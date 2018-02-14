@@ -1,0 +1,36 @@
+{
+  "name": "inucafeteria",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.5.0",
+    "body-parser": "^1.17.2",
+    "date-utils": "^1.2.21",
+    "es6-promise": "^4.1.1",
+    "express": "^4.15.3",
+    "express-cluster": "0.0.4",
+    "express-session": "^1.15.4",
+    "fcm-node": "^1.2.0",
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "moment": "^2.18.1",
+    "morgan": "^1.8.2",
+    "mysql": "^2.13.0",
+    "node-gyp": "^3.6.2",
+    "oracledb": "^1.0.0",
+    "path": "^0.12.7",
+    "rebuild": "^0.1.2",
+    "request": "^2.81.0",
+    "rotating-file-stream": "^1.2.2",
+    "socket.io": "^2.0.3",
+    "winston": "^2.3.1"
+  }
+}
