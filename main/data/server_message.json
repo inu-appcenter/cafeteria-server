@@ -1,0 +1,14 @@
+{
+  "all":{
+    "title":"공지사항",
+    "message":"현재 번호 알림 기능이 점검중에 있습니다."
+  },
+  "android":{
+    "title":"공지사항",
+    "message":""
+  },
+  "ios":{
+    "title":"공지사항",
+    "message":""
+  }
+}
