@@ -1,0 +1,14 @@
+{
+  "all":{
+    "title":"공지사항",
+    "message":""
+  },
+  "android":{
+    "title":"공지사항",
+    "message":""
+  },
+  "ios":{
+    "title":"공지사항",
+    "message":""
+  }
+}

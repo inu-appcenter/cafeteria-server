@@ -1,228 +1,208 @@
 // copyright(c) 2016 All rights reserved by jongwook(koyu1212@naver.com) 201003051 컴퓨터공학부 고종욱
 // edited by jaemoon 201201646 정보통신공학과 신재문
 
-var wookora = require('wookora');
 var mysql = require('./mysql.js');
 var moment = require('moment');
-var winston = require('winston');
+var request = require('request');
+var asc = require('async');
+var randtoken = require('rand-token');
+// var winston = require('winston');
 
 var mysqld = require('mysql');
-var dbconfig = require('../info/mysqldbconfig.js');
+var dbconfig = require('../config.js').MYSQL_CONFIG;
 var pool = mysqld.createPool(dbconfig);
-require('date-utils');
+// require('date-utils');
 
-var logger = new (winston.Logger)({
-	transports:[
-		new (winston.transports.Console)({
-			name:'consoleLog',
-			colorize:false,
-			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
-			json:false
-		}),
+// var logger = new (winston.Logger)({
+// 	transports:[
+// 		new (winston.transports.Console)({
+// 			name:'consoleLog',
+// 			colorize:false,
+// 			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
+// 			json:false
+// 		}),
+//
+// 		new (winston.transports.File)({
+// 			name:'infoLog',
+// 			level:'info',
+// 			filename:'./data/log/info.log',
+// 			maxsize:10000000,
+// 			maxFile:10,
+// 			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
+// 			dataPattern:'yyyyMMdd',
+// 			json:false
+// 		}),
+// 		new (winston.transports.File)({
+// 			name:'errorLog',
+// 			level:'error',
+// 			filename:'./data/log/err.log',
+// 			maxsize:10000000,
+// 			maxFile:10,
+// 			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
+// 			dataPattern:'yyyyMMdd',
+// 			json:false
+// 		})
+// 	]
+// });
 
-		new (winston.transports.File)({
-			name:'infoLog',
-			level:'info',
-			filename:'./data/log/info.log',
-			maxsize:10000000,
-			maxFile:10,
-			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
-			dataPattern:'yyyyMMdd',
-			json:false
-		}),
-		new (winston.transports.File)({
-			name:'errorLog',
-			level:'error',
-			filename:'./data/log/err.log',
-			maxsize:10000000,
-			maxFile:10,
-			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
-			dataPattern:'yyyyMMdd',
-			json:false
-		})
-	]
-});
 
+// 200 : 성공
+// 400 : ID/PW틀리거나 대상자 아님
+// 401 : 토큰 없음(타 기기 로그인으로 자동로그인 풀림)
+// 402 : 서버 DB에러
+// 403 : 기타 에러
 
-//F_LOGIN_KLIN
-function postlogin(req, res, next) {
-	var json = require('./code.json');
-	var result = new Array();
-	var sql =
-	'SELECT F_LOGIN_CHECK(:sno, :pw) AS success FROM DUAL';
-	var bindvar = {sno:req.body.sno, pw:req.body.pw}
-	 wookora.execute(
-     sql,bindvar,{outFormat: wookora.OBJECT},
-       function(err, results) {
-			if (err) {
-				next(err);
-				res.sendStatus(404);
-				return;
+function login(req, res) {
+	var sno = req.body.sno;
+	var pw = req.body.pw;
+	var device = req.body.device;
+	var autologin = req.body.auto;
+	var token = req.body.token;
+	var barcode;
+
+	// 토큰 자동로그인
+	if(token){
+		pool.getConnection(function(err, connection){
+			if(err){
+				res.send('err');
 			}
-		res.header("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-		result = results.rows[0];
-		if(result['SUCCESS']=="Y"){
-			req.session.user = req.body.sno;
-      req.session.status = true;
-      req.session.device = req.body.device;
-			var barcode = (req.session.user*6).toString();
-			req.session.barcode = barcode;
-      if(req.body.auto == 'true'){
-				// console.log('[etc/postlogin_auto] ' + req.body.sno + ' SUCCESS');
-        var dtoken = moment().format('mmss')*3 + req.body.sno + 't';
-				req.session.dtoken = dtoken;
-        var sno = req.body.sno;
-        var device = req.body.device;
-
-				pool.getConnection(function(err, connection){
-					if(err){
-						res.send('err');
+			var query = connection.query('select student_no from autologin where token=\''+token + '\'', function(err, rows, fields){
+				if(!err){
+					if(rows.length != 0){
+						// 자동로그인 성공
+						sno = rows[0].student_no;
+						if(sno.length == 10){
+							barcode = (sno*4).toString();
+						}else{
+							barcode = (sno*6).toString();
+						}
+						console.log('[etc/login] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
+						res.status(200).json({
+							"barcode":barcode,
+							"token":token
+						});
 					}
-					var query = connection.query('select student_no from autologin where student_no=\''+sno + '\'' , function(err, rows, fields){
-						if(!err){
-							if(rows.length != 0){
-								mysql.deleteDtokenBySno(sno);
-								mysql.putAuto(dtoken, sno, device);
-							}
-							else{
-								mysql.putAuto(dtoken, sno, device);
-							}
-						}
-						else{
-							console.log('err');
-							res.sendStatus(400);
-						}
-					});
-					connection.release();
-				});
-      }
-
-			  var stu_info = req.session.stu_info;
-				if(stu_info.stat == '재학' || stu_info.stat == '수료' || stu_info.stat == '휴학'){
-					stu_info.stat = '재학';
-			  	var login = {"dtoken":dtoken,"barcode":barcode};
-					mysql.checkBarcode(barcode);
+					else{
+						// 토큰 없음, 재로그인 유도
+						console.log('[etc/login/query] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' TOKEN_ERROR');
+						res.status(401);
+					}
 				}
 				else{
-					var login = {"dtoken":dtoken};
+					// DB 에러
+					console.log('[etc/login/getConnection] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' QUERY_ERROR');
+					res.sendStatus(402);
 				}
-				console.log('[etc/postlogin] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + req.body.sno + ' SUCCESS');
-				// console.log(stu_info);
-				res.json({"login":login,"code":json,"stu_info":stu_info});
-      // console.log(req.body.sno + ' suc');
-			// res.json({"dtoken":dtoken});
-			res.end();
+			});
+			connection.release();
+		});
+	} // 토큰 자동로그인 끝
+
+	// 로그인
+	else if(sno){
+		// 조식 대상자 확인
+		const options = {
+			method : 'POST',
+			uri : 'http://inucafeteria.us.to:8081/login',
+			form: {sno:sno, pw:pw}
 		}
-		else{
-			next();
-		}
-       }
-   );
+		// console.log('[login] sno : ' + sno + 'pw : ' + pw);
+
+		request(options,
+			function (error, response, body){
+				if (!error) {
+					// console.log('[login/request] body : ' + body);
+					if(body=="Y"){
+						if(sno.length == 10){
+							barcode = (sno*4).toString();
+						}else{
+							barcode = (sno*6).toString();
+						}
+						mysql.checkBarcode(barcode);
+
+						if(autologin == '1'){
+							do{	// 자동로그인 토큰 중복 방지
+								token = randtoken.generate(20);
+							}while(mysql.checkTokenDup(token))
+
+							pool.getConnection(function(err, connection){
+								if(err){
+									res.sendStatus(402);
+								}
+								var query = connection.query('select student_no from autologin where student_no=\''+sno + '\'' , function(err, rows, fields){
+									if(!err){
+										// 토큰이 있는 경우 삭제후 등록(새 기기에서로그인)
+										// TODO releaseAutoLoginBySno를 setAutoLogin내에서 사용하도록.
+										if(rows.length != 0){
+											mysql.releaseAutoLoginBySno(sno);
+											mysql.setAutoLogin(token, sno, device);
+										}
+										else{
+											mysql.setAutoLogin(token, sno, device);
+										}
+									}
+									else{
+										console.log('err');
+										res.sendStatus(401);
+									}
+								});
+								connection.release();
+							});
+						} //자동로그인 등록 끝
+						else {
+							// 자동로그인 체크 안한경우.
+						}
+						console.log('[etc/login] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
+						res.status(200).json({
+							"token":token,
+							"barcode":barcode
+						});
+					}
+				}
+				else {
+					res.sendStatus(403);
+				}
+			}
+		); // request end
+	}
+}
+
+function logout(req, res){
+	var token = req.body.token
+	if(token){
+		console.log('[etc/logout]' + token + '로그아웃');
+		mysql.releaseAutoLogin(token);
+		req.session.destroy();
+		res.json({"result":"logout is successful"});
+	}
+	else {
+		res.json({"result":"invalid token"});
+	}
 }
 
 
-
-function Kpostlogin(req, res, next) {			//한국어학당 학생들
-	var json = require('./code.json');
-	var result = new Array();
-	var sql =
-	'SELECT F_LOGIN_KLIN(:sno, :pw) AS success FROM DUAL';
-	var bindvar = {sno:req.body.sno, pw:req.body.pw}
-	 wookora.execute(
-     sql,bindvar,{outFormat: wookora.OBJECT},
-       function(err, results) {
-			if (err) {
-				next(err);
-				res.sendStatus(404);
-				return;
-			}
-
-		result = results.rows[0];
-		if(result['SUCCESS']=="Y"){
-			req.session.user = req.body.sno;
-      req.session.status = true;
-      req.session.device = req.body.device;
-			var barcode = (req.session.user*4).toString();
-			req.session.barcode = barcode;
-      if(req.body.auto == 'true'){
-				// console.log('[etc/postlogin_auto] ' + req.body.sno + ' SUCCESS');
-        var dtoken = moment().format('mmss')*3 + req.body.sno + 't';
-				req.session.dtoken = dtoken;
-        var sno = req.body.sno;
-        var device = req.body.device;
-
-				pool.getConnection(function(err, connection){
-					if(err){
-						res.send('err');
-					}
-					var query = connection.query('select student_no from autologin where student_no=\''+sno + '\'' , function(err, rows, fields){
-						if(!err){
-							if(rows.length != 0){
-								mysql.deleteDtokenBySno(sno);
-								mysql.putAuto(dtoken, sno, device);
-							}
-							else{
-								mysql.putAuto(dtoken, sno, device);
-							}
-						}
-						else{
-							console.log('err');
-							res.sendStatus(400);
-						}
-					});
-					connection.release();
-				});
-      }
-
-			  var stu_info = req.session.stu_info;
-				if(stu_info.stat == '재학' || stu_info.stat == '수료' || stu_info.stat == '휴학'){
-					stu_info.stat = '재학';
-			  	var login = {"dtoken":dtoken,"barcode":barcode};
-					mysql.checkBarcode(barcode);
-				}
-				else{
-					var login = {"dtoken":dtoken};
-				}
-				console.log('[etc/postlogin] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + req.body.sno + ' SUCCESS');
-				// console.log(stu_info);
-				res.json({"login":login,"code":json,"stu_info":stu_info});
-      // console.log(req.body.sno + ' suc');
-			// res.json({"dtoken":dtoken});
-		}
-		else{
-			res.sendStatus(400)	//로그인 실패
-      console.log('[etc/postlogin] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + req.body.sno + ' PW_ERROR');
-		}
-		res.end();
-       }
-   );
-}
-
-
-// Number서버에서 쓰는 함수
-function isNumberWait(req, res, next){
+// App이 재시작할때 기 등록된 알림이 있었는지 확인하는 함수.
+function isNumberWait(req, res){
 	var fcmToken = req.body.fcmtoken;
-	var num1;
-	var num2;
-	var num3;
-	var code;
+	var ordernums=[];
+	var cafecode;
 	pool.getConnection(function(err, connection){
 		if(err){
 			res.send('err');
 		}
-		var query = connection.query('select num1,num2,num3, code from number where token=\''+fcmToken + '\'' +  ' and flag=' + '\'' + 1 + '\'', function(err, rows, fields){
+		var query = connection.query('select ordernum, cafecode from number where token=\''+fcmToken + '\'', function(err, rows, fields){
 			if(!err){
 				if(rows.length != 0){
-					num1 = rows[0].num1;
-					num2 = rows[0].num2;
-					num3 = rows[0].num3;
-					code = rows[0].code;
-					console.log('your state is wait');
+					for(var i in rows){
+						ordernums.push(rows[i].ordernum);
+					}
+					cafecode = rows[0].cafecode;
+					res.json({"cafecode":cafecode, num:ordernums});
 				}
-				else{
-					console.log('you are not wait');
+				else {
+					// console.log('you are not wait');
+					res.sendStatus(400);
 				}
-				res.json({"num1":num1,"num2":num2,"num3":num3,"code":code});
 			}
 			else{
 				console.log('err');
@@ -233,179 +213,193 @@ function isNumberWait(req, res, next){
 	});
 }
 
-
-
-function autologin(req, res, next){
-	var json = require('./code.json');
-	var sno = req.body.sno;
-  var dtoken = req.body.dtoken;
-  req.session.dtoken = dtoken;
-
-	pool.getConnection(function(err, connection){
-		if(err){
-			res.send('err');
-		}
-		var query = connection.query('select dtoken from autologin where dtoken=\''+dtoken + '\'' + ' and student_no=\'' + sno + '\'', function(err, rows, fields){
-			if(!err){
-				if(rows.length != 0){
-					req.session.user = req.body.sno;
-					var stu_info = req.session.stu_info;
-					if(stu_info.dep == '한국어학당'){
-						var barcode = (req.session.user*4).toString();
-					}else{
-						var barcode = (req.session.user*6).toString();
-					}
-					req.session.barcode = barcode;
-					req.session.status = true;
-					req.session.device = rows[0].device;
-					console.log('[etc/autologin] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + req.body.sno + ' SUCCESS');
-					if(stu_info.stat == '재학' || stu_info.stat == '수료' || stu_info.stat == '휴학'){
-						stu_info.stat = '재학';
-						res.json({"barcode":barcode,"code":json,"stu_info":stu_info});
-					}
-					else{
-						res.json({"code":json,"stu_info":stu_info});
-					}
-				}
-				else{
-					console.log('[etc/autologin] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + req.body.sno + ' TOKEN_ERROR');
-					res.sendStatus(400);
-				}
-			}
-			else{
-				console.log('[etc/autologin] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + req.body.sno + ' QUERY_ERROR');
-				res.sendStatus(404);
-			}
-		});
-		connection.release();
-	});
-}
-
-
-
-
-function logout(req, res, next){
-	if(req.session.dtoken){
-		console.log('[etc/logout] 자동로그인 상태에서 접근');
-		var dtoken = req.session.dtoken;
-		mysql.deleteDtoken(dtoken);
-	}
-  req.session.destroy();
-  res.json({"result":"logout is successful"});
-}
-
-
-
-
 function activeBarcode(req, res, next){
-  var activeBarcode = req.body.flag;
-	var device = req.body.device;
+	var activated = req.body.activated;
 	var barcode = req.body.barcode;
-	// if(device == 'android'){
-		// barcode = req.body.barcode;
-	// } else{
-	// 	barcode = req.session.barcode;
-	// }
-	mysql.updateBarcodeFlag(activeBarcode,barcode);
-	console.log('Student(' + barcode/6 + ') flag is ' + activeBarcode);
-  res.json({"active":activeBarcode});
+	if(!activated || !barcode){
+		res.status(400).json({"result":"ERROR"});
+		return;
+	}
+	mysql.activateBarcode(activated,barcode);
+	res.status(200).json({"active":activated});
+	console.log('[etc/activeBarcode] ' + barcode + ' is ' + activated);
 }
 
-
-
-function isBarcode(req,res,next){
+// code 1: 기숙사 식당, 2 : 미추홀캠퍼스
+// DB의 processing에 code값을 넣어 해당 식당에서 결제중임을 표시한다.
+function isBarcode(req,res){
 	var barcode = req.query.barcode;
+	var code = req.query.code;
 	pool.getConnection(function(err, connection){
 		if(err){
 			console.log('[etc/isBarcode] DB_Connection_Error');
+			connection.release();
 			res.status(404).json({ message : "DB_ERROR"});
 		}
-		var query = connection.query('select flag from barcode where barcode=' + barcode , function(err, rows, fields){
+		var query = connection.query('select * from barcode where barcode=\'' + barcode + '\'' , function(err, rows, fields){
 			if(!err){
 				if(rows.length != 0){
-					var flag = rows[0].flag;
-					if(flag == 1){
-						logger.info(barcode/6 + ' 조식할인');
-						// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
+					var activated = rows[0].activated;
+					var processing = rows[0].processing;
+					var michuhol = rows[0].michuhol;
+					var dormitory = rows[0].dormitory;
+					console.log('[etc/isBarcode] barcode : ' + barcode + ' code : ' + code + ' processing : ' + processing + ' activated : ' + activated);
+					console.log('[etc/isBarcode] accpted : ' + barcode + ' dormitory : ' +dormitory + ' michuhol : ' + michuhol );
+					if(processing == 0 && activated == 1){
+						if(code == '1'){
+							if(dormitory < 1){
+								// 정상
+								connection.query('update barcode set processing=\'1\' where barcode=\'' + barcode + '\'' , function(err, results){
+									if(!err){
+										console.log('[code/isBarcode] code : '+code);
+										// logger.info(barcode/6 + ' 조식할인');
+										// TODO 조회 카운트를 누적해 로그로 남기기.
+										// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
+									}
+									else {
+										console.log('[etc/isBarcode] Query_Error' + err);
+										connection.release();
+										return res.status(404).json({ message : 'DB_QUERY_ERROR'});
+									}
+								});
+							}
+							else {
+								activated = 0;
+							}
+						}
+						else if(code == '2'){
+							if(michuhol < 2){
+								// 정상
+								connection.query('update barcode set processing=\'2\' where barcode=\'' + barcode + '\'' , function(err, results){
+									if(!err){
+										console.log('[code/isBarcode] code : '+code);
+										// logger.info(barcode/6 + ' 조식할인');
+										// TODO 조회 카운트를 누적해 로그로 남기기.
+										// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
+									}
+									else {
+										console.log('[etc/isBarcode] Query_Error' + err);
+										connection.release();
+										return res.status(404).json({ message : 'DB_QUERY_ERROR'});
+									}
+								});
+							}
+							else {
+								// 횟수 초과
+								activated = 0;
+							}
+						}
 					}
-					else{
-						logger.info(barcode/6 + ' 불법적인 경로');
-							// console.log('[etc/isBarcode] ' + barcode/6 + '님이 불법적인 경로로 할인시도를 하였습니다.');
+					else {
+						activated = 0;
+						// logger.info(barcode/6 + ' 불법적인 경로');
+						// console.log('[etc/isBarcode] ' + barcode/6 + '님이 불법적인 경로로 할인시도를 하였습니다.');
 					}
-					return res.status(200).json({message : "SUCCESS","flag":flag});
+					return res.status(200).json({message : "SUCCESS","activated":activated});
 				}
 				else{
 					console.log('[etc/isBarcode] Barcode_Error');
 					console.log('[etc/isBarcode] Barcode is ' + barcode);
+					connection.release();
 					return res.status(400).json({ message : 'BARCODE_ERROR'});
 				}
 			}
-
 			else{
-				console.log('[etc/isBarcode] Query_Error');
-				return res.status(404).json({ message : 'QUERY_ERROR'});
+				console.log('[etc/isBarcode] Query_Error' + err);
+				connection.release();
+				return res.status(404).json({ message : 'DB_QUERY_ERROR'});
 			}
 		});
 		connection.release();
 	});
 }
 
-
-
-
-
-
-function postIsBarcode(req,res,next){
-	var barcode = req.body.barcode;
+function paymentSend(req, res){
+	var barcode = req.query.barcode;
+	var payment = req.query.payment;
 	pool.getConnection(function(err, connection){
 		if(err){
-			console.log('[etc/isBarcode] DB_Connection_Error');
+			console.log('[etc/paymentSend] DB_Connection_Error' + err);
 			res.status(404).json({ message : "DB_ERROR"});
 		}
-		var query = connection.query('select flag from barcode where barcode=\''+barcode + '\'', function(err, rows, fields){
-			if(!err){
-				if(rows.length != 0){
-					var flag = rows[0].flag;
-					console.log('[etc/postIsBarcode] ' + barcode + ',' + flag + ' SUCCESS');
-					return res.status(200).json({message : "SUCCESS","flag":flag});
+		var query = connection.query('select * from barcode where barcode=\'' + barcode + '\'' , function(err, rows, fields){
+			if(rows.length != 0){
+				if(!err){
+					var processing = rows[0].processing;
+					var michuhol = rows[0].michuhol;
+					var dormitory = rows[0].dormitory;
+					if(processing == 0){
+						console.log('[etc/paymentSend] Barcode_State_Error. Barcode : ' + barcode + ', payment : ' + payment + ', processing : ' + processing);
+						return res.status(400).json({ message : 'BARCODE_STATE_ERROR'});
+					}
+					if(payment == 'Y'){
+						if(processing == '1'){
+							dormitory++;
+						}
+						else if(processing == '2'){
+							michuhol++;
+						}
+
+						console.log('[etc/paymentSend] dormitory : ' + dormitory + ', michuhol : ' + michuhol);
+					}
+					else if(payment == 'N'){
+							// 그냥 processing만 0으로 초기화
+					}
+					var query = connection.query('update barcode set processing=\'0\' and dormitory=\''+dormitory+'\' and michuhol=\'' + michuhol + '\' where barcode=\'' + barcode + '\'' , function(err, rows, fields){
+						if(!err){
+							console.log('[etc/paymentSned] barcode : ' + barcode + ', payment : ' + payment);
+							return res.status(200).json({message : "SUCCESS"});
+						}
+						else {
+							console.log('[etc/paymentSend] Query_Error' + err);
+							res.status(404).json({ message : "DB_QUERY_ERROR"});
+						}
+					});
 				}
-				else{
-					console.log('[etc/postIsBarcode] Barcode_Error');
-					console.log('[etc/postIsBarcode] Barcode is ' + barcode);
-					return res.status(400).json({ message : 'BARCODE_ERROR'});
+				else {
+					if(err){
+						console.log('[etc/paymentSend] Query_Error' + err);
+						res.status(404).json({ message : "DB_QUERY_ERROR"});
+					}
 				}
 			}
-
-			else{
-				console.log('[etc/isBarcode] Query_Error');
-				return res.status(404).json({ message : 'QUERY_ERROR'});
+			else {
+				console.log('[etc/paymentSend] Barcode_Error. Barcode : ' + barcode);
+				return res.status(400).json({ message : 'BARCODE_ERROR'});
 			}
 		});
-		connection.release();
 	});
 }
 
-
-function errMsg(req, res, next){
+function postErrorMessage(req, res){
 	var sno = req.body.sno;
 	var msg = req.body.msg;
+	var device = req.body.device;
 
 	console.log('error_msg is registered');
 
-	mysql.putError(sno,msg);
+	mysql.putError(sno,msg,device);
 	res.json({"result":"success"});
 }
 
+function getErrorMessage(req, res){
+	var task = [
+		function(callback){
+			mysql.getError(callback);
+			}
+	];
 
+	asc.series(task, function(err, results){
+		// console.log(results);
+		res.send(results[0]);
+	})
+}
 
-
-
-module.exports.postlogin = postlogin;
-module.exports.autologin = autologin;
+module.exports.login = login;
 module.exports.logout = logout;
 module.exports.activeBarcode = activeBarcode;
 module.exports.isBarcode = isBarcode;
+module.exports.paymentSend = paymentSend;
 module.exports.isNumberWait = isNumberWait;
-module.exports.postIsBarcode = postIsBarcode;
-module.exports.errMsg = errMsg;
-module.exports.Kpostlogin = Kpostlogin;
+module.exports.postErrorMessage = postErrorMessage;
+module.exports.getErrorMessage = getErrorMessage;
