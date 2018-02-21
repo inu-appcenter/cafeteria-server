@@ -5,21 +5,30 @@ var oracledbconfig = require('./oracledbconfig.js');
 
 /*
 로그인 리턴
-200 : 할인 대상자
-400 : ID/PW 틀림, 할인 대상자 아님
+Y : 할인 대상자
+N : ID/PW 틀림, 할인 대상자 아님
+400 : 로그인 정보 오류
 402 : 토큰만료(재로그인)
 403 : 토큰 없음(타 기기에서 자동로그인 덮어씌움)
-404 : 서버연결, 조회 오류
+404 : DB 연결 오류
+405 : DB 조회 오류
 */
 
 //F_LOGIN_KLIN
 // 일반 학생 로그인.
 function login(req, res) {
   var sno = req.body.sno;
+  var pw = req.body.pw;
   // var device = req.body.device;
   var sql = "";
   // var json = require('./code.json');
   var result = new Array();
+
+  // 빈칸 체크
+  if(!sno || !pw){
+    res.sendStatus(400);
+    return;
+  }
 
   // 학번 길이에 따라 뷰를 다르게 사용.
   // 일반 학생
@@ -38,9 +47,9 @@ function login(req, res) {
     return;
   }
 
-  var bindvar = {sno:req.body.sno, pw:req.body.pw}
-  // 오라클에서 조회.
+  var bindvar = {sno:sno, pw:pw};
 
+  // 오라클에서 조회.
   oracledb.getConnection(
     oracledbconfig ,
     function(err,connection){
@@ -63,6 +72,7 @@ function login(req, res) {
           }
           result = result.rows[0];
           result = result[0];
+          console.log(sno + " 조회");
           res.send(result);
           res.end();
           doRelease(connection);
@@ -75,7 +85,6 @@ function login(req, res) {
 function doRelease(conn){
   conn.release(function(err){
     if(err){
-      // 구버전이라 그런지 close함수가 없다고 나옴.
       console.log(err);
     }
   });
