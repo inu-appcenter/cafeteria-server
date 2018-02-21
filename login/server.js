@@ -20,10 +20,8 @@ cluster(function(worker) {
 	var port = 8081;
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
-	// app.post('/test', login.getstudentinfo);
 	app.post('/login', login.postlogin);
 	app.listen(port);
-	console.log(worker.id + '실행 완료');
 },
 {count: 4});
 
