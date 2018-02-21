@@ -3,7 +3,7 @@ var moment = require('moment');
 var winston = require('winston');
 
 var mysqld = require('mysql');
-var dbconfig = require('../info/mysqldbconfig.js');
+var dbconfig = require('../config.js').MYSQL_CONFIG;
 var pool = mysqld.createPool(dbconfig);
 
 function inquiredMsg(req, res, next){

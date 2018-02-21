@@ -1,6 +1,10 @@
-*/node_modules/
-node_modules/
+main/node_modules/
+main/public/image/
+login/node_modules/
 package-lock.json
-/data/log/
+config.js
+config/
 .ftpconfig
 *.sql
+*.log
+nohup.out
