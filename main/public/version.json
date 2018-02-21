@@ -1,0 +1,26 @@
+{
+  "android":{
+    "lastest":"1.1.8",
+    "log":[
+      {"version":"1.1.9",
+        "info":[
+          "- test1",
+          "- test2",
+          "- test3"
+        ]
+      }
+    ]
+  },
+  "ios":{
+    "lastest":"1.20",
+    "log":[
+      {"version":"1.20",
+        "info":[
+          "- test1",
+          "- test2",
+          "- test3"
+        ]
+      }
+    ]
+  }
+}

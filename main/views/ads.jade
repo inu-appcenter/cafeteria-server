@@ -1,0 +1,66 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title
+      |카페테리아 광고 관리 페이지
+    script(src='//code.jquery.com/jquery-latest.min.js')
+    script(src='/js/form.js')
+  body
+    //-var adList = JSON.parse(JSON.stringify(ads));
+    
+    //- -var ad = adList[i];
+    //- -var title = ad.title;
+    //- -var url = ad.url;
+    //- -var imgsrc = ad.img;
+    //- -var contents = ad.contents;
+
+    form(id='form' name='form' action='adSet' method='post' enctype="multipart/form-data")
+      table(id='table' border='1')
+        tr
+          td
+            |번호 : 
+            select(id="no" name="no")
+            //-   option(value="1") 추가
+            //-   option(value="2") 추가
+            //-   -for(var i = 0; i <adList.length;i++){
+            //-     option(value="#{i}") #{i+1}
+            //-   -}
+            //- -if(ads.length == 0){
+            //-   | 항목이 없습니다.
+            //- -} else {
+            //- input(type='hidden' id='no')
+        tr
+          td
+            |제목 
+            input(type='input' id='title' name='title')
+        tr
+          td
+            |첨부할 링크 
+            input(type='input' id='url' name='url' size="100")
+        tr    
+          td
+            |내용
+            input(type='button' id='add_content' value='추가')
+        tbody(id='tbody')
+        //- #contents
+        //- td
+        //-     |항목명 
+        //-     input(type='input')
+        //-   td
+        //-     |내용 
+        //-     input(type='input')
+        tr
+          td
+            |이미지 url 
+            input(type='text' id='imageurl' name='img' readonly='ro' size="100")
+            br
+            img(id='img' width='200px')
+            br
+            input(type='file' name='userfile')
+            
+        tr
+          td
+              input(type='button' value="수정" onclick='send()')
+              input(type='button' value="삭제" onclick='deleteAD()')
+            //- -}
