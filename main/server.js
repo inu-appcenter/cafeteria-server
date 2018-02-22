@@ -20,6 +20,17 @@ var randtoken = require('rand-token');
 var provider = require('./router/provider.js');
 var logDirectory = path.join(__dirname+'/data','log');
 var multer = require('multer'); // multer모듈 적용 (for 파일업로드)
+var schedule = require('node-schedule');
+
+var getFood = schedule.scheduleJob('* 7 * * *', function(){
+	var now = Date.now();
+	var aDay = 86400000;
+	for(var i = 0; i < 7; i++){
+		// console.log(now + (aDay * i));
+		var date = etc.makeDate(now + (aDay * i));
+		etc.getFoodPlan(date);
+	}
+});
 
 // fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 //
@@ -79,7 +90,7 @@ cluster(function(worker){
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use('/', express.static(__dirname + '/public'));
-	app.use('/menu', express.static(__dirname + '/public/menu'));
+	app.use('/food', express.static(__dirname + '/public/food'));
 	app.use('/image', express.static(__dirname + '/public/image'));
 	app.use('/js', express.static(__dirname + '/views/js'));
 	// app.use(morgan("IP:remote-addr|:method:url 결과:status 응답시간 :response-time ms 기기 :device 사용자 :user",
@@ -110,6 +121,9 @@ cluster(function(worker){
 	app.get('/ads', function (req, res) {
 		res.render('ads');
 	});
+	app.get('/food/:date', function(req, res){
+			res.json(require('public/food/' + req.params.date));
+	});
 	app.post('/adSet', upload.single('userfile'), ad.adSet);
 
 	app.post('/login', etc.login);
@@ -129,5 +143,6 @@ cluster(function(worker){
 	// app.get('/getInquire',provider.inquiredMsg);
 
 	server.listen(port);
+	console.log("서버 시작" + etc.makeDate(new Date()) + ' ' + etc.makeTime(new Date()));
 },
 {count:1});
