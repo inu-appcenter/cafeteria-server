@@ -49,7 +49,7 @@ function adSet(req, res){
   }
   var fd = fs.open(path.join(__dirname, '../public', 'ads.json'), "w",  function(err, fd){
     if(!err){
-      fs.writeSync(fd, JSON.stringify(ads), 0);
+      fs.writeSync(fd, JSON.stringify(ads, null, '\t'), 0);
       console.log('[ad/adSet] ad 수정 : ' + JSON.stringify(ad, null, '\t'));
     }
     else {
