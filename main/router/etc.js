@@ -7,10 +7,11 @@ var request = require('request');
 var asc = require('async');
 var randtoken = require('rand-token');
 // var winston = require('winston');
-
+var path = require('path');
 var mysqld = require('mysql');
 var dbconfig = require('../config.js').MYSQL_CONFIG;
 var pool = mysqld.createPool(dbconfig);
+var fs = require('fs');
 // require('date-utils');
 
 // var logger = new (winston.Logger)({
@@ -343,7 +344,7 @@ function paymentSend(req, res){
 						console.log('[etc/paymentSend] dormitory : ' + dormitory + ', michuhol : ' + michuhol);
 					}
 					else if(payment == 'N'){
-							// 그냥 processing만 0으로 초기화
+						// 그냥 processing만 0으로 초기화
 					}
 					var query = connection.query('update barcode set processing=\'0\' and dormitory=\''+dormitory+'\' and michuhol=\'' + michuhol + '\' where barcode=\'' + barcode + '\'' , function(err, rows, fields){
 						if(!err){
@@ -386,7 +387,7 @@ function getErrorMessage(req, res){
 	var task = [
 		function(callback){
 			mysql.getError(callback);
-			}
+		}
 	];
 
 	asc.series(task, function(err, results){
@@ -395,6 +396,68 @@ function getErrorMessage(req, res){
 	})
 }
 
+function makeDate(millis){
+	var now = new Date(millis);
+	var year = now.getFullYear();
+	var month = now.getMonth()+1;
+	var day = now.getDate();
+	if(month<10){
+		month = '0'+month;
+	}
+	if(day<10) {
+		day = '0'+day;
+	}
+	var date = ''+year+month+day;
+	return date;
+}
+
+function makeTime(millis){
+	var now = new Date(millis);
+	var hour=now.getHours();
+	if(hour<10){
+		hour = '0'+hour;
+	}
+	var min = now.getMinutes();
+	if(min<10) {
+		min = '0'+min;
+	}
+	var sec = now.getSeconds();
+	if(sec<10) {
+		sec = '0'+sec;
+	}
+	return ''+hour+min+sec;
+}
+
+function getFoodPlan(date){
+	if(!date){
+		date = makeDate(new Date());
+	}
+	const options = {
+		method : 'GET',
+		uri : 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch?stdDate=' + date,
+	}
+	request(options,
+		function (error, response, body){
+			if(!error){
+				body = JSON.parse(body);
+				fs.writeFile(path.join(__dirname, '../public/food', date), JSON.stringify(body,null,'\t'), function(err){
+					if(!err){
+						console.log('[etc/getFoodPlan] 식단 저장 ' + date);
+					}
+					else {
+						console.log('[etc/getFoodPlan] ' + err);
+					}
+				});
+			}
+			else {
+				console.log('[etc/getFoodPlan] ' + error);
+			}
+		}
+	);
+}
+module.exports.makeTime = makeTime;
+module.exports.makeDate = makeDate;
+module.exports.getFoodPlan = getFoodPlan;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.activeBarcode = activeBarcode;

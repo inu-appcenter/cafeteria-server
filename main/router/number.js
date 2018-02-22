@@ -98,7 +98,8 @@ function pushNumber(req,res){
       else {
         console.log('[number/pushNumber] Error ' + error);
       }
-    });
+    }
+  );
 
     pool.getConnection(function(err, connection){
       if(err){
