@@ -1,5 +1,6 @@
 main/node_modules/
 main/public/image/
+main/public/food
 login/node_modules/
 package-lock.json
 config.js
