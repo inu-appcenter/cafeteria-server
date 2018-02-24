@@ -1,14 +1,17 @@
 {
   "all":{
+    "id":"1",
     "title":"공지사항",
     "message":""
   },
   "android":{
+    "id":"1",
     "title":"공지사항",
-    "message":""
+    "message":"Hi"
   },
   "ios":{
+    "id":"1",
     "title":"공지사항",
-    "message":""
+    "message":"Hi"
   }
 }
