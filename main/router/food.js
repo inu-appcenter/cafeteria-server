@@ -4,6 +4,8 @@ const fs = require('fs');
 const cafecode = require('../public/cafecode.json');
 const util = require('util');
 const path = require('path');
+const moment = require('moment');
+
 const time = ["", "조식", "중식", "석식"];
 
 var makeResultName = function(no){
@@ -61,9 +63,9 @@ function getFoodPlan(date){
         let menuNum = cafecode[i].menu;
         if(menuNum != -1){
           let conercheck = true;
-          json[i + ''] = json[makeResultName(menuNum)];
+          json[cafecode[i].no + ''] = json[makeResultName(menuNum)];
           delete json[makeResultName(menuNum)];
-          menus = json[i+''];
+          menus = json[cafecode[i].no + ''];
           for(let j in menus){
             let menu = menus[j];
             if(menu.MENU == null){
@@ -125,6 +127,8 @@ function getFoodPlans(){
 		getFoodPlan(date);
 	}
 }
+
+// getFoodPlans();
 
 module.exports={
   food,

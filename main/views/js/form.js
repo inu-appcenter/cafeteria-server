@@ -1,10 +1,5 @@
-// $.getJSON('http://query.yahooapis.com/v1/public/yql?q=select%20%2a%20from%20yahoo.finance.quotes%20WHERE%20symbol%3D%27WRC%27&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys&callback', function(data) {
-//     //data is the JSON string
-// });
-// function change(){
-//   var x = document.getElementById("item").value;
-//   console.log(x);
-// }
+// 2017 동계 리뉴얼 bungabear6422@gmail.com 손민재
+
 var ads;
 var select;
 var title;
@@ -14,6 +9,7 @@ var image;
 var contenets = [];
 var form;
 var subcount = 0;
+var contnetsRow = 0;
 
 $(function() {
   form = $('#form');
@@ -38,6 +34,10 @@ $(function() {
     var url_string = window.location.href; //window.location.href
     var url = new URL(url_string);
     var c = url.searchParams.get("item");
+    var error = url.searchParams.get("error");
+    if(error == 'pw'){
+      alert('비밀번호가 틀립니다.');
+    }
     console.log(c);
     if(c) item = c;
     select.val(item-1);
@@ -51,26 +51,30 @@ $(function() {
   });
 
   $('#add_content').click(function() {
+    // if(contentsRow <= 5){
     subcount++;
     addContentRow(subcount, "", "");
-    // $('#tbody').append("<tr id='tr" + subcount + "'><td>항목<input type='input' id='subtitle" + subcount + "'>내용<textarea id='msg" + subcount + "'></textarea><input type='button' id='" + subcount + "' value='삭제' onclick='deleteContentsRow(this.id)' ></td></tr>");
-    // $('#contents').html(
-    //   '<tr> \
-    //     <td>항목' + subcount + ' : <input type=\'input\' name=\'subtitle'+ subcount + '\'>\
-    //     내용' + subcount + '<input type=\'input\' name=\'msg'+ subcount + '\'>\
-    //     </td>\
-    //   </tr>');
+    // }
+    // else {
+    // }
   });
 });
 
 function addContentRow(iter, subtitle, msg){
-  $('#tbody').append("<tr id='tr" + iter + "'><td>항목<input type='input' id='subtitle" + iter + "' value='" + subtitle + "'><br>내용<textarea id='msg" + iter + "' rows='3' cols='50'>"+msg+"</textarea><input type='button' id='" + iter + "' value='삭제' onclick='deleteContentsRow(this.id)' ></td></tr>");
+  if(contentsRow < 5){
+    console.log(contentsRow);
+    contentsRow++;
+    $('#tbody').append("<tr id='tr" + iter + "'><td>항목<input type='input' id='subtitle" + iter + "' value='" + subtitle + "'><br>내용<textarea id='msg" + iter + "' rows='3' cols='50'>"+msg+"</textarea><input type='button' id='" + iter + "' value='삭제' onclick='deleteContentsRow(this.id)' ></td></tr>");
+  }
+  else {
+    alert('5개 까지만 가능합니다.');
+  }
 }
 
 function deleteAD(){
   var input = $("<input>")
-    .attr("type", "hidden")
-    .attr("name", "del").val("1");
+  .attr("type", "hidden")
+  .attr("name", "del").val("1");
   form.append(input);
   console.log(form);
   form.submit();
@@ -80,6 +84,7 @@ function deleteContentsRow(no){
   // deleteContentsRowByNo(button.id);
   var subtitle = $('#subtitle'+no);
   var msg = $('#msg'+no);
+  contentsRow--;
   // console.log(subtitle.val() + ' : ' + msg.val());
   subtitle.val("");
   msg.val("");
@@ -96,18 +101,22 @@ function send(){
     // console.log(subtitle + " : " + msg);
     if(msg || subtitle){
       form.append($('<input>')
-        .attr("type", "hidden")
-        .attr("name", "contents").val("{\"title\":\""+subtitle+"\", \"msg\":\""+msg+"\"}"));
-      // contents.push({"title":subtitle, "msg":msg});
+      .attr("type", "hidden")
+      .attr("name", "contents").val("{\"title\":\""+subtitle+"\", \"msg\":\""+msg+"\"}"));
     }
   }
-  // var input = $("<input>")
-  //   .attr("type", "hidden")
-  //   .attr("name", "contents").val(contents);
-  // console.log(contents);
-  form.append($('<input>')
-    .attr("type", "hidden")
-    .attr("name", "contents").val("{\"title\":\"\", \"msg\":\"\"}"));
+  if(contentsRow<5){
+    form.append($('<input>')
+      .attr("type", "hidden")
+      .attr("name", "contents").val("{\"title\":\"\", \"msg\":\"\"}"));
+      contentsRow++;
+  }
+  if(contnetsRow<2){
+    form.append($('<input>')
+      .attr("type", "hidden")
+      .attr("name", "contents").val("{\"title\":\"\", \"msg\":\"\"}"));
+      contentsRow++;
+  }
   form.submit();
 }
 
@@ -115,7 +124,7 @@ function fillForm(no){
   for(var i = subcount; i > 0; i--){
     deleteContentsRow(i);
   }
-  // subcount = 1;
+  contentsRow=0;
   if(no > 4){
     alert("5개 까지만 가능합니다.");
   }

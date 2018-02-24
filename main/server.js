@@ -1,36 +1,28 @@
 // copyright(c) 2017 All rights reserved by jaemoon(jjaemny@naver.com) 201201646 정보통신공학과 신재문
+const express = require('express');
+const cluster = require('express-cluster');
+const session = require('express-session');
+const fs = require('fs');
+const http = require('http');
+const path = require('path');
+const moment = require('moment');
+const bodyParser = require('body-parser');
+const schedule = require('node-schedule');
 
-var socket = require('./socket.js');
-var express = require('express');
-var ad = require('./router/ad.js');
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var http = require('http');
-var path = require('path');
-var cluster = require('express-cluster');
-var session = require('express-session');
-var moment = require('moment');
-var fs = require('fs');
-var path = require('path');
-var rfs = require('rotating-file-stream');
-var number = require('./router/number.js');
-var etc = require('./router/etc.js');
-var randtoken = require('rand-token');
-//var student = require('./router/student.js');
-var provider = require('./router/provider.js');
-var logDirectory = path.join(__dirname+'/data','log');
-var multer = require('multer'); // multer모듈 적용 (for 파일업로드)
-var schedule = require('node-schedule');
+const morgan = require('morgan');
+const randtoken = require('rand-token');
 
-var getFood = schedule.scheduleJob('* 7 * * *', function(){
-	var now = Date.now();
-	var aDay = 86400000;
-	for(var i = 0; i < 7; i++){
-		// console.log(now + (aDay * i));
-		var date = etc.makeDate(now + (aDay * i));
-		etc.getFoodPlan(date);
-	}
-});
+const rfs = require('rotating-file-stream');
+const etc = require('./router/etc.js');
+const number = require('./router/number.js');
+const socket = require('./router/socket.js');
+const ad = require('./router/ad.js');
+const food = require('./router/food');
+const SESSION_KEY = require('./config.js').SESSION_KEY;
+const logDirectory = path.join(__dirname+'/data','log');
+
+// 식단 파싱 매일 7시
+var dd = schedule.scheduleJob('* 7 * * *', food.getFoodPlans);
 
 // fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 //
@@ -81,6 +73,8 @@ var getFood = schedule.scheduleJob('* 7 * * *', function(){
 // 		return res.sendStatus(404);
 // 	//return res.send("{status:\"notauth\"}");
 // };
+
+// 서버가 죽는걸 방지.
 cluster(function(worker){
 	var port = 3829;
 	var app = express();
@@ -90,59 +84,34 @@ cluster(function(worker){
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use('/', express.static(__dirname + '/public'));
-	app.use('/food', express.static(__dirname + '/public/food'));
 	app.use('/image', express.static(__dirname + '/public/image'));
 	app.use('/js', express.static(__dirname + '/views/js'));
+	app.use(session(SESSION_KEY));
 	// app.use(morgan("IP:remote-addr|:method:url 결과:status 응답시간 :response-time ms 기기 :device 사용자 :user",
 	// {skip:function(req,res){ return req.url === '/activeBarcode' || req.url === '/logout' || req.url === '/message'}, stream:accessLogStream}));
-	app.use(session({
-		key: 'jaemoon_session',
-		secret: '01@0-~2#$36%4-5@00!8%',
-		// store: sqlSessionStore,
-		resave: true,
-		saveUninitialized: false
-	}));
-
-
-	var storage = multer.diskStorage({
-		destination: function (req, file, cb) {
-			cb(null, 'public/image/'); // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
-		},
-		filename: function (req, file, cb) {
-			// randtoken.generate(10);
-			// TODO 파일 중복체크, 파일명 변경
-			cb(null, new Date().valueOf() + path.extname(file.originalname)); // cb 콜백함수를 통해 전송된 파일 이름 설정
-		}
-	});
-	var upload = multer({ storage: storage });
 
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
-	app.get('/ads', function (req, res) {
-		res.render('ads');
-	});
-	app.get('/food/:date', function(req, res){
-			res.json(require('public/food/' + req.params.date));
-	});
-	app.post('/adSet', upload.single('userfile'), ad.adSet);
+	app.get('/ads', (req, res) => {res.render('ads');});
+	app.get('/food/:date', food.food);
+	app.post('/adSet', ad.upload().single('userfile'), ad.adSet);
 
 	app.post('/login', etc.login);
-	app.post('/isNumberWait', etc.isNumberWait);
 	app.post('/logout',  etc.logout);
 	app.post('/activeBarcode', etc.activeBarcode);
 	app.get('/isBarcode', etc.isBarcode);
 	app.get('/paymentSend', etc.paymentSend);
 
 	app.get('/socket', socket.emit);
+	app.post('/isNumberWait', number.isNumberWait);
 	app.post('/registerNumber',number.registerNumber);
 	app.get('/pushNumber', number.pushNumber);
 	app.post('/resetNumber', number.resetNumber);
 
 	app.post('/errormsg',etc.postErrorMessage);
 	app.get('/errormsg', etc.getErrorMessage);
-	// app.get('/getInquire',provider.inquiredMsg);
 
 	server.listen(port);
-	console.log("서버 시작" + etc.makeDate(new Date()) + ' ' + etc.makeTime(new Date()));
+	console.log("서버 시작" + moment().format('YYYY-MM-DD HH:mm:ss'));
 },
 {count:1});
