@@ -5,6 +5,7 @@ var mysql = require('./mysql.js');
 var moment = require('moment');
 var request = require('request');
 var asc = require('async');
+var moment = require('moment');
 var randtoken = require('rand-token');
 // var winston = require('winston');
 var path = require('path');
@@ -65,7 +66,7 @@ function login(req, res) {
 	if(token){
 		pool.getConnection(function(err, connection){
 			if(err){
-				res.send('err');
+				res.sendStatus(402);
 			}
 			var query = connection.query('select student_no from autologin where token=\''+token + '\'', function(err, rows, fields){
 				if(!err){
@@ -77,7 +78,7 @@ function login(req, res) {
 						}else{
 							barcode = (sno*6).toString();
 						}
-						console.log('[etc/login] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
+						console.log('[etc/login/token] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
 						res.status(200).json({
 							"barcode":barcode,
 							"token":token
@@ -85,13 +86,13 @@ function login(req, res) {
 					}
 					else{
 						// 토큰 없음, 재로그인 유도
-						console.log('[etc/login/query] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' TOKEN_ERROR');
-						res.status(401);
+						console.log('[etc/login/token/query] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' TOKEN_ERROR');
+						res.sendStatus(401);
 					}
 				}
 				else{
 					// DB 에러
-					console.log('[etc/login/getConnection] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' QUERY_ERROR');
+					console.log('[etc/login/token/getConnection] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' QUERY_ERROR');
 					res.sendStatus(402);
 				}
 			});
@@ -166,6 +167,9 @@ function login(req, res) {
 			}
 		); // request end
 	}
+	else {
+		res.sendStatus(400);
+	}
 }
 
 function logout(req, res){
@@ -181,39 +185,6 @@ function logout(req, res){
 	}
 }
 
-
-// App이 재시작할때 기 등록된 알림이 있었는지 확인하는 함수.
-function isNumberWait(req, res){
-	var fcmToken = req.body.fcmtoken;
-	var ordernums=[];
-	var cafecode;
-	pool.getConnection(function(err, connection){
-		if(err){
-			res.send('err');
-		}
-		var query = connection.query('select ordernum, cafecode from number where token=\''+fcmToken + '\'', function(err, rows, fields){
-			if(!err){
-				if(rows.length != 0){
-					for(var i in rows){
-						ordernums.push(rows[i].ordernum);
-					}
-					cafecode = rows[0].cafecode;
-					res.json({"cafecode":cafecode, num:ordernums});
-				}
-				else {
-					// console.log('you are not wait');
-					res.sendStatus(400);
-				}
-			}
-			else{
-				console.log('err');
-				res.sendStatus(400);
-			}
-		});
-		connection.release();
-	});
-}
-
 function activeBarcode(req, res, next){
 	var activated = req.body.activated;
 	var barcode = req.body.barcode;
@@ -227,10 +198,15 @@ function activeBarcode(req, res, next){
 }
 
 // code 1: 기숙사 식당, 2 : 미추홀캠퍼스
-// DB의 processing에 code값을 넣어 해당 식당에서 결제중임을 표시한다.
 function isBarcode(req,res){
 	var barcode = req.query.barcode;
 	var code = req.query.code;
+	if(!barcode || !code){
+		return res.status(400).json({ message : "Parameter_Error"});
+	}
+	// TODO 시간에따라 할인을 구분한다.
+	// if() 할인 시간대에 하나도 해당안하면 리턴
+	//momnet
 	pool.getConnection(function(err, connection){
 		if(err){
 			console.log('[etc/isBarcode] DB_Connection_Error');
@@ -243,16 +219,18 @@ function isBarcode(req,res){
 					var activated = rows[0].activated;
 					var processing = rows[0].processing;
 					var michuhol = rows[0].michuhol;
+					var michuhol = rows[0].michuhol2;
 					var dormitory = rows[0].dormitory;
-					console.log('[etc/isBarcode] barcode : ' + barcode + ' code : ' + code + ' processing : ' + processing + ' activated : ' + activated);
-					console.log('[etc/isBarcode] accpted : ' + barcode + ' dormitory : ' +dormitory + ' michuhol : ' + michuhol );
+					console.log('[etc/isBarcode] barcode checked : ' + barcode + ' code : ' + code + ' processing : ' + processing + ' activated : ' + activated + ' dormitory : ' +dormitory + ' michuhol : ' + michuhol);
 					if(processing == 0 && activated == 1){
 						if(code == '1'){
+							// TODO 오전 시간인경우
 							if(dormitory < 1){
 								// 정상
 								connection.query('update barcode set processing=\'1\' where barcode=\'' + barcode + '\'' , function(err, results){
 									if(!err){
-										console.log('[code/isBarcode] code : '+code);
+										console.log('[etc/isBarcode] 할인 대상');
+										// console.log('[code/isBarcode] code : '+code);
 										// logger.info(barcode/6 + ' 조식할인');
 										// TODO 조회 카운트를 누적해 로그로 남기기.
 										// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
@@ -269,11 +247,13 @@ function isBarcode(req,res){
 							}
 						}
 						else if(code == '2'){
+							// TODO 점심시간인경우
 							if(michuhol < 2){
 								// 정상
 								connection.query('update barcode set processing=\'2\' where barcode=\'' + barcode + '\'' , function(err, results){
 									if(!err){
-										console.log('[code/isBarcode] code : '+code);
+										console.log('[etc/isBarcode] 할인 대상');
+										// console.log('[code/isBarcode] code : '+code);
 										// logger.info(barcode/6 + ' 조식할인');
 										// TODO 조회 카운트를 누적해 로그로 남기기.
 										// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
@@ -285,23 +265,30 @@ function isBarcode(req,res){
 									}
 								});
 							}
+							// TODO 저녁시간인경우
+							// else if(michuhol2 < 1){
+								//
+							// }
 							else {
 								// 횟수 초과
 								activated = 0;
 							}
 						}
 					}
+					else if(activated == 0){
+						console.log('[etc/isBarcode] Barcode Not Activated ' + barcode);
+					}
 					else {
 						activated = 0;
+						console.log('[etc/isBarcode] Barcode Not Processiong ' + barcode);
 						// logger.info(barcode/6 + ' 불법적인 경로');
 						// console.log('[etc/isBarcode] ' + barcode/6 + '님이 불법적인 경로로 할인시도를 하였습니다.');
 					}
 					return res.status(200).json({message : "SUCCESS","activated":activated});
 				}
 				else{
-					console.log('[etc/isBarcode] Barcode_Error');
-					console.log('[etc/isBarcode] Barcode is ' + barcode);
-					connection.release();
+					console.log('[etc/isBarcode] Barcode_Not_Found : ' + barcode);
+					// connection.release();
 					return res.status(400).json({ message : 'BARCODE_ERROR'});
 				}
 			}
@@ -346,9 +333,9 @@ function paymentSend(req, res){
 					else if(payment == 'N'){
 						// 그냥 processing만 0으로 초기화
 					}
-					var query = connection.query('update barcode set processing=\'0\' and dormitory=\''+dormitory+'\' and michuhol=\'' + michuhol + '\' where barcode=\'' + barcode + '\'' , function(err, rows, fields){
+					var query = connection.query('update barcode set? where barcode=\'' + barcode + '\'',{processing:0, dormitory:dormitory, michuhol:michuhol} , function(err, rows, fields){
 						if(!err){
-							console.log('[etc/paymentSned] barcode : ' + barcode + ', payment : ' + payment);
+							console.log('[etc/paymentSend] barcode : ' + barcode + ', payment : ' + payment);
 							return res.status(200).json({message : "SUCCESS"});
 						}
 						else {
@@ -411,58 +398,10 @@ function makeDate(millis){
 	return date;
 }
 
-function makeTime(millis){
-	var now = new Date(millis);
-	var hour=now.getHours();
-	if(hour<10){
-		hour = '0'+hour;
-	}
-	var min = now.getMinutes();
-	if(min<10) {
-		min = '0'+min;
-	}
-	var sec = now.getSeconds();
-	if(sec<10) {
-		sec = '0'+sec;
-	}
-	return ''+hour+min+sec;
-}
-
-function getFoodPlan(date){
-	if(!date){
-		date = makeDate(new Date());
-	}
-	const options = {
-		method : 'GET',
-		uri : 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch?stdDate=' + date,
-	}
-	request(options,
-		function (error, response, body){
-			if(!error){
-				body = JSON.parse(body);
-				fs.writeFile(path.join(__dirname, '../public/food', date), JSON.stringify(body,null,'\t'), function(err){
-					if(!err){
-						console.log('[etc/getFoodPlan] 식단 저장 ' + date);
-					}
-					else {
-						console.log('[etc/getFoodPlan] ' + err);
-					}
-				});
-			}
-			else {
-				console.log('[etc/getFoodPlan] ' + error);
-			}
-		}
-	);
-}
-module.exports.makeTime = makeTime;
-module.exports.makeDate = makeDate;
-module.exports.getFoodPlan = getFoodPlan;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.activeBarcode = activeBarcode;
 module.exports.isBarcode = isBarcode;
 module.exports.paymentSend = paymentSend;
-module.exports.isNumberWait = isNumberWait;
 module.exports.postErrorMessage = postErrorMessage;
 module.exports.getErrorMessage = getErrorMessage;
