@@ -1,8 +1,9 @@
 {
   "android":{
-    "lastest":"1.1.8",
+    "latest":"1.1.8",
     "log":[
       {"version":"1.1.9",
+        "date":"20180223",
         "info":[
           "- test1",
           "- test2",
@@ -12,9 +13,10 @@
     ]
   },
   "ios":{
-    "lastest":"1.20",
+    "latest":"1.20",
     "log":[
       {"version":"1.20",
+        "date":"20180223",
         "info":[
           "- test1",
           "- test2",
