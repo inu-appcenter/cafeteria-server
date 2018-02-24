@@ -1,8 +1,13 @@
 var ads = require('../public/ads.json');
 var fs = require('fs');
 var path = require('path');
+var im = require('imagemagick');
+const multer = require('multer'); // multer모듈 적용 (for 파일업로드)
+var AD_MANAGE_PW = require('../config.js').AD_MANAGE_PW;
+
 
 function adSet(req, res){
+  var pw = req.body.pw;
   var del = req.body.del;
   var no = req.body.no;
   var title = req.body.title;
@@ -14,22 +19,70 @@ function adSet(req, res){
   var ad = ads[no];
   var oldimage = ad.img;
   // console.log(req.body);
+  if(pw != AD_MANAGE_PW){
+    var item = no*1;
+    item++;
+    console.log('[ad/adSet] PASSWORD_ERROR');
+    res.redirect('/ads?item=' + item  + '&error=pw');
+    return;
+  }
   // 광고 삭제
   if(del == 1){
     ad.title = '';
     ad.url = '';
     ad.contents = [];
-    if(ad.img)
-      fs.unlinkSync(path.join(__dirname, '../public', ad.img));
+    if(ad.img){
+      var imgpath = path.join(__dirname, '../public', ad.img);
+      fs.unlink(imgpath,
+        function(err){
+          if(err){
+            console.log(err);
+          }
+        }
+      );
+    }
+    imgpath = path.join(__dirname, '../public', ad.previewimg);
+    if(ad.previewimg){
+      fs.unlinkSync(imgpath,
+        function(err){
+          if(err){
+            console.log(err);
+          }
+        }
+      );
+    }
     ad.img = '';
   }
   else {
     // 이미지 치환
     if(file){
+      console.log(req.file);
       imgname = req.file.filename;
       ad.img = '/image/' + imgname;
+      // im.identify('../public' + ad.img, function(err, features){
+      //   if (err){
+      //     console.log(features);
+      //   }
+      //   else {
+      //     console.log(err);
+      //   }
+      //   //   // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
+      // });
+      // im.resize({
+      //   srcData: fs.readFileSync('kittens.jpg', 'binary'),
+      //   width:   256
+      // }, function(err, stdout, stderr){
+      //   if (err) throw err
+      //   fs.writeFileSync('kittens-resized.jpg', stdout, 'binary');
+      //   console.log('resized kittens.jpg to fit within 256x256px')
+      // });
       if(oldimage){
-        fs.unlinkSync(path.join(__dirname, '../public', oldimage));
+        fs.unlink(path.join(__dirname, '../public', oldimage),
+        function(err){
+          if(err){
+            console.log(err);
+          }
+        });
       }
     }
     ad.title = title;
@@ -61,4 +114,21 @@ function adSet(req, res){
   res.redirect('/ads?item=' + no);
 }
 
-module.exports.adSet = adSet;
+var upload = function(){
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/image/'); // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+    },
+    filename: function (req, file, cb) {
+      // randtoken.generate(10);
+      // TODO 파일 중복체크, 파일명 변경
+      cb(null, new Date().valueOf() + path.extname(file.originalname)); // cb 콜백함수를 통해 전송된 파일 이름 설정
+    }
+  });
+  return multer({ storage: storage });
+}
+
+module.exports = {
+  adSet,
+  upload
+}
