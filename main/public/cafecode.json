@@ -6,7 +6,7 @@
   {"no":"5",  "menu":-1, "alarm":true, "order":"7" ,"img":"/image/cafe5.png", "bgimg":"/image/cafe5_bg.jpg", "name":"카페드림(도서관)"},
   {"no":"6",  "menu":-1, "alarm":true, "order":"9" ,"img":"/image/cafe6.png", "bgimg":"/image/cafe6_bg.jpg", "name":"미유카페"},
   {"no":"7",  "menu":-1, "alarm":true, "order":"8" ,"img":"/image/cafe7.png", "bgimg":"/image/cafe7_bg.jpg", "name":"카페드림(학식실외)"},
-  {"no":"8",  "menu":4,  "alarm":false, "order":"2" ,"img":"", "bgimg":"", "name":"기숙사식당"},
+  {"no":"8",  "menu":4,  "alarm":false, "order":"2" ,"img":"/image/test1.png", "bgimg":"/image/test1.png", "name":"기숙사식당"},
   {"no":"9",  "menu":3,  "alarm":false, "order":"4" ,"img":"", "bgimg":"", "name":"사범대식당"},
   {"no":"10", "menu":5,  "alarm":false, "order":"5" ,"img":"", "bgimg":"", "name":"교직원식당"}
 ]

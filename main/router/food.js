@@ -28,11 +28,11 @@ var makeConerName = function(code, no, time){
 }
 
 function food(req, res){
-  var date = req.param("date");
-  console.log(date);
-  fs.exists('/food/' + date, (exists) => {
+  var date = req.params.date;
+  // console.log(date);
+  fs.exists(path.join(__dirname, '../public/food', date) + date, (exists) => {
     if(exists){
-      res.json(require('./food/'+date));
+      res.json(require('../public/food/'+date));
     }
     else {
       res.sendStatus(400);
