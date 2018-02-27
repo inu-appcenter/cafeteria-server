@@ -13,6 +13,8 @@ var mysqld = require('mysql');
 var dbconfig = require('../config.js').MYSQL_CONFIG;
 var pool = mysqld.createPool(dbconfig);
 var fs = require('fs');
+// var logger = require('./logger.js');
+// eval(fs.readFileSync( path.join(__dirname, 'logger.js'))+'');
 // require('date-utils');
 
 // var logger = new (winston.Logger)({
@@ -62,6 +64,7 @@ function login(req, res) {
 	var token = req.body.token;
 	var barcode;
 
+	console.log();
 	// 토큰 자동로그인
 	if(token){
 		pool.getConnection(function(err, connection){
@@ -78,6 +81,8 @@ function login(req, res) {
 						}else{
 							barcode = (sno*6).toString();
 						}
+						// logger.logger(logger.__line, 'SUCCESS', {sno:sno});
+						// logger(__line, 'SUCCESS', {sno : sno})
 						console.log('[etc/login/token] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
 						res.status(200).json({
 							"barcode":barcode,
@@ -160,6 +165,10 @@ function login(req, res) {
 							"barcode":barcode
 						});
 					}
+					else if(body=='N'){
+						console.log('[etc/login] login fail' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno);
+						return res.sendStatus(400);
+					}
 				}
 				else {
 					res.sendStatus(403);
@@ -200,10 +209,11 @@ function activeBarcode(req, res, next){
 // code 1: 기숙사 식당, 2 : 미추홀캠퍼스
 function isBarcode(req,res){
 	var barcode = req.query.barcode;
-	var code = req.query.code;
-	if(!barcode || !code){
-		return res.status(400).json({ message : "Parameter_Error"});
-	}
+	var cafecode = req.query.code;
+	var menu = req.query.menu;
+	// if(!barcode || !cafecode || !menu){
+	// return res.status(400).json({ message : "Parameter_Error"});
+	// }
 	// TODO 시간에따라 할인을 구분한다.
 	// if() 할인 시간대에 하나도 해당안하면 리턴
 	//momnet
@@ -211,162 +221,114 @@ function isBarcode(req,res){
 		if(err){
 			console.log('[etc/isBarcode] DB_Connection_Error');
 			connection.release();
-			res.status(404).json({ message : "DB_ERROR"});
+			return res.status(404).json({ message : "DB_ERROR"});
 		}
 		var query = connection.query('select * from barcode where barcode=\'' + barcode + '\'' , function(err, rows, fields){
+			// connection.release();
+
 			if(!err){
 				if(rows.length != 0){
 					var activated = rows[0].activated;
-					var processing = rows[0].processing;
-					var michuhol = rows[0].michuhol;
-					var michuhol = rows[0].michuhol2;
-					var dormitory = rows[0].dormitory;
-					console.log('[etc/isBarcode] barcode checked : ' + barcode + ' code : ' + code + ' processing : ' + processing + ' activated : ' + activated + ' dormitory : ' +dormitory + ' michuhol : ' + michuhol);
-					if(processing == 0 && activated == 1){
-						if(code == '1'){
-							// TODO 오전 시간인경우
-							if(dormitory < 1){
-								// 정상
-								connection.query('update barcode set processing=\'1\' where barcode=\'' + barcode + '\'' , function(err, results){
-									if(!err){
-										console.log('[etc/isBarcode] 할인 대상');
-										// console.log('[code/isBarcode] code : '+code);
-										// logger.info(barcode/6 + ' 조식할인');
-										// TODO 조회 카운트를 누적해 로그로 남기기.
-										// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
+					console.log('[etc/isBarcode] barcode checked : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu);
+					if(activated == 1){
+						connection.query('select * from payment where barcode=? and cafecode=? and menu=?',[barcode, cafecode, menu], function (err, rows, fields){
+							connection.release();
+							if(!err){
+									if(rows.length == 0){
+										console.log('[etc/isBarcode] Discount OK : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu);
+										return res.status(200).json({message : "SUCCESS","activated":1});
 									}
 									else {
-										console.log('[etc/isBarcode] Query_Error' + err);
-										connection.release();
-										return res.status(404).json({ message : 'DB_QUERY_ERROR'});
+										console.log('[etc/isBarcode] Already_Discounted : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu);
+										return res.status(200).json({message : "SUCCESS","activated":0});
 									}
-								});
 							}
 							else {
-								activated = 0;
+								console.log('[etc/isBarcode] Err : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu + err);
+								return res.status(200).json({ message : "DB_ERROR"});
 							}
-						}
-						else if(code == '2'){
-							// TODO 점심시간인경우
-							if(michuhol < 2){
-								// 정상
-								connection.query('update barcode set processing=\'2\' where barcode=\'' + barcode + '\'' , function(err, results){
-									if(!err){
-										console.log('[etc/isBarcode] 할인 대상');
-										// console.log('[code/isBarcode] code : '+code);
-										// logger.info(barcode/6 + ' 조식할인');
-										// TODO 조회 카운트를 누적해 로그로 남기기.
-										// console.log('[etc/isBarcode] ' + barcode/6 + '님이 조식할인을 받으셨습니다.');
-									}
-									else {
-										console.log('[etc/isBarcode] Query_Error' + err);
-										connection.release();
-										return res.status(404).json({ message : 'DB_QUERY_ERROR'});
-									}
-								});
-							}
-							// TODO 저녁시간인경우
-							// else if(michuhol2 < 1){
-								//
-							// }
-							else {
-								// 횟수 초과
-								activated = 0;
-							}
-						}
-					}
-					else if(activated == 0){
-						console.log('[etc/isBarcode] Barcode Not Activated ' + barcode);
+						});
 					}
 					else {
 						activated = 0;
-						console.log('[etc/isBarcode] Barcode Not Processiong ' + barcode);
+						console.log('[etc/isBarcode] Barcode Not Activated ' + barcode);
 						// logger.info(barcode/6 + ' 불법적인 경로');
 						// console.log('[etc/isBarcode] ' + barcode/6 + '님이 불법적인 경로로 할인시도를 하였습니다.');
+						return res.status(200).json({message : "SUCCESS","activated":0});
 					}
-					return res.status(200).json({message : "SUCCESS","activated":activated});
+					// return res.status(200).json({message : "SUCCESS","activated":activated});
 				}
 				else{
 					console.log('[etc/isBarcode] Barcode_Not_Found : ' + barcode);
-					// connection.release();
 					return res.status(400).json({ message : 'BARCODE_ERROR'});
 				}
 			}
 			else{
 				console.log('[etc/isBarcode] Query_Error' + err);
-				connection.release();
 				return res.status(404).json({ message : 'DB_QUERY_ERROR'});
 			}
 		});
-		connection.release();
 	});
 }
 
 function paymentSend(req, res){
 	var barcode = req.query.barcode;
+	var cafecode = req.query.code;
+	var menu = req.query.menu;
 	var payment = req.query.payment;
+	// console.log({barcode:barcode, cafecode:cafecode, menu:menu, payment:payment});
+	// if(!barcode || !cafecode || !menu || !payment){
+		// return res.status(400).json({ message : "Parameter_Error"});
+	// }
 	pool.getConnection(function(err, connection){
 		if(err){
 			console.log('[etc/paymentSend] DB_Connection_Error' + err);
-			res.status(404).json({ message : "DB_ERROR"});
+			return res.status(404).json({ message : "DB_ERROR"});
 		}
-		var query = connection.query('select * from barcode where barcode=\'' + barcode + '\'' , function(err, rows, fields){
-			if(rows.length != 0){
-				if(!err){
-					var processing = rows[0].processing;
-					var michuhol = rows[0].michuhol;
-					var dormitory = rows[0].dormitory;
-					if(processing == 0){
-						console.log('[etc/paymentSend] Barcode_State_Error. Barcode : ' + barcode + ', payment : ' + payment + ', processing : ' + processing);
-						return res.status(400).json({ message : 'BARCODE_STATE_ERROR'});
-					}
-					if(payment == 'Y'){
-						if(processing == '1'){
-							dormitory++;
-						}
-						else if(processing == '2'){
-							michuhol++;
-						}
-
-						console.log('[etc/paymentSend] dormitory : ' + dormitory + ', michuhol : ' + michuhol);
-					}
-					else if(payment == 'N'){
-						// 그냥 processing만 0으로 초기화
-					}
-					var query = connection.query('update barcode set? where barcode=\'' + barcode + '\'',{processing:0, dormitory:dormitory, michuhol:michuhol} , function(err, rows, fields){
-						if(!err){
-							console.log('[etc/paymentSend] barcode : ' + barcode + ', payment : ' + payment);
-							return res.status(200).json({message : "SUCCESS"});
-						}
-						else {
-							console.log('[etc/paymentSend] Query_Error' + err);
-							res.status(404).json({ message : "DB_QUERY_ERROR"});
-						}
-					});
-				}
-				else {
-					if(err){
-						console.log('[etc/paymentSend] Query_Error' + err);
-						res.status(404).json({ message : "DB_QUERY_ERROR"});
-					}
-				}
+		if(payment == 'Y')
+		connection.query('insert into payment (barcode, cafecode, menu) values ('+barcode+','+cafecode+','+menu+')', function(err, result){
+			// console.log(JSON.stringify(result) + ' ' + err.code);
+			connection.release();
+			if(!err){
+				console.log('[etc/paymentSend] 결제 성공 barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu);
+				return res.status(200).json({ message : 'SUCCESS'});
+			}
+			else if(err.code == 'ER_DUP_ENTRY') {
+				console.log('[etc/paymentSend] 중복 할인됨 barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu);
+				return res.status(200).json({ message : 'Already_Discounted'});
 			}
 			else {
-				console.log('[etc/paymentSend] Barcode_Error. Barcode : ' + barcode);
-				return res.status(400).json({ message : 'BARCODE_ERROR'});
+				console.log('[etc/paymentSend] 에러 : barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu + err);
+				return res.status(200).json({ message : 'SUCCESS'});
 			}
 		});
+		else {
+			connection.query('delete from payment where barcode=? and cafecode=? and menu=? ', [barcode, cafecode, menu], function(err, result){
+				// console.log(JSON.stringify(result) + ' ' + err);
+				connection.release();
+				if(!err){
+					console.log('[etc/paymentSend] 결제취소 성공. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu);
+					return res.status(200).json({ message : 'SUCCESS'});
+				}
+				else {
+					console.log('[etc/paymentSend] 결제취소 실패. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu + err);
+					return res.status(200).json({ message : 'SUCCESS'});
+				}
+			});
+		}
 	});
 }
 
 function postErrorMessage(req, res){
 	var sno = req.body.sno;
+	var title = req.body.title;
 	var msg = req.body.msg;
 	var device = req.body.device;
+	var service = req.body.service;
 
 	console.log('error_msg is registered');
 
-	mysql.putError(sno,msg,device);
+	mysql.putError(sno, title, msg, device, service);
 	res.json({"result":"success"});
 }
 
