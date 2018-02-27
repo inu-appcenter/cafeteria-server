@@ -1,4 +1,3 @@
-'use strict';
 const request = require('request');
 const fs = require('fs');
 const cafecode = require('../public/cafecode.json');
@@ -10,7 +9,7 @@ const time = ["", "조식", "중식", "석식"];
 
 var makeResultName = function(no){
   return util.format('foodMenuType%sResult',no);
-}
+};
 
 var makeConerName = function(code, no, time){
   no=no*1;
@@ -25,7 +24,7 @@ var makeConerName = function(code, no, time){
   }
   if(time) return util.format('%s코너(%s)',str,time);
   else return util.format('%s코너',str);
-}
+};
 
 function food(req, res){
   var date = req.params.date;
@@ -44,7 +43,7 @@ function getFoodPlan(date){
   var options = {
     uri : 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch?stdDate=' + date,
     method : 'GET'
-  }
+  };
 
   request(options, function(err, result){
     if(!err){
@@ -92,13 +91,14 @@ function getFoodPlan(date){
           for(let j in menus){
             let menu = menus[j];
             if(conercheck){
-              menu.TITLE = menu.TYPE2
+              menu.TITLE = menu.TYPE2;
             }
             else {
               menu.TITLE = makeConerName(i, menu.TYPE1, menu.TYPE2);
             }
             delete menu.TYPE1;
             delete menu.TYPE2;
+            menu.order = j;
           }
         }
       }

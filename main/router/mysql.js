@@ -170,13 +170,13 @@ function checkBarcode(barcode){
   });
 }
 
-function putError(sno,msg,device){
+function putError(sno,title,msg,device,service){
   pool.getConnection(function(err, connection){
     if(err){
       res.send('err');
     }
     else{
-      connection.query('insert into error set?',{student_no:sno, message:msg, device:device},
+      connection.query('insert into error set?',{student_no:sno, title:title, message:msg, device:device, service:service},
       function(err, results){
         connection.release();
         if(err){
