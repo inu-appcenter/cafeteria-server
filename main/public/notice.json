@@ -2,16 +2,16 @@
   "all":{
     "id":"1",
     "title":"공지사항",
-    "message":""
+    "message":"번호알림 서비스는 점검중에 있습니다."
   },
   "android":{
     "id":"1",
     "title":"공지사항",
-    "message":"Hi"
+    "message":""
   },
   "ios":{
     "id":"1",
     "title":"공지사항",
-    "message":"Hi"
+    "message":""
   }
 }
