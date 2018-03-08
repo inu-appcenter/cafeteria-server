@@ -1,17 +1,38 @@
 
 
 // function(){
-  if( /Android/i.test(navigator.userAgent)) {
+if( /Android/i.test(navigator.userAgent)) {
   // 안드로이드
-  window.location.href = 'https://play.google.com/store/apps/details?id=com.inu.cafeteria';
+  var locale = getLocale();
+  if(locale == 'ko')
+  {
+    window.open('https://goo.gl/6TVgRC');
+  }
+  else {
+    window.open('http://inucafeteriaaws.us.to:3829/INU Cafeteria.apk');
+  }
+
 } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
   // iOS 아이폰, 아이패드, 아이팟
-  window.location.href = 'https://itunes.apple.com/kr/app/inu-%EC%B9%B4%ED%8E%98%ED%85%8C%EB%A6%AC%EC%95%84/id1272600111?mt=8';
+  window.location.href = 'https://goo.gl/jtRxnJ';
 } else {
   // 그 외 디바이스
-  window.location.href = 'https://play.google.com/store/apps/details?id=com.inu.cafeteria';
 }
-// }
 
+function getLocale() {
 
-// 출처: http://webinformation.tistory.com/14 [끄적끄적]
+  if ( navigator ) {
+    if ( navigator.language ) {
+      return navigator.language;
+    }
+    else if ( navigator.browserLanguage ) {
+      return navigator.browserLanguage;
+    }
+    else if ( navigator.systemLanguage ) {
+      return navigator.systemLanguage;
+    }
+    else if ( navigator.userLanguage ) {
+      return navigator.userLanguage;
+    }
+  }
+}
