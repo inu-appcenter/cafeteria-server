@@ -13,42 +13,38 @@ var mysqld = require('mysql');
 var dbconfig = require('../config.js').MYSQL_CONFIG;
 var pool = mysqld.createPool(dbconfig);
 var fs = require('fs');
-// var logger = require('./logger.js');
-// eval(fs.readFileSync( path.join(__dirname, 'logger.js'))+'');
-// require('date-utils');
+const logger = require('./logger.js');
 
-// var logger = new (winston.Logger)({
-// 	transports:[
-// 		new (winston.transports.Console)({
-// 			name:'consoleLog',
-// 			colorize:false,
-// 			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
-// 			json:false
-// 		}),
-//
-// 		new (winston.transports.File)({
-// 			name:'infoLog',
-// 			level:'info',
-// 			filename:'./data/log/info.log',
-// 			maxsize:10000000,
-// 			maxFile:10,
-// 			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
-// 			dataPattern:'yyyyMMdd',
-// 			json:false
-// 		}),
-// 		new (winston.transports.File)({
-// 			name:'errorLog',
-// 			level:'error',
-// 			filename:'./data/log/err.log',
-// 			maxsize:10000000,
-// 			maxFile:10,
-// 			timestamp: function(){return new Date().toFormat('YYYY-MM-DD HH24:MI:SS')},
-// 			dataPattern:'yyyyMMdd',
-// 			json:false
-// 		})
-// 	]
-// });
+function barcodeAdd(req, res){
+	var barcode = req.query.barcode;
 
+	pool.getConnection(function(err, connection){
+		if(err){
+			logger('error',err, barcodeAdd);
+			res.status(404).json({ message : 'CONNECTION_ERROR'});
+		}
+		else{
+			connection.query('insert into barcode set?',{"barcode":barcode}, function(err, results){
+				connection.release();
+				if(err){
+					if(err.code == 'ER_DUP_ENTRY') {
+						logger('info','바코드 기등록됨 : '+barcode, barcodeAdd);
+						// console.log('구서버 바코드 이미 등록됨 : ' + barcode);
+						res.status(200).json({ message : 'SUCCESS'});
+					}
+					else {
+						logger('info','바코드 등록실패 : '+barcode, barcodeAdd);
+						// console.log('구서버 바코드 등록 실패 : ' + barcode);
+						res.status(200).json({ message : 'ETC_ERROR'});
+					}
+				} else{
+					logger('info','바코드 등록성공 : '+barcode, barcodeAdd);
+					res.status(200).json({ message : 'SUCCESS'});
+				}
+			});
+		}
+	});
+}
 
 // 200 : 성공
 // 400 : ID/PW틀리거나 대상자 아님
@@ -64,11 +60,11 @@ function login(req, res) {
 	var token = req.body.token;
 	var barcode;
 
-	console.log();
 	// 토큰 자동로그인
 	if(token){
 		pool.getConnection(function(err, connection){
 			if(err){
+				logger('error',err, login);
 				res.sendStatus(402);
 			}
 			var query = connection.query('select student_no from autologin where token=\''+token + '\'', function(err, rows, fields){
@@ -81,9 +77,7 @@ function login(req, res) {
 						}else{
 							barcode = (sno*6).toString();
 						}
-						// logger.logger(logger.__line, 'SUCCESS', {sno:sno});
-						// logger(__line, 'SUCCESS', {sno : sno})
-						console.log('[etc/login/token] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
+						logger('info', sno + ' Token Login SUCCESS');
 						res.status(200).json({
 							"barcode":barcode,
 							"token":token
@@ -91,13 +85,13 @@ function login(req, res) {
 					}
 					else{
 						// 토큰 없음, 재로그인 유도
-						console.log('[etc/login/token/query] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' TOKEN_ERROR');
+						logger('info', token + ' TOKEN_ERROR', login);
 						res.sendStatus(401);
 					}
 				}
 				else{
 					// DB 에러
-					console.log('[etc/login/token/getConnection] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + token + ' QUERY_ERROR');
+					logger('error', token + err, login);
 					res.sendStatus(402);
 				}
 			});
@@ -114,7 +108,6 @@ function login(req, res) {
 			form: {sno:sno, pw:pw}
 		}
 		// console.log('[login] sno : ' + sno + 'pw : ' + pw);
-
 		request(options,
 			function (error, response, body){
 				if (!error) {
@@ -149,7 +142,7 @@ function login(req, res) {
 										}
 									}
 									else{
-										console.log('err');
+										logger('error',err,login);
 										res.sendStatus(401);
 									}
 								});
@@ -159,14 +152,14 @@ function login(req, res) {
 						else {
 							// 자동로그인 체크 안한경우.
 						}
-						console.log('[etc/login] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno + ' SUCCESS');
+						logger('info', sno + ' Login SUCCESS', login);
 						res.status(200).json({
 							"token":token,
 							"barcode":barcode
 						});
 					}
 					else if(body=='N'){
-						console.log('[etc/login] login fail' + moment().format('YYYY-MM-DD HH:mm:ss') + ' ' + sno);
+						logger('info', sno + ' login fail', login);
 						return res.sendStatus(400);
 					}
 				}
@@ -184,12 +177,12 @@ function login(req, res) {
 function logout(req, res){
 	var token = req.body.token
 	if(token){
-		console.log('[etc/logout]' + token + '로그아웃');
+		logger('info', token + ' 로그아웃', logout);
 		mysql.releaseAutoLogin(token);
-		req.session.destroy();
 		res.json({"result":"logout is successful"});
 	}
 	else {
+		logger('error', token + ' 로그아웃 토큰 없음', logout);
 		res.json({"result":"invalid token"});
 	}
 }
@@ -203,7 +196,8 @@ function activeBarcode(req, res, next){
 	}
 	mysql.activateBarcode(activated,barcode);
 	res.status(200).json({"active":activated});
-	console.log('[etc/activeBarcode] ' + barcode + ' is ' + activated);
+	var sno = barcode<2000000000 ? barcode/6 : barcode/4;
+	logger('info', sno  + ' : ' + barcode + ' : ' + activated, activeBarcode);
 }
 
 // code 1: 기숙사 식당, 2 : 미추홀캠퍼스
@@ -216,10 +210,12 @@ function isBarcode(req,res){
 	// }
 	// TODO 시간에따라 할인을 구분한다.
 	// if() 할인 시간대에 하나도 해당안하면 리턴
+	var time = getTimeSlot(60);
+
 	//momnet
 	pool.getConnection(function(err, connection){
 		if(err){
-			console.log('[etc/isBarcode] DB_Connection_Error');
+			logger('error', err, isBarcode);
 			connection.release();
 			return res.status(404).json({ message : "DB_ERROR"});
 		}
@@ -228,43 +224,76 @@ function isBarcode(req,res){
 
 			if(!err){
 				if(rows.length != 0){
+					logger('info', 'barcode checked : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu, isBarcode);
 					var activated = rows[0].activated;
-					console.log('[etc/isBarcode] barcode checked : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu);
+					var lastchecktime = rows[0].lastchecktime;
 					if(activated == 1){
-						connection.query('select * from payment where barcode=? and cafecode=? and menu=?',[barcode, cafecode, menu], function (err, rows, fields){
+						connection.query('select * from payment where barcode=? and cafecode=? and menu=? and time=?',[barcode, cafecode, menu, time], function (err, rows, fields){
 							connection.release();
 							if(!err){
-									if(rows.length == 0){
-										console.log('[etc/isBarcode] Discount OK : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu);
-										return res.status(200).json({message : "SUCCESS","activated":1});
+								if(time == -1){
+									logger('error', barcode +  ' 할인 시간대 아님.' + cafecode + ', ' + menu, isBarcode);
+									return res.status(200).json({message : "SUCCESS","activated":0});
+								}
+								if(rows.length == 0){
+									if((cafecode == 1 && time == 0) || (cafecode == 2 && (time == 1 || time == 2))){
+										if(lastchecktime == null || moment().diff(moment(lastchecktime).format('YYYY-MM-DD HH:mm:ss'), 'seconds') > 15){
+											logger('info', 'Discount OK : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu, isBarcode);
+											mysql.updateBarcodeCheckTime(barcode);
+											return res.status(200).json({message : "SUCCESS","activated":1});
+										}
+										else {
+											logger('info', barcode +  ' 15초이내 할인체크.' + cafecode + ', ' + menu, isBarcode);
+											return res.status(200).json({message : "SUCCESS","activated":0});
+										}
+										// logger('info', 'Discount OK : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu, isBarcode);
+										// mysql.updateBarcodeCheckTime(barcode)
+										// return res.status(200).json({message : "SUCCESS","activated":1});
 									}
 									else {
-										console.log('[etc/isBarcode] Already_Discounted : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu);
+										logger('error', barcode +  ' 할인 시간대 아님.' + cafecode + ', ' + menu, isBarcode);
 										return res.status(200).json({message : "SUCCESS","activated":0});
 									}
+								}
+								else {
+									logger('info', 'Already_Discounted : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu, isBarcode);
+									return res.status(200).json({message : "SUCCESS","activated":0});
+								}
 							}
 							else {
-								console.log('[etc/isBarcode] Err : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu + err);
+								logger('error', barcode + ' code : ' + cafecode + ' menu : ' + menu + err, isBarcode);
 								return res.status(200).json({ message : "DB_ERROR"});
 							}
 						});
 					}
 					else {
-						activated = 0;
-						console.log('[etc/isBarcode] Barcode Not Activated ' + barcode);
-						// logger.info(barcode/6 + ' 불법적인 경로');
-						// console.log('[etc/isBarcode] ' + barcode/6 + '님이 불법적인 경로로 할인시도를 하였습니다.');
+						logger('info', 'Barcode Not Activated ' + barcode, isBarcode);
 						return res.status(200).json({message : "SUCCESS","activated":0});
 					}
-					// return res.status(200).json({message : "SUCCESS","activated":activated});
 				}
 				else{
-					console.log('[etc/isBarcode] Barcode_Not_Found : ' + barcode);
+					// // 구 서버 지연때문에 등록되지 않은 바코드들을 위해 조건만 맞으면 추가시켜줌.
+					// //console.log(barcode*1 >= 1000000000 && ((barcode*1/6)%1 === 0 || (barcode*1/4)%1 === 0));
+					// if(((barcode*1 >= 1000000000) && ((((barcode*1)/6)%1) === 0)) || ((barcode*1 >= 8000000000) && ((((barcode*1)/4)%1) === 0))){
+					// 	mysql.checkBarcode(barcode);
+					// 	logger('info', 'Tmp Barcode Accecpt ' + barcode, isBarcode);
+					// 	if((cafecode == 1 && time == 0) || (cafecode == 2 && (time == 2 || time == 3))){
+					// 		logger('info', 'Discount OK : ' + barcode + ' code : ' + cafecode + ' menu : ' + menu, isBarcode);
+					// 		return res.status(200).json({message : "SUCCESS","activated":1});
+					// 	}
+					// 	else {
+					// 		logger('error', barcode +  ' 할인 시간대 아님.' + cafecode + ', ' + menu, isBarcode);
+					// 		return res.status(200).json({message : "SUCCESS","activated":0});
+					// 	}
+					// }
+					// else {
+					logger('error', 'Barcode Not Found ' + barcode, isBarcode);
 					return res.status(400).json({ message : 'BARCODE_ERROR'});
+					// }
 				}
 			}
 			else{
-				console.log('[etc/isBarcode] Query_Error' + err);
+				logger('error', err , isBarcode);
 				return res.status(404).json({ message : 'DB_QUERY_ERROR'});
 			}
 		});
@@ -278,41 +307,44 @@ function paymentSend(req, res){
 	var payment = req.query.payment;
 	// console.log({barcode:barcode, cafecode:cafecode, menu:menu, payment:payment});
 	// if(!barcode || !cafecode || !menu || !payment){
-		// return res.status(400).json({ message : "Parameter_Error"});
+	// return res.status(400).json({ message : "Parameter_Error"});
 	// }
+	var time = getTimeSlot(70);
 	pool.getConnection(function(err, connection){
 		if(err){
-			console.log('[etc/paymentSend] DB_Connection_Error' + err);
+			logger('error', err, paymentSend);
 			return res.status(404).json({ message : "DB_ERROR"});
 		}
-		if(payment == 'Y')
-		connection.query('insert into payment (barcode, cafecode, menu) values ('+barcode+','+cafecode+','+menu+')', function(err, result){
-			// console.log(JSON.stringify(result) + ' ' + err.code);
-			connection.release();
-			if(!err){
-				console.log('[etc/paymentSend] 결제 성공 barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu);
-				return res.status(200).json({ message : 'SUCCESS'});
-			}
-			else if(err.code == 'ER_DUP_ENTRY') {
-				console.log('[etc/paymentSend] 중복 할인됨 barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu);
-				return res.status(200).json({ message : 'Already_Discounted'});
-			}
-			else {
-				console.log('[etc/paymentSend] 에러 : barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu + err);
-				return res.status(200).json({ message : 'SUCCESS'});
-			}
-		});
+
+		if(payment == 'Y'){
+			connection.query('insert into payment (barcode, cafecode, menu, time) values ('+barcode+','+cafecode+','+menu+','+time+')', function(err, result){
+				// console.log(JSON.stringify(result) + ' ' + err.code);
+				connection.release();
+				if(!err){
+					logger('info', '결제등록 성공. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu, paymentSend);
+					return res.status(200).json({ message : 'SUCCESS'});
+				}
+				else if(err.code == 'ER_DUP_ENTRY') {
+					logger('error', '중복 할인됨. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu, paymentSend);
+					return res.status(200).json({ message : 'Already_Discounted'});
+				}
+				else {
+					logger('error', '결제등록 실패. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu + err, paymentSend);
+					return res.status(200).json({ message : 'SUCCESS'});
+				}
+			});
+		}
 		else {
 			connection.query('delete from payment where barcode=? and cafecode=? and menu=? ', [barcode, cafecode, menu], function(err, result){
 				// console.log(JSON.stringify(result) + ' ' + err);
 				connection.release();
 				if(!err){
-					console.log('[etc/paymentSend] 결제취소 성공. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu);
+					logger('info', '결제취소 성공. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu, paymentSend);
 					return res.status(200).json({ message : 'SUCCESS'});
 				}
 				else {
-					console.log('[etc/paymentSend] 결제취소 실패. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu + err);
-					return res.status(200).json({ message : 'SUCCESS'});
+					logger('error', '결제취소 실패. barcode : ' + barcode + ' cafecode : ' + cafecode + ' menu : ' + menu + err, paymentSend);
+					return res.status(200).json({ message : 'ERROR'});
 				}
 			});
 		}
@@ -325,9 +357,7 @@ function postErrorMessage(req, res){
 	var msg = req.body.msg;
 	var device = req.body.device;
 	var service = req.body.service;
-
-	console.log('error_msg is registered');
-
+	logger('info', '문의사항 '+service+' '+msg+' 등록됨', postErrorMessage);
 	mysql.putError(sno, title, msg, device, service);
 	res.json({"result":"success"});
 }
@@ -341,25 +371,36 @@ function getErrorMessage(req, res){
 
 	asc.series(task, function(err, results){
 		// console.log(results);
-		res.send(results[0]);
+		json = JSON.parse(JSON.stringify(results[0]));
+		res.send('<pre>' + JSON.stringify(json, null, '\t') + '</pre>');
 	})
 }
 
-function makeDate(millis){
-	var now = new Date(millis);
-	var year = now.getFullYear();
-	var month = now.getMonth()+1;
-	var day = now.getDate();
-	if(month<10){
-		month = '0'+month;
+function getTimeSlot(spare){
+	if(!spare) spare = 0;
+	var breakfastStart = moment('07:00','HH:mm');
+	var breakfastEnd = moment('09:40','HH:mm').add(spare, 'm');
+	var launchStart = moment('10:30','HH:mm');
+	var launchEnd = moment('14:10', 'HH:mm').add(spare, 'm');
+	var dinnerStart = moment('16:30', 'HH:mm');
+	var dinnerEnd = moment('18:40', 'HH:mm').add(spare, 'm');
+	var now = moment();
+	var time;
+	if(now.isBetween(breakfastStart, breakfastEnd, 'minutes', '[]')){
+		time = 0;
 	}
-	if(day<10) {
-		day = '0'+day;
+	else if (now.isBetween(launchStart, launchEnd, 'minutes', '[]')) {
+		time = 1;
 	}
-	var date = ''+year+month+day;
-	return date;
+	else if (now.isBetween(dinnerStart, dinnerEnd, 'minutes', '[]')){
+		time = 2;
+	} else {
+		time = -1;
+	}
+	return time;
 }
 
+module.exports.barcodeAdd = barcodeAdd;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.activeBarcode = activeBarcode;
