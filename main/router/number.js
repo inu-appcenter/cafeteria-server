@@ -8,6 +8,7 @@ var moment = require('moment');
 // var io = require('socket.io')(http);
 // var http = require('http');
 var request = require('request');
+const logger = require('./logger.js');
 
 
 var FCM = require('fcm-node');
@@ -26,28 +27,29 @@ function isNumberWait(req, res){
 	var cafecode;
 	pool.getConnection(function(err, connection){
 		if(err){
+			logger('error', err, isNumberWait);
 			res.status(402).send('err');
 		}
 		var query = connection.query('select ordernum, cafecode from number where flag=0 and token=\''+fcmToken + '\'', function(err, rows, fields){
+			connection.release();
 			if(!err){
 				if(rows.length != 0){
 					for(var i in rows){
 						ordernums.push(rows[i].ordernum);
 					}
 					cafecode = rows[0].cafecode;
-					res.json({"cafecode":cafecode, num:ordernums});
+					return res.json({"cafecode":cafecode, num:ordernums});
 				}
 				else {
 					// console.log('you are not wait');
-					res.status(400).send('not wait');
+					return res.status(400).send('not wait');
 				}
 			}
 			else{
-				console.log('err');
-				res.sendStatus(402);
+				logger('error', err, isNumberWait);
+				return res.sendStatus(402);
 			}
 		});
-		connection.release();
 	});
 }
 
@@ -66,6 +68,7 @@ function registerNumber(req, res){
 
 	pool.getConnection(function(err, connection){
 		if(err){
+			logger('error', err, registerNumber);
 			res.send('err');
 		}
 		else {
@@ -85,8 +88,10 @@ function registerNumber(req, res){
 					results.splice(results.indexOf(0),1);
 				}
 				res.json({"cafecode":code,"token":token, "nums":results});
-				if(results.length == 0) results = "nothing"
-				console.log('[number/registerNumber] cafecode : ' + code + ', ' + results + ' registered.');
+				if(results.length == 0) {
+					results = "nothing";
+				}
+				logger('info', 'cafecode : ' + code + ', ' + results + ' registered.', registerNumber);
 			});
 		}
 	});
@@ -111,7 +116,7 @@ function insertNumber(connection, sql, data, callback){
 		var num = req.query.num;
 		var code = req.query.code;
 		var cafe = require('../public/cafecode.json');
-		console.log('[number/pushNumber] ' + moment().format('YYYY-MM-DD HH:mm:ss') + ' | cafecode : ' + code + ' : ' + num);
+		logger('info', 'cafecode : ' + code + ' : ' + num, pushNumber);
 		// console.log('[number/getPushNumber/params]' + code + ' ' + num );
 
 		const options = {
@@ -120,21 +125,23 @@ function insertNumber(connection, sql, data, callback){
 		}
 
 		request(options,
-			function (error, response, body){
-				if(!error){
+			function (err, response, body){
+				if(!err){
 					// console.log('[number/pushNumber/request] SUCCESS ' + body);
 				}
 				else {
-					console.log('[number/pushNumber] Error ' + error);
+					logger('error', err, pushNumber);
+					// console.log('[number/pushNumber] Error ' + error);
 				}
 			}
 		);
 
 		pool.getConnection(function(err, connection){
 			if(err){
-				console.log('[number/pushNumber] DB_Connection_Select_ERROR')
-				res.json({'result':'error'});
-				return;
+				connection.release();
+				logger('error', err, pushNumber);
+				// console.log('[number/pushNumber] DB_Connection_Select_ERROR')
+				return res.json({'result':'error'});
 			}
 			var query = connection.query('select token, device from number where ordernum=? and cafecode=? and flag=0', [num, code], function(err, rows, fields){
 				if(!err){
@@ -143,11 +150,12 @@ function insertNumber(connection, sql, data, callback){
 						var token = rows[0].token;
 						var device = rows[0].device;
 						connection.query('update number set flag=1 where token=? and ordernum=? and cafecode=? ', [token, num, code], function(err, rows, fields){
+							connection.release();
 							if(err){
-								console.log('[number/pushNumber] DB_UPDATE_ERR ' + err);
+								logger('error', err, pushNumber);
+								// console.log('[number/pushNumber] DB_UPDATE_ERR ' + err);
 							}
 						});
-						connection.release();
 						var message;
 						if(device == 'ios'){
 							message = {
@@ -176,21 +184,25 @@ function insertNumber(connection, sql, data, callback){
 						}
 						fcm.send(message, function(err, response){
 							if (err) {
-								console.log('[number/pushNumber] FCM_ERROR');
-								return res.json({'result':'ERROR'});
+								fcm.send(message, function(err, response){
+									if(err){
+										logger('error', fcmtoken + err, pushNumber);
+										// return res.json({'result':'SUCCESS'});
+									}
+								});
 							}
 						});
 						break;
 						case 0:
-							// console.log('[number/pushNumber] Not_Exist');
+						// console.log('[number/pushNumber] Not_Exist');
 							return res.json({'result':'SUCCESS'});
 						break;
 					}
-
 					res.json({'result':'SUCCESS'});
 				}
 				else {
-					console.log('[number/pushNumber] DB_Connection_ERROR');
+					logger('error', err, pushNumber);
+					// console.log('[number/pushNumber] DB_Connection_ERROR');
 				}
 			});
 		}
@@ -204,6 +216,7 @@ function resetNumber(req, res){
 	}
 	pool.getConnection(function(err, connection){
 		if(err){
+			logger('error', err, resetNumber);
 			res.status(402).send('err');
 		}
 		else{
@@ -211,10 +224,11 @@ function resetNumber(req, res){
 			function(err, results){
 				connection.release();
 				if(err){
-					console.log('[number/resetNumber] DB_QUERY_ERROR :' + fcmtoken)
+					logger('error', fcmtoken + err, resetNumber);
+					// console.log('[number/resetNumber] DB_QUERY_ERROR :' + fcmtoken)
 					return res.status(402).send('err');
 				} else{
-					console.log('[NUMBER/RESETNUMBER] SUCCESS : ' + fcmtoken);
+					logger('info', 'SUCCESS : ' + fcmtoken.substring(0,10), resetNumber);
 					return res.json({"result":"success"});
 				}
 			}
