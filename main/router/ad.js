@@ -4,7 +4,7 @@ var path = require('path');
 var im = require('imagemagick');
 const multer = require('multer'); // multer모듈 적용 (for 파일업로드)
 var AD_MANAGE_PW = require('../config.js').AD_MANAGE_PW;
-
+const logger = require('./logger.js');
 
 function adSet(req, res){
   var pw = req.body.pw;
@@ -22,7 +22,8 @@ function adSet(req, res){
   if(pw != AD_MANAGE_PW){
     var item = no*1;
     item++;
-    console.log('[ad/adSet] PASSWORD_ERROR');
+    // logger('PASSWORD_ERROR');
+    // console.log('[ad/adSet] PASSWORD_ERROR');
     res.redirect('/ads?item=' + item  + '&error=pw');
     return;
   }
@@ -32,11 +33,11 @@ function adSet(req, res){
     ad.url = '';
     ad.contents = [];
     if(ad.img){
-      var imgpath = path.join(__dirname, '../public', ad.img);
+      imgpath = path.join(__dirname, '../public', ad.img);
       fs.unlink(imgpath,
         function(err){
           if(err){
-            console.log(err);
+            logger('error', err, adSet);
           }
         }
       );
@@ -46,7 +47,7 @@ function adSet(req, res){
       fs.unlinkSync(imgpath,
         function(err){
           if(err){
-            console.log(err);
+            logger('error', err, adSet);
           }
         }
       );
@@ -56,7 +57,7 @@ function adSet(req, res){
   else {
     // 이미지 치환
     if(file){
-      console.log(req.file);
+      // console.log(req.file);
       imgname = req.file.filename;
       ad.img = '/image/' + imgname;
       // im.identify('../public' + ad.img, function(err, features){
@@ -80,7 +81,7 @@ function adSet(req, res){
         fs.unlink(path.join(__dirname, '../public', oldimage),
         function(err){
           if(err){
-            console.log(err);
+            logger('error', err, adSet);
           }
         });
       }
@@ -103,10 +104,10 @@ function adSet(req, res){
   var fd = fs.open(path.join(__dirname, '../public', 'ads.json'), "w",  function(err, fd){
     if(!err){
       fs.writeSync(fd, JSON.stringify(ads, null, '\t'), 0);
-      console.log('[ad/adSet] ad 수정 : ' + JSON.stringify(ad, null, '\t'));
+      logger('info', 'ad 수정 : ' + JSON.stringify(ad, null, '\t'), adSet);
     }
     else {
-      console.log(err);
+      logger('error', err, adSet);
     }
   });
 
@@ -126,9 +127,9 @@ var upload = function(){
     }
   });
   return multer({ storage: storage });
-}
+};
 
 module.exports = {
   adSet,
   upload
-}
+};

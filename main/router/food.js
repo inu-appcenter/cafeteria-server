@@ -4,6 +4,7 @@ const cafecode = require('../public/cafecode.json');
 const util = require('util');
 const path = require('path');
 const moment = require('moment');
+const logger = require('./logger.js');
 
 const time = ["", "조식", "중식", "석식"];
 
@@ -104,10 +105,11 @@ function getFoodPlan(date){
       }
       fs.writeFile(path.join(__dirname, '../public/food', date), JSON.stringify(json,null,'\t'), function(err){
         if(!err){
-          console.log('[food/getFoodPlan] 식단 저장 ' + date);
+          logger('info','식단 저장 ' + date, getFoodPlan);
+          logger('telegram','식단 저장 ' + date, getFoodPlan);
         }
         else {
-          console.log('[food/getFoodPlan] ' + err);
+          logger('info', err, getFoodPlan);
         }
       });
       // console.log(json);

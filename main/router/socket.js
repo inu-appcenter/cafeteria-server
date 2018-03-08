@@ -1,3 +1,6 @@
+const util = require('util');
+const moment = require('moment');
+const logger = require('./logger.js');
 
 var socketList = [];
 var io;
@@ -17,7 +20,10 @@ function create (server){
 
   io.on('connection', function(socket){
     socketList.push(socket);
-    console.log('[socket] ' + socket.id + ' is connected, total : ' + socketList.length);
+    var address = socket.handshake.address;
+    address = address.substring(7);
+    logger('info', util.format('ip : %s id : %s... connected, total : %s', address, socket.id.substring(0,8), socketList.length));
+    // console.log('[socket] ip : ' + address + ' id : ' + socket.id.substring(0,8) + '... connected, total : ' + socketList.length);
 
     socket.on('reconnect', function(){
       console.log('[socket] ' + socket.id + ' has reconnected');
@@ -25,7 +31,8 @@ function create (server){
 
     socket.on('disconnect', function(){
       socketList.splice(socketList.indexOf(socket),1);
-      console.log('[socket] ' + socket.id + ' has disconnected, total : ' + socketList.length);
+          logger('info', util.format('ip : %s id : %s... disconnected, total : %s', address, socket.id.substring(0,8), socketList.length));
+      // console.log(util.format('[%s][socket] ip : %s id : %s... disconnected, total : %s',moment().format('HH:mm:ss'), address, socket.id.substring(0,8), socketList.length));
     });
   }); // io.on
   return io;
