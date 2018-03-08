@@ -1,35 +1,23 @@
 // copyright(c) 2017 All rights reserved by jaemoon(jjaemny@naver.com) 201201646 정보통신공학과 신재문
-const express = require('express');
-const cluster = require('express-cluster');
-const session = require('express-session');
-const fs = require('fs');
-const http = require('http');
-const path = require('path');
-const moment = require('moment');
-const bodyParser = require('body-parser');
+
+const cluster = require('cluster');
+const SESSION_KEY = require('./config.js').SESSION_KEY;
+const food = require('./router/food');
+const socket = require('./router/socket.js');
+const logger = require('./router/logger.js');
 const schedule = require('node-schedule');
 
-const morgan = require('morgan');
-const randtoken = require('rand-token');
+// const logDirectory = path.join(__dirname+'/public','log');
 
-const rfs = require('rotating-file-stream');
-const etc = require('./router/etc.js');
-const number = require('./router/number.js');
-const socket = require('./router/socket.js');
-const ad = require('./router/ad.js');
-const food = require('./router/food');
-const SESSION_KEY = require('./config.js').SESSION_KEY;
-const logDirectory = path.join(__dirname+'/public','log');
+// schedule.scheduleJob('58 23 * * *', function(){
+// });
 
-// 식단 파싱 매일 7시
-var dd = schedule.scheduleJob('* * 7 * *', food.getFoodPlans);
 
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-var accessLogStream = rfs('inuCafe.log',{
-	interval : '7d',
-	size : '10M',
-	path : logDirectory
-});
+// var accessLogStream = rfs('inuCafe.log',{
+// 	interval : '7d',
+// 	size : '10M',
+// 	path : logDirectory
+// });
 
 // morgan.token('current_time', (req, res)=>(
 // 	moment().format('YYYY-MM-DD HH:mm:ss')
@@ -40,9 +28,46 @@ var accessLogStream = rfs('inuCafe.log',{
 // morgan.token('sno', (req,res) => (
 // 	req.session.device
 // ));
+// 서버가 죽는걸 방지, 다중 처리.
+if (cluster.isMaster) {
 
-// 서버가 죽는걸 방지.
-cluster(function(worker){
+	// 식단 파싱 매일 7시
+	// TODO 오래된 식단 삭제 하기.
+	// TODO DB 일별 초기화.
+	const bot = require('./router/telegrambot.js');
+	schedule.scheduleJob('0 7 * * *', food.getFoodPlans);
+	schedule.scheduleJob('0 0 * * *', console.clear());
+	for (var i = 0; i < 1; i++) {
+		var child = cluster.fork();
+		logger('info','worker '+child.process.pid+' born at init.');
+	}
+	cluster.on('exit', function(deadWorker, code, signal) {
+		var worker = cluster.fork();
+		var newPID = worker.process.pid;
+		var oldPID = deadWorker.process.pid;
+		logger('error','worker '+oldPID+' died.');
+		logger('error','worker '+newPID+' born.');
+	});
+} else {
+
+	const express = require('express');
+	// const session = require('express-session');
+	const fs = require('fs');
+	const http = require('http');
+	const path = require('path');
+	const moment = require('moment');
+	const bodyParser = require('body-parser');
+	const winston = require('winston');
+	const morgan = require('morgan');
+	const randtoken = require('rand-token');
+	const serveIndex = require('serve-index');
+
+	const mysql = require('./router/mysql.js');
+	const rfs = require('rotating-file-stream');
+	const etc = require('./router/etc.js');
+	const number = require('./router/number.js');
+	const ad = require('./router/ad.js');
+
 	var port = 3829;
 	var app = express();
 	var server = http.createServer(app);
@@ -50,20 +75,50 @@ cluster(function(worker){
 
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
+	// app.use(session(SESSION_KEY));
 	app.use('/', express.static(__dirname + '/public'));
 	app.use('/image', express.static(__dirname + '/public/image'));
 	app.use('/js', express.static(__dirname + '/views/js'));
-	app.use(session(SESSION_KEY));
-	// app.use(morgan('[:current_time] IP:remote-addr Method:method Status:status Respons-time :response-time ms'),
-		// {skip:function (req,res){return req.url == '/activeBarcode' || '/socket' || '/errormsg' || '/food' || '/ads' || '/' || '/js'}, stream:accessLogStream});
+	app.use('/css', express.static(__dirname + '/views/css'));
+	app.use('/log', serveIndex(__dirname + '/log'));
+	app.use('/log', express.static(__dirname + '/log'));
+	app.use('/logs', serveIndex(__dirname + '/public/log'));
+	app.use('/logs', express.static(__dirname + '/public/log'));
+	// app.use(timeout(6*1000));
+	// app.use(haltOnTimedout);
 
+	// app.use(morgan('[:current_time] IP:remote-addr Method:method Status:status Respons-time :response-time ms'),
+	// {skip:function (req,res){return req.url == '/activeBarcode' || '/socket' || '/errormsg' || '/food' || '/ads' || '/' || '/js'}, stream:accessLogStream});
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
+	app.use(function(req, res, next){
+		res.setTimeout(3*1000, function(){
+			logger('error-only', 'response time out : ' + req.originalUrl + '\n' + req);
+			res.status(200).json({message : "SUCCESS", activated:0});
+			// process.exit();
+		});
+		next();
+	});
+
+	app.use(function(err, req, res, next){
+		logger('error', 'errorHandler : ' + req.originalUrl + '\n' + req + '\n' + err);
+		res.status(200).json({message : "SUCCESS", activated:0});
+		process.exit();
+	});
+
+	app.get('/std.log', (req, res) => {	// read all lines:
+		logger.readReverse('./std.log', (str)=>{res.send('<pre>위가 최신\n'+str+'</pre>')});
+	});
+	app.get('/err.log', (req, res) => {	// read all lines:
+		logger.readReverse('./err.log', (str)=>{res.send('<pre>위가 최신\n'+str+'</pre>')});
+	});
+
 	app.get('/ads', (req, res) => {res.render('ads');});
 	app.get('/store', (req, res) => {res.render('store');});
 	app.get('/food/:date', food.food);
 	app.post('/adSet', ad.upload().single('userfile'), ad.adSet);
 
+	app.get('/barcodeAdd', etc.barcodeAdd);
 	app.post('/login', etc.login);
 	app.post('/logout',  etc.logout);
 	app.post('/activeBarcode', etc.activeBarcode);
@@ -80,6 +135,6 @@ cluster(function(worker){
 	app.get('/errormsg', etc.getErrorMessage);
 
 	server.listen(port);
-	console.log("서버 시작" + moment().format('YYYY-MM-DD HH:mm:ss'));
-},
-{count:2});
+	// 클라이언트가 응답을 받지않고 연결을 끊으면 서버가 2분간 대기하게 되므로, 적절히 짧은 시간을 주어야한다.
+	server.timeout = 2*1000;
+}
