@@ -4,7 +4,7 @@ const cafecode = require('../public/cafecode.json');
 const util = require('util');
 const path = require('path');
 const moment = require('moment');
-const logger = require('./logger.js');
+// const logger = require('./logger.js');
 
 const time = ["", "조식", "중식", "석식"];
 
@@ -29,18 +29,35 @@ var makeConerName = function(code, no, time){
 
 function food(req, res){
   var date = req.params.date;
+  var type = req.params.type;
+  console.log(type);  // TODO android, iOS 분리코드
+  if(type == 'android'){
+    fs.exists(path.join(__dirname, '../public/androidfood', date + '.json'), (exists) => {
+      if(exists){
+        res.json(require('../public/androidfood/' + date + '.json'));
+        // res.json(fs.readFileSync(path.join(__dirname, '../public/androidfood', date), 'utf8'));
+      }
+      else {
+        res.sendStatus(400);
+      }
+    });
+  }
+  else {
+    fs.exists(path.join(__dirname, '../public/food', date + '.json'), (exists) => {
+      if(exists){
+        res.json(require('../public/food/' + date + '.json'));
+        // res.json(fs.readFileSync(path.join(__dirname, '../public/food', date), 'utf8'));
+      }
+      else {
+        res.sendStatus(400);
+      }
+    });
+  }
   // console.log(date);
-  fs.exists(path.join(__dirname, '../public/food', date) + date, (exists) => {
-    if(exists){
-      res.json(require('../public/food/'+date));
-    }
-    else {
-      res.sendStatus(400);
-    }
-  });
 }
 
-function getFoodPlan(date){
+// TODO mode : android, iOS 분리코드
+function getFoodPlan(date, mode){
   var options = {
     uri : 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch?stdDate=' + date,
     method : 'GET'
@@ -63,9 +80,17 @@ function getFoodPlan(date){
         let menuNum = cafecode[i].menu;
         if(menuNum != -1){
           let conercheck = true;
-          json[cafecode[i].no + ''] = json[makeResultName(menuNum)];
+          // TODO android, iOS 분리코드
+          if(mode == 0){
+            json[cafecode[i].no + ''] = json[makeResultName(menuNum)];
+            menus = json[cafecode[i].no + ''];
+          }
+          else {
+            json['cafe' + cafecode[i].no] = json[makeResultName(menuNum)];
+            menus = json['cafe' + cafecode[i].no];
+          }
           delete json[makeResultName(menuNum)];
-          menus = json[cafecode[i].no + ''];
+          // menus = json[cafecode[i].no + ''];
           for(let j in menus){
             let menu = menus[j];
             if(menu.MENU == null){
@@ -103,13 +128,21 @@ function getFoodPlan(date){
           }
         }
       }
-      fs.writeFile(path.join(__dirname, '../public/food', date), JSON.stringify(json,null,'\t'), function(err){
+      // TODO android, iOS 분리코드
+      var dir = '../public/';
+      if(mode == 0){
+        dir += 'food';
+      }
+      else {
+        dir += 'androidfood';
+      }
+      fs.writeFile(path.join(__dirname, dir, date + '.json'), JSON.stringify(json,null,'\t'), function(err){
         if(!err){
-          logger('info','식단 저장 ' + date, getFoodPlan);
-          logger('telegram','식단 저장 ' + date, getFoodPlan);
+          // logger('info','식단 저장 ' + date, getFoodPlan);
+          // logger('telegram','식단 저장 ' + date, getFoodPlan);
         }
         else {
-          logger('info', err, getFoodPlan);
+          // logger('error', err, getFoodPlan);
         }
       });
       // console.log(json);
@@ -119,15 +152,17 @@ function getFoodPlan(date){
 }
 
 function getFoodPlans(){
-	var now = Date.now();
-	var aDay = 86400000;
+  var now = Date.now();
+  var aDay = 86400000;
   var someday;
-	for(var i = 0; i < 7; i++){
-		someday = now + (aDay * i);
+  for(var i = 0; i < 7; i++){
+    someday = now + (aDay * i);
     // console.log(now + (aDay * i));
-		var date = moment(someday).format('YYYYMMDD');
-		getFoodPlan(date);
-	}
+    var date = moment(someday).format('YYYYMMDD');
+    // TODO android, iOS 분리코드
+    getFoodPlan(date, 0);
+    getFoodPlan(date, 1);
+  }
 }
 
 // getFoodPlans();
