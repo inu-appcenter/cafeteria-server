@@ -9,32 +9,11 @@
 	},
 	{
 		"no": "2",
-		"title": "인천대 앱센터 신입 모집",
-		"img": "/image/1519294334844.jpg",
+		"title": "",
+		"img": "",
 		"previewimg": "",
-		"url": "https://www.facebook.com/INUAppCenter/",
-		"contents": [
-			{
-				"title": "모집분야",
-				"msg": "안드로이드, iOS"
-			},
-			{
-				"title": "활동내용",
-				"msg": "프로젝트 진행"
-			},
-			{
-				"title": "지원자격",
-				"msg": "1년 이상 활동 가능한 학부생"
-			},
-			{
-				"title": "회원혜택",
-				"msg": "도서, 기기 등"
-			},
-			{
-				"title": "신청방법",
-				"msg": "구글 지원서 작성!"
-			}
-		]
+		"url": "",
+		"contents": []
 	},
 	{
 		"no": "3",

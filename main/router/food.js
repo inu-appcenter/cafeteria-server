@@ -118,6 +118,8 @@ function getFoodPlan(date){
   });
 }
 
+// getFoodPlan('20180101')
+
 function getFoodPlans(){
 	var now = Date.now();
 	var aDay = 86400000;
