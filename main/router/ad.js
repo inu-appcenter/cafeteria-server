@@ -90,24 +90,15 @@ function adSet(req, res){
     ad.url = url;
     // content escape문자 없도록 파싱
     var newcontents = [];
-    for(let i=0; i < contents.length; i++){
-      contents[i] = contents[i].replace(/\r\n/gi,'\\r\\n');
-      contents[i] = JSON.parse(contents[i]);
+    contents.forEach(function(content){
+      content = content.replace(/\r\n/gi,'\\r\\n');
+      content = JSON.parse(content);
       var newcontent = {
-         title:contents[i].title,
-         msg:contents[i].msg
-       };
-       newcontents.push(newcontent[i]);
-    }
-    // contents.forEach(function(content){
-    //   content = content.replace(/\r\n/gi,'\\r\\n');
-    //   content = JSON.parse(content);
-    //   var newcontent = {
-    //     title:content.title,
-    //     msg:content.msg
-    //   };
-    //   newcontents.push(newcontent);
-    // });
+        title:content.title,
+        msg:content.msg
+      };
+      newcontents.push(newcontent);
+    });
     ad.contents = newcontents;
   }
   var fd = fs.open(path.join(__dirname, '../public', 'ads.json'), "w",  function(err, fd){
