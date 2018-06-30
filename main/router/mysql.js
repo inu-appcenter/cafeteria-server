@@ -305,10 +305,13 @@ function customQuery(sql, cb){
       function(err, rows, fields){
         connection.release();
         if(err){
-          logger('error', err, customQuery);
+          console.error(err);
+          // logger('error', err, customQuery);
           return err;
         } else{
-          cb(rows);
+          console.log(sql + ' executed');
+          // logger('info', sql + ' executed', customQuery);
+          if(cb != null) cb(rows);
           return rows;
         }
       }

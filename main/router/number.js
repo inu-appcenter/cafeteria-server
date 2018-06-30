@@ -108,45 +108,46 @@ function insertNumber(connection, sql, data, callback){
 				ret = data.ordernum;
 			}
 			callback(null, ret);
-		});
+		}
+	);
+}
+
+// EDMS에서 번호 주는 함수
+function pushNumber(req,res){
+	var num = req.query.num;
+	var code = req.query.code;
+	var cafe = require('../public/cafecode.json');
+	logger('info', 'cafecode : ' + code + ' : ' + num, pushNumber);
+	// console.log('[number/getPushNumber/params]' + code + ' ' + num );
+
+	const options = {
+		method : 'GET',
+		uri : 'http://inucafeteriaaws.us.to:3829/socket?code='+code+'&num='+num
 	}
 
-	// EDMS에서 번호 주는 함수
-	function pushNumber(req,res){
-		var num = req.query.num;
-		var code = req.query.code;
-		var cafe = require('../public/cafecode.json');
-		logger('info', 'cafecode : ' + code + ' : ' + num, pushNumber);
-		// console.log('[number/getPushNumber/params]' + code + ' ' + num );
-
-		const options = {
-			method : 'GET',
-			uri : 'http://inucafeteriaaws.us.to:3829/socket?code='+code+'&num='+num
-		}
-
-		request(options,
-			function (err, response, body){
-				if(!err){
-					// console.log('[number/pushNumber/request] SUCCESS ' + body);
-				}
-				else {
-					logger('error', err, pushNumber);
-					// console.log('[number/pushNumber] Error ' + error);
-				}
+	request(options,
+		function (err, response, body){
+			if(!err){
+				// console.log('[number/pushNumber/request] SUCCESS ' + body);
 			}
-		);
-
-		pool.getConnection(function(err, connection){
-			if(err){
-				connection.release();
+			else {
 				logger('error', err, pushNumber);
-				// console.log('[number/pushNumber] DB_Connection_Select_ERROR')
-				return res.json({'result':'error'});
+				// console.log('[number/pushNumber] Error ' + error);
 			}
-			var query = connection.query('select token, device from number where ordernum=? and cafecode=? and flag=0', [num, code], function(err, rows, fields){
-				if(!err){
-					switch(rows.length){
-						case 1:
+		}
+	);
+
+	pool.getConnection(function(err, connection){
+		if(err){
+			connection.release();
+			logger('error', err, pushNumber);
+			// console.log('[number/pushNumber] DB_Connection_Select_ERROR')
+			return res.json({'result':'error'});
+		}
+		var query = connection.query('select token, device from number where ordernum=? and cafecode=? and flag=0', [num, code], function(err, rows, fields){
+			if(!err){
+				switch(rows.length){
+					case 1:
 						var token = rows[0].token;
 						var device = rows[0].device;
 						connection.query('update number set flag=1 where token=? and ordernum=? and cafecode=? ', [token, num, code], function(err, rows, fields){
@@ -186,27 +187,27 @@ function insertNumber(connection, sql, data, callback){
 							if (err) {
 								fcm.send(message, function(err, response){
 									if(err){
-										logger('error', fcmtoken + err, pushNumber);
+										logger('error', token + err, pushNumber);
 										// return res.json({'result':'SUCCESS'});
 									}
 								});
 							}
 						});
 						break;
-						case 0:
+					case 0:
 						// console.log('[number/pushNumber] Not_Exist');
-							return res.json({'result':'SUCCESS'});
-						break;
-					}
-					res.json({'result':'SUCCESS'});
+					break;
 				}
-				else {
-					logger('error', err, pushNumber);
-					// console.log('[number/pushNumber] DB_Connection_ERROR');
-				}
-			});
-		}
-	);
+				return res.json({'result':'SUCCESS'});
+			}
+			else {
+				logger('error', err, pushNumber);
+				return res.json({'result':'ERROR'});
+				// console.log('[number/pushNumber] DB_Connection_ERROR');
+			}
+		});
+	}
+);
 }
 
 function resetNumber(req, res){

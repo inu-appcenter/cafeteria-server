@@ -95,28 +95,31 @@ function send(){
   // var contents = [];
   var subtitle;
   var msg;
+  contentsRow = 0;
   for(var i = 1 ; i <= subcount; i++){
     subtitle = $('#subtitle'+i).val();
     msg = $('#msg'+i).val();
     // console.log(subtitle + " : " + msg);
     if(msg || subtitle){
+      contentsRow++;
       form.append($('<input>')
       .attr("type", "hidden")
       .attr("name", "contents").val("{\"title\":\""+subtitle+"\", \"msg\":\""+msg+"\"}"));
     }
   }
-  if(contentsRow<5){
+  if(contentsRow<4){
     form.append($('<input>')
       .attr("type", "hidden")
       .attr("name", "contents").val("{\"title\":\"\", \"msg\":\"\"}"));
       contentsRow++;
   }
+/*
   if(contnetsRow<2){
     form.append($('<input>')
       .attr("type", "hidden")
       .attr("name", "contents").val("{\"title\":\"\", \"msg\":\"\"}"));
       contentsRow++;
-  }
+  }*/
   form.submit();
 }
 
@@ -143,8 +146,10 @@ function fillForm(no){
     for(subcount in contents){
       var subtitle = contents[subcount].title;
       var msg = contents[subcount].msg;
-      subcount++;
-      addContentRow(subcount, subtitle, msg);
+      if(msg || subtitle){
+        subcount++;
+        addContentRow(subcount, subtitle, msg);
+      }
     }
   }
 }
