@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "mv std.log log/$(date +%y-%m-%d.%H:%M:%S)_std.log ; mv err.log log/$(date +%y-%m-%d.%H:%M:%S)_err.log ; forever start -o std.log -e err.log server.js",
+    "start": "mv std.text log/$(date +%y-%m-%d.%H:%M:%S)_std.text ; mv err.text log/$(date +%y-%m-%d.%H:%M:%S)_err.text ; forever start -o std.text -e err.text server.js",
     "restart": "forever stop 0; npm start",
     "stop": "forever stop server.js"
   },
@@ -40,6 +40,7 @@
     "reverse-line-reader": "^0.2.6",
     "rotating-file-stream": "^1.2.2",
     "serve-index": "^1.9.1",
+    "sharp": "^0.20.3",
     "socket.io": "^2.0.3",
     "winston": "^2.4.0",
     "winston-daily-rotate-file": "^1.7.2"

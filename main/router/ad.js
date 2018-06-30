@@ -52,6 +52,7 @@ function adSet(req, res){
         }
       );
     }
+    ad.previewimg = '';
     ad.img = '';
   }
   else {
