@@ -1,11 +1,11 @@
 const oracledb = require('oracledb');
-const oracledbconfig = require('./config.js').dbconfig;
-const sqls = require('./config.js').sqls;
+const oracledbconfig = require('./config.js').DB_CONFIG;
+const sqls = require('./config.js').SQLS;
 const moment = require('moment');
 const util = require('util');
 // pw 양방향 암호화
 const crypto = require('crypto');
-const password = require('./config.js').password;
+const password = require('./config.js').PASSWORD;
 const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 
 // TODO 파일 로그 추가하기.
