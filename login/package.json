@@ -11,6 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "express-cluster": "0.0.5",
+    "express-session": "^1.15.6",
+    "moment": "^2.21.0",
+    "oracledb": "^2.2.0",
+    "util": "^0.10.3"
   }
 }
