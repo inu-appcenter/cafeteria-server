@@ -1,19 +1,20 @@
 // copyright(c) 2016 All rights reserved by jongwook(koyu1212@naver.com) 201003051 컴퓨터공학부 고종욱
 // edited by jaemoon 201201646 정보통신공학과 신재문
 
-var mysql = require('./mysql.js');
-var moment = require('moment');
-var request = require('request');
-var asc = require('async');
-var moment = require('moment');
-var randtoken = require('rand-token');
+const mysql = require('./mysql.js');
+const moment = require('moment');
+const request = require('request');
+const asc = require('async');
+const randtoken = require('rand-token');
 // var winston = require('winston');
-var path = require('path');
-var mysqld = require('mysql');
-var dbconfig = require('../config.js').MYSQL_CONFIG;
-var pool = mysqld.createPool(dbconfig);
-var fs = require('fs');
+const path = require('path');
+const mysqld = require('mysql');
+const config = require('../config.js');
+const dbconfig = config.MYSQL_CONFIG;
+const pool = mysqld.createPool(dbconfig);
+const fs = require('fs');
 const logger = require('./logger.js');
+const crypto = require('crypto');
 
 function barcodeAdd(req, res){
 	var barcode = req.query.barcode;
@@ -53,12 +54,12 @@ function barcodeAdd(req, res){
 // 403 : 기타 에러
 
 function login(req, res) {
-	var sno = req.body.sno;
-	var pw = req.body.pw;
-	var device = req.body.device;
-	var autologin = req.body.auto;
-	var token = req.body.token;
-	var barcode;
+	let sno = req.body.sno;
+	let pw = req.body.pw;
+	let device = req.body.device;
+	let autologin = req.body.auto;
+	let token = req.body.token;
+	let barcode;
 
 	// 토큰 자동로그인
 	if(token){
@@ -67,7 +68,7 @@ function login(req, res) {
 				logger('error',err, login);
 				res.sendStatus(402);
 			}
-			var query = connection.query('select student_no from autologin where token=\''+token + '\'', function(err, rows, fields){
+			let query = connection.query('select student_no from autologin where token=\''+token + '\'', function(err, rows, fields){
 				if(!err){
 					if(rows.length != 0){
 						// 자동로그인 성공
@@ -101,6 +102,11 @@ function login(req, res) {
 
 	// 로그인
 	else if(sno){
+		// 양방향 암호화
+		let cipher = crypto.createCipher('aes-256-cbc', config.PASSWORD);
+		let encypt = cipher.update(pw, 'utf-8', 'base64');
+		encypt += cipher.final('base64');
+		pw = encypt;
 		// 조식 대상자 확인
 		const options = {
 			method : 'POST',
@@ -305,11 +311,12 @@ function paymentSend(req, res){
 	var cafecode = req.query.code;
 	var menu = req.query.menu;
 	var payment = req.query.payment;
-	// console.log({barcode:barcode, cafecode:cafecode, menu:menu, payment:payment});
-	// if(!barcode || !cafecode || !menu || !payment){
-	// return res.status(400).json({ message : "Parameter_Error"});
-	// }
-	var time = getTimeSlot(70);
+
+	if(!barcode || !cafecode || !menu || !payment){
+		logger('error-only', {barcode:barcode, cafecode:cafecode, menu:menu, payment:payment}, paymentSend);
+		return res.status(400).json({ message : "Parameter_Error"});
+	}
+	var time = getTimeSlot(20);
 	pool.getConnection(function(err, connection){
 		if(err){
 			logger('error', err, paymentSend);
