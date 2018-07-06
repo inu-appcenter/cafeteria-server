@@ -4,6 +4,7 @@ const cafecode = require('../public/cafecode.json');
 const util = require('util');
 const path = require('path');
 const moment = require('moment');
+
 // const logger = require('./logger.js');
 
 const time = ["", "아침", "점심", "저녁"];
@@ -51,7 +52,6 @@ function food(req, res){
       return
     }
   });
-
 }
 
 // request wrapper function
@@ -151,9 +151,7 @@ async function getFoodPlan(date, mode){
       // }
     } // menu num check if end
   } // cafecode for end
-
-
-
+  
   // ---------------스캠 데이터 파싱 종료
 
   // ---------------메뉴 서버 데이터 추가
@@ -187,6 +185,7 @@ async function getFoodPlan(date, mode){
 // getFoodPlan('20180101')
 
 function getFoodPlans(){
+
   var now = Date.now();
   var aDay = 86400000;
   var someday;
