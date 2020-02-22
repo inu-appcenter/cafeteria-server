@@ -1,0 +1,24 @@
+{
+  "name": "cafeteria-server",
+  "version": "1.0.0",
+  "description": "Server side application for INU Cafeteria.",
+  "main": "index.js",
+  "scripts": {
+	"start": "node app.js",
+    "test": "echo test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inu-appcenter/INU-Cafeteria-Server.git"
+  },
+  "keywords": [
+    "inu",
+    "cafeteria"
+  ],
+  "author": "potados",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/inu-appcenter/INU-Cafeteria-Server/issues"
+  },
+  "homepage": "https://github.com/inu-appcenter/INU-Cafeteria-Server#readme"
+}
