@@ -39,15 +39,13 @@ function split(combined) {
 		const calorie = matched[3] ? matched[3] : null;
 		const foods = preprocessed.slice(0, matched.index).trim();
 
-		if (foods.length == 0) {
-			break;
+		if (foods.length != 0) {
+			result.push({
+				foods: foods,
+				price: price,
+				calorie: calorie
+			});
 		}
-
-		result.push({
-			foods: foods,
-			price: price,
-			calorie: calorie
-		});
 
 		preprocessed = preprocessed.slice(matched.index + matched[0].length);
 	}
