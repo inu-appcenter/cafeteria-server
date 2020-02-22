@@ -1,0 +1,5 @@
+[
+	"cafeteriaId",
+	"id",
+	"name"
+]

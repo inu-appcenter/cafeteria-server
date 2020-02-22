@@ -1,8 +1,10 @@
+global.__base = __dirname + '/';
+
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 
-const cafeteria = require('./routes/cafeteria.js');
+const cafeteria = require(__base + 'routes/cafeteria.js');
 
 /****************************************************************
  * Cafeteria

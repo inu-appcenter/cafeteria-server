@@ -15,15 +15,24 @@
 
 const fs = require('fs');
 
-function getCafeteriaProfiles() {
-	return JSON.parse(fs.readFileSync(__dirname + '/cafeterias.js', 'utf8'));
+function readJson(fileName) {
+	return JSON.parse(fs.readFileSync(__base + 'data/' + fileName, 'utf8'));
 }
 
-function getCornerProfiles() {
-	return JSON.parse(fs.readFileSync(__dirname + '/corners.js', 'utf8'));
-}
+function getCafeteriaKeys() { return readJson('cafeteria-keys.js'); }
+function getCafeteriaProfiles() { return readJson('cafeterias.js'); }
+
+function getCornerKeys() { return readJson('corner-keys.js'); }
+function getCornerProfiles() { return readJson('corners.js'); }
+
+function getMenuKeys() { return readJson('menu-keys.js'); }
 
 module.exports = {
+	getCafeteriaKeys,
 	getCafeteriaProfiles,
-	getCornerProfiles
+
+	getCornerKeys,
+	getCornerProfiles,
+
+	getMenuKeys
 };
