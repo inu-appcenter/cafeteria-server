@@ -56,12 +56,16 @@ const menuCache = {
  * @param	{array} keys array of key strings.
  * @returns	{boolean} true if assertion succeded, otherwise false.
  */
-function assertNonEmptyArrayWithKeys(array, arrayName, keys) {
+function assertNonEmptyArrayWithKeys(array, arrayName, keys, shoudNotBeEmpty=true) {
+	if (!array) {
+		console.log(arrayName + " is null or undefined!");
+		return false;
+	}
 	if (!Array.isArray(array)) {
 		console.log(arrayName + " is not an array!");
 		return false;
 	}
-	if (array.length == 0) {
+	if (shoudNotBeEmpty && array.length == 0) {
 		console.log(arrayName + " is empty!");
 		return false;
 	}
@@ -75,7 +79,7 @@ function assertNonEmptyArrayWithKeys(array, arrayName, keys) {
 		return true;
 	}
 
-	if (!array.reduce((acc, cur) => acc && hasKeys(cur, keys))) {
+	if (array.length != 0 && !array.reduce((acc, cur) => acc && hasKeys(cur, keys))) {
 		console.log(arrayName + " contains invalid data!");
 		return false;
 	}
@@ -234,7 +238,8 @@ function getMenus(date, callback/* (err, menus) => void */) {
 	// In the deep-dark JS world,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, menus) {
-		if (!assertNonEmptyArrayWithKeys(menus, "menus", profiles.getMenuKeys())) {
+		// It could be empty.
+		if (!assertNonEmptyArrayWithKeys(menus, "menus", profiles.getMenuKeys(), shoudNotBeEmpty=false)) {
 			callback(err, null);
 			return;
 		}
