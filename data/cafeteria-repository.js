@@ -3,53 +3,89 @@
  *
  * Single source of truth for the list of cafeteria.
  *
- * Exports: two functions.
+ * @module cafeteria-repository
  */
+
+ /**
+  * A callback used in this repository.
+  * @callback DataCallback
+  * @param	{Object} err an error object. null or undefined if no error.
+  * @param	{Object} data data if successful.
+  */
+
+ /**
+  * A cache object.
+  * @typedef	{Object} Cache
+  */
 
 const request = require('request');
 const profiles = require(__base + 'data/cafeteria-profiles.js');
 const parser = require(__base + 'data/cafeteria-parser.js');
 
 /**
- * Configs
+ * Minumum fetch interval.
+ * @const {number}
  */
 const fetchInvervalMillis = 3600000 /* An hour */
+
+/**
+ * Data source.
+ * @const {string}
+ */
 const foodMenuUrl = 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch'
 
+/**
+ * A simple cache object that holds fetched menu data.
+ * @const {Cache}
+ */
 const menuCache = {
 	data: {},
 	lastUpdateMillis: 0
 };
 
-const checker = {
-	assertNonEmptyArrayWithKeys: function(array, arrayName, keys) {
-		if (!Array.isArray(array)) {
-			console.log(arrayName + " is not an array!");
-			return false;
-		}
-		if (array.length == 0) {
-			console.log(arrayName + " is empty!");
-			return false;
-		}
+/**
+ * A checker function that asserts the given first parameter is an array
+ * with size > 0 and every element in that has all keys specified in
+ * second parameter.
+ *
+ * @param	{array} array (could be or not)an array.
+ * @param	{string} arrayName name of the array. used to write a log.
+ * @param	{array} keys array of key strings.
+ * @returns	{boolean} true if assertion succeded, otherwise false.
+ */
+function assertNonEmptyArrayWithKeys(array, arrayName, keys) {
+	if (!Array.isArray(array)) {
+		console.log(arrayName + " is not an array!");
+		return false;
+	}
+	if (array.length == 0) {
+		console.log(arrayName + " is empty!");
+		return false;
+	}
 
-		const hasKeys = function(element, keys) {
-			for (var key of keys) {
- 				if (typeof element[key] === "undefined") {
-					return false;
-				}
+	const hasKeys = function(element, keys) {
+		for (var key of keys) {
+			if (typeof element[key] === "undefined") {
+				return false;
 			}
- 			return true;
 		}
-
-		if (!array.reduce((acc, cur) => acc && hasKeys(cur, keys))) {
-			console.log(arrayName + " contains invalid data!");
-  			return false;
-		}
-
 		return true;
 	}
+
+	if (!array.reduce((acc, cur) => acc && hasKeys(cur, keys))) {
+		console.log(arrayName + " contains invalid data!");
+		return false;
+	}
+
+	return true;
 }
 
+/**
+ * Fetch menus from source and save the to the cache.
+ *
+ * @param	{string} date a date string in yyyymmdd format.
+ * @param	{DataCallback} callback a callback.
+ */
 function fetchMenus(date, callback) {
 	const options = {
 	  'uri': foodMenuUrl,
@@ -74,6 +110,22 @@ function fetchMenus(date, callback) {
 	request(options, onResponse);
 }
 
+/**
+ * Get all cafeterias.
+ * If succeeded, the result of this call pulfils key requisition of
+ * 'cafeteria-keys.js' and is in a good form that can be sent to user.
+ *
+ * In current implementation it does not require any async tasks nor callbacks,
+ * but for the consistency every public function in this repository is forced
+ * to use callback.
+ *
+ * Before calling the real callback, because there could be some cases we did
+ * not expect, to handle the case, the callback is wrapped in a callback wrapper
+ * with some data checks.
+ *
+ * @param	{DataCallback} callback callback
+ * @return	{boolean} true if call succeeded, otherwise false.
+ */
 function getCafeterias(callback/* (err, corners) => void */) {
 	// Check params.
 	if (typeof callback !== "function") {
@@ -84,7 +136,7 @@ function getCafeterias(callback/* (err, corners) => void */) {
 	// In the deep-dark JS word,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, cafeterias) {
-		if (!checker.assertNonEmptyArrayWithKeys(cafeterias, "cafeterias", profiles.getCafeteriaKeys())) {
+		if (!assertNonEmptyArrayWithKeys(cafeterias, "cafeterias", profiles.getCafeteriaKeys())) {
 			callback(err, null);
 			return;
 		}
@@ -100,6 +152,22 @@ function getCafeterias(callback/* (err, corners) => void */) {
 	return true;
 }
 
+/**
+ * Get all corners.
+ * If succeeded, the result of this call pulfils key requisition of
+ * 'corners-keys.js' and is in a good form that can be sent to user.
+ *
+ * In current implementation it does not require any async tasks nor callbacks,
+ * but for the consistency every public function in this repository is forced
+ * to use callback.
+ *
+ * Before calling the real callback, because there could be some cases we did
+ * not expect, to handle the case, the callback is wrapped in a callback wrapper
+ * with some data checks.
+ *
+ * @param	{DataCallback} callback callback
+ * @return	{boolean} true if call succeeded, otherwise false.
+ */
 function getCorners(callback/* (err, corners) => void */) {
 	// Check params.
 	if (typeof callback !== "function") {
@@ -110,7 +178,7 @@ function getCorners(callback/* (err, corners) => void */) {
 	// In the deep-dark JS word,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, corners) {
-		if (!checker.assertNonEmptyArrayWithKeys(corners, "corners", profiles.getCornerKeys())) {
+		if (!assertNonEmptyArrayWithKeys(corners, "corners", profiles.getCornerKeys())) {
 			callback(err, null);
 			return;
 		}
@@ -132,6 +200,23 @@ function getCorners(callback/* (err, corners) => void */) {
 	return true;
 }
 
+/**
+ * Get all menus.
+ * If succeeded, the result of this call pulfils key requisition of
+ * 'menu-keys.js' and is in a good form that can be sent to user.
+ *
+ * In current implementation it does not require any async tasks nor callbacks,
+ * but for the consistency every public function in this repository is forced
+ * to use callback.
+ *
+ * Before calling the real callback, because there could be some cases we did
+ * not expect, to handle the case, the callback is wrapped in a callback wrapper
+ * with some data checks.
+ *
+ * @param	{string} date a date string in yyyymmdd format.
+ * @param	{DataCallback} callback callback
+ * @return	{boolean} true if call succeeded, otherwise false.
+ */
 function getMenus(date, callback/* (err, menus) => void */) {
 	// Check parameters.
 	if (!/([12]\d{3}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))/.test(date)) {
@@ -146,7 +231,7 @@ function getMenus(date, callback/* (err, menus) => void */) {
 	// In the deep-dark JS word,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, menus) {
-		if (!checker.assertNonEmptyArrayWithKeys(menus, "menus", profiles.getMenuKeys())) {
+		if (!assertNonEmptyArrayWithKeys(menus, "menus", profiles.getMenuKeys())) {
 			callback(err, null);
 			return;
 		}
@@ -170,7 +255,6 @@ function getMenus(date, callback/* (err, menus) => void */) {
 }
 
 module.exports = {
-	fetchMenus,
 	getCafeterias,
 	getCorners,
 	getMenus

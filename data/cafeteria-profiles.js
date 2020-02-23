@@ -13,14 +13,14 @@
  * A profile that holds infomrations about a cafeteria.
  * Keys: id: number, name: string, imagePath: string,
  * supportFoodMenu: boolean, supportAlarm: boolean.
- * @typedef {Object} CafeteriaProfile
+ * @typedef	{Object} CafeteriaProfile
  */
 
 /**
  * A profile that holds informations about a corner.
  * Keys: cafeteriaId: number, id: number, name: string,
  * _type1: number, _type2: number.
- * @typedef {Object} CornerProfile
+ * @typedef	{Object} CornerProfile
  */
 
 const fs = require('fs');
