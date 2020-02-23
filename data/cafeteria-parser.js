@@ -1,15 +1,16 @@
 /**
  * cafeteria-parser.js
- * @module cafeteria-parser
  *
  * We do the FUCKING DIRTY menu parsing here.
+ * It sucks. damn...
  *
- * Exports: parse function.
+ * @module cafeteria-parser
  */
 
  /**
- * A menu object, with keys: 'cornerId', 'foods', 'price', 'calorie'.
- * @typedef {Object} menu
+ * A menu object.
+ * Keys: cornerId: number, foods: string, price: number, calorie: number.
+ * @typedef {Object} Menu
  */
 
  const profiles = require(__base + 'data/cafeteria-profiles.js');
@@ -89,7 +90,7 @@ function split(combined) {
  * Parse a raw json object (not a string!) to an array of menu.
  *
  * @param	{Object} raw unrectified dirty garbage
- * @return	{array}	array of {@link menu}.
+ * @return	{array}	array of {@link Menu}.
  */
 function parse(raw) {
 	// Lets see,
