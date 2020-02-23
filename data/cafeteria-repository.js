@@ -136,7 +136,7 @@ function getCafeterias(callback/* (err, corners) => void */) {
 		return false;
 	}
 
-	// In the deep-dark JS word,
+	// In the deep-dark JS world,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, cafeterias) {
 		if (!assertNonEmptyArrayWithKeys(cafeterias, "cafeterias", profiles.getCafeteriaKeys())) {
@@ -178,7 +178,7 @@ function getCorners(callback/* (err, corners) => void */) {
 		return false;
 	}
 
-	// In the deep-dark JS word,
+	// In the deep-dark JS world,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, corners) {
 		if (!assertNonEmptyArrayWithKeys(corners, "corners", profiles.getCornerKeys())) {
@@ -231,7 +231,7 @@ function getMenus(date, callback/* (err, menus) => void */) {
 		return false;
 	}
 
-	// In the deep-dark JS word,
+	// In the deep-dark JS world,
 	// unexpected things always happen.
 	const callbackWrapper = function(err, menus) {
 		if (!assertNonEmptyArrayWithKeys(menus, "menus", profiles.getMenuKeys())) {
