@@ -1,9 +1,12 @@
 /**
  * cafeteria.js
  *
- * This router takes requests on cafeteria and corners.
+ * This router takes requests on cafeterias, corners, and menus.
+ * It describes the domain logic of how to act to the request.
  *
- * Exports: two router functions that takes req, res as arguments.
+ * On error case, user will receive an error code.
+ *
+ * @module cafeteria
  */
 
 const repo = require('../data/cafeteria-repository.js');
@@ -15,6 +18,7 @@ function handleCafeteriaRequest(req, res) {
 	// Get params.
 	const id = req.params.id;
 
+	// Define a callback here.
 	const onCafeteriaCallback = function(err, cafeterias) {
 		// Verify data.
 		if (err) {
@@ -44,6 +48,7 @@ function handleCafeteriaRequest(req, res) {
 		}
 	}
 
+	// Fire!
 	repo.getCafeterias(onCafeteriaCallback);
 }
 
@@ -56,6 +61,7 @@ function handleCornerRequest(req, res) {
 	const id = req.params.id;
 	const cafeteriaId = req.query.cafeteriaId;
 
+	// Define a callback here.
 	const onCornerCallback = function(err, corners) {
 		if (err) {
 			console.log(err);
@@ -98,6 +104,7 @@ function handleCornerRequest(req, res) {
 		}
 	}
 
+	// Fire!
 	repo.getCorners(onCornerCallback);
 }
 
@@ -111,6 +118,7 @@ function handleMenuRequest(req, res) {
 	const _today = new Date().toISOString().split('T')[0].replace(/-/g, "");
 	const date = req.query.date ? req.query.date : _today;
 
+	// Define a callback here.
 	const onMenuCallback = function(err, menus) {
 		if (err) {
 			console.log(err);
@@ -134,11 +142,11 @@ function handleMenuRequest(req, res) {
 				res.sendStatus(500);
 			}
 		} else {
-			console.log(menus);
 			res.json(menus);
 		}
 	};
 
+	// Fire!
 	repo.getMenus(date, onMenuCallback);
 }
 

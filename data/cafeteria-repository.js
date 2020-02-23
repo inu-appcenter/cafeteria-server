@@ -2,6 +2,9 @@
  * cafeteria-repository.js
  *
  * Single source of truth for the list of cafeteria.
+ * Functions in this repository will give us null as data when an error occured.
+ * Therefore the null can be considered as a sign that there was a failure while
+ * getting the data.
  *
  * @module cafeteria-repository
  */
