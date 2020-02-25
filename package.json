@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,10 +25,35 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "hapi": "^18.1.0",
+    "jest": "^25.1.0",
+    "module-alias": "^2.2.2",
     "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
     "rand-token": "^0.4.0",
     "request": "^2.88.2",
     "sequelize": "^5.21.5"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@domain": "lib/domain",
+    "@application": "lib/application",
+    "@interfaces": "lib/interfaces",
+    "@infrastructure": "lib/domain",
+	"@common": "lib/common",
+    "@config": "config"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "@root": "<rootDir>",
+      "^@((domain|application|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
+      "^@((config){1}(/.*|))$": "<rootDir>/$1"
+    },
+    "collectCoverageFrom": [
+      "**/*.{js}",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/coverage/**"
+    ]
   }
 }

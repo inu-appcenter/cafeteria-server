@@ -1,3 +1,3 @@
 'use strict';
 
-global.__lib = __dirname + '/';
+require('module-alias/register');
