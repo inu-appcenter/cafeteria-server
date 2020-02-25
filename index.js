@@ -2,7 +2,7 @@
 
 require('module-alias/register');
 
-const sqeulize = require('@infrastructure/database/sequelize');
+const sequelize = require('@infrastructure/database/sequelize');
 const createServer = require('@infrastructure/webserver/server');
 
 async function start() {

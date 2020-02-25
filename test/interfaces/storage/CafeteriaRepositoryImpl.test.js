@@ -1,6 +1,6 @@
 'use strict';
 
-const sqeulize = require('@infrastructure/database/sequelize');
+const sequelize = require('@infrastructure/database/sequelize');
 
 const MenuConverter = require('@domain/converter/MenuConverter');
 const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
