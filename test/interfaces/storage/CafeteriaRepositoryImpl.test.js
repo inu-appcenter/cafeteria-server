@@ -13,9 +13,9 @@ const repo = new CafeteriaRepository(new CafeteriaRepositoryImpl(converter));
 
 describe('# Cafeteria repository', () => {
 
-	it('shoud get all cafeterias', async () => {
+	it('shoud get all cafeteria', async () => {
 
-		const result = await repo.getCafeterias();
+		const result = await repo.getAllCafeteria();
 
 		expect(result).toBeTruthy();
 		expect(result.length).toBeGreaterThan(0);
@@ -33,7 +33,7 @@ describe('# Cafeteria repository', () => {
 
 	it('should get cafeteria with id 2', async () => {
 
-		const result = await repo.getCafeterias({ id: 2 });
+		const result = await repo.getCafeteriaById(2);
 
 		expect(result).toEqual(
 			expect.objectContaining({
@@ -46,7 +46,7 @@ describe('# Cafeteria repository', () => {
 
 	it('should get all corners', async () => {
 
-		const result = await repo.getCorners();
+		const result = await repo.getAllCorners();
 
 		expect(result).toBeTruthy();
 		expect(result.length).toBeGreaterThan(0);
@@ -64,7 +64,7 @@ describe('# Cafeteria repository', () => {
 
 	it('should get corner with id 3', async () => {
 
-		const result = await repo.getCorners({ id: 3 });
+		const result = await repo.getCornerById(3);
 
 		expect(result).toEqual(
 			expect.objectContaining({
@@ -77,7 +77,7 @@ describe('# Cafeteria repository', () => {
 
 	it('should get corners with cafeteriaId 2', async () => {
 
-		const result = await repo.getCorners({ cafeteriaId: 2 });
+		const result = await repo.getCornersByCafeteriaId(2);
 
 		for (var corner of result) {
 			expect(corner).toEqual(
@@ -90,32 +90,12 @@ describe('# Cafeteria repository', () => {
 		}
 	});
 
-	it('should get corner with id 7 and cafeteriaId 1', async () => {
-
-		const result = await repo.getCorners({ id: 7, cafeteriaId: 1 });
-
-		expect(result).toEqual(
-			expect.objectContaining({
-				id: 7,
-				name: expect.any(String),
-				cafeteriaId: 1
-			})
-		);
-	})
-
-	it('should not get corner with id 17 and cafeteriaId 2', async () => {
-
-		const result = await repo.getCorners({ id: 17, cafeteriaId: 1 });
-
-		expect(result).toBeFalsy();
-	});
-
 	it('should get all menus 20200219', async () => {
 
 		const converter = new MenuConverter(new MenuConverterImpl());
 		const repo = new CafeteriaRepository(new CafeteriaRepositoryImpl(converter));
 
-		const result = await repo.getMenus({ date: '20200219' });
+		const result = await repo.getAllMenus('20200219');
 		const expected = [
 			{ calorie: '759',
 			  cornerId: 1,

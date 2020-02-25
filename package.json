@@ -4,7 +4,7 @@
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node index.js",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "repository": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/inu-appcenter/INU-Cafeteria-Server#readme",
   "dependencies": {
     "@hapi/boom": "^9.0.0",
+    "@hapi/hapi": "^19.1.1",
     "@hapi/inert": "^6.0.1",
     "@hapi/vision": "^6.0.0",
     "express": "^4.17.1",
@@ -42,7 +43,7 @@
     "@root": ".",
     "@domain": "lib/domain",
     "@interfaces": "lib/interfaces",
-    "@infrastructure": "lib/domain",
+    "@infrastructure": "lib/infrastructure",
     "@common": "lib/common",
     "@config": "config"
   },

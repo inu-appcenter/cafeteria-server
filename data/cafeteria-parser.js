@@ -139,7 +139,7 @@ function parse(raw) {
 	// Get a lambda that makes a formated string.
 	const getFieldName = n => 'foodMenuType' + n + 'Result';
 
-	// Get number of cafeterias.
+	// Get number of cafeteria.
 	const n_cafeteria = profiles.getCafeteriaProfiles().length;
 
 	// Get a corner profile that contains corner ids.

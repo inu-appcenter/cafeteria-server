@@ -118,7 +118,7 @@ function fetchMenus(date, callback) {
 }
 
 /**
- * Get all cafeterias.
+ * Get all cafeteria.
  * If succeeded, the result of this call pulfils key requisition of
  * 'cafeteria-keys.js' and is in a good form that can be sent to user.
  *
@@ -133,7 +133,7 @@ function fetchMenus(date, callback) {
  * @param	{DataCallback} callback callback
  * @return	{boolean} true if call succeeded, otherwise false.
  */
-function getCafeterias(callback/* (err, corners) => void */) {
+function getCafeteria(callback/* (err, corners) => void */) {
 	// Check params.
 	if (typeof callback !== "function") {
 		console.log("Wrong callback!");
@@ -142,13 +142,13 @@ function getCafeterias(callback/* (err, corners) => void */) {
 
 	// In the deep-dark JS world,
 	// unexpected things always happen.
-	const callbackWrapper = function(err, cafeterias) {
-		if (!assertNonEmptyArrayWithKeys(cafeterias, "cafeterias", profiles.getCafeteriaKeys())) {
+	const callbackWrapper = function(err, cafeteria) {
+		if (!assertNonEmptyArrayWithKeys(cafeteria, "cafeteria", profiles.getCafeteriaKeys())) {
 			callback(err, null);
 			return;
 		}
 
-		callback(err, cafeterias);
+		callback(err, cafeteria);
 	}
 
 	// No need for any additional jobs.
@@ -263,7 +263,7 @@ function getMenus(date, callback/* (err, menus) => void */) {
 }
 
 module.exports = {
-	getCafeterias,
+	getCafeteria,
 	getCorners,
 	getMenus
 };

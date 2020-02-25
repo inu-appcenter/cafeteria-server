@@ -1,7 +1,7 @@
 /**
  * cafeteria.js
  *
- * This router takes requests on cafeterias, corners, and menus.
+ * This router takes requests on cafeteria, corners, and menus.
  * It describes the domain logic of how to act to the request.
  *
  * On error case, user will receive an error code.
@@ -19,21 +19,21 @@ function handleCafeteriaRequest(req, res) {
 	const id = req.params.id;
 
 	// Define a callback here.
-	const onCafeteriaCallback = function(err, cafeterias) {
+	const onCafeteriaCallback = function(err, cafeteria) {
 		// Verify data.
 		if (err) {
 			console.log(err);
 			res.sendStatus(500);
 			return;
 		}
-		if (!cafeterias) {
+		if (!cafeteria) {
 			// Something went wrong.
 			res.sendStatus(500);
 			return;
 		}
 
 		if (id) {
-			const found = cafeterias.find(cafe =>
+			const found = cafeteria.find(cafe =>
 				cafe.id == id
 			);
 
@@ -44,12 +44,12 @@ function handleCafeteriaRequest(req, res) {
 				return;
 			}
 		} else {
-			res.json(cafeterias);
+			res.json(cafeteria);
 		}
 	}
 
 	// Fire!
-	repo.getCafeterias(onCafeteriaCallback);
+	repo.getCafeteria(onCafeteriaCallback);
 }
 
 /**

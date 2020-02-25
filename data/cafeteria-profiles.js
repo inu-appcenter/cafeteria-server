@@ -3,7 +3,7 @@
  *
  * Hardcoded cafeteria profiles.
  * We get food menus from Smart Campus API (https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch),
- * which SUCKS and does not give us anything usefule for listing and naming cafeterias.
+ * which SUCKS and does not give us anything usefule for listing and naming cafeteria.
  * So we need a hardcoded solution.
  *
  * @module cafeteria-profile
@@ -47,7 +47,7 @@ function getCafeteriaKeys() { return readJson('cafeteria-keys.js'); }
  *
  * @returns	{CafeteriaProfile} the profiles.
  */
-function getCafeteriaProfiles() { return readJson('cafeterias.js'); }
+function getCafeteriaProfiles() { return readJson('cafeteria.js'); }
 
 /**
  * Get array of keys that should be included in the response.
