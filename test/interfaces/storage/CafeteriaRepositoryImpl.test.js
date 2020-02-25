@@ -1,9 +1,9 @@
 'use strict';
 
-const MenuConverter = require('@application/converter/MenuConverter');
+const MenuConverter = require('@domain/converter/MenuConverter');
 const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
 
-const CafeteriaRepository = require('@application/repositories/CafeteriaRepository');
+const CafeteriaRepository = require('@domain/repositories/CafeteriaRepository');
 const CafeteriaRepositoryImpl = require('@interfaces/storage/CafeteriaRepositoryImpl');
 
 describe('# Cafeteria repository', () => {

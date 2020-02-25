@@ -22,9 +22,13 @@
   },
   "homepage": "https://github.com/inu-appcenter/INU-Cafeteria-Server#readme",
   "dependencies": {
+    "@hapi/boom": "^9.0.0",
+    "@hapi/inert": "^6.0.1",
+    "@hapi/vision": "^6.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "hapi": "^18.1.0",
+    "hapi-swagger": "^12.1.1",
     "jest": "^25.1.0",
     "module-alias": "^2.2.2",
     "mysql": "^2.18.1",
@@ -37,16 +41,15 @@
   "_moduleAliases": {
     "@root": ".",
     "@domain": "lib/domain",
-    "@application": "lib/application",
     "@interfaces": "lib/interfaces",
     "@infrastructure": "lib/domain",
-	"@common": "lib/common",
+    "@common": "lib/common",
     "@config": "config"
   },
   "jest": {
     "moduleNameMapper": {
       "@root": "<rootDir>",
-      "^@((domain|application|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
+      "^@((domain|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
       "^@((config){1}(/.*|))$": "<rootDir>/$1"
     },
     "collectCoverageFrom": [
