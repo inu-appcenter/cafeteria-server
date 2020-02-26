@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Register module aliases.
+ * See '_moduleAliases' in  package.json.
+ */
 require('module-alias/register');
 
 const sequelize = require('@infrastructure/database/sequelize');

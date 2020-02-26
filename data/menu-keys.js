@@ -1,6 +1,0 @@
-[
-	"cornerId",
-	"foods",
-	"price",
-	"calorie"
-]

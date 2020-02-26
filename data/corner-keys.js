@@ -1,5 +1,0 @@
-[
-	"cafeteriaId",
-	"id",
-	"name"
-]

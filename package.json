@@ -49,13 +49,15 @@
     "@interfaces": "lib/interfaces",
     "@infrastructure": "lib/infrastructure",
     "@common": "lib/common",
-    "@config": "config"
+    "@config": "config",
+	"@public": "public"
   },
   "jest": {
     "moduleNameMapper": {
       "@root": "<rootDir>",
       "^@((domain|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
-      "^@((config){1}(/.*|))$": "<rootDir>/$1"
+      "^@((config){1}(/.*|))$": "<rootDir>/$1",
+	  "^@((public){1}(/.*|))$": "<rootDir>/$1"
     },
     "collectCoverageFrom": [
       "**/*.{js}",

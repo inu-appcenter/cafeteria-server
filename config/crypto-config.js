@@ -16,21 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-'use strict';
 
-module.exports = (options, { cafeteriaRepository }) => {
-
-	if (options.id && options.cafeteriaId) {
-		// This is not allowed.
-		return null;
-	}
-
-	if (options.id) {
-		return cafeteriaRepository.getCornerById(options.id);
-	} else if (options.cafeteriaId) {
-		return cafeteriaRepository.getCornersByCafeteriaId(options.cafeteriaId);
-	} else {
-		return cafeteriaRepository.getAllCorners();
-	}
-
-};
+module.exports = {
+	key: 'encryption key :)'
+}

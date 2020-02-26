@@ -18,8 +18,6 @@
  */
 'use strict';
 
-require('@common/Object');
-
 const MenuConverter = require('@domain/converter/MenuConverter');
 const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
 

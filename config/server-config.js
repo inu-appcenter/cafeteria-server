@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 module.exports = {
-		port: process.env.PORT || 9999
+		port: 9999
 };

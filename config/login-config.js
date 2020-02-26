@@ -16,21 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-'use strict';
 
-module.exports = (options, { cafeteriaRepository }) => {
-
-	if (options.id && options.cafeteriaId) {
-		// This is not allowed.
-		return null;
-	}
-
-	if (options.id) {
-		return cafeteriaRepository.getCornerById(options.id);
-	} else if (options.cafeteriaId) {
-		return cafeteriaRepository.getCornersByCafeteriaId(options.cafeteriaId);
-	} else {
-		return cafeteriaRepository.getAllCorners();
-	}
-
-};
+module.exports = {
+	url: 'http://117.16.191.242:8081/login'
+}
