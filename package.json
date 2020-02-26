@@ -1,0 +1,69 @@
+{
+  "name": "cafeteria-server",
+  "version": "0.1.0",
+  "description": "Server side application for INU Cafeteria.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest --runInBand --detectOpenHandles",
+	"md-docs": "swagger-markdown -i docs/swagger.yaml -o docs/api-doc.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inu-appcenter/INU-Cafeteria-Server.git"
+  },
+  "keywords": [
+    "inu",
+    "cafeteria"
+  ],
+  "author": "potados",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/inu-appcenter/INU-Cafeteria-Server/issues"
+  },
+  "homepage": "https://github.com/inu-appcenter/INU-Cafeteria-Server#readme",
+  "dependencies": {
+    "@hapi/boom": "^9.0.0",
+    "@hapi/good": "^9.0.0",
+    "@hapi/good-console": "^8.1.2",
+    "@hapi/good-squeeze": "^5.2.1",
+    "@hapi/hapi": "^19.1.1",
+    "@hapi/inert": "^6.0.1",
+    "@hapi/joi": "^17.1.0",
+    "@hapi/vision": "^6.0.0",
+    "blipp": "^4.0.1",
+    "hapi": "^18.1.0",
+    "hapi-auth-cookie": "^10.0.0",
+    "hapi-swagger": "^12.1.1",
+    "jest": "^25.1.0",
+    "module-alias": "^2.2.2",
+    "mysql2": "^2.1.0",
+    "node-fetch": "^2.6.0",
+    "rand-token": "^0.4.0",
+    "sequelize": "^5.21.5",
+    "swagger-markdown": "^1.2.0"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@domain": "lib/domain",
+    "@interfaces": "lib/interfaces",
+    "@infrastructure": "lib/infrastructure",
+    "@common": "lib/common",
+    "@config": "config",
+    "@public": "public"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "@root": "<rootDir>",
+      "^@((domain|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
+      "^@((config){1}(/.*|))$": "<rootDir>/$1",
+      "^@((public){1}(/.*|))$": "<rootDir>/$1"
+    },
+    "collectCoverageFrom": [
+      "**/*.{js}",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/coverage/**"
+    ]
+  }
+}
