@@ -18,7 +18,9 @@
  */
 
 module.exports = {
-	url: 'http://117.16.191.242:8081/login',
-	success: 'Y',
-	fail: 'N'
-}
+	cookie: {
+		name: 'sid-cookie',
+		password: 'APasswordStringThatIsVeryVeryLongEnoughToReachOver32CharactersWowUnbelivable',
+		isSecure: false /* We need god damn SSL! Oh fuck */
+	}
+};

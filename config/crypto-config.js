@@ -18,5 +18,5 @@
  */
 
 module.exports = {
-	key: 'encryption key :)'
+	key: 'Appcenter The Greatest.'
 }
