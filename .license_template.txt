@@ -16,34 +16,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 'use strict';
-
-const CafeteriaController = require('@interfaces/controllers/CafeteriaController');
-
-module.exports = {
-	name: 'corners',
-	version: '1.0.0',
-	register: async (server) => {
-
-		server.route([
-			{
-				method: 'GET',
-				path: '/corners',
-				handler: CafeteriaController.getCorners,
-				options: {
-					description: 'Get all corners',
-					tags: ['api']
-				}
-			},
-			{
-				method: 'GET',
-				path: '/corners/{id}',
-				handler: CafeteriaController.getCorners,
-				options: {
-					description: 'Get corners by its {id}',
-					tags: ['api']
-				}
-			}
-		]);
-	}
-};

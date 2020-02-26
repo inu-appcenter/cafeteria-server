@@ -16,34 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 'use strict';
+'use strict';
 
-const CafeteriaController = require('@interfaces/controllers/CafeteriaController');
+const crypto = require('crypto');
 
-module.exports = {
-	name: 'corners',
-	version: '1.0.0',
-	register: async (server) => {
-
-		server.route([
-			{
-				method: 'GET',
-				path: '/corners',
-				handler: CafeteriaController.getCorners,
-				options: {
-					description: 'Get all corners',
-					tags: ['api']
-				}
-			},
-			{
-				method: 'GET',
-				path: '/corners/{id}',
-				handler: CafeteriaController.getCorners,
-				options: {
-					description: 'Get corners by its {id}',
-					tags: ['api']
-				}
-			}
-		]);
-	}
+module.exports = (raw, key) => {
+	const cipher = crypto.createCipher('aes-256-cbc', key);
+	cipher.update(raw, 'utf-8', 'base64');
+	return cipher.final('base64');
 };
