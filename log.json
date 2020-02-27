@@ -1,0 +1,7 @@
+200227/192512.417, [log,myLog] data: logger initiated.
+200227/192517.570, [log,myLog,error] data: Bad date format: 9
+200227/192517.560, (1582831517560:Procyon.local:52057:k7550j0u:10000) [response,api,menus] http://Procyon.local:9999: [1;32mget[0m /menus {"date":"9"} [32m200[0m (24ms)
+200227/192519.452, [log,myLog,error] data: Bad date format: 9
+200227/192519.451, (1582831519451:Procyon.local:52057:k7550j0u:10001) [response,api,menus] http://Procyon.local:9999: [1;32mget[0m /menus {"date":"9"} [32m200[0m (2ms)
+200227/193739.491, [log,myLog] data: logger initiated.
+200227/194331.138, [log,myLog] data: logger initiated.
