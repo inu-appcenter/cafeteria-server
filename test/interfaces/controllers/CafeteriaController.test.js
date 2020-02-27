@@ -21,6 +21,7 @@
 const GetCafeteria = require('@domain/usecases/GetCafeteria');
 const GetCorners = require('@domain/usecases/GetCorners');
 const GetMenus = require('@domain/usecases/GetMenus');
+
 const CafeteriaController = require('@interfaces/controllers/CafeteriaController');
 
 jest.mock('@domain/usecases/GetCafeteria');

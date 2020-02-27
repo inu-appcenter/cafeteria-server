@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "jest --runInBand --detectOpenHandles",
-	"md-docs": "swagger-markdown -i docs/swagger.yaml -o docs/api-doc.md"
+    "md-docs": "swagger-markdown -i docs/swagger.yaml -o docs/api-doc.md"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/inu-appcenter/INU-Cafeteria-Server#readme",
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@hapi/boom": "^9.0.0",
     "@hapi/good": "^9.0.0",
     "@hapi/good-console": "^8.1.2",
@@ -64,6 +65,16 @@
       "!**/node_modules/**",
       "!**/vendor/**",
       "!**/coverage/**"
+    ]
+  },
+  "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ]
     ]
   }
 }
