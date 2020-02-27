@@ -14,7 +14,7 @@ You need these packages installed.
 
 ### Create DB
 
-We will use 'cafeteria' as a name of DB.
+We will use `cafeteria` as a name of new DB.
 
 ~~~
 CREATE DATABASE cafeteria;
@@ -46,7 +46,7 @@ mysql> CREATE USER 'potados'@'localhost' IDENTIFIED BY '1234';
 
 ### Grant privileges
 
-Now we need to grant permissions of the 'cafeteria' DB for the new user wee added.
+Now we need to grant permissions of the `cafeteria` DB for the new user wee added.
 
 ~~~
 mysql> GRANT ALL PRIVILEGES ON cafeteria.* TO '[username]'@'localhost';
