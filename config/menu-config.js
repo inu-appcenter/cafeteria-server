@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 module.exports = {
 	url: 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch',
 	fetchInterval: 3600000 /* millis */
