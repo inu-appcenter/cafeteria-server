@@ -6,6 +6,7 @@
  */
 require('module-alias/register');
 
+const logger = require('@common/logger');
 const sequelize = require('@infrastructure/database/sequelize');
 const createServer = require('@infrastructure/webserver/server');
 
@@ -15,9 +16,9 @@ async function start() {
 	try {
 		await sequelize.sync();
 
-		console.log('Connection to DB has been established successfully.');
+		logger.info('Connection to DB has been established successfully.');
 	} catch (e) {
-		console.error('Unable to connect to the database:', e);
+		logger.error('Unable to connect to the database:', e);
 	}
 
 	// Start server.
@@ -25,9 +26,9 @@ async function start() {
 		const server = await createServer();
 		await server.start();
 
-		console.log('Server running at: ' + server.info.uri);
+		logger.info('Server running at: ' + server.info.uri);
 	} catch (e) {
-		console.log(e);
+		logger.error(e);
 		process.exit(1);
 	}
 
