@@ -16,7 +16,7 @@
 
 ## API
 
-[API 문서](/docs/api-doc.md)는 여기로.
+[API 문서](/docs/API.md)는 여기로.
 
 ## 설치
 
