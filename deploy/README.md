@@ -72,13 +72,13 @@ mysql> source deploy/setup-db.sql
 
 ## Configure app
 
-### Configure DB settings
+### Configure DB
 
 Open `config/seq-config.js`.
 
 Modify keys `username` and `password` with those you used on the DB configuration.
 
-### Configure crypto config
+### Configure crypto
 
 Open `config/crypto-config.js`.
 
@@ -86,7 +86,13 @@ Change `key` with the one you received from the system administrator.
 
 If you got nothing, mail me <potados99@gmail.com>.
 
-### Configure server settings
+### Configure auth
+
+Open `config/auth-config.js`.
+
+Change `cookie.password` to any string that has at least 32 characters.
+
+### Configure server
 
 Open `config/server-config.js`.
 
