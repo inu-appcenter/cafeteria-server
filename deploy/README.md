@@ -12,15 +12,7 @@ You need these packages installed.
 
 ## Configure DB
 
-### Create DB
-
-We will use `cafeteria` as a name of new DB.
-
-~~~
-CREATE DATABASE cafeteria;
-~~~
-
-### Create user
+### Start MySQL CLI
 
 Open mysql command line client with following command:
 
@@ -30,7 +22,23 @@ $ mysql -uroot -p
 
 Type your `root` password.
 
-Once the mysql prompt is open, create a new user by:
+### Create DB
+
+We will use `cafeteria` as a name of new DB.
+
+~~~
+mysql> CREATE DATABASE cafeteria;
+~~~
+
+Use that DB.
+
+~~~
+mysql> USE cafeteria;
+~~~
+
+### Create user
+
+Create a new user by:
 
 ~~~
 mysql> CREATE USER '[username]'@'localhost' IDENTIFIED BY '[password]';

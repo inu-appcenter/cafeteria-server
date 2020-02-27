@@ -18,5 +18,5 @@
  */
 
 module.exports = {
-		port: 9999
+	port: 9999
 };
