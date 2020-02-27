@@ -33,7 +33,7 @@ mysql> CREATE DATABASE cafeteria;
 Use that DB.
 
 ~~~
-mysql> USE cafeteria;
+mysql> use cafeteria
 ~~~
 
 ### Create user

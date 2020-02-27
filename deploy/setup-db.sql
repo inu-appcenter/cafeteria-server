@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS `cafeteria` (`id` INTEGER NOT NULL , `name` VARCHAR(255) NOT NULL, `image_path` VARCHAR(255), PRIMARY KEY (`id`)) ENGINE=InnoDB;
-CREATE TABLE IF NOT EXISTS `corners` (`id` INTEGER NOT NULL , `name` VARCHAR(255), `cafeteria_id` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`cafeteria_id`) REFERENCES `cafeteria` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
-CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL , `token` VARCHAR(255), `barcode` VARCHAR(255), `last_login` DATETIME, `last_logout` DATETIME, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS `cafeteria` (`id` INTEGER NOT NULL , `name` VARCHAR(255) NOT NULL, `image_path` VARCHAR(255), PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `corners` (`id` INTEGER NOT NULL , `name` VARCHAR(255), `cafeteria_id` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`cafeteria_id`) REFERENCES `cafeteria` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL , `token` VARCHAR(255), `barcode` VARCHAR(255), `last_login` DATETIME, `last_logout` DATETIME, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO cafeteria VALUES (1, "복지회관 학생식당", "res/images/cafeteria-1.jpg");
 INSERT INTO cafeteria VALUES (2, "카페테리아", "res/images/cafeteria-2.jpg");
