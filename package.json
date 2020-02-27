@@ -34,7 +34,6 @@
     "@hapi/vision": "^6.0.0",
     "blipp": "^4.0.1",
     "fs-extra": "^8.1.0",
-    "good-winston": "^4.0.0",
     "hapi-auth-cookie": "^10.0.0",
     "hapi-swagger": "^12.1.1",
     "jest": "^25.1.0",
