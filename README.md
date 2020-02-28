@@ -2,6 +2,9 @@
 
 > 인천대학교 식단 정보 애플리케이션 INU Cafeteria (Server)
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inu-appcenter/cafeteria-server/node-ci)
+![GitHub top language](https://img.shields.io/github/languages/top/inu-appcenter/cafeteria-server)
+
 ## 개요
 
 ![architecture](/docs/architecture.jpeg)
