@@ -234,4 +234,5 @@ describe('# Cafeteria repository', () => {
 
 		expect(result).toEqual(expected);
 	});
+	
 });
