@@ -151,3 +151,11 @@ Start the server.
 ~~~
 npm start
 ~~~
+
+### Check
+
+To check if the server is running,
+
+~~~
+npm run status
+~~~
