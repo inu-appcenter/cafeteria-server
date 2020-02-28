@@ -29,6 +29,16 @@ module.exports = {
 		port: 9999
 	},
 
+	// Logging settings.
+	log: {
+		file: {
+			dir: 'log',
+			name: (name) => 'logs/' + name + '/' + name + '-%DATE%.log',
+			datePattern: 'YYYY-MM-DD'
+		},
+		timestamp: 'YYYY-MM-DD HH:mm:ss'
+	},
+
 	// Auth settings.
 	// Used in lib/infrastructure/webserver/server.
 	auth: {
