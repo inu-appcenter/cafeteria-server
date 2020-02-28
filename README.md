@@ -14,16 +14,63 @@
 - 식단 정보 제공
 - 로그인 및 바코드 생성, 관리
 
+## 상세
+
+이 애플리케이션은 밥아저씨의 "[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)"를 준수합니다. ~~아닐 수도 있음 :D~~
+
+### 디렉토리 구조
+
+~~~
+app
+ └ config                           → 설정 파일
+ └ deploy                           → 설정 및 배포 가이드, 스크립트
+ └ docs                             → 문서
+ └ lib                              → 애플리케이션 소스
+    └ common   	                    → 애플리케이션 전역에서 쓰이는 객체 (로깅, 암호화 등)
+    └ domain   	                    → 도메인 레이어 (엔터프라이즈 비즈니스 규칙과 애플리케이션 비즈니스 규칙을 통합)
+       └ converter                  → 외부 모델을 도메인 모델로 바꾸어 주는 객체
+       └ entities                   → 도메인 모델 (엔티티)
+       └ repositories               → 데이터에 접근하는 객체의 인터페이스
+       └ serializer                 → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체.
+       └ usecases                   → 애플리케이션 비즈니스 규칙
+    └ interfaces                    → 인터페이스 어댑터 레이어 (애플리케이션 비즈니스 규칙과 외부 레이어를 연결)
+       └ controllers                → Hapi.js 라우터의 handler
+       └ converter                  → converter 구현
+       └ serializers                → serializer 구현
+       └ storage                    → repository 구현
+    └ infrastructure                → 프레임워크, 드라이버 (DB, 웹서버 등)
+       └ database                   → ORM과 DB 연결 객체
+       └ network                    → 네트워크 API (fetch)
+       └ webserver                  → Hapi.js 웹 서버 구성 (서버, 라우터, 플러그인 등)
+       └ server.js                  → Hapi.js 서버 정의
+ └ public                           → 웹 서버에 의해 public으로 제공되는 파일들 (res/images 등)
+ └ test                             → 테스트 소스
+ └ index.js                         → 메인 애플리케이션 진입점
+~~~
+
 ## API
 
-API 문서는 [여기](/docs/API.md)로.
+- [API 문서](/docs/API.md)
 
-API 테스트는 [여기](http://ec2-52-79-48-231.ap-northeast-2.compute.amazonaws.com:9999/documentation#/)로.
+- [API 테스트](http://ec2-52-79-48-231.ap-northeast-2.compute.amazonaws.com:4869/documentation#/)
 
 ## 설치
 
-[Deploy](/deploy) 참조.
+- [설치 및 배포 가이드](/deploy) (우분투/데비안 계열 리눅스 환경 기준으로 작성되었습니다).
+
+## 업데이트 로그
+
+### 2020.2.29 v1.0.0
+- 새로운 시작 1.0.0 !!
+- 실서버에 배포
+- CI 테스트 적용
 
 ## 라이센스
 
-`GPLv3`
+소스 코드에는 GPLv3 라이센스가 적용됩니다. 라이센스는 [이곳](/LICENSE)에서 확인하실 수 있습니다.
+
+## 스페셜 땡스 투
+
+- 좋은 [레퍼런스](https://github.com/jbuget/nodejs-clean-architecture-app) 제공해주신 [Jérémy Buget](https://github.com/jbuget)님
+- 바쁘신 와중에도 큰 도움 주신 [doukong](https://github.com/doukong)님
+- 먼저 왔다 가신 jaemoon님, [Minjae Son](https://github.com/bungabear)님, jongwook님
