@@ -16,14 +16,21 @@
 
 ## API
 
-API 문서는 [여기](/docs/API.md)로.
+- [API 문서](/docs/API.md)
 
-API 테스트는 [여기](http://ec2-52-79-48-231.ap-northeast-2.compute.amazonaws.com:4869/documentation#/)로.
+- [API 테스트](http://ec2-52-79-48-231.ap-northeast-2.compute.amazonaws.com:4869/documentation#/)
 
 ## 설치
 
 [Deploy](/deploy) 참조.
 
+## 업데이트 로그
+
+### 2020.2.29 v1.0.0
+- 드디어 버전 1!
+- 실서버에 배포
+- CI 테스트 적용
+
 ## 라이센스
 
-`GPLv3`
+소스 코드에는 GPLv3 라이센스가 적용됩니다. 라이센스는 [이곳](/LICENSE)에서 확인하실 수 있습니다.
