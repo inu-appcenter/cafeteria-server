@@ -46,8 +46,8 @@ module.exports = {
 	// Used in lib/infrastructure/webserver/server.
 	auth: {
 		cookie: {
-			name: 'sid-cookie',
-			password: 'APasswordStringThatIsVeryVeryLongEnoughToReachOver32CharactersWowUnbelivable',
+			name: '', /* sid-cookie */
+			password: '',
 			isSecure: false /* We need god damn SSL! Oh fuck */
 		}
 	},
@@ -55,11 +55,11 @@ module.exports = {
 	// DB connection settings.
 	// Used in lib/infrastructure/database/sequelize.
 	sequelize: {
-		database: "cafeteria",
-		username: "user",
-		password: "pw",
-		host: "localhost",
-		dialect: "mysql",
+		database: '', /* cafeteria */
+		username: '',
+		password: '',
+		host: '', /* localhost */
+		dialect: '', /* mysql */
 		logging: false
 	},
 
@@ -67,7 +67,7 @@ module.exports = {
 	// Used in lib/interfaces/storage/UserRepositoryImpl.
 	login: {
 		url: 'http://117.16.191.242:8081/login',
-		key: 'Appcenter The Greatest.',
+		key: '', /* Appcenter The Greatest. */
 		success: 'Y',
 		fail: 'N'
 	},
