@@ -100,6 +100,26 @@ jest.mock('@infrastructure/network/fetch', () => {
 	};
 });
 
+/**
+ * Also the config.
+ */
+jest.mock('@config/config', () => {
+	return {
+		menu: {
+			url: '0',
+			fetchInterval: 0
+		},
+
+		log: {
+			timestamp: 0,
+			file: {
+				name: jest.fn(() => ''),
+				datePattern: ''
+			}
+		}
+	};
+});
+
 describe('# Cafeteria repository', () => {
 
 	it('shoud get all cafeteria', async () => {
@@ -234,5 +254,5 @@ describe('# Cafeteria repository', () => {
 
 		expect(result).toEqual(expected);
 	});
-	
+
 });
