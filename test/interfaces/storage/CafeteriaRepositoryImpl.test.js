@@ -111,7 +111,7 @@ jest.mock('@config/config', () => {
 		log: {
 			timestamp: 0,
 			file: {
-				name: jest.fn(() => ''),
+				name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
 				datePattern: ''
 			}
 		}

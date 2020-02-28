@@ -18,6 +18,29 @@
  */
 'use strict';
 
+jest.unmock('@config/config');
+
+jest.mock('@config/config', () => {
+	return {
+		sequelize: {
+			database: 'cafeteria', /* cafeteria */
+			username: 'hah',
+			password: 'duh',
+			host: 'host', /* localhost */
+			dialect: 'mysql', /* mysql */
+			logging: false
+		},
+
+		log: {
+			timestamp: 0,
+			file: {
+				name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
+				datePattern: ''
+			}
+		}
+	};
+});
+
 const Login = require('@domain/usecases/Login');
 const Logout = require('@domain/usecases/Logout');
 const GetUser = require('@domain/usecases/GetUser');

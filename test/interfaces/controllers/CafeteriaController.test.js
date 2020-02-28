@@ -18,11 +18,36 @@
  */
 'use strict';
 
+jest.unmock('@config/config');
+
+jest.mock('@config/config', () => {
+	return {
+		sequelize: {
+			database: 'cafeteria', /* cafeteria */
+			username: 'hah',
+			password: 'duh',
+			host: 'host', /* localhost */
+			dialect: 'mysql', /* mysql */
+			logging: false
+		},
+
+		log: {
+			timestamp: 0,
+			file: {
+				name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
+				datePattern: ''
+			}
+		}
+	};
+});
+
 const GetCafeteria = require('@domain/usecases/GetCafeteria');
 const GetCorners = require('@domain/usecases/GetCorners');
 const GetMenus = require('@domain/usecases/GetMenus');
 
 const CafeteriaController = require('@interfaces/controllers/CafeteriaController');
+
+
 
 jest.mock('@domain/usecases/GetCafeteria');
 jest.mock('@domain/usecases/GetCorners');
