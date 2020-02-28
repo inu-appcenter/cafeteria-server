@@ -16,7 +16,9 @@
 
 ## API
 
-[API 문서](/docs/API.md)는 여기로.
+API 문서는 [여기](/docs/API.md)로.
+
+API 테스트는 [여기](http://ec2-52-79-48-231.ap-northeast-2.compute.amazonaws.com:9999/documentation#/)로.
 
 ## 설치
 
