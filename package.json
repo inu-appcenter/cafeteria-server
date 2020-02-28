@@ -6,10 +6,9 @@
   "scripts": {
 	"prestart": "systemctl --user enable cafeteria",
     "start": "systemctl --user start cafeteria",
-	"poststart": "systemctl --user status cafeteria",
 	"stop": "systemctl --user stop cafeteria",
-	"poststop": "systemctl --user status cafeteria | echo",
-    "test": "jest --runInBand --detectOpenHandles"
+    "test": "jest --runInBand --detectOpenHandles",
+	"status": "systemctl --user status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {
     "type": "git",
