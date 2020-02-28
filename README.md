@@ -1,12 +1,11 @@
 # INU 카페테리아 서버
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/inu-appcenter/cafeteria-server)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inu-appcenter/cafeteria-server/Node.js%20CI)
-![GitHub Release Date](https://img.shields.io/github/release-date/inu-appcenter/cafeteria-server)
-![GitHub last commit](https://img.shields.io/github/last-commit/inu-appcenter/cafeteria-server)
-![GitHub stars](https://img.shields.io/github/stars/inu-appcenter/cafeteria-server?style=shield)
-![GitHub issues](https://img.shields.io/github/issues/inu-appcenter/cafeteria-server)
-![GitHub license](https://img.shields.io/github/license/inu-appcenter/cafeteria-server)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inu-appcenter/cafeteria-server/Node.js%20CI)](https://github.com/inu-appcenter/cafeteria-server/actions?query=workflow%3A%22Node.js+CI%22)
+[![GitHub last commit](https://img.shields.io/github/last-commit/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/commits)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/inu-appcenter/cafeteria-server?style=shield)](https://github.com/inu-appcenter/cafeteria-server/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/issues)
+[![GitHub license](https://img.shields.io/github/license/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/blob/master/LICENSE)
 
 > 인천대학교 식단 정보 애플리케이션 INU Cafeteria (Server)
 
