@@ -130,14 +130,19 @@ npm test
 
 ### Set as service
 
-We want to deploy this app as a service.
+Deploy this app as a service.
 
-At the project root:
+We will use `systemctl`.
+
+At the project root, do the following:
 
 ~~~
 $ mkdir -p ~/.config/systemd/user
 $ cp deploy/cafeteria.service ~/.config/systemd/user
 ~~~
+
+> The service file cafeteria.service is written in assumption that the user name is `potados` and the project directory is `/home/potados/cafeteria-server`.    
+You need to modify it yourself on different configurations.
 
 ### Run
 
