@@ -1,4 +1,4 @@
-# INU-Cafeteria-Server
+# INU 카페테리아 서버
 
 > 인천대학교 식단 정보 애플리케이션 INU Cafeteria (Server)
 
