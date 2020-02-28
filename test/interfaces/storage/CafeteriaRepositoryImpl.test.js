@@ -164,5 +164,8 @@ describe('# Cafeteria repository', () => {
 
 		expect(result).toEqual(expected);
 	});
+});
 
+afterAll(() => {
+	sequelize.close();
 });

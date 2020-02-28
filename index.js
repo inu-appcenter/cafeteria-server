@@ -30,6 +30,8 @@ async function start() {
 
 		logger.info('Server running at: ' + server.info.uri);
 	} catch (e) {
+		sequelize.close();
+
 		logger.error(e);
 		process.exit(1);
 	}
