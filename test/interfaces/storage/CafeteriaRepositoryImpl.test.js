@@ -18,14 +18,12 @@
  */
 'use strict';
 
-const MenuConverter = require('@domain/converter/MenuConverter');
-const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
-
-const CafeteriaRepository = require('@domain/repositories/CafeteriaRepository');
-const CafeteriaRepositoryImpl = require('@interfaces/storage/CafeteriaRepositoryImpl');
-
-const converter = new MenuConverter(new MenuConverterImpl());
-const repo = new CafeteriaRepository(new CafeteriaRepositoryImpl(converter));
+/**
+ * Unmock all before applying new mocks.
+ */
+jest.unmock('@infrastructure/database/sequelize');
+jest.unmock('@infrastructure/network/fetch');
+jest.unmock('@config/config');
 
 /**
  * Mock whole usage of sequelize in this repository.
@@ -119,6 +117,15 @@ jest.mock('@config/config', () => {
 		}
 	};
 });
+
+const MenuConverter = require('@domain/converter/MenuConverter');
+const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
+
+const CafeteriaRepository = require('@domain/repositories/CafeteriaRepository');
+const CafeteriaRepositoryImpl = require('@interfaces/storage/CafeteriaRepositoryImpl');
+
+const converter = new MenuConverter(new MenuConverterImpl());
+const repo = new CafeteriaRepository(new CafeteriaRepositoryImpl(converter));
 
 describe('# Cafeteria repository', () => {
 
