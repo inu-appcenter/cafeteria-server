@@ -5,6 +5,7 @@ Description=Cafeteria service
 ExecStart=/home/potados/cafeteria-server/index.js
 WorkingDirectory=/home/potados/cafeteria-server
 Restart=always
+User=potados
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

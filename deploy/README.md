@@ -115,8 +115,7 @@ We will use `systemctl`.
 At the project root, do the following:
 
 ~~~
-$ mkdir -p ~/.config/systemd/user
-$ cp deploy/cafeteria.service ~/.config/systemd/user
+$ sudo cp deploy/cafeteria.service /etc/systemd/system/
 ~~~
 
 > The service file cafeteria.service is written in assumption that the user name is `potados` and the project directory is `/home/potados/cafeteria-server`.    

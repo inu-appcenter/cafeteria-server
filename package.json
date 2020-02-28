@@ -4,11 +4,11 @@
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
-	"prestart": "systemctl --user enable cafeteria",
-    "start": "systemctl --user start cafeteria",
-	"stop": "systemctl --user stop cafeteria",
+	"prestart": "sudo systemctl enable cafeteria",
+    "start": "sudo systemctl start cafeteria",
+	"stop": "sudo systemctl stop cafeteria",
     "test": "jest --runInBand --detectOpenHandles",
-	"status": "systemctl --user status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
+	"status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {
     "type": "git",
