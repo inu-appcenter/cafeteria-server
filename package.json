@@ -1,6 +1,6 @@
 {
   "name": "cafeteria-server",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
