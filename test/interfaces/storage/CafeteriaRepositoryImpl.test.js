@@ -23,7 +23,7 @@
  */
 jest.unmock('@infrastructure/database/sequelize');
 jest.unmock('@infrastructure/network/fetch');
-jest.unmock('@config/config');
+// No need to unmock config, which does not exist.
 
 /**
  * Mock whole usage of sequelize in this repository.
