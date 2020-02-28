@@ -2,8 +2,18 @@
 
 > 인천대학교 식단 정보 애플리케이션 INU Cafeteria (Server)
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inu-appcenter/cafeteria-server/node-ci)
-![GitHub top language](https://img.shields.io/github/languages/top/inu-appcenter/cafeteria-server)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/inu-appcenter/cafeteria-server)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/inu-appcenter/cafeteria-server/@hapi/hapi)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/inu-appcenter/cafeteria-server/sequelize)
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/inu-appcenter/cafeteria-server)
+![GitHub commits since tagged version](https://img.shields.io/github/commits-since/inu-appcenter/cafeteria-server/latest)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inu-appcenter/cafeteria-server/Node.js%20CI)
+
+![GitHub stars](https://img.shields.io/github/stars/inu-appcenter/cafeteria-server?style=shield)
+![GitHub issues](https://img.shields.io/github/issues/inu-appcenter/cafeteria-server)
+![GitHub license](https://img.shields.io/github/license/inu-appcenter/cafeteria-server)
+
 
 ## 개요
 
