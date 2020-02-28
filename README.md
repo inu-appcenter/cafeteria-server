@@ -16,7 +16,7 @@
 
 ## 상세
 
-이 애플리케이션은 밥아저씨의 "[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)"를 준수합니다.
+이 애플리케이션은 밥아저씨의 "[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)"를 준수합니다. ~~아닐 수도 있지만 최소한 노력은 많이 했습니다 :D~~
 
 ### 디렉토리 구조
 
