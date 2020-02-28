@@ -6,7 +6,7 @@
   "scripts": {
 	"prestart": "systemctl --user enable cafeteria",
     "start": "systemctl --user start cafeteria",
-	"poststart": "systemctl --user status cafeteria"
+	"poststart": "systemctl --user status cafeteria",
 	"stop": "systemctl --user stop cafeteria",
 	"poststop": "systemctl --user status cafeteria",
     "test": "jest --runInBand --detectOpenHandles"
