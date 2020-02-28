@@ -18,6 +18,8 @@
  */
 'use strict';
 
+// TODO need to mock DB to test on CI.
+
 const sequelize = require('@infrastructure/database/sequelize');
 
 const MenuConverter = require('@domain/converter/MenuConverter');
