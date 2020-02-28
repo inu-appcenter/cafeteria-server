@@ -8,7 +8,7 @@
     "start": "systemctl --user start cafeteria",
 	"stop": "systemctl --user stop cafeteria",
     "test": "jest --runInBand --detectOpenHandles",
-	"postversion": "systemctl --user statuc cafeteria && echo 'Server is running.' || 'Server is not running.'"
+	"postversion": "systemctl --user statuc cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {
     "type": "git",
