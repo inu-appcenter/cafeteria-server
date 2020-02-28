@@ -35,7 +35,6 @@ module.exports = {
 			interval: 60 * 1000 /* interval sampling ops event. */
 		},
 		file: {
-			dir: 'log',
 			name: (name) => 'logs/' + name + '/' + name + '-%DATE%.log',
 			datePattern: 'YYYY-MM-DD'
 		},
