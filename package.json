@@ -8,7 +8,7 @@
     "start": "systemctl --user start cafeteria",
 	"poststart": "systemctl --user status cafeteria || echo 'Start failed!'",
 	"stop": "systemctl --user stop cafeteria",
-	"poststop": "systemctl --user status cafeteria || echo ''",
+	"poststop": "systemctl --user status cafeteria || echo 'Service stopped.'",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "repository": {
