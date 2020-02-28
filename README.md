@@ -16,7 +16,7 @@
 
 ## 상세
 
-이 애플리케이션은 밥아저씨의 [클린 아키텍쳐](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) 원칙을 준수합니다.
+이 애플리케이션은 밥아저씨의 "[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)"를 준수합니다.
 
 ### 디렉토리 구조
 
@@ -28,19 +28,19 @@ app
  └ lib                              → 애플리케이션 소스
     └ common   	                    → 애플리케이션 전역에서 쓰이는 객체 (로깅, 암호화 등)
     └ domain   	                    → 도메인 레이어 (엔터프라이즈 비즈니스 규칙과 애플리케이션 비즈니스 규칙을 통합)
-	   └ converter                  → 외부 모델을 도메인 모델로 바꾸어 주는 객체
-	   └ entities                   → 도메인 모델 (엔티티)
+	   └ converter              → 외부 모델을 도메인 모델로 바꾸어 주는 객체
+	   └ entities               → 도메인 모델 (엔티티)
        └ repositories               → 데이터에 접근하는 객체의 인터페이스
-	   └ serializer                 → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체.
+	   └ serializer             → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체.
        └ usecases                   → 애플리케이션 비즈니스 규칙
     └ infrastructure                → 프레임워크, 드라이버 (DB, 웹서버 등)
        └ database                   → ORM과 DB 연결 객체
-	   └ network                    → 네트워크 API (fetch)
+	   └ network                → 네트워크 API (fetch)
        └ webserver                  → Hapi.js 웹 서버 구성 (서버, 라우터, 플러그인 등)
           └ server.js               → Hapi.js 서버 정의
     └ interfaces                    → 인터페이스 어댑터 레이어 (애플리케이션 비즈니스 규칙과 외부 레이어를 연결)
        └ controllers                → Hapi.js 라우터의 handler
-	   └ converter                	→ converter 구현
+	   └ converter              → converter 구현
        └ serializers                → serializer 구현
        └ storage                    → repository 구현
  └ public                           → 웹 서버에 의해 public으로 제공되는 파일들 (res/images 등)
