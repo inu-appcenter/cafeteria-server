@@ -1,0 +1,10 @@
+[Unit]
+Description=Cafeteria service
+
+[Service]
+ExecStart=/home/potados/cafeteria-server/index.js
+WorkingDirectory=/home/potados/cafeteria-server
+Restart=always
+
+[Install]
+WantedBy=default.target

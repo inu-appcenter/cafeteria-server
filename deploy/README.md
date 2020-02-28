@@ -128,6 +128,17 @@ You can run unit tests using this command:
 npm test
 ~~~
 
+### Set as service
+
+We want to deploy this app as a service.
+
+At the project root:
+
+~~~
+$ mkdir -p ~/.config/systemd/user
+$ cp deploy/cafeteria.service ~/.config/systemd/user
+~~~
+
 ### Run
 
 Start the server.

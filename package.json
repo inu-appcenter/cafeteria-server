@@ -4,9 +4,10 @@
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "jest --runInBand --detectOpenHandles",
-    "md-docs": "swagger-markdown -i docs/swagger.yaml -o docs/api-doc.md"
+	"prestart": "systemctl --user enable cafeteria",
+    "start": "systemctl --user start cafeteria",
+	"stop": "systemctl --user stop cafeteria"
+    "test": "jest --runInBand --detectOpenHandles"
   },
   "repository": {
     "type": "git",
