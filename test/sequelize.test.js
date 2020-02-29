@@ -18,32 +18,13 @@
  */
 'use strict';
 
-module.exports = (sequelize, DataTypes) => {
+const sequelize = require('@infrastructure/database/sequelize');
 
-	 const userDiscountRuleModel = sequelize.define('user_discount_rule', {
+describe('# Sequelize', () => {
 
-		last_barcode_activation: {
-			type: DataTypes.DATE,
-			allowNull: true
-		},
-		last_barcode_tagging: {
-			type: DataTypes.DATE,
-			allowNull: true
-		}
+	it('should sync', async () => {
+		await sequelize.sync();
+		await sequelize.close();
+	})
 
-		/**
-		 * And a foreign key 'user_id'
-		 */
-
-	}, {
-		// options
-		timestamps: false
-	});
-
-	userDiscountRuleModel.associate = (models) => {
-		userDiscountRuleModel.belongsTo(models.User, { foreignKey: 'user_id' });
-	};
-
-	return userDiscountRuleModel;
-
-};
+});
