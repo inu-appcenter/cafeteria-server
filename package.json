@@ -43,6 +43,7 @@
     "hapi-swagger": "^12.1.1",
     "jest": "^25.1.0",
     "module-alias": "^2.2.2",
+    "moment": "^2.24.0",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
     "rand-token": "^0.4.0",
