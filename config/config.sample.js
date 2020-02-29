@@ -76,6 +76,16 @@ module.exports = {
 	menu: {
 		url: 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch',
 		fetchInterval: 3600000 /* millis */
+	},
+
+	// Discount transaction settings.
+	transaction: {
+		saltRounds: 9,
+		tokenPairs: [
+			// These tokens below are hashed.
+			{ cafeteriaId: 4, hashedToken: 2200000048271 },
+			{ cafeteriaId: 3, hashedToken: 2200000042934 }
+		]
 	}
 
 };

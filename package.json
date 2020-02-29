@@ -4,13 +4,13 @@
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
-	"prestart": "sudo systemctl enable cafeteria",
+    "prestart": "sudo systemctl enable cafeteria",
     "start": "sudo systemctl start cafeteria",
-	"restart": "sudo systemctl restart cafeteria",
-	"stop": "sudo systemctl stop cafeteria",
-	"pretest": "touch config/config.js",
+    "restart": "sudo systemctl restart cafeteria",
+    "stop": "sudo systemctl stop cafeteria",
+    "pretest": "touch config/config.js",
     "test": "jest --runInBand --detectOpenHandles",
-	"status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
+    "status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "@hapi/inert": "^6.0.1",
     "@hapi/joi": "^17.1.0",
     "@hapi/vision": "^6.0.0",
+    "bcrypt": "^4.0.0",
     "blipp": "^4.0.1",
     "fs-extra": "^8.1.0",
     "hapi-auth-cookie": "^10.0.0",
