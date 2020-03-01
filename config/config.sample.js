@@ -78,14 +78,10 @@ module.exports = {
 		fetchInterval: 3600000 /* millis */
 	},
 
-	// Discount transaction settings.
-	transaction: {
-		saltRounds: 9,
-		tokenPairs: [
-			// These tokens below are hashed.
-			{ cafeteriaId: 4, hashedToken: 2200000048271 },
-			{ cafeteriaId: 3, hashedToken: 2200000042934 }
-		]
+	// bcrypt setting.
+	// Used in lib/interfaces/validator/DiscountTransactionValidator.
+	hash: {
+		saltRounds: 10
 	}
 
 };
