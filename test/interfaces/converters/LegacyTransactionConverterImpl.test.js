@@ -27,6 +27,8 @@ const LegacyTransactionConverterImpl = require('@interfaces/converters/LegacyTra
 
 const BarcodeTransformer = require('@domain/security/BarcodeTransformer');
 
+const DiscountTransaction = require('@domain/entities/DiscountTransaction');
+
 describe('# Legacy transaction converter', () => {
 
 	it('should convert', async () => {
@@ -39,15 +41,27 @@ describe('# Legacy transaction converter', () => {
 		});
 		const converter = new LegacyTransactionConverter(new LegacyTransactionConverterImpl(barcodeTransformer));
 
-		const inputQuery = {
+		const todayMorning = new Date();
+		todayMorning.setHours(8, 50, 0); /* today morning. */
+
+		const input = {
 			barcode: '12345678',
 			code: 1,
-			menu: 'blahblah'
+			menu: 'blahblah',
+
+			now: todayMorning
 		};
 
-		const converted = converter.convert(inputQuery);
+		const converted = converter.convert(input);
+		const expected = new DiscountTransaction({
+			token: 'blahblah', /* was 'menu' */
+			mealType: 0, /* newly added */
 
-		logger.info(converted, TAG);
+			userId: '201701562', /* extracted from 'barcode' */
+			cafeteriaId: 4 /* 생활원식당, mapped from 'code' */
+		});
 
+		expect(converted).toEqual(expected);
 	});
+
 });
