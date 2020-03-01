@@ -19,7 +19,6 @@
 'use strict';
 
 jest.unmock('@config/config');
-
 jest.mock('@config/config', () => {
 	return {
 		sequelize: {

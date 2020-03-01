@@ -10,7 +10,7 @@
     "restart": "sudo systemctl restart cafeteria",
     "stop": "sudo systemctl stop cafeteria",
     "pretest": "touch config/config.js",
-    "test": "jest --runInBand --detectOpenHandles",
+    "test": "jest --runInBand --detectOpenHandles test/interfaces/converters/",
     "status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {
@@ -65,7 +65,8 @@
     "moduleNameMapper": {
       "@root": "<rootDir>",
       "^@((domain|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
-      "^@((config){1}(/.*|))$": "<rootDir>/$1"
+      "^@((config){1}(/.*|))$": "<rootDir>/$1",
+	  "^@((test){1}(/.*|))$": "<rootDir>/$1"
     },
     "collectCoverageFrom": [
       "**/*.{js}",

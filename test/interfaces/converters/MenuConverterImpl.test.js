@@ -18,6 +18,8 @@
  */
 'use strict';
 
+jest.mock('@config/config', () => require('@test/config'));
+
 const MenuConverter = require('@domain/converters/MenuConverter');
 const MenuConverterImpl = require('@interfaces/converters/MenuConverterImpl');
 
