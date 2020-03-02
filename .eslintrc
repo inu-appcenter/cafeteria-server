@@ -1,3 +1,9 @@
 {
-    "extends": "eslint-config-google"
+    "extends": "eslint-config-google",
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+    "env": {
+        "es6": true
+    }
 }
