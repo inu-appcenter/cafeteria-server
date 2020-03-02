@@ -20,8 +20,6 @@
 
 jest.mock('@config/config', () => require('@test/config'));
 
-const logger = require('@common/logger');
-
 const LegacyTransactionConverter = require('@domain/converters/LegacyTransactionConverter');
 const LegacyTransactionConverterImpl = require('@interfaces/converters/LegacyTransactionConverterImpl');
 
@@ -30,38 +28,34 @@ const BarcodeTransformer = require('@domain/security/BarcodeTransformer');
 const DiscountTransaction = require('@domain/entities/DiscountTransaction');
 
 describe('# Legacy transaction converter', () => {
+  it('should convert', async () => {
+    const barcodeTransformer = new BarcodeTransformer({
+      extractIdFromBarcode(barcode) {
+        return '201701562';
+      },
+    });
+    const converter = new LegacyTransactionConverter(new LegacyTransactionConverterImpl(barcodeTransformer));
 
-	it('should convert', async () => {
-		const TAG = 'should convert';
+    const todayMorning = new Date();
+    todayMorning.setHours(8, 50, 0); /* today morning. */
 
-		const barcodeTransformer = new BarcodeTransformer({
-			extractIdFromBarcode(barcode) {
-				return '201701562';
-			}
-		});
-		const converter = new LegacyTransactionConverter(new LegacyTransactionConverterImpl(barcodeTransformer));
+    const input = {
+      barcode: '12345678',
+      code: 1,
+      menu: 'blahblah',
 
-		const todayMorning = new Date();
-		todayMorning.setHours(8, 50, 0); /* today morning. */
+      now: todayMorning,
+    };
 
-		const input = {
-			barcode: '12345678',
-			code: 1,
-			menu: 'blahblah',
+    const converted = converter.convert(input);
+    const expected = new DiscountTransaction({
+      token: 'blahblah', /* was 'menu' */
+      mealType: 0, /* newly added */
 
-			now: todayMorning
-		};
+      userId: '201701562', /* extracted from 'barcode' */
+      cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
+    });
 
-		const converted = converter.convert(input);
-		const expected = new DiscountTransaction({
-			token: 'blahblah', /* was 'menu' */
-			mealType: 0, /* newly added */
-
-			userId: '201701562', /* extracted from 'barcode' */
-			cafeteriaId: 4 /* 생활원식당, mapped from 'code' */
-		});
-
-		expect(converted).toEqual(expected);
-	});
-
+    expect(converted).toEqual(expected);
+  });
 });

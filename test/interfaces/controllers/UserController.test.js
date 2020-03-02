@@ -20,24 +20,24 @@
 
 jest.unmock('@config/config');
 jest.mock('@config/config', () => {
-	return {
-		sequelize: {
-			database: 'cafeteria', /* cafeteria */
-			username: 'hah',
-			password: 'duh',
-			host: 'host', /* localhost */
-			dialect: 'mysql', /* mysql */
-			logging: false
-		},
+  return {
+    sequelize: {
+      database: 'cafeteria', /* cafeteria */
+      username: 'hah',
+      password: 'duh',
+      host: 'host', /* localhost */
+      dialect: 'mysql', /* mysql */
+      logging: false,
+    },
 
-		log: {
-			timestamp: 0,
-			file: {
-				name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
-				datePattern: ''
-			}
-		}
-	};
+    log: {
+      timestamp: 0,
+      file: {
+        name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
+        datePattern: '',
+      },
+    },
+  };
 });
 
 const Login = require('@domain/usecases/Login');
@@ -54,100 +54,94 @@ jest.mock('@domain/usecases/GetUser');
 jest.mock('@domain/usecases/GenerateBarcode');
 
 const CookieAuth = class {
-	constructor() {
-		this.data = null;
-	}
+  constructor() {
+    this.data = null;
+  }
 
-	set(data) {
-		this.data = data;
-	}
+  set(data) {
+    this.data = data;
+  }
 
-	get() {
-		return this.data;
-	}
+  get() {
+    return this.data;
+  }
 
-	clear() {
-		this.data = null;
-	}
-}
+  clear() {
+    this.data = null;
+  }
+};
 
 describe('# User controller', () => {
+  it('should login', async () => {
+    Login.mockImplementationOnce(() => {
+      return UserRepository.LOGIN_OK;
+    });
 
-	it('should login', async () => {
+    const user = {
+      id: '201701562',
+      token: 'token',
+      barcode: 'barcode',
+    };
 
-		Login.mockImplementationOnce(() => {
-			return UserRepository.LOGIN_OK;
-		});
+    GetUser.mockImplementationOnce(() => {
+      return user;
+    });
 
-		const user = {
-			id: '201701562',
-			token: 'token',
-			barcode: 'barcode'
-		};
+    GenerateBarcode.mockImplementationOnce(() => {});
 
-		GetUser.mockImplementationOnce(() => {
-			return user;
-		});
+    const request = {
+      payload: {
+        id: '201701562',
+        password: 'blah',
+      },
+      cookieAuth: new CookieAuth(),
+    };
 
-		GenerateBarcode.mockImplementationOnce(() => {});
+    await UserController.login(request);
 
-		const request = {
-			payload: {
-				id: '201701562',
-				password: 'blah'
-			},
-			cookieAuth: new CookieAuth()
-		};
+    expect(request.cookieAuth.get()).toEqual(user);
+  });
 
-		await UserController.login(request);
+  it('should logout', async () => {
+    Login.mockImplementationOnce(() => {
+      return UserRepository.LOGOUT_OK;
+    });
 
-		expect(request.cookieAuth.get()).toEqual(user);
+    const user = {
+      id: '201701562',
+      token: 'token',
+      barcode: 'barcode',
+    };
 
-	});
+    const auth = {
+      isAuthenticated: true,
+      credentials: user,
+    };
 
-	it('should logout', async () => {
+    const cookieAuth = new CookieAuth();
+    cookieAuth.set(user);
 
-		Login.mockImplementationOnce(() => {
-			return UserRepository.LOGOUT_OK;
-		});
+    const request = {
+      auth: auth,
+      cookieAuth: cookieAuth,
+    };
 
-		const user = {
-			id: '201701562',
-			token: 'token',
-			barcode: 'barcode'
-		};
+    const h = {
+      response: () => {
+        return {
+          code: () => {
 
-		const auth = {
-			isAuthenticated: true,
-			credentials: user
-		};
+          },
+        };
+      },
+    };
 
-		const cookieAuth = new CookieAuth();
-		cookieAuth.set(user);
+    expect(UserRepository.LOGIN_OK).toBe(0);
 
-		const request = {
-			auth: auth,
-			cookieAuth: cookieAuth
-		};
+    expect(cookieAuth.get()).toEqual(user);
 
-		const h = {
-			response: () => {
-				return {
-					code: () => {
+    await UserController.logout(request, h);
 
-					}
-				};
-			}
-		};
-
-		expect(UserRepository.LOGIN_OK).toBe(0);
-
-		expect(cookieAuth.get()).toEqual(user);
-
-		await UserController.logout(request, h);
-
-		expect(cookieAuth.get()).toBeNull();
-
-	});
-
+    expect(cookieAuth.get()).toBeNull();
+  });
 });

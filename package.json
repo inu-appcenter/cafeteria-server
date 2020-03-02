@@ -36,10 +36,12 @@
     "@hapi/inert": "^6.0.1",
     "@hapi/joi": "^17.1.0",
     "@hapi/vision": "^6.0.0",
+    "babel-eslint": "^10.1.0",
     "bcrypt": "^4.0.0",
     "blipp": "^4.0.1",
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-plugin-babel": "^5.3.0",
     "fs-extra": "^8.1.0",
     "hapi-auth-cookie": "^10.0.0",
     "hapi-swagger": "^12.1.1",
@@ -85,5 +87,8 @@
         }
       ]
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-class-property": "^1.1.0"
   }
 }

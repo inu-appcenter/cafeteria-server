@@ -21,24 +21,24 @@
 jest.unmock('@config/config');
 
 jest.mock('@config/config', () => {
-	return {
-		sequelize: {
-			database: 'cafeteria', /* cafeteria */
-			username: 'hah',
-			password: 'duh',
-			host: 'host', /* localhost */
-			dialect: 'mysql', /* mysql */
-			logging: false
-		},
+  return {
+    sequelize: {
+      database: 'cafeteria', /* cafeteria */
+      username: 'hah',
+      password: 'duh',
+      host: 'host', /* localhost */
+      dialect: 'mysql', /* mysql */
+      logging: false,
+    },
 
-		log: {
-			timestamp: 0,
-			file: {
-				name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
-				datePattern: ''
-			}
-		}
-	};
+    log: {
+      timestamp: 0,
+      file: {
+        name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
+        datePattern: '',
+      },
+    },
+  };
 });
 
 const GetCafeteria = require('@domain/usecases/GetCafeteria');
@@ -48,84 +48,78 @@ const GetMenus = require('@domain/usecases/GetMenus');
 const CafeteriaController = require('@interfaces/controllers/CafeteriaController');
 
 
-
 jest.mock('@domain/usecases/GetCafeteria');
 jest.mock('@domain/usecases/GetCorners');
 jest.mock('@domain/usecases/GetMenus');
 
 describe('# Cafeteria controller', () => {
+  it('should get cafeteria with id 2.', async () => {
+    const cafeteriaEntity = {
+      'id': '2',
+      'name': 'theName',
+      'imagePath': 'thePath',
+    };
 
-	it('should get cafeteria with id 2.', async () => {
+    const cafeteriaResponse = {
+      'id': '2',
+      'name': 'theName',
+      'image-path': 'thePath',
+    };
 
-		const cafeteriaEntity = {
-			'id': '2' ,
-			'name': 'theName',
-			'imagePath': 'thePath'
-		};
+    GetCafeteria.mockImplementationOnce(() => cafeteriaEntity);
 
-		const cafeteriaResponse = {
-			'id': '2' ,
-			'name': 'theName',
-			'image-path': 'thePath'
-		};
+    const request = {params: {id: 2}};
 
-		GetCafeteria.mockImplementationOnce(() => cafeteriaEntity);
+    const response = await CafeteriaController.getCafeteria(request);
 
-		const request = { params: { id: 2} };
+    expect(response).toEqual(cafeteriaResponse);
+  });
 
-		const response = await CafeteriaController.getCafeteria(request);
+  it('should get corner with id 3.', async () => {
+    const cornerEntity = {
+      'id': '3',
+      'name': 'theName',
+      'cafeteriaId': '1',
+    };
 
-		expect(response).toEqual(cafeteriaResponse);
-	});
+    const cornerResponse = {
+      'cafeteria-id': '1',
+      'id': '3',
+      'name': 'theName',
+    };
 
-	it('should get corner with id 3.', async () => {
+    GetCorners.mockImplementationOnce(() => cornerEntity);
 
-		const cornerEntity = {
-			'id': '3' ,
-			'name': 'theName',
-			'cafeteriaId': '1'
-		};
+    const request = {params: {id: 3}, query: {}};
+    const response = await CafeteriaController.getCorners(request);
 
-		const cornerResponse = {
-			'cafeteria-id': '1',
-			'id': '3' ,
-			'name': 'theName',
-		};
+    expect(response).toEqual(cornerResponse);
+  });
 
-		GetCorners.mockImplementationOnce(() => cornerEntity);
+  it('should get menus at 20200219 of corner with id 18.', async () => {
+    const menuEntities = [
+      {
+        'foods': 'yeah foods',
+        'price': '1000',
+        'calorie': '100',
+        'cornerId': '18',
+      },
+    ];
 
-		const request = { params: { id: 3 }, query: {} };
-		const response = await CafeteriaController.getCorners(request);
+    const menuResponse = [
+      {
+        'corner-id': '18',
+        'foods': 'yeah foods',
+        'price': '1000',
+        'calorie': '100',
+      },
+    ];
 
-		expect(response).toEqual(cornerResponse);
-	});
+    GetMenus.mockImplementationOnce(() => menuEntities);
 
-	it('should get menus at 20200219 of corner with id 18.', async () => {
+    const request = {params: {}, query: {date: '20200219', cornerId: 18}};
+    const response = await CafeteriaController.getMenus(request);
 
-		const menuEntities = [
-			{
-				'foods': 'yeah foods',
-				'price': '1000',
-				'calorie': '100',
-				'cornerId': '18'
-			}
-		];
-
-		const menuResponse = [
-			{
-				'corner-id': '18',
-				'foods': 'yeah foods',
-				'price': '1000',
-				'calorie': '100'
-			}
-		];
-
-		GetMenus.mockImplementationOnce(() => menuEntities);
-
-		const request = { params: {}, query: { date: '20200219', cornerId: 18 } };
-		const response = await CafeteriaController.getMenus(request);
-
-		expect(response).toEqual(menuResponse);
-	});
-
+    expect(response).toEqual(menuResponse);
+  });
 });

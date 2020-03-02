@@ -21,10 +21,8 @@
 const sequelize = require('@infrastructure/database/sequelize');
 
 describe('# Sequelize', () => {
-
-	it('should sync', async () => {
-		await sequelize.sync();
-		await sequelize.close();
-	})
-
+  it('should sync', async () => {
+    await sequelize.sync();
+    await sequelize.close();
+  });
 });
