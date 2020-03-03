@@ -44,10 +44,14 @@ module.exports = {
   // Auth settings.
   // Used in lib/infrastructure/webserver/server.
   auth: {
-    cookie: {
-      name: '', /* sid-cookie */
-      password: '',
-      isSecure: false, /* We need god damn SSL! Oh fuck */
+    key: 'blahblah',
+    cookie_options: {
+      ttl: 365 * 24 * 60 * 60 * 1000, // expires a year from today
+      encoding: 'none', // we already used JWT to encode
+      isSecure: false, // warm & fuzzy feelings
+      isHttpOnly: true, // prevent client alteration
+      clearInvalid: false, // remove invalid cookies
+      strictHeader: true, // don't allow violations of RFC 6265
     },
   },
 
