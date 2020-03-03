@@ -4,6 +4,7 @@
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
+    "nativerun": "node index.js",
     "prestart": "sudo systemctl enable cafeteria",
     "start": "sudo systemctl start cafeteria",
     "restart": "sudo systemctl restart cafeteria",
