@@ -19,31 +19,11 @@
 'use strict';
 
 jest.unmock('@config/config');
-jest.mock('@config/config', () => {
-  return {
-    sequelize: {
-      database: 'cafeteria', /* cafeteria */
-      username: 'hah',
-      password: 'duh',
-      host: 'host', /* localhost */
-      dialect: 'mysql', /* mysql */
-      logging: false,
-    },
-
-    log: {
-      timestamp: 0,
-      file: {
-        name: (name) => 'logs/' + name + '/' + name + '-test-%DATE%.log',
-        datePattern: '',
-      },
-    },
-  };
-});
+jest.mock('@config/config', () => require('@test/config'));
 
 const Login = require('@domain/usecases/Login');
 const Logout = require('@domain/usecases/Logout');
 const GetUser = require('@domain/usecases/GetUser');
-const GenerateBarcode = require('@domain/usecases/GenerateBarcode');
 
 const UserRepository = require('@domain/repositories/UserRepository');
 const UserController = require('@interfaces/controllers/UserController');
@@ -51,7 +31,6 @@ const UserController = require('@interfaces/controllers/UserController');
 jest.mock('@domain/usecases/Login');
 jest.mock('@domain/usecases/Logout');
 jest.mock('@domain/usecases/GetUser');
-jest.mock('@domain/usecases/GenerateBarcode');
 
 const CookieAuth = class {
   constructor() {
@@ -86,8 +65,6 @@ describe('# User controller', () => {
     GetUser.mockImplementationOnce(() => {
       return user;
     });
-
-    GenerateBarcode.mockImplementationOnce(() => {});
 
     const request = {
       payload: {

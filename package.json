@@ -9,7 +9,8 @@
     "restart": "sudo systemctl restart cafeteria",
     "stop": "sudo systemctl stop cafeteria",
     "pretest": "touch config/config.js",
-    "test": "jest --runInBand --detectOpenHandles test/interfaces/converters/",
+    "test": "jest --runInBand --detectOpenHandles",
+    "unittest": "jest --runInBand --detectOpenHandles test/unit",
     "status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {

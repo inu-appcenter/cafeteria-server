@@ -18,6 +18,7 @@
  */
 'use strict';
 
+jest.unmock('@config/config');
 jest.mock('@config/config', () => require('@test/config'));
 
 const MenuConverter = require('@domain/converters/MenuConverter');
