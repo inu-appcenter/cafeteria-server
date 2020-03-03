@@ -1,0 +1,1070 @@
+Executing (default): CREATE TABLE IF NOT EXISTS `cafeteria` (`id` INTEGER NOT NULL , `name` VARCHAR(255) NOT NULL, `image_path` VARCHAR(255), PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `cafeteria` FROM `cafeteria`
+Executing (default): CREATE TABLE IF NOT EXISTS `cafeteria_discount_rules` (`id` INTEGER NOT NULL auto_increment , `token` VARCHAR(255) NOT NULL, `available_meal_types` INTEGER NOT NULL, `cafeteria_id` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`cafeteria_id`) REFERENCES `cafeteria` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `cafeteria_discount_rules` FROM `cafeteria`
+Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL , `token` VARCHAR(255), `barcode` VARCHAR(255), `last_login` DATETIME, `last_logout` DATETIME, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `users` FROM `cafeteria`
+Executing (default): CREATE TABLE IF NOT EXISTS `discount_transactions` (`id` INTEGER NOT NULL auto_increment , `meal_type` INTEGER NOT NULL, `timestamp` DATETIME NOT NULL, `user_id` INTEGER, `cafeteria_id` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY (`cafeteria_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `discount_transactions` FROM `cafeteria`
+Executing (default): CREATE TABLE IF NOT EXISTS `user_discount_statuses` (`id` INTEGER NOT NULL auto_increment , `last_barcode_activation` DATETIME, `last_barcode_tagging` DATETIME, `user_id` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `user_discount_statuses` FROM `cafeteria`
+Executing (default): CREATE TABLE IF NOT EXISTS `corners` (`id` INTEGER NOT NULL , `name` VARCHAR(255), `cafeteria_id` INTEGER, PRIMARY KEY (`id`), FOREIGN KEY (`cafeteria_id`) REFERENCES `cafeteria` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `corners` FROM `cafeteria`
+2020-03-03 20:35:42 [32minfo[39m: /Users/potados/Documents/GitHub/cafeteria-server/index.js:start:20:12: Connection to DB has been established successfully.
+2020-03-03 20:35:42 [31merror[39m: /Users/potados/Documents/GitHub/cafeteria-server/index.js:start:34:12: Error: Invalid routeConfig options (put /activateBarcode) {
+  "cache": {
+    "statuses": [
+      200,
+      204
+    ],
+    "otherwise": "no-cache"
+  },
+  "compression": {},
+  "cors": false,
+  "ext": {},
+  "files": {
+    "relativeTo": "."
+  },
+  "json": {
+    "replacer": null,
+    "space": null,
+    "suffix": null,
+    "escape": false
+  },
+  "log": {
+    "collect": false
+  },
+  "payload": {
+    "output": "data",
+    "parse": true,
+    "multipart": false,
+    "protoAction": "error",
+    "maxBytes": 1048576,
+    "uploads": "/var/folders/_v/g2cxvsr95k72xsfnqb23vs2h0000gn/T",
+    "failAction": "error",
+    "timeout": 10000,
+    "defaultContentType": "application/json",
+    "compression": {}
+  },
+  "response": {
+    "401": {
+      "type": "object",
+      "$_root": {
+        "_types": {},
+        "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+        "version": "17.1.0",
+        "cache": {
+          "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+        },
+        "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+        "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+        "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+        "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+        "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+        "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+        "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+        "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+        "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+        "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+        "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+        "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+        "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+        "override": Symbol(override),
+        "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+        "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+        "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+        "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+        "untrace": () => {\n\n        root._tracer = null;\n    }
+      },
+      "$_temp": {
+        "ruleset": false,
+        "whens": {}
+      },
+      "_ids": {
+        "_byId": {},
+        "_byKey": {},
+        "_schemaChain": false
+      },
+      "_preferences": null,
+      "_valids": null,
+      "_invalids": null,
+      "_rules": [],
+      "_singleRules": {},
+      "_refs": {
+        "refs": []
+      },
+      "_flags": {
+        "label": "Boom 오류 모델"
+      },
+      "_cache": null,
+      "$_terms": {
+        "alterations": null,
+        "examples": null,
+        "externals": null,
+        "metas": [],
+        "notes": [],
+        "shared": null,
+        "tags": [],
+        "whens": null,
+        "dependencies": null,
+        "keys": [
+          {
+            "key": "statusCode",
+            "schema": {
+              "type": "number",
+              "$_root": {
+                "_types": {},
+                "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+                "version": "17.1.0",
+                "cache": {
+                  "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+                },
+                "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+                "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+                "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+                "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+                "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+                "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+                "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+                "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+                "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+                "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+                "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+                "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+                "override": Symbol(override),
+                "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+                "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+                "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+                "untrace": () => {\n\n        root._tracer = null;\n    }
+              },
+              "$_temp": {
+                "ruleset": false,
+                "whens": {}
+              },
+              "_ids": {
+                "_byId": {},
+                "_byKey": {},
+                "_schemaChain": false
+              },
+              "_preferences": null,
+              "_valids": null,
+              "_invalids": null,
+              "_rules": [],
+              "_singleRules": {},
+              "_refs": {
+                "refs": []
+              },
+              "_flags": {
+                "description": "HTTP 상태 코드"
+              },
+              "_cache": null,
+              "$_terms": {
+                "alterations": null,
+                "examples": null,
+                "externals": null,
+                "metas": [],
+                "notes": [],
+                "shared": null,
+                "tags": [],
+                "whens": null
+              },
+              "$_super": {}
+            }
+          },
+          {
+            "key": "error",
+            "schema": {
+              "type": "string",
+              "$_root": {
+                "_types": {},
+                "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+                "version": "17.1.0",
+                "cache": {
+                  "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+                },
+                "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+                "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+                "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+                "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+                "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+                "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+                "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+                "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+                "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+                "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+                "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+                "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+                "override": Symbol(override),
+                "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+                "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+                "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+                "untrace": () => {\n\n        root._tracer = null;\n    }
+              },
+              "$_temp": {
+                "ruleset": false,
+                "whens": {}
+              },
+              "_ids": {
+                "_byId": {},
+                "_byKey": {},
+                "_schemaChain": false
+              },
+              "_preferences": null,
+              "_valids": null,
+              "_invalids": null,
+              "_rules": [],
+              "_singleRules": {},
+              "_refs": {
+                "refs": []
+              },
+              "_flags": {
+                "description": "HTTP 에러 이름"
+              },
+              "_cache": null,
+              "$_terms": {
+                "alterations": null,
+                "examples": null,
+                "externals": null,
+                "metas": [],
+                "notes": [],
+                "shared": null,
+                "tags": [],
+                "whens": null,
+                "replacements": null
+              },
+              "$_super": {}
+            }
+          },
+          {
+            "key": "message",
+            "schema": {
+              "type": "string",
+              "$_root": {
+                "_types": {},
+                "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+                "version": "17.1.0",
+                "cache": {
+                  "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+                },
+                "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+                "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+                "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+                "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+                "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+                "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+                "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+                "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+                "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+                "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+                "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+                "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+                "override": Symbol(override),
+                "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+                "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+                "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+                "untrace": () => {\n\n        root._tracer = null;\n    }
+              },
+              "$_temp": {
+                "ruleset": false,
+                "whens": {}
+              },
+              "_ids": {
+                "_byId": {},
+                "_byKey": {},
+                "_schemaChain": false
+              },
+              "_preferences": null,
+              "_valids": null,
+              "_invalids": null,
+              "_rules": [],
+              "_singleRules": {},
+              "_refs": {
+                "refs": []
+              },
+              "_flags": {
+                "description": "메시지"
+              },
+              "_cache": null,
+              "$_terms": {
+                "alterations": null,
+                "examples": null,
+                "externals": null,
+                "metas": [],
+                "notes": [],
+                "shared": null,
+                "tags": [],
+                "whens": null,
+                "replacements": null
+              },
+              "$_super": {}
+            }
+          }
+        ],
+        "patterns": null,
+        "renames": null
+      },
+      "$_super": {
+        "default": function () { [native code] }
+      }
+    },
+    "500": {
+      "type": "object",
+      "$_root": {
+        "_types": {},
+        "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+        "version": "17.1.0",
+        "cache": {
+          "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+        },
+        "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+        "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+        "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+        "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+        "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+        "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+        "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+        "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+        "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+        "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+        "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+        "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+        "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+        "override": Symbol(override),
+        "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+        "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+        "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+        "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+        "untrace": () => {\n\n        root._tracer = null;\n    }
+      },
+      "$_temp": {
+        "ruleset": false,
+        "whens": {}
+      },
+      "_ids": {
+        "_byId": {},
+        "_byKey": {},
+        "_schemaChain": false
+      },
+      "_preferences": null,
+      "_valids": null,
+      "_invalids": null,
+      "_rules": [],
+      "_singleRules": {},
+      "_refs": {
+        "refs": []
+      },
+      "_flags": {
+        "label": "Boom 오류 모델"
+      },
+      "_cache": null,
+      "$_terms": {
+        "alterations": null,
+        "examples": null,
+        "externals": null,
+        "metas": [],
+        "notes": [],
+        "shared": null,
+        "tags": [],
+        "whens": null,
+        "dependencies": null,
+        "keys": [
+          {
+            "key": "statusCode",
+            "schema": {
+              "type": "number",
+              "$_root": {
+                "_types": {},
+                "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+                "version": "17.1.0",
+                "cache": {
+                  "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+                },
+                "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+                "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+                "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+                "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+                "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+                "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+                "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+                "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+                "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+                "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+                "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+                "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+                "override": Symbol(override),
+                "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+                "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+                "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+                "untrace": () => {\n\n        root._tracer = null;\n    }
+              },
+              "$_temp": {
+                "ruleset": false,
+                "whens": {}
+              },
+              "_ids": {
+                "_byId": {},
+                "_byKey": {},
+                "_schemaChain": false
+              },
+              "_preferences": null,
+              "_valids": null,
+              "_invalids": null,
+              "_rules": [],
+              "_singleRules": {},
+              "_refs": {
+                "refs": []
+              },
+              "_flags": {
+                "description": "HTTP 상태 코드"
+              },
+              "_cache": null,
+              "$_terms": {
+                "alterations": null,
+                "examples": null,
+                "externals": null,
+                "metas": [],
+                "notes": [],
+                "shared": null,
+                "tags": [],
+                "whens": null
+              },
+              "$_super": {}
+            }
+          },
+          {
+            "key": "error",
+            "schema": {
+              "type": "string",
+              "$_root": {
+                "_types": {},
+                "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+                "version": "17.1.0",
+                "cache": {
+                  "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+                },
+                "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+                "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+                "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+                "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+                "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+                "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+                "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+                "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+                "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+                "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+                "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+                "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+                "override": Symbol(override),
+                "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+                "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+                "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+                "untrace": () => {\n\n        root._tracer = null;\n    }
+              },
+              "$_temp": {
+                "ruleset": false,
+                "whens": {}
+              },
+              "_ids": {
+                "_byId": {},
+                "_byKey": {},
+                "_schemaChain": false
+              },
+              "_preferences": null,
+              "_valids": null,
+              "_invalids": null,
+              "_rules": [],
+              "_singleRules": {},
+              "_refs": {
+                "refs": []
+              },
+              "_flags": {
+                "description": "HTTP 에러 이름"
+              },
+              "_cache": null,
+              "$_terms": {
+                "alterations": null,
+                "examples": null,
+                "externals": null,
+                "metas": [],
+                "notes": [],
+                "shared": null,
+                "tags": [],
+                "whens": null,
+                "replacements": null
+              },
+              "$_super": {}
+            }
+          },
+          {
+            "key": "message",
+            "schema": {
+              "type": "string",
+              "$_root": {
+                "_types": {},
+                "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+                "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+                "version": "17.1.0",
+                "cache": {
+                  "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+                },
+                "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+                "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+                "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+                "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+                "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+                "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+                "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+                "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+                "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+                "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+                "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+                "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+                "override": Symbol(override),
+                "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+                "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+                "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+                "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+                "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+                "untrace": () => {\n\n        root._tracer = null;\n    }
+              },
+              "$_temp": {
+                "ruleset": false,
+                "whens": {}
+              },
+              "_ids": {
+                "_byId": {},
+                "_byKey": {},
+                "_schemaChain": false
+              },
+              "_preferences": null,
+              "_valids": null,
+              "_invalids": null,
+              "_rules": [],
+              "_singleRules": {},
+              "_refs": {
+                "refs": []
+              },
+              "_flags": {
+                "description": "메시지"
+              },
+              "_cache": null,
+              "$_terms": {
+                "alterations": null,
+                "examples": null,
+                "externals": null,
+                "metas": [],
+                "notes": [],
+                "shared": null,
+                "tags": [],
+                "whens": null,
+                "replacements": null
+              },
+              "$_super": {}
+            }
+          }
+        ],
+        "patterns": null,
+        "renames": null
+      },
+      "$_super": {
+        "default": function () { [native code] }
+      }
+    },
+    "disconnectStatusCode": 499,
+    "emptyStatusCode": 204,
+    "failAction": "error",
+    "ranges": true,
+    "204" [31m[1][0m: {
+      "type": "string",
+      "$_root": {
+        "_types": {},
+        "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+        "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+        "version": "17.1.0",
+        "cache": {
+          "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+        },
+        "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+        "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+        "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+        "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+        "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+        "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+        "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+        "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+        "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+        "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+        "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+        "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+        "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+        "override": Symbol(override),
+        "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+        "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+        "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+        "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+        "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+        "untrace": () => {\n\n        root._tracer = null;\n    }
+      },
+      "$_temp": {
+        "ruleset": false,
+        "whens": {}
+      },
+      "_ids": {
+        "_byId": {},
+        "_byKey": {},
+        "_schemaChain": false
+      },
+      "_preferences": null,
+      "_valids": null,
+      "_invalids": null,
+      "_rules": [],
+      "_singleRules": {},
+      "_refs": {
+        "refs": []
+      },
+      "_flags": {
+        "empty": {
+          "type": "any",
+          "$_root": {
+            "_types": {},
+            "alternatives": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "any": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "array": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "boolean": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "date": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "function": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "link": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "number": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "object": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "string": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "symbol": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "binary": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "allow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "custom": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "disallow": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "equal": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "exist": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "forbidden": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "invalid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "not": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "only": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "optional": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "options": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "prefs": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "preferences": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "required": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "strip": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "valid": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "when": function (...args) {\n\n            return this.any()[method](...args);\n        },
+            "ValidationError": "[class extends Error {\n\n    constructor(message, details, original) {\n\n        super(message);\n        this._original = original;\n        this.details = details;\n    }\n\n    static isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }\n}]",
+            "version": "17.1.0",
+            "cache": {
+              "provision": "[provision(options) {\n\n        return new internals.Cache(options);\n    }]"
+            },
+            "assert": "[assert(value, schema, ...args /* [message], [options] */) {\n\n        internals.assert(value, schema, true, args);\n    }]",
+            "attempt": "[attempt(value, schema, ...args /* [message], [options] */) {\n\n        return internals.assert(value, schema, false, args);\n    }]",
+            "build": "[build(desc) {\n\n        Assert(typeof Manifest.build === 'function', 'Manifest functionality disabled');\n        return Manifest.build(this, desc);\n    }]",
+            "checkPreferences": "[checkPreferences(prefs) {\n\n        Common.checkPreferences(prefs);\n    }]",
+            "compile": "[compile(schema, options) {\n\n        return Compile.compile(this, schema, options);\n    }]",
+            "defaults": "[defaults(modifier) {\n\n        Assert(typeof modifier === 'function', 'modifier must be a function');\n\n        const joi = Object.assign({}, this);\n        for (const type of joi._types) {\n            const schema = modifier(joi[type]());\n            Assert(Common.isSchema(schema), 'modifier must return a valid schema object');\n\n            joi[type] = function (...args) {\n\n                return internals.generate(this, schema, args);\n            };\n        }\n\n        return joi;\n    }]",
+            "expression": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+            "extend": "[extend(...extensions) {\n\n        Common.verifyFlat(extensions, 'extend');\n\n        Schemas = Schemas || require('./schemas');\n\n        Assert(extensions.length, 'You need to provide at least one extension');\n        this.assert(extensions, Schemas.extensions);\n\n        const joi = Object.assign({}, this);\n        joi._types = new Set(joi._types);\n\n        for (let extension of extensions) {\n            if (typeof extension === 'function') {\n                extension = extension(joi);\n            }\n\n            this.assert(extension, Schemas.extension);\n\n            const expanded = internals.expandExtension(extension, joi);\n            for (const item of expanded) {\n                Assert(joi[item.type] === undefined || joi._types.has(item.type), 'Cannot override name', item.type);\n\n                const base = item.base || this.any();\n                const schema = Extend.type(base, item);\n\n                joi._types.add(item.type);\n                joi[item.type] = function (...args) {\n\n                    return internals.generate(this, schema, args);\n                };\n            }\n        }\n\n        return joi;\n    }]",
+            "isError": "[isError(err) {\n\n        return err instanceof exports.ValidationError;\n    }]",
+            "isExpression": "[isTemplate(template) {\n\n        return template ? !!template[Common.symbols.template] : false;\n    }]",
+            "isRef": function (ref) {\n\n    return ref ? !!ref[Common.symbols.ref] : false;\n},
+            "isSchema": function (schema, options = {}) {\n\n    const any = schema && schema[exports.symbols.any];\n    if (!any) {\n        return false;\n    }\n\n    Assert(options.legacy || any.version === exports.version, 'Cannot mix different versions of joi schemas');\n    return true;\n},
+            "in": "[in(...args) {\n\n        return Ref.in(...args);\n    }]",
+            "override": Symbol(override),
+            "ref": "[ref(...args) {\n\n        return Ref.create(...args);\n    }]",
+            "types": "[types() {\n\n        const types = {};\n        for (const type of this._types) {\n            types[type] = this[type]();\n        }\n\n        for (const target in internals.aliases) {\n            types[target] = this[target]();\n        }\n\n        return types;\n    }]",
+            "alt": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "bool": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "func": function (...args) {\n\n            Assert(!args.length || ['alternatives', 'link', 'object'].includes(type), 'The', type, 'type does not allow arguments');\n            return internals.generate(this, internals.types[type], args);\n        },
+            "x": "[expression(...args) {\n\n        return new Template(...args);\n    }]",
+            "trace": function () {\n\n        root._tracer = root._tracer || new internals.Tracer();\n        return root._tracer;\n    },
+            "untrace": () => {\n\n        root._tracer = null;\n    }
+          },
+          "$_temp": {
+            "ruleset": false,
+            "whens": {}
+          },
+          "_ids": {
+            "_byId": {},
+            "_byKey": {},
+            "_schemaChain": false
+          },
+          "_preferences": null,
+          "_valids": {
+            "_values": {},
+            "_refs": {},
+            "_lowercase": {},
+            "_override": false
+          },
+          "_invalids": null,
+          "_rules": [],
+          "_singleRules": {},
+          "_refs": {
+            "refs": []
+          },
+          "_flags": {
+            "only": true
+          },
+          "_cache": null,
+          "$_terms": {
+            "alterations": null,
+            "examples": null,
+            "externals": null,
+            "metas": [],
+            "notes": [],
+            "shared": null,
+            "tags": [],
+            "whens": null
+          },
+          "$_super": {}
+        }
+      },
+      "_cache": null,
+      "$_terms": {
+        "alterations": null,
+        "examples": null,
+        "externals": null,
+        "metas": [],
+        "notes": [],
+        "shared": null,
+        "tags": [],
+        "whens": null,
+        "replacements": null
+      },
+      "$_super": {}
+    }
+  },
+  "security": false,
+  "state": {
+    "parse": true,
+    "failAction": "error"
+  },
+  "timeout": {
+    "server": false
+  },
+  "validate": {
+    "failAction": "error",
+    "options": {}
+  },
+  "description": "바코드 활성화를 요청합니다.",
+  "notes": [
+    "바코드를 10분간 사용 가능하게 합니다."
+  ],
+  "tags": [
+    "api",
+    "transaction"
+  ],
+  "auth": {
+    "mode": "required",
+    "strategy": "standard"
+  }
+}
+[31m
+[1] "response.204" is not allowed[0m
+    at Object.exports.apply (/Users/potados/Documents/GitHub/cafeteria-server/node_modules/@hapi/hapi/lib/config.js:19:15)
+    at new module.exports.internals.Route (/Users/potados/Documents/GitHub/cafeteria-server/node_modules/@hapi/hapi/lib/route.js:84:32)
+    at internals.Server._addRoute (/Users/potados/Documents/GitHub/cafeteria-server/node_modules/@hapi/hapi/lib/server.js:498:23)
+    at internals.Server.route (/Users/potados/Documents/GitHub/cafeteria-server/node_modules/@hapi/hapi/lib/server.js:491:22)
+    at Object.register (/Users/potados/Documents/GitHub/cafeteria-server/lib/infrastructure/webserver/routes/transaction.js:103:12)
+    at internals.Server.register (/Users/potados/Documents/GitHub/cafeteria-server/node_modules/@hapi/hapi/lib/server.js:466:35)
+    at async createServer (/Users/potados/Documents/GitHub/cafeteria-server/lib/infrastructure/webserver/server.js:76:3)
+    at async start (/Users/potados/Documents/GitHub/cafeteria-server/index.js:27:20)
