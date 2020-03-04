@@ -16,5 +16,6 @@
         "new-cap": "off",
         "spaced-comment": "off",
         "valid-jsdoc": "off",
+        "indent": "off"
     }
 }

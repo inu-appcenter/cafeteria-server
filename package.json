@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "nativerun": "node index.js",
+    "postinstall": "link-module-alias",
     "prestart": "sudo systemctl enable cafeteria",
     "start": "sudo systemctl start cafeteria",
     "restart": "sudo systemctl restart cafeteria",
@@ -49,7 +50,8 @@
     "hapi-swagger": "^12.1.1",
     "install": "^0.13.0",
     "jest": "^25.1.0",
-    "module-alias": "^2.2.2",
+    "jsonwebtoken": "latest",
+    "link-module-alias": "^1.2.0",
     "moment": "^2.24.0",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
@@ -58,10 +60,8 @@
     "sequelize": "^5.21.5",
     "stack-trace": "0.0.10",
     "stream": "0.0.2",
-    "webpack": "^4.42.0",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.2",
-    "jsonwebtoken": "latest"
+    "winston-daily-rotate-file": "^4.4.2"
   },
   "_moduleAliases": {
     "@root": ".",
