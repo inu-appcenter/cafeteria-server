@@ -21,8 +21,8 @@
 jest.unmock('@config/config');
 jest.mock('@config/config', () => require('@test/config'));
 
-const MenuConverter = require('@domain/converters/MenuConverter');
-const MenuConverterImpl = require('@interfaces/converters/MenuConverterImpl');
+const MenuConverter = require('@domain/converter/MenuConverter');
+const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
 
 describe('# Menu converter', () => {
   it('should convert menu', async () => {

@@ -99,8 +99,8 @@ jest.mock('@infrastructure/network/fetch', () => {
   };
 });
 
-const MenuConverter = require('@domain/converters/MenuConverter');
-const MenuConverterImpl = require('@interfaces/converters/MenuConverterImpl');
+const MenuConverter = require('@domain/converter/MenuConverter');
+const MenuConverterImpl = require('@interfaces/converter/MenuConverterImpl');
 
 const CafeteriaRepository = require('@domain/repositories/CafeteriaRepository');
 const CafeteriaRepositoryImpl = require('@interfaces/storage/CafeteriaRepositoryImpl');

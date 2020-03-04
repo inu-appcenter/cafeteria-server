@@ -60,7 +60,8 @@
     "stream": "0.0.2",
     "webpack": "^4.42.0",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.2"
+    "winston-daily-rotate-file": "^4.4.2",
+    "jsonwebtoken": "latest"
   },
   "_moduleAliases": {
     "@root": ".",

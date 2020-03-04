@@ -21,8 +21,8 @@
 jest.unmock('@config/config');
 jest.mock('@config/config', () => require('@test/config'));
 
-const LegacyTransactionConverter = require('@domain/converters/LegacyTransactionConverter');
-const LegacyTransactionConverterImpl = require('@interfaces/converters/LegacyTransactionConverterImpl');
+const LegacyTransactionConverter = require('@domain/converter/LegacyTransactionConverter');
+const LegacyTransactionConverterImpl = require('@interfaces/converter/LegacyTransactionConverterImpl');
 
 const BarcodeTransformer = require('@domain/security/BarcodeTransformer');
 
