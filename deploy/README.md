@@ -80,7 +80,7 @@ mysql> source deploy/setup-db.sql
 
 ## Configure app
 
-Copy `config/config.sample.js` to `config/config.js`.
+Copy `config/config.sample.mjs` to `config/config.mjs`.
 
 Fill all empty keys.
 

@@ -4,15 +4,15 @@
   "description": "Server side application for INU Cafeteria.",
   "main": "app.js",
   "scripts": {
-    "nativerun": "node index.js",
+    "devstart": "./run",
     "postinstall": "link-module-alias",
     "prestart": "sudo systemctl enable cafeteria",
     "start": "sudo systemctl start cafeteria",
     "restart": "sudo systemctl restart cafeteria",
     "stop": "sudo systemctl stop cafeteria",
-    "pretest": "touch config/config.js",
+    "pretest": "touch config/config.mjs",
     "test": "jest --runInBand --detectOpenHandles",
-    "unittest": "touch config/config.js && jest --runInBand --detectOpenHandles test/unit",
+    "unittest": "touch config/config.mjs && jest --runInBand --detectOpenHandles test/unit",
     "status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
   },
   "repository": {

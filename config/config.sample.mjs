@@ -18,7 +18,7 @@
  */
 
 /**
- * Copy this file to a same directory with name 'config.js'.
+ * Copy this file to a same directory with name 'config.mjs'.
  */
 
 module.exports = {

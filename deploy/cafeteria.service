@@ -2,7 +2,7 @@
 Description=Cafeteria service
 
 [Service]
-ExecStart=/home/potados/cafeteria-server/index.js
+ExecStart=/home/potados/cafeteria-server/run
 WorkingDirectory=/home/potados/cafeteria-server
 Restart=always
 User=potados
