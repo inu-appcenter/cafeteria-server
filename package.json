@@ -45,7 +45,6 @@
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-babel": "^5.3.0",
-    "fs-extra": "^8.1.0",
     "hapi-auth-jwt2": "^9.0.1",
     "hapi-swagger": "^12.1.1",
     "install": "^0.13.0",
@@ -64,7 +63,7 @@
     "winston-daily-rotate-file": "^4.4.2"
   },
   "_moduleAliases": {
-    "#root": ".",
+    "root": ".",
     "#domain": "lib/domain",
     "#interfaces": "lib/interfaces",
     "#infrastructure": "lib/infrastructure",
