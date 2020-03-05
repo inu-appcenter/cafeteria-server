@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 'use strict';
 
-const sequelize = require('@infrastructure/database/sequelize');
+import sequelize from '../../lib/infrastructure/database/sequelize';
 
 describe('# Sequelize', () => {
   it('should sync', async () => {

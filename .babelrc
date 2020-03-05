@@ -1,11 +1,9 @@
 {
-  "presets" : ["@babel/preset-env"],
+  "presets": ["@babel/preset-env"],
   "plugins": [
-    [
-      "@babel/plugin-proposal-class-properties",
-      {
-        "loose": true
-      }
-    ]
+    "@babel/plugin-syntax-import-meta",
+    ["transform-runtime", {
+      "regenerator": true
+    }]
   ]
 }
