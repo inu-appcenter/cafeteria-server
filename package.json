@@ -55,7 +55,6 @@
     "hapi-swagger": "^12.1.1",
     "jest": "^25.1.0",
     "jsonwebtoken": "^8.5.1",
-    "module-alias": "^2.2.2",
     "moment": "^2.24.0",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
