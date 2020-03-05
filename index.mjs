@@ -1,5 +1,11 @@
 'use strict';
 
+import logger from './lib/common/utils/logger';
+
+import sequelize from './lib/infrastructure/database/sequelize';
+
+import createServer from './lib/infrastructure/webserver/server';
+
 async function start() {
   // Sync DB.
   try {
