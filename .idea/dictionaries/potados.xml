@@ -2,6 +2,7 @@
   <dictionary name="potados">
     <words>
       <w>bcrypt</w>
+      <w>blipp</w>
       <w>hapi</w>
       <w>sequelize</w>
     </words>
