@@ -1,0 +1,12 @@
+<component name="CopyrightManager">
+  <settings default="gpl3">
+    <module2copyright>
+      <element module="Project Files" copyright="gpl3" />
+    </module2copyright>
+    <LanguageOptions name="ECMAScript 6">
+      <option name="fileTypeOverride" value="3" />
+      <option name="separateBefore" value="true" />
+      <option name="lenBefore" value="2" />
+    </LanguageOptions>
+  </settings>
+</component>
