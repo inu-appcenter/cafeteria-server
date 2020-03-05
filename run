@@ -1,3 +1,5 @@
 #!/bin/bash
 
-/usr/bin/env node --experimental-modules --es-module-specifier-resolution=node index.mjs
+# /usr/bin/env node --experimental-modules --es-module-specifier-resolution=node index.mjs
+
+/usr/bin/env node -r esm index.mjs
