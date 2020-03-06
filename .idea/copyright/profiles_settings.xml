@@ -8,5 +8,10 @@
       <option name="separateBefore" value="true" />
       <option name="lenBefore" value="2" />
     </LanguageOptions>
+    <LanguageOptions name="JavaScript">
+      <option name="fileTypeOverride" value="3" />
+      <option name="separateBefore" value="true" />
+      <option name="lenBefore" value="2" />
+    </LanguageOptions>
   </settings>
 </component>
