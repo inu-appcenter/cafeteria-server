@@ -17,24 +17,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GetCafeteria from '../../../../lib/domain/usecases/GetCafeteria';
-import GetCorners from '../../../../lib/domain/usecases/GetCorners';
-import GetMenus from '../../../../lib/domain/usecases/GetMenus';
+jest.mock('../../../../lib/common/di/resolve', () => {
+
+});
+
+import {set} from '../../../../lib/common/di/resolve';
+import resolve from '../../../../lib/common/di/resolve';
 
 import CafeteriaController from '../../../../lib/interfaces/controllers/CafeteriaController';
+import GetCafeteria from '../../../../lib/domain/usecases/GetCafeteria';
 
-jest.mock('../../../../lib/domain/usecases/GetCafeteria');
-jest.mock('../../../../lib/domain/usecases/GetCorners');
-jest.mock('../../../../lib/domain/usecases/GetMenus');
+set();
 
-beforEach(() => {
-  GetCafeteria.mockClear();
-  GetCorners.mockClear();
-  GetMenus.mockClear();
-});
+
 
 describe('# Cafeteria controller', () => {
   it('should get cafeteria with id 2.', async () => {
+
     const cafeteriaEntity = {
       'id': '2',
       'name': 'theName',
@@ -47,7 +46,6 @@ describe('# Cafeteria controller', () => {
       'image-path': 'thePath',
     };
 
-    GetCafeteria.mockImplementationOnce(() => cafeteriaEntity);
 
     const request = {params: {id: 2}};
 
