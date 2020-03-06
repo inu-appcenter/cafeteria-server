@@ -17,19 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-jest.mock('../../../../lib/common/di/resolve', () => {
-
-});
-
-import {set} from '../../../../lib/common/di/resolve';
-import resolve from '../../../../lib/common/di/resolve';
+jest.mock('../../../../lib/domain/usecases/GetCafeteria');
 
 import CafeteriaController from '../../../../lib/interfaces/controllers/CafeteriaController';
 import GetCafeteria from '../../../../lib/domain/usecases/GetCafeteria';
-
-set();
-
-
 
 describe('# Cafeteria controller', () => {
   it('should get cafeteria with id 2.', async () => {
@@ -46,6 +37,13 @@ describe('# Cafeteria controller', () => {
       'image-path': 'thePath',
     };
 
+    GetCafeteria.mockImplementationOnce(() => {
+      return {
+        run: () => {
+          console.log();
+        },
+      };
+    });
 
     const request = {params: {id: 2}};
 
