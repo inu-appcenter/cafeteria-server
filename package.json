@@ -5,8 +5,8 @@
   "description": "Server side application for INU Cafeteria.",
   "scripts": {
     "start": "node -r esm index.mjs",
-    "test": "touch lib/config/config.mjs && jest --runInBand --detectOpenHandles",
-    "unittest": "touch lib/config/config.mjs && jest --runInBand --detectOpenHandles test/unit"
+    "test": "touch config/config.mjs && jest --runInBand --detectOpenHandles",
+    "unittest": "touch config/config.mjs && jest --runInBand --detectOpenHandles test/unit"
   },
   "repository": {
     "type": "git",
