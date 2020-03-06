@@ -16,20 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-'use strict';
 
-jest.unmock('@config/config');
-jest.mock('@config/config', () => require('@test/config'));
+import GetCafeteria from '../../../../lib/domain/usecases/GetCafeteria';
+import GetCorners from '../../../../lib/domain/usecases/GetCorners';
+import GetMenus from '../../../../lib/domain/usecases/GetMenus';
 
-const GetCafeteria = require('@domain/usecases/GetCafeteria');
-const GetCorners = require('@domain/usecases/GetCorners');
-const GetMenus = require('@domain/usecases/GetMenus');
+import CafeteriaController from '../../../../lib/interfaces/controllers/CafeteriaController';
 
-const CafeteriaController = require('@interfaces/controllers/CafeteriaController');
+jest.mock('../../../../lib/domain/usecases/GetCafeteria');
+jest.mock('../../../../lib/domain/usecases/GetCorners');
+jest.mock('../../../../lib/domain/usecases/GetMenus');
 
-jest.mock('@domain/usecases/GetCafeteria');
-jest.mock('@domain/usecases/GetCorners');
-jest.mock('@domain/usecases/GetMenus');
+beforEach(() => {
+  GetCafeteria.mockClear();
+  GetCorners.mockClear();
+  GetMenus.mockClear();
+});
 
 describe('# Cafeteria controller', () => {
   it('should get cafeteria with id 2.', async () => {
