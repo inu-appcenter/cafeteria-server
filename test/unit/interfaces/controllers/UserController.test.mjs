@@ -29,12 +29,12 @@ beforeAll(async () => {
 
 describe('# User controller', () => {
   it('should login', async () => {
-    const request = requestMock.getRequest(
-      {
-      id: '201701562',
+    const request = requestMock.getRequest({
+      payload: {
+        id: '201701562',
         password: 'blah',
-      }, null, false,
-    );
+      },
+    });
 
     const response = await UserController.login(request, requestMock.getH());
 
@@ -42,7 +42,7 @@ describe('# User controller', () => {
   });
 
   it('should logout', async () => {
-    const request = requestMock.getRequest(null, null, true);
+    const request = requestMock.getRequest({auth: true});
 
     const response = await UserController.logout(request, requestMock.getH());
 

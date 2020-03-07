@@ -17,31 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default {
+describe('# Integration test', () => {
+  // Write tests in real situations.
+  // Use no mock.
 
-  getRequest({payload, params, query, auth=false}) {
-    return {
-      payload: payload,
-      params: params,
-      query: query,
-      auth: {
-        isAuthenticated: auth,
-        credentials: {
-          id: 201701562, /* me */
-        },
-      },
-    };
-  },
-
-  getH() {
-    return {
-      response: (object) => ({
-        code: (c) => ({model: object, code: c}),
-        header: (key, val) => ({model: object, header: {key: key, val: val}}),
-      }),
-      state: (key, val) => {},
-      unstate: (key) => {},
-    };
-  },
-
-};
+  // From login to discount.
+});

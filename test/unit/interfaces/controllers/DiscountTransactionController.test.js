@@ -35,13 +35,9 @@ const h = {
 
 describe('# Discount transaction controller', () => {
   it('should activate barcode', async () => {
-    const request = {
-      auth: {
-        credentials: {
-          id: 201701562,
-        },
-      },
-    };
+    const request = requestMock.getRequest({
+      auth: true,
+    });
 
     const response = await DiscountTransactionController.activateBarcode(request, h);
 
@@ -49,20 +45,17 @@ describe('# Discount transaction controller', () => {
   });
 
   it('it shoud check discount availability', async () => {
-
-    const request = requestMock.getRequest(
-      null,
-      {
+    const request = requestMock.getRequest({
+      query: {
         barcode: '1210209372', /* 201701562 */
         code: 1,
         menu: 'blahblah',
-      }, true);
+      },
+      auth: true,
+    });
 
     const response = await DiscountTransactionController.checkDiscountAvailability(request, requestMock.getH());
 
     expect(response.model).toEqual({message: 'SUCCESS', activated: 1});
-
   });
-
-
 });
