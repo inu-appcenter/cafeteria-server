@@ -27,12 +27,6 @@ beforeAll(async () => {
 
 describe('# User controller', () => {
   it('should login', async () => {
-    const user = {
-      id: '201701562',
-      token: 'token',
-      barcode: 'barcode',
-    };
-
     const request = {
       payload: {
         id: '201701562',
