@@ -22,4 +22,5 @@ describe('# Integration test', () => {
   // Use no mock.
 
   // From login to discount.
+  it('should be done', async () => {});
 });

@@ -35,7 +35,9 @@ describe('# Sequelize', () => {
       {id: 3, name: '사범대식당', image_path: 'res/images/cafeteria-3.jpg'},
       {id: 4, name: '생활관 기숙사식당', image_path: 'res/images/cafeteria-4.jpg'},
       {id: 5, name: '교직원식당', image_path: 'res/images/cafeteria-5.jpg'},
-    ]);
+    ], {
+      updateOnDuplicate: ['id'],
+    });
 
     await cornerModel.bulkCreate([
       {id: 1, name: '1코너 점심', cafeteria_id: 1},
@@ -60,20 +62,24 @@ describe('# Sequelize', () => {
 
       {id: 17, name: '점심', cafeteria_id: 5},
       {id: 18, name: '저녁', cafeteria_id: 5},
-    ]);
+    ], {
+      updateOnDuplicate: ['id'],
+    });
 
     await cafeteriaDiscountRuleModel.bulkCreate([
       {
+        cafeteria_id: 4, /* 생활원 기숙사식당 */
         token: '$2b$09$7gXIej4V7ZAu8fPSDiEVVOBOKiLEBKJkumHONkIECver4EW829pZ2',
         available_meal_types: 2**0, /* breakfast only */
-        cafeteria_id: 4, /* 생활원 기숙사식당 */
       },
       {
+        cafeteria_id: 3, /* 사범대 */
         token: '$2b$09$im4EsvdDUMEP00/MqJ0fOe2hgCufZbHjwPr51nyVTK3KfjWXse9HW',
         available_meal_types: 2**1 | 2**2, /* launch and dinner only */
-        cafeteria_id: 3, /* 사범대 */
       },
-    ]);
+    ], {
+      updateOnDuplicate: ['cafeteria_id'],
+    });
   });
 
   it('should close', async () => {
