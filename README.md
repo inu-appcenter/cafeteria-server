@@ -34,30 +34,38 @@
 
 ~~~
 app
- └ config                           → 설정 파일
  └ deploy                           → 설치 및 배포 가이드, 스크립트
  └ docs                             → 문서
  └ lib                              → 애플리케이션 소스
-    └ common   	                    → 애플리케이션 전역에서 쓰이는 객체 (로깅, 암호화 등)
+    └ common   	                    → 애플리케이션 전역에서 쓰이는 객체
+       └ di                         → 의존성 주입 클래스 선언과 모듈 정의
+       └ utils                      → 유틸리티
     └ domain   	                    → 도메인 레이어 (엔터프라이즈 비즈니스 규칙과 애플리케이션 비즈니스 규칙을 통합)
        └ converter                  → 외부 모델을 도메인 모델로 바꾸어 주는 객체
        └ entities                   → 도메인 모델 (엔티티)
        └ repositories               → 데이터에 접근하는 객체의 인터페이스
-       └ serializer                 → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체.
+       └ security                   → 인증 또는 개인정보과 관련된 객체
+       └ serializer                 → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체
        └ usecases                   → 애플리케이션 비즈니스 규칙
+       └ validators                 → 요청의 유효성을 검사하는 객체
     └ interfaces                    → 인터페이스 어댑터 레이어 (애플리케이션 비즈니스 규칙과 외부 레이어를 연결)
        └ controllers                → Hapi.js 라우터의 handler
        └ converter                  → converter 구현
+       └ security                   → security 구현
        └ serializers                → serializer 구현
        └ storage                    → repository 구현
+       └ validators                 → validators 구현
     └ infrastructure                → 프레임워크, 드라이버 (DB, 웹서버 등)
        └ database                   → ORM과 DB 연결 객체
-       └ network                    → 네트워크 API (fetch)
        └ webserver                  → Hapi.js 웹 서버 구성 (서버, 라우터, 플러그인 등)
-       └ server.js                  → Hapi.js 서버 정의
+       └ server.mjs                 → Hapi.js 서버 정의
  └ public                           → 웹 서버에 의해 public으로 제공되는 파일들 (res/images 등)
  └ test                             → 테스트 소스
- └ index.mjs                         → 메인 애플리케이션 진입점
+    └ integration   	              → 통합 테스트
+    └ mocks   	                    → 테스트용으로 구현한 목(mock) 소스 파일
+    └ unit   	                      → 유닛 테스트
+ └ index.mjs                        → 메인 애플리케이션 진입점
+ └ config.mjs                       → 설정 파일
 ~~~
 
 ## API

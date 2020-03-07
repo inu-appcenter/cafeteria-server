@@ -17,6 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * This modules declaration is usef for unit test.
+ * You can override the default(production) declarations with your owns.
+ */
+
 import origin from '../lib/common/di/modules';
 
 import CafeteriaRepository from '../lib/domain/repositories/CafeteriaRepository';
