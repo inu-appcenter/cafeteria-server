@@ -34,11 +34,10 @@ export default {
   auth: {
     key: process.env.JWT_SECRET_KEY || 'whatever',
     cookie_options: {
-      ttl: 24 * 60 * 60 * 1000, // a day
       encoding: 'none', // we already used JWT to encode
       isSecure: false, // https only?
       isHttpOnly: true, // prevent client alteration
-      clearInvalid: false, // remove invalid cookies
+      clearInvalid: true, // remove invalid cookies
       strictHeader: true, // don't allow violations of RFC 6265
     },
   },
@@ -49,7 +48,8 @@ export default {
     password: process.env.DB_PASSWORD || '1234',
     host: 'localhost',
     dialect: 'mysql',
-    logging: console.log,
+    timezone: '+09:00',
+    logging: false,
   },
 
   login: {

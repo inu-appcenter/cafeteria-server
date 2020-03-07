@@ -78,6 +78,16 @@ Go to the project root and type:
 mysql> source deploy/setup-db.sql
 ~~~
 
+### Timezone(optional)
+
+Set default timezone to `+09:00`.
+
+~~~
+sudo vi /etc/my.cnf
+~~~
+
+add `default-time-zone='+9:00'` to `[mysqld]` section.
+
 ## Configure app
 
 Copy `config/config.sample.mjs` to `config/config.mjs`.
