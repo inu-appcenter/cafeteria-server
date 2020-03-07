@@ -20,32 +20,49 @@
 import {init} from '../../../../lib/common/di/resolve';
 import testModules from '../../../testModules';
 
-import UserController from '../../../../lib/interfaces/controllers/UserController';
+import DiscountTransactionController from '../../../../lib/interfaces/controllers/DiscountTransactionController';
 import requestMock from './requestMock';
 
 beforeAll(async () => {
   await init(testModules);
 });
 
-describe('# User controller', () => {
-  it('should login', async () => {
-    const request = requestMock.getRequest(
-      {
-      id: '201701562',
-        password: 'blah',
-      }, null, false,
-    );
+const h = {
+  response: (object) => ({
+    code: (c) => ({model: object, code: c}),
+  }),
+};
 
-    const response = await UserController.login(request, requestMock.getH());
+describe('# Discount transaction controller', () => {
+  it('should activate barcode', async () => {
+    const request = {
+      auth: {
+        credentials: {
+          id: 201701562,
+        },
+      },
+    };
 
-    expect(response.header.key).toEqual('Authorization');
-  });
-
-  it('should logout', async () => {
-    const request = requestMock.getRequest(null, null, true);
-
-    const response = await UserController.logout(request, requestMock.getH());
+    const response = await DiscountTransactionController.activateBarcode(request, h);
 
     expect(response.code).toBe(204);
   });
+
+  it('it shoud check discount availability', async () => {
+
+    const request = requestMock.getRequest(
+      null,
+      {
+        barcode: '1210209372', /* 201701562 */
+        code: 1,
+        menu: 'blahblah',
+      }, true);
+
+    const response = await DiscountTransactionController.checkDiscountAvailability(request, requestMock.getH());
+
+    expect(response.model).toEqual({message: 'SUCCESS', activated: 1});
+
+  });
+
+
 });

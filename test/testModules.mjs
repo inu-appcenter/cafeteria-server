@@ -23,9 +23,17 @@ import CafeteriaRepository from '../lib/domain/repositories/CafeteriaRepository'
 import CafeteriaRepositoryMock from './mocks/CafeteriaRepositoryMock';
 import UserRepositoryMock from './mocks/UserRepositoryMock';
 import UserRepository from '../lib/domain/repositories/UserRepository';
+import TransactionRepositoryMock from './mocks/TransactionRepositoryMock';
+import TransactionRepository from '../lib/domain/repositories/TransactionRepository';
+import DiscountTransactionValidatorMock from './mocks/TransactionValidatorMock';
+import DiscountTransactionValidator from '../lib/domain/validators/DiscountTransactionValidator';
 
 // Mocks here.
 const overrides = [
+  {
+    create: async (r) => new TransactionRepositoryMock(),
+    as: TransactionRepository,
+  },
   {
     create: async (r) => new CafeteriaRepositoryMock(),
     as: CafeteriaRepository,
@@ -33,6 +41,10 @@ const overrides = [
   {
     create: async (r) => new UserRepositoryMock(),
     as: UserRepository,
+  },
+  {
+    create: async (r) => new DiscountTransactionValidatorMock(),
+    as: DiscountTransactionValidator,
   },
 ];
 

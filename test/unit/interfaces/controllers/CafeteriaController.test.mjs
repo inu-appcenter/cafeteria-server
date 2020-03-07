@@ -18,12 +18,12 @@
  */
 
 import {init} from '../../../../lib/common/di/resolve';
-import testModels from '../../../testModules';
+import testModules from '../../../testModules';
 
 import CafeteriaController from '../../../../lib/interfaces/controllers/CafeteriaController';
 
 beforeAll(async () => {
-  await init(testModels, false, false);
+  await init(testModules, false, false);
 });
 
 describe('# Cafeteria controller', () => {
