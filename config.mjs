@@ -49,7 +49,7 @@ export default {
     host: 'localhost',
     dialect: 'mysql',
     timezone: '+09:00',
-    logging: true,
+    logging: false,
   },
 
   login: {
