@@ -16,32 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 'use strict';
 
-jest.unmock('@config/config');
-jest.mock('@config/config', () => require('@test/config'));
-
-const LegacyTransactionConverter = require('@domain/converter/LegacyTransactionConverter');
-const LegacyTransactionConverterImpl = require('@interfaces/converter/LegacyTransactionConverterImpl');
-
-const BarcodeTransformer = require('@domain/security/BarcodeTransformer');
-
-const DiscountTransaction = require('@domain/entities/DiscountTransaction');
+import BarcodeTransformerImpl from '../../../../lib/interfaces/security/BarcodeTransformerImpl';
+import LegacyTransactionConverter from '../../../../lib/interfaces/converters/LegacyTransactionConverter';
+import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 
 describe('# Legacy transaction converter', () => {
   it('should convert', async () => {
-    const barcodeTransformer = new BarcodeTransformer({
-      extractIdFromBarcode(barcode) {
-        return '201701562';
-      },
+    const converter = new LegacyTransactionConverter({
+      barcodeTransformer: new BarcodeTransformerImpl(),
     });
-    const converter = new LegacyTransactionConverter(new LegacyTransactionConverterImpl(barcodeTransformer));
 
     const todayMorning = new Date();
     todayMorning.setHours(8, 50, 0); /* today morning. */
 
     const input = {
-      barcode: '12345678',
+      barcode: '1210209372', /* 201701562 */
       code: 1,
       menu: 'blahblah',
 
@@ -53,7 +45,7 @@ describe('# Legacy transaction converter', () => {
       token: 'blahblah', /* was 'menu' */
       mealType: 0, /* newly added */
 
-      userId: '201701562', /* extracted from 'barcode' */
+      userId: 201701562, /* extracted from 'barcode' */
       cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
     });
 

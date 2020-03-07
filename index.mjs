@@ -17,15 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 import logger from './lib/common/utils/logger';
+
+import {init} from './lib/common/di/resolve';
+import modules from './lib/common/di/modules';
 
 import sequelize from './lib/infrastructure/database/sequelize';
 
 import createServer from './lib/infrastructure/webserver/server';
 
 async function start() {
+  // Instantiate all.
+  try {
+    await init(modules);
+
+    logger.info('Resolver initialized.');
+  } catch (e) {
+    logger.error('Error during instantiation');
+  }
+
   // Sync DB.
   try {
     await sequelize.sync();
@@ -45,7 +55,7 @@ async function start() {
     sequelize.close();
 
     logger.error(e);
-    process.exit(1);
+    process.exit(3);
   }
 }
 

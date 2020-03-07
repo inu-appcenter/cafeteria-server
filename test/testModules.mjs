@@ -17,31 +17,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-module.exports = {
+import origin from '../lib/common/di/modules';
 
-  sequelize: {
-    database: 'cafeteria', /* cafeteria */
-    username: 'hah',
-    password: 'duh',
-    host: 'host', /* localhost */
-    dialect: 'mysql', /* mysql */
-    logging: false,
+import CafeteriaRepository from '../lib/domain/repositories/CafeteriaRepository';
+import CafeteriaRepositoryMock from './mocks/CafeteriaRepositoryMock';
+
+// Mocks here.
+const overrides = [
+  {
+    create: async (r) => new CafeteriaRepositoryMock(),
+    as: CafeteriaRepository,
   },
+];
 
-  log: {
-    ops: {
-      interval: 60 * 1000, /* interval sampling ops event. */
-    },
-    file: {
-      name: (name) => 'logs/test/test-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
-    },
-    timestamp: 'YYYY-MM-DD HH:mm:ss',
-  },
+const merged = origin.map((decl) => {
+  const overrideFound = overrides.find((ov) => ov.as === decl.as);
 
-  menu: {
-    url: '0',
-    fetchInterval: 0,
-  },
+  if (overrideFound) {
+    return {
+      create: overrideFound.create,
+      as: overrideFound.as,
+    };
+  } else {
+    return decl;
+  }
+});
 
-};
+export default merged;
