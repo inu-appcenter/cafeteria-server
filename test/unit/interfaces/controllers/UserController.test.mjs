@@ -16,74 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-'use strict';
 
-jest.unmock('@config/config');
-jest.mock('@config/config', () => require('@test/config'));
+import {init} from '../../../../lib/common/di/resolve';
+import testModules from '../../../testModules';
+import UserController from '../../../../lib/interfaces/controllers/UserController';
 
-const Login = require('@domain/usecases/Login');
-const Logout = require('@domain/usecases/Logout');
-const GetUser = require('@domain/usecases/GetUser');
-
-const UserRepository = require('@domain/repositories/UserRepository');
-const UserController = require('@interfaces/controllers/UserController');
-
-jest.mock('@domain/usecases/Login');
-jest.mock('@domain/usecases/Logout');
-jest.mock('@domain/usecases/GetUser');
-
-const CookieAuth = class {
-  constructor() {
-    this.data = null;
-  }
-
-  set(data) {
-    this.data = data;
-  }
-
-  get() {
-    return this.data;
-  }
-
-  clear() {
-    this.data = null;
-  }
-};
+beforeAll(async () => {
+  await init(testModules);
+});
 
 describe('# User controller', () => {
   it('should login', async () => {
-    Login.mockImplementationOnce(() => {
-      return UserRepository.LOGIN_OK;
-    });
-
     const user = {
       id: '201701562',
       token: 'token',
       barcode: 'barcode',
     };
 
-    GetUser.mockImplementationOnce(() => {
-      return user;
-    });
-
     const request = {
       payload: {
         id: '201701562',
         password: 'blah',
       },
-      cookieAuth: new CookieAuth(),
     };
 
-    await UserController.login(request);
+    const h = {
+      response: () => ({
+        header: (key, val) => {
+          return key;
+        },
+      }),
+      state: () => {},
+    };
 
-    expect(request.cookieAuth.get()).toEqual(user);
+    const response = await UserController.login(request, h);
+
+    expect(response).toEqual('Authorization');
   });
 
   it('should logout', async () => {
-    Login.mockImplementationOnce(() => {
-      return UserRepository.LOGOUT_OK;
-    });
-
     const user = {
       id: '201701562',
       token: 'token',
@@ -95,30 +66,19 @@ describe('# User controller', () => {
       credentials: user,
     };
 
-    const cookieAuth = new CookieAuth();
-    cookieAuth.set(user);
-
     const request = {
       auth: auth,
-      cookieAuth: cookieAuth,
     };
 
     const h = {
-      response: () => {
-        return {
-          code: () => {
-
-          },
-        };
-      },
+      response: () => ({
+        code: () => 204,
+      }),
+      unstate: () => {},
     };
 
-    expect(UserRepository.LOGIN_OK).toBe(0);
+    const response = await UserController.logout(request, h);
 
-    expect(cookieAuth.get()).toEqual(user);
-
-    await UserController.logout(request, h);
-
-    expect(cookieAuth.get()).toBeNull();
+    expect(response).toBe(204);
   });
 });

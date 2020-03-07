@@ -21,12 +21,18 @@ import origin from '../lib/common/di/modules';
 
 import CafeteriaRepository from '../lib/domain/repositories/CafeteriaRepository';
 import CafeteriaRepositoryMock from './mocks/CafeteriaRepositoryMock';
+import UserRepositoryMock from './mocks/UserRepositoryMock';
+import UserRepository from '../lib/domain/repositories/UserRepository';
 
 // Mocks here.
 const overrides = [
   {
     create: async (r) => new CafeteriaRepositoryMock(),
     as: CafeteriaRepository,
+  },
+  {
+    create: async (r) => new UserRepositoryMock(),
+    as: UserRepository,
   },
 ];
 
