@@ -33,6 +33,7 @@ export default {
 
   auth: {
     key: process.env.JWT_SECRET_KEY || 'whatever',
+    expiresIn: '24h',
     cookie_options: {
       encoding: 'none', // we already used JWT to encode
       isSecure: false, // https only?
