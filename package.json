@@ -1,16 +1,13 @@
 {
   "name": "cafeteria-server",
+  "main": "./index.js",
   "version": "1.0.0",
   "description": "Server side application for INU Cafeteria.",
-  "main": "app.js",
   "scripts": {
-	"prestart": "sudo systemctl enable cafeteria",
-    "start": "sudo systemctl start cafeteria",
-	"restart": "sudo systemctl restart cafeteria",
-	"stop": "sudo systemctl stop cafeteria",
-	"pretest": "touch config/config.js",
-    "test": "jest --runInBand --detectOpenHandles",
-	"status": "sudo systemctl status cafeteria && echo 'Server is running.' || echo 'Server is not running.'"
+    "start": "node -r esm index.mjs",
+    "test": "npm run unittest && npm run integrationtest",
+    "unittest": "jest --runInBand --detectOpenHandles test/unit",
+    "integrationtest": "jest --runInBand --detectOpenHandles test/integration"
   },
   "repository": {
     "type": "git",
@@ -27,7 +24,8 @@
   },
   "homepage": "https://github.com/inu-appcenter/cafeteria-server#readme",
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
     "@hapi/boom": "^9.0.0",
     "@hapi/good": "^9.0.0",
     "@hapi/good-console": "^8.1.2",
@@ -36,49 +34,51 @@
     "@hapi/inert": "^6.0.1",
     "@hapi/joi": "^17.1.0",
     "@hapi/vision": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.1.0",
+    "bcrypt": "^4.0.0",
     "blipp": "^4.0.1",
-    "fs-extra": "^8.1.0",
-    "hapi-auth-cookie": "^10.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-class-property": "^1.1.0",
+    "esm": "^3.2.25",
+    "hapi-auth-jwt2": "^9.0.1",
     "hapi-swagger": "^12.1.1",
     "jest": "^25.1.0",
-    "module-alias": "^2.2.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
+    "npm": "^6.14.2",
     "rand-token": "^0.4.0",
     "sequelize": "^5.21.5",
+    "stack-trace": "0.0.10",
     "stream": "0.0.2",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
   },
-  "_moduleAliases": {
-    "@root": ".",
-    "@domain": "lib/domain",
-    "@interfaces": "lib/interfaces",
-    "@infrastructure": "lib/infrastructure",
-    "@common": "lib/common",
-    "@config": "config"
-  },
   "jest": {
-    "moduleNameMapper": {
-      "@root": "<rootDir>",
-      "^@((domain|interfaces|infrastructure|common){1}(/.*|))$": "<rootDir>/lib/$1",
-      "^@((config){1}(/.*|))$": "<rootDir>/$1"
+    "testMatch": [
+      "**/__tests__/**/*.?(m)js?(x)",
+      "**/?(*.)(spec|test).?(m)js?(x)"
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.m?js$": "babel-jest"
     },
+    "transformIgnorePatterns": [
+      "./node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "mjs"
+    ],
     "collectCoverageFrom": [
       "**/*.{js}",
       "!**/node_modules/**",
       "!**/vendor/**",
       "!**/coverage/**"
-    ]
-  },
-  "babel": {
-    "plugins": [
-      [
-        "@babel/plugin-proposal-class-properties",
-        {
-          "loose": true
-        }
-      ]
     ]
   }
 }

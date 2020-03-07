@@ -80,7 +80,7 @@ mysql> source deploy/setup-db.sql
 
 ## Configure app
 
-Copy `config/config.sample.js` to `config/config.js`.
+Copy `config/config.sample.mjs` to `config/config.mjs`.
 
 Fill all empty keys.
 
@@ -121,12 +121,18 @@ $ sudo cp deploy/cafeteria.service /etc/systemd/system/
 > The service file cafeteria.service is written in assumption that the user name is `potados` and the project directory is `/home/potados/cafeteria-server`.    
 You need to modify it yourself on different configurations.
 
+Enable the service.
+
+~~~
+sudo systemctl enable cafeteria
+~~~
+
 ### Run
 
 Start the server.
 
 ~~~
-npm start
+sudo systemctl start cafeteria
 ~~~
 
 ### Check
@@ -134,5 +140,13 @@ npm start
 To check if the server is running,
 
 ~~~
-npm run status
+sudo systemctl status cafeteria
+~~~
+
+### Others
+
+~~~
+sudo systemctl stop cafeteria # stop the service
+sudo systemctl restart cafeteria # restart the service
+sudo systemctl disable cafeteria # disable the service
 ~~~

@@ -2,8 +2,8 @@
 Description=Cafeteria service
 
 [Service]
-ExecStart=/home/potados/cafeteria-server/index.js
 WorkingDirectory=/home/potados/cafeteria-server
+ExecStart=/usr/bin/env node -r esm /home/potados/cafeteria-server/index.mjs
 Restart=always
 User=potados
 
