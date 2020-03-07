@@ -21,6 +21,8 @@ import LoginResults from '../../lib/domain/entities/LoginResults';
 import LogoutResults from '../../lib/domain/entities/LogoutResults';
 import User from '../../lib/domain/entities/User';
 
+import logger from '../../lib/common/utils/logger';
+
 class UserRepositoryMock extends UserRepository {
   tryLoginWithIdAndToken(id, token) {
     return LoginResults.SUCCESS;
@@ -35,10 +37,13 @@ class UserRepositoryMock extends UserRepository {
   }
 
   setBarcode(id, barcode) {
-    console.log('Barcode is set!');
+    logger.verbose(`set barcode of user ${id} to ${barcode}`);
+    return true;
   }
 
   getUserById(id) {
+    logger.verbose(`getting user of if ${id}`);
+
     return new User({
       id: 201701562,
       token: 'string',

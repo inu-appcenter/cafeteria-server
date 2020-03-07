@@ -25,8 +25,12 @@ import Corner from '../../lib/domain/entities/Corner';
 
 const impl = new CafeteriaRepositoryImpl({menuConverter: new MenuConverter()});
 
+import logger from '../../lib/common/utils/logger';
+
 class CafeteriaRepositoryMock extends CafeteriaRepository {
     getCafeteriaById(id) {
+        logger.verbose(`getting cafeteria of id ${id}`);
+
         return new Cafeteria({
             id: id,
             name: 'string',
@@ -35,6 +39,8 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
     }
 
     getCornerById(id) {
+        logger.verbose(`getting corner of id ${id}`);
+
         return new Corner({
             id: id,
             name: 'string',
@@ -43,10 +49,14 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
     }
 
     getAllMenus(date) {
+        logger.verbose(`getting all menus on ${date}`);
+
         return impl.getAllMenus(date);
     }
 
     getMenusByCornerId(cornerId, date = null) {
+        logger.verbose(`getting menus of corner ${cornerId} on ${date}`);
+
         return impl.getMenusByCornerId(cornerId, date);
     }
 }

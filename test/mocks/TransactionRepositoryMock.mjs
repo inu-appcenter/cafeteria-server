@@ -16,7 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import TransactionRepository from '../../lib/domain/repositories/TransactionRepository';
+
+import logger from '../../lib/common/utils/logger';
 
 class TransactionRepositoryMock extends TransactionRepository {
   getUserDiscountStatusByUserId(userId) {
@@ -32,7 +35,7 @@ class TransactionRepositoryMock extends TransactionRepository {
   }
 
   tryActivateBarcode(userId) {
-    console.log('FFFFF!!!');
+    logger.verbose(`acvitating barcode of user ${userId}`);
     return true;
   }
 
