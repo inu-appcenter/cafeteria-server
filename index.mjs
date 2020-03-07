@@ -29,11 +29,11 @@ import createServer from './lib/infrastructure/webserver/server';
 async function start() {
   // Instantiate all.
   try {
-    await init(modules);
+    await init(modules, false, false);
 
     logger.info('Resolver initialized.');
   } catch (e) {
-    logger.error('Error during instantiation');
+    logger.error(e);
   }
 
   // Sync DB.
@@ -42,7 +42,7 @@ async function start() {
 
     logger.info('Connection to DB has been established successfully.');
   } catch (e) {
-    logger.error('Unable to connect to the database: ' + e);
+    logger.error(e);
   }
 
   // Start server.
