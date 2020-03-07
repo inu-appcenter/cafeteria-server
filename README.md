@@ -61,8 +61,8 @@ app
        └ server.mjs                 → Hapi.js 서버 정의
  └ public                           → 웹 서버에 의해 public으로 제공되는 파일들 (res/images 등)
  └ test                             → 테스트 소스
-    └ integration   	              → 통합 테스트
-    └ mocks   	                    → 테스트용으로 구현한 목(mock) 소스 파일
+    └ integration   	               → 통합 테스트
+    └ mocks   	                     → 테스트용으로 구현한 목(mock) 소스 파일
     └ unit   	                      → 유닛 테스트
  └ index.mjs                        → 메인 애플리케이션 진입점
  └ config.mjs                       → 설정 파일
