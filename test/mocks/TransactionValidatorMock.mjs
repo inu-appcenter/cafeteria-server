@@ -24,6 +24,10 @@ class DiscountTransactionValidatorMock extends DiscountTransactionValidator {
     return true;
   }
 
+  cafeteriaSupportsDiscount(cafeteriaId) {
+    return true;
+  }
+
   userExists(userId) {
     return true;
   }

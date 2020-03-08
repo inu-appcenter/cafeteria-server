@@ -35,6 +35,9 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
             id: id,
             name: 'string',
             imagePath: 'string',
+            supportMenu: false,
+            supportDiscount: false,
+            supportNotification: false,
         });
     }
 
