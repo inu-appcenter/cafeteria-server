@@ -17,8 +17,8 @@ You need these packages installed.
 Add below lines to mysql config file (`/etc/mysql/mysql.conf.d/mysqld.cnf` or other).
 
 ~~~
-default-character-set   = utf8
 collation-server        = utf8_unicode_ci
+init-connect            = 'SET NAMES utf8'
 character-set-server    = utf8
 ~~~
 
