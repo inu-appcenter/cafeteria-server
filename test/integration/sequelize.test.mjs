@@ -30,11 +30,46 @@ describe('# Sequelize', () => {
     const cafeteriaDiscountRuleModel = sequelize.model('cafeteria_discount_rule');
 
     await cafeteriaModel.bulkCreate([
-      {id: 1, name: '복지회관 학생식당', image_path: 'res/images/cafeteria-1.jpg'},
-      {id: 2, name: '카페테리아', image_path: 'res/images/cafeteria-2.jpg'},
-      {id: 3, name: '사범대식당', image_path: 'res/images/cafeteria-3.jpg'},
-      {id: 4, name: '생활관 기숙사식당', image_path: 'res/images/cafeteria-4.jpg'},
-      {id: 5, name: '교직원식당', image_path: 'res/images/cafeteria-5.jpg'},
+      {
+        id: 1,
+        name: '복지회관 학생식당',
+        image_path: 'res/images/cafeteria-1.jpg',
+        support_menu: true,
+        support_discount: false,
+        support_notification: false,
+      },
+      {
+        id: 2,
+        name: '카페테리아',
+        image_path: 'res/images/cafeteria-2.jpg',
+        support_menu: true,
+        support_discount: false,
+        support_notification: false,
+      },
+      {
+        id: 3,
+        name: '사범대식당',
+        image_path: 'res/images/cafeteria-3.jpg',
+        support_menu: true,
+        support_discount: true,
+        support_notification: false,
+      },
+      {
+        id: 4,
+        name: '생활관 기숙사식당',
+        image_path: 'res/images/cafeteria-4.jpg',
+        support_menu: true,
+        support_discount: true,
+        support_notification: false,
+      },
+      {
+        id: 5,
+        name: '교직원식당',
+        image_path: 'res/images/cafeteria-5.jpg',
+        support_menu: true,
+        support_discount: false,
+        support_notification: false,
+      },
     ], {
       updateOnDuplicate: ['id'],
     });
