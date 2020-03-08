@@ -12,6 +12,16 @@ You need these packages installed.
 
 ## Configure DB
 
+### Set default character set
+
+Add below lines to mysql config file (`/etc/mysql/mysql.conf.d/mysqld.cnf` or other).
+
+~~~
+default-character-set   = utf8
+collation-server        = utf8_unicode_ci
+character-set-server    = utf8
+~~~
+
 ### Start MySQL CLI
 
 Open mysql command line client with following command:
@@ -86,13 +96,22 @@ Set default timezone to `+09:00`.
 sudo vi /etc/my.cnf
 ~~~
 
-add `default-time-zone='+9:00'` to `[mysqld]` section.
+Add `default-time-zone='+9:00'` to `[mysqld]` section.
 
 ## Configure app
 
-Copy `config/config.sample.mjs` to `config/config.mjs`.
+Add below lines to `~/.bashrc`:
 
-Fill all empty keys.
+**Replace values with your owns.**
+
+~~~
+export NODE_ENV=production
+export PORT=[any port number you want]
+export JWT_SECRET_KEY=[any string that is logn enough]
+export DB_USERNAME=[username of your DB]
+export DB_PASSWORD=[password of your DB]
+export LOGIN_KEY=['Appcenter the greatest' in korean]
+~~~
 
 ## Run
 
@@ -159,4 +178,16 @@ sudo systemctl status cafeteria
 sudo systemctl stop cafeteria # stop the service
 sudo systemctl restart cafeteria # restart the service
 sudo systemctl disable cafeteria # disable the service
+~~~
+
+You can add commands above to your `.bashrc`.
+
+~~~
+alias enable='sudo systemctl enable cafeteria'
+alias disable='sudo systemctl disable cafeteria'
+
+alias start='sudo systemctl start cafeteria'
+alias restart='sudo systemctl restart cafeteria'
+alias stop='sudo systemctl stop cafeteria'
+alias status='sudo systemctl status cafeteria'
 ~~~
