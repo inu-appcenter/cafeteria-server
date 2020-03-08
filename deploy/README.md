@@ -100,17 +100,17 @@ Add `default-time-zone='+9:00'` to `[mysqld]` section.
 
 ## Configure app
 
-Add below lines to `~/.bashrc`:
+Add below lines to `~/env`:
 
 **Replace values with your owns.**
 
 ~~~
-export NODE_ENV=production
-export PORT=[any port number you want]
-export JWT_SECRET_KEY=[any string that is logn enough]
-export DB_USERNAME=[username of your DB]
-export DB_PASSWORD=[password of your DB]
-export LOGIN_KEY=['Appcenter the greatest' in korean]
+NODE_ENV=production
+PORT=[any port number you want]
+JWT_SECRET_KEY=[any string that is logn enough]
+DB_USERNAME=[username of your DB]
+DB_PASSWORD=[password of your DB]
+LOGIN_KEY=['Appcenter the greatest' in korean]
 ~~~
 
 ## Run
