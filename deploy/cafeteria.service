@@ -3,6 +3,7 @@ Description=Cafeteria service
 
 [Service]
 WorkingDirectory=/home/potados/cafeteria-server
+EnvironmentFile=/home/potados/env
 Environment=NODE_ENV=production
 ExecStart=/usr/bin/env node -r esm /home/potados/cafeteria-server/index.mjs
 Restart=always
