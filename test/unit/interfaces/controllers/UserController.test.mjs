@@ -38,7 +38,7 @@ describe('# User controller', () => {
 
     const response = await UserController.login(request, requestMock.getH());
 
-    expect(response.header.key).toEqual('Authorization');
+    expect(response.headerResult.key).toEqual('Authorization');
   });
 
   it('should logout', async () => {
@@ -46,6 +46,6 @@ describe('# User controller', () => {
 
     const response = await UserController.logout(request, requestMock.getH());
 
-    expect(response.code).toBe(204);
+    expect(response.codeResult).toBe(204);
   });
 });

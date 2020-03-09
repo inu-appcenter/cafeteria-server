@@ -34,14 +34,35 @@ export default {
   },
 
   getH() {
-    return {
-      response: (object) => ({
-        code: (c) => ({model: object, code: c}),
-        header: (key, val) => ({model: object, header: {key: key, val: val}}),
-      }),
-      state: (key, val) => {},
-      unstate: (key) => {},
-    };
+    return new MockH();
   },
 
 };
+
+class MockH {
+  response(body) {
+    this.responseResult = body;
+    return this;
+  }
+
+  code(code) {
+    this.codeResult = code;
+    return this;
+  }
+
+  state(key, val) {
+    this.cookieResult = {
+      key: key,
+      val: val,
+    };
+    return this;
+  }
+
+  header(key, val) {
+    this.headerResult = {
+      key: key,
+      val: val,
+    };
+    return this;
+  }
+}

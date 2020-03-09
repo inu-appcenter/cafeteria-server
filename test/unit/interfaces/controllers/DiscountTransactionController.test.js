@@ -27,21 +27,15 @@ beforeAll(async () => {
   await init(testModules);
 });
 
-const h = {
-  response: (object) => ({
-    code: (c) => ({model: object, code: c}),
-  }),
-};
-
 describe('# Discount transaction controller', () => {
   it('should activate barcode', async () => {
     const request = requestMock.getRequest({
       auth: true,
     });
 
-    const response = await DiscountTransactionController.activateBarcode(request, h);
+    const response = await DiscountTransactionController.activateBarcode(request, requestMock.getH());
 
-    expect(response.code).toBe(204);
+    expect(response.codeResult).toBe(204);
   });
 
   it('it shoud check discount availability', async () => {
@@ -56,6 +50,6 @@ describe('# Discount transaction controller', () => {
 
     const response = await DiscountTransactionController.checkDiscountAvailability(request, requestMock.getH());
 
-    expect(response.model).toEqual({message: 'SUCCESS', activated: 1});
+    expect(response.responseResult).toEqual({message: 'SUCCESS', activated: 1});
   });
 });
