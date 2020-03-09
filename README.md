@@ -81,6 +81,11 @@ app
 
 ## 업데이트 로그
 
+### 2020.3.10 v1.1.3
+- Notification API 이름 FeedbackReplies로 변경
+- 내부 DB 구조 변경 (notifications -> feedback_replies, id와 feedback_id 추가)
+- /isBarcode와 /paymentSend에 대응되는 입력 유효성 검사 로직 강화
+
 ### 2020.3.9 v1.1.2
 - 도메인 엔티티 Cafeteria 확장
 - 결제 유효성 검사에서 Cafeteria 할인 지원 여부 명시적으로 확인.
