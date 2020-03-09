@@ -20,6 +20,10 @@
 import DiscountTransactionValidator from '../../lib/domain/validators/DiscountTransactionValidator';
 
 class DiscountTransactionValidatorMock extends DiscountTransactionValidator {
+  isNotMalformed(transaction) {
+    return true;
+  }
+
   isInMealTime(cafeteriaId, mealType/* 0 or 1 or 2 */) {
     return true;
   }
