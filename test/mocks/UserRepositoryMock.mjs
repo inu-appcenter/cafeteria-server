@@ -24,7 +24,16 @@ import User from '../../lib/domain/entities/User';
 import logger from '../../lib/common/utils/logger';
 
 class UserRepositoryMock extends UserRepository {
+  constructor() {
+    super();
+    this.user = null;
+  }
+
   tryLoginWithIdAndToken(id, token) {
+    this.user = new User({
+      id: id,
+      token: token,
+    })
     return LoginResults.SUCCESS;
   }
 
@@ -45,9 +54,9 @@ class UserRepositoryMock extends UserRepository {
     logger.verbose(`getting user of if ${id}`);
 
     return new User({
-      id: 201701562,
-      token: 'string',
-      barcode: 'string',
+      id: id,
+      token: 'my-remember-me-token',
+      barcode: 'my-barcode',
     });
   }
 }

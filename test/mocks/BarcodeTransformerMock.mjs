@@ -17,25 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import TokenCreator from '../../domain/security/TokenCreator';
+import BarcodeTransformer from '../../lib/domain/security/BarcodeTransformer';
 
-import config from '../../../config';
-
-import randToken from 'rand-token';
-import bcrypt from 'bcrypt';
-import JWT from 'jsonwebtoken';
-
-class TokenCreatorImpl extends TokenCreator {
-  createJwt() {
-    return JWT.sign(
-      {id: this._user.id},
-      config.auth.key,
-      {algorithm: 'HS256'});
+class BarcodeTransformerMock extends BarcodeTransformer {
+  generateBarcodeWithId(id) {
+    return 'my-barcode';
   }
 
-  createRememberMeToken() {
-    return bcrypt.hash(randToken.generate(20), config.hash.saltRounds);
+  extractIdFromBarcode(barcode) {
+    return '201701562';
   }
 }
 
-export default TokenCreatorImpl;
+export default BarcodeTransformerMock;

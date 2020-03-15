@@ -32,6 +32,10 @@ import TransactionRepositoryMock from './mocks/TransactionRepositoryMock';
 import TransactionRepository from '../lib/domain/repositories/TransactionRepository';
 import DiscountTransactionValidatorMock from './mocks/TransactionValidatorMock';
 import DiscountTransactionValidator from '../lib/domain/validators/DiscountTransactionValidator';
+import TokenManager from '../lib/domain/security/TokenManager';
+import TokenManagerMock from './mocks/TokenManagerMock';
+import BarcodeTransformer from '../lib/domain/security/BarcodeTransformer';
+import BarcodeTransformerMock from './mocks/BarcodeTransformerMock';
 
 // Mocks here.
 const overrides = [
@@ -50,6 +54,14 @@ const overrides = [
   {
     create: async (r) => new DiscountTransactionValidatorMock(),
     as: DiscountTransactionValidator,
+  },
+  {
+    create: async (r) => new TokenManagerMock(),
+    as: TokenManager,
+  },
+  {
+    create: async (r) => new BarcodeTransformerMock(),
+    as: BarcodeTransformer,
   },
 ];
 

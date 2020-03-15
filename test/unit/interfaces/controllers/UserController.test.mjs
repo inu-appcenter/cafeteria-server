@@ -32,8 +32,15 @@ describe('# User controller', () => {
   it('should login', async () => {
     const response = await doLoginAndGetActual('201701562', null, '1234');
     const expected = requestMock.getH()
+      .state('token', 'my-jwt')
+      .header('Authorization', 'my-jwt')
+      .response({
+        id: '201701562',
+        token: 'my-remember-me-token',
+        barcode: 'my-barcode',
+      });
 
-    expect(response.headerResult.key).toEqual('Authorization');
+    expect(response).toEqual(expected);
   });
 
   it('should fail login without id', async () => {
