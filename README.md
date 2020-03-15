@@ -47,6 +47,7 @@ app
        └ repositories               → 데이터에 접근하는 객체의 인터페이스
        └ security                   → 인증 또는 개인정보과 관련된 객체
        └ serializer                 → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체
+       └ services                   → controller와 repository 사이의 도메인 로직을 처리하는 객체
        └ usecases                   → 애플리케이션 비즈니스 규칙
        └ validators                 → 요청의 유효성을 검사하는 객체
     └ interfaces                    → 인터페이스 어댑터 레이어 (애플리케이션 비즈니스 규칙과 외부 레이어를 연결)
@@ -54,6 +55,7 @@ app
        └ converter                  → converter 구현
        └ security                   → security 구현
        └ serializers                → serializer 구현
+       └ services                   → services 구현
        └ storage                    → repository 구현
        └ validators                 → validators 구현
     └ infrastructure                → 프레임워크, 드라이버 (DB, 웹서버 등)

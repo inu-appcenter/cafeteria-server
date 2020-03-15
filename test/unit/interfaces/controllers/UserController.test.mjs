@@ -22,6 +22,7 @@ import testModules from '../../../testModules';
 
 import UserController from '../../../../lib/interfaces/controllers/UserController';
 import requestMock from './requestMock';
+import Boom from '@hapi/boom';
 
 beforeAll(async () => {
   await init(testModules);
@@ -29,23 +30,50 @@ beforeAll(async () => {
 
 describe('# User controller', () => {
   it('should login', async () => {
-    const request = requestMock.getRequest({
-      payload: {
-        id: '201701562',
-        password: 'blah',
-      },
-    });
-
-    const response = await UserController.login(request, requestMock.getH());
+    const response = await doLoginAndGetActual('201701562', null, '1234');
+    const expected = requestMock.getH()
 
     expect(response.headerResult.key).toEqual('Authorization');
   });
 
+  it('should fail login without id', async () => {
+
+  });
+
   it('should logout', async () => {
-    const request = requestMock.getRequest({auth: true});
+    const response = await doLogoutAndGetActual('201701562');
+    const expected = requestMock.getH()
+      .code(204)
+      .state('token', 'expired');
 
-    const response = await UserController.logout(request, requestMock.getH());
+    expect(response).toEqual(expected);
+  });
 
-    expect(response.codeResult).toBe(204);
+  it('should fail logout without auth', async () => {
+    const response = await doLogoutAndGetActual(null);
+    const expected = Boom.Boom;
+
+    expect(response).toBeInstanceOf(expected);
   });
 });
+
+function doLoginAndGetActual(id, token, password) {
+  const request = requestMock.getRequest({
+    payload: {
+      id: id,
+      token: token,
+      password: password,
+    },
+  });
+
+  return UserController.login(request, requestMock.getH());
+}
+
+function doLogoutAndGetActual(id) {
+  const request = requestMock.getRequest({
+    includeAuth: !!id,
+    id: id,
+  });
+
+  return UserController.logout(request, requestMock.getH());
+}
