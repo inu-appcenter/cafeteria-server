@@ -23,9 +23,12 @@ import CafeteriaRepositoryImpl from '../../lib/interfaces/storage/CafeteriaRepos
 import MenuConverter from '../../lib/interfaces/converters/MenuConverter';
 import Corner from '../../lib/domain/entities/Corner';
 
-const impl = new CafeteriaRepositoryImpl({menuConverter: new MenuConverter()});
+const impl = new CafeteriaRepositoryImpl({
+    menuConverter: new MenuConverter(config.cornerMenuKeys)
+});
 
 import logger from '../../lib/common/utils/logger';
+import config from '../../config';
 
 class CafeteriaRepositoryMock extends CafeteriaRepository {
     getCafeteriaById(id) {
