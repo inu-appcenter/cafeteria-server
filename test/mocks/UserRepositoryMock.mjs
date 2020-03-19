@@ -18,8 +18,8 @@
  */
 
 import UserRepository from '../../lib/domain/repositories/UserRepository';
-import LoginResults from '../../lib/domain/entities/LoginResults';
-import LogoutResults from '../../lib/domain/entities/LogoutResults';
+import LoginResults from '../../lib/domain/constants/LoginResults';
+import LogoutResults from '../../lib/domain/constants/LogoutResults';
 import User from '../../lib/domain/entities/User';
 
 import logger from '../../lib/common/utils/logger';
