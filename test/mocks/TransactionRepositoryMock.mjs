@@ -39,16 +39,16 @@ class TransactionRepositoryMock extends TransactionRepository {
     return true;
   }
 
-  tryUpdateBarcodeTagTime(userId) {
+  updateBarcodeTagTime(userId) {
     logger.verbose(`last tag time of barcode of user ${userId} updated`);
     return true;
   }
 
-  tryWriteDiscountTransaction(transaction) {
+  writeDiscountTransaction(transaction) {
     throw new Error('Not implemented!');
   }
 
-  tryRemoveDiscountTransaction(transaction) {
+  removeDiscountTransaction(transaction) {
     throw new Error('Not implemented!');
   }
 }

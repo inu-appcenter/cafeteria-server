@@ -102,4 +102,9 @@ export default {
     {id: 18, TYPE1: 1, TYPE2: 3, FOODMENU_TYPE: 5},
   ],
 
+  transaction: {
+    barcodeLifetimeMinutes: 10,
+    barcodeTagMinimumIntervalSecs: 15,
+  },
+
 };
