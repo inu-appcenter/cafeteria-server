@@ -36,7 +36,7 @@ beforeAll(async () => {
 
 describe('# Barcode activation', () => {
   const createMockedResponse = function(useCaseReturn) {
-    const request = requestMock.getRequest({includeAuth: true});
+    const request = requestMock.getRequest({credentials: {}});
 
     overrideOnce(ActivateBarcode, new (class ActivateBarcodeMock extends UseCase {
       onExecute(param) {

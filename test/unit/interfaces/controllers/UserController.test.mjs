@@ -17,70 +17,103 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../../testModules';
+import {init, overrideOnce} from '../../../../lib/common/di/resolve';
 
 import UserController from '../../../../lib/interfaces/controllers/UserController';
 import requestMock from './requestMock';
 import Boom from '@hapi/boom';
+import UseCase from '../../../../lib/domain/usecases/UseCase';
+import Login from '../../../../lib/domain/usecases/Login';
+import LoginResults from '../../../../lib/domain/constants/LoginResults';
+import modules from '../../../../lib/common/di/modules';
+import GetUser from '../../../../lib/domain/usecases/GetUser';
+import User from '../../../../lib/domain/entities/User';
 
 beforeAll(async () => {
-  await init(testModules);
+  await init(modules);
 });
 
-describe('# User controller', () => {
-  it('should login', async () => {
-    const response = await doLoginAndGetActual('201701562', null, '1234');
-    const expected = requestMock.getH()
-      .state('token', 'my-jwt')
-      .header('Authorization', 'my-jwt')
-      .response({
-        id: '201701562',
-        token: 'my-remember-me-token',
-        barcode: 'my-barcode',
-      });
+describe('# Login', () => {
+  const createMockedResponse = function(useCaseReturn, payload={}, params={}, query={}, credentials=null) {
+    const request = requestMock.getRequest({payload, params, query, credentials});
 
-    expect(response).toEqual(expected);
+    overrideOnce(Login, new (class LoginMock extends UseCase {
+      onExecute({id, token, password}) {
+        return useCaseReturn;
+      }
+    }));
+
+    return UserController.login(request, requestMock.getH());
+  };
+
+  it('should fail with WRONG_ID', async () => {
+    const response = await createMockedResponse(LoginResults.WRONG_ID);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
   });
 
-  it('should fail login without id', async () => {
+  it('should fail with WRONG_PASSWORD', async () => {
+    const response = await createMockedResponse(LoginResults.WRONG_PASSWORD);
 
+    expect(response).toBeInstanceOf(Boom.Boom);
   });
 
-  it('should logout', async () => {
-    const response = await doLogoutAndGetActual('201701562');
-    const expected = requestMock.getH()
-      .code(204)
-      .state('token', 'expired');
+  it('should fail with INVALID_TOKEN', async () => {
+    const response = await createMockedResponse(LoginResults.INVALID_TOKEN);
 
-    expect(response).toEqual(expected);
+    expect(response).toBeInstanceOf(Boom.Boom);
   });
 
-  it('should fail logout without auth', async () => {
-    const response = await doLogoutAndGetActual(null);
-    const expected = Boom.Boom;
+  it('should fail with NOT_SUPPORTED', async () => {
+    const response = await createMockedResponse(LoginResults.NOT_SUPPORTED);
 
-    expect(response).toBeInstanceOf(expected);
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('should fail with FUCK', async () => {
+    const response = await createMockedResponse(LoginResults.FUCK);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('should fail with unknown return', async () => {
+    const response = await createMockedResponse(0xDEAD);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('should succeed', async () => {
+    overrideOnce(GetUser, new (class GetUserMock extends UseCase {
+      onExecute({id}) {
+        if (id !== 201701562) {
+          throw new Error();
+        }
+
+        return new User({
+          id: id,
+          token: 'token',
+          barcode: 'barcode',
+        });
+      }
+    }));
+
+    const response = await createMockedResponse(
+      {result: LoginResults.SUCCESS, jwt: 'abcde'},
+      {id: 201701562},
+      );
+
+    expect(response.responseResult).toEqual({
+      'id': 201701562,
+      'token': 'token',
+      'barcode': 'barcode',
+    });
+    expect(response.cookieResult).toEqual({
+      'key': 'token',
+      'val': 'abcde',
+    });
+    expect(response.headerResult).toEqual({
+      'key': 'Authorization',
+      'val': 'abcde',
+    });
   });
 });
-
-function doLoginAndGetActual(id, token, password) {
-  const request = requestMock.getRequest({
-    payload: {
-      id: id,
-      token: token,
-      password: password,
-    },
-  });
-
-  return UserController.login(request, requestMock.getH());
-}
-
-function doLogoutAndGetActual(id) {
-  const request = requestMock.getRequest({
-    includeAuth: !!id,
-    id: id,
-  });
-
-  return UserController.logout(request, requestMock.getH());
-}

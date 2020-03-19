@@ -19,16 +19,14 @@
 
 export default {
 
-  getRequest({payload, params, query, includeAuth=false, id=null}) {
+  getRequest({payload, params, query, credentials}) {
     return {
       payload: payload,
       params: params,
       query: query,
       auth: {
-        isAuthenticated: includeAuth,
-        credentials: {
-          id: id || 201701562, /* me */
-        },
+        isAuthenticated: !!credentials,
+        credentials: credentials,
       },
     };
   },
