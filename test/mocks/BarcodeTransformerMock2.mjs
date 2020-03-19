@@ -19,6 +19,10 @@
 
 import BarcodeTransformer from '../../lib/domain/security/BarcodeTransformer';
 
+/**
+ * For unknown reason, setting BarcodeTransformerMock.mjs as a filename
+ * makes a problem: the file is not recognized by the IDE as a js source file.
+ */
 class BarcodeTransformerMock extends BarcodeTransformer {
   generateBarcodeWithId(id) {
     return 'my-barcode';

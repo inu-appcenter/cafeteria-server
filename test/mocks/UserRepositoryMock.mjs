@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import UserRepository from '../../lib/domain/repositories/UserRepository';
 import LoginResults from '../../lib/domain/entities/LoginResults';
 import LogoutResults from '../../lib/domain/entities/LogoutResults';

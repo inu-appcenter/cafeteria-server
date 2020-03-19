@@ -24,7 +24,7 @@ import MenuConverter from '../../lib/interfaces/converters/MenuConverter';
 import Corner from '../../lib/domain/entities/Corner';
 
 const impl = new CafeteriaRepositoryImpl({
-    menuConverter: new MenuConverter(config.cornerMenuKeys)
+    menuConverter: new MenuConverter(config.cornerMenuKeys),
 });
 
 import logger from '../../lib/common/utils/logger';

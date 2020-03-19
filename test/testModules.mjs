@@ -35,7 +35,7 @@ import DiscountTransactionValidator from '../lib/domain/validators/DiscountTrans
 import TokenManager from '../lib/domain/security/TokenManager';
 import TokenManagerMock from './mocks/TokenManagerMock';
 import BarcodeTransformer from '../lib/domain/security/BarcodeTransformer';
-import BarcodeTransformerMock from './mocks/BarcodeTransformerMock';
+import BarcodeTransformerMock from './mocks/BarcodeTransformerMock2';
 
 // Mocks here.
 const overrides = [
