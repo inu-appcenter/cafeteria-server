@@ -18,55 +18,29 @@
  */
 
 import CafeteriaRepository from '../../lib/domain/repositories/CafeteriaRepository';
-import Cafeteria from '../../lib/domain/entities/Cafeteria';
-import CafeteriaRepositoryImpl from '../../lib/interfaces/storage/CafeteriaRepositoryImpl';
-import MenuConverter from '../../lib/interfaces/converters/MenuConverter';
-import Corner from '../../lib/domain/entities/Corner';
-
-import logger from '../../lib/common/utils/logger';
-import config from '../../config';
-import sequelize from '../../lib/infrastructure/database/sequelize';
-
-const impl = new CafeteriaRepositoryImpl({
-    db: sequelize,
-    menuConverter: new MenuConverter(config.cornerMenuKeys),
-});
 
 class CafeteriaRepositoryMock extends CafeteriaRepository {
-    getCafeteriaById(id) {
-        logger.verbose(`getting cafeteria of id ${id}`);
+  constructor() {
+    super();
 
-        return new Cafeteria({
-            id: id,
-            name: 'string',
-            imagePath: 'string',
-            supportMenu: false,
-            supportDiscount: false,
-            supportNotification: false,
-        });
-    }
+    this.cafeteria = new Map();
+  }
 
-    getCornerById(id) {
-        logger.verbose(`getting corner of id ${id}`);
+  getCafeteriaById(id) {
+    return this.cafeteria.get(id);
+  }
 
-        return new Corner({
-            id: id,
-            name: 'string',
-            cafeteriaId: 1,
-        });
-    }
+  getCornerById(id) {
 
-    getAllMenus(date) {
-        logger.verbose(`getting all menus on ${date}`);
+  }
 
-        return impl.getAllMenus(date);
-    }
+  getAllMenus(date) {
 
-    getMenusByCornerId(cornerId, date = null) {
-        logger.verbose(`getting menus of corner ${cornerId} on ${date}`);
+  }
 
-        return impl.getMenusByCornerId(cornerId, date);
-    }
+  getMenusByCornerId(cornerId, date = null) {
+
+  }
 }
 
 export default CafeteriaRepositoryMock;

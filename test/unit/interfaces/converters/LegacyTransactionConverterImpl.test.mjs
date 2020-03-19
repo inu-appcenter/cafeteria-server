@@ -23,32 +23,95 @@ import BarcodeTransformerImpl from '../../../../lib/interfaces/security/BarcodeT
 import LegacyTransactionConverter from '../../../../lib/interfaces/converters/LegacyTransactionConverter';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 
-describe('# Legacy transaction converter', () => {
-  it('should convert', async () => {
-    const converter = new LegacyTransactionConverter({
-      barcodeTransformer: new BarcodeTransformerImpl(),
+describe('# Convert', () => {
+  const converter = new LegacyTransactionConverter({
+    barcodeTransformer: new BarcodeTransformerImpl(),
+  });
+
+  const getResult = function(barcode, code, menu, now) {
+    return converter.convert({
+      barcode, code, menu, now,
     });
+  };
 
-    const todayMorning = new Date();
-    todayMorning.setHours(8, 50, 0); /* today morning. */
+  const timingTest = function(date, expectedMealType) {
+    const result = getResult('1210209372', 1, 'blah', date);
 
-    const input = {
-      barcode: '1210209372', /* 201701562 */
-      code: 1,
-      menu: 'blahblah',
-
-      now: todayMorning,
-    };
-
-    const converted = converter.convert(input);
-    const expected = new DiscountTransaction({
-      token: 'blahblah', /* was 'menu' */
-      mealType: 0, /* newly added */
+    expect(result).toEqual(new DiscountTransaction({
+      mealType: expectedMealType, /* newly added */
 
       userId: 201701562, /* extracted from 'barcode' */
       cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
-    });
+    }));
+  };
 
-    expect(converted).toEqual(expected);
+  const cafeteriaIdTest = function(code, cafeteriaId) {
+    const now = new Date();
+    now.setHours(8, 50, 0);
+    const result = getResult('1210209372', code, 'blah', now);
+
+    expect(result).toEqual(new DiscountTransaction({
+      mealType: 0, /* newly added */
+
+      userId: 201701562, /* extracted from 'barcode' */
+      cafeteriaId: cafeteriaId, /* 생활원식당, mapped from 'code' */
+    }));
+  };
+
+  const barcodeTest = function(barcode, id) {
+    const now = new Date();
+    now.setHours(8, 50, 0);
+    const result = getResult(barcode, 1, 'blah', now);
+
+    expect(result).toEqual(new DiscountTransaction({
+      mealType: 0, /* newly added */
+
+      userId: id, /* extracted from 'barcode' */
+      cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
+    }));
+  };
+
+  it('should set 0 at morning', async () => {
+    const now = new Date();
+    now.setHours(8, 50, 0);
+    timingTest(now, 0);
+  });
+
+  it('should set 1 at lunch', async () => {
+    const now = new Date();
+    now.setHours(12, 50, 0);
+    timingTest(now, 1);
+  });
+
+  it('should set 2 at dinner', async () => {
+    const now = new Date();
+    now.setHours(18, 50, 0);
+    timingTest(now, 2);
+  });
+
+  it('should set -1 at night', async () => {
+    const now = new Date();
+    now.setHours(23, 50, 0);
+    timingTest(now, -1);
+  });
+
+  it('should convert code 1 to 4(사범대식당)', async () => {
+    cafeteriaIdTest(1, 4);
+  });
+
+  it('should convert code 2 to 3(생활원식당)', async () => {
+    cafeteriaIdTest(2, 3);
+  });
+
+  it('should convert unknown code to -1', async () => {
+    cafeteriaIdTest(99, -1);
+  });
+
+  it('should convert barcode under 2000000000', async () => {
+    barcodeTest('1210209372', 201701562);
+  });
+
+  it('should convert barcode over 2000000000', async () => {
+    barcodeTest('8068062480', 2017015620);
   });
 });

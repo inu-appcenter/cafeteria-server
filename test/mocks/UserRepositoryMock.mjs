@@ -25,7 +25,8 @@ import logger from '../../lib/common/utils/logger';
 class UserRepositoryMock extends UserRepository {
   constructor() {
     super();
-    this.user = null;
+
+    this.users = new Map();
   }
 
   getRemoteLoginResult(id, password) {
@@ -33,17 +34,15 @@ class UserRepositoryMock extends UserRepository {
   }
 
   findUserById(id) {
-    logger.verbose(`getting user of if ${id}`);
-
-    return new User({
-      id: id,
-      token: 'my-remember-me-token',
-      barcode: 'my-barcode',
-    });
+    return this.users.get(id);
   }
 
   addOrUpdateUser(id, {token=null, barcode=null}) {
-    logger.verbose(`update ${id}: (${token}, ${barcode})`);
+    this.users.set(id, new User({
+      id: id,
+      token: token,
+      barcode: barcode,
+    }));
   }
 
   updateLastLoginTimestamp(id) {

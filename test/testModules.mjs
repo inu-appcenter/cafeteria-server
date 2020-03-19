@@ -30,7 +30,6 @@ import UserRepositoryMock from './mocks/UserRepositoryMock';
 import UserRepository from '../lib/domain/repositories/UserRepository';
 import TransactionRepositoryMock from './mocks/TransactionRepositoryMock';
 import TransactionRepository from '../lib/domain/repositories/TransactionRepository';
-import DiscountTransactionValidator from '../lib/domain/validators/DiscountTransactionValidator';
 import TokenManager from '../lib/domain/security/TokenManager';
 import TokenManagerMock from './mocks/TokenManagerMock';
 import BarcodeTransformer from '../lib/domain/security/BarcodeTransformer';

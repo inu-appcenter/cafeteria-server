@@ -29,7 +29,7 @@ class TokenManagerMock extends TokenManager {
   }
 
   compareBcryptToken(plain, hashed) {
-    return true;
+    return plain === hashed;
   }
 }
 

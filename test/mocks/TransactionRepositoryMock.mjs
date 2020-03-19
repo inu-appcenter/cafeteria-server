@@ -19,37 +19,43 @@
 
 import TransactionRepository from '../../lib/domain/repositories/TransactionRepository';
 
-import logger from '../../lib/common/utils/logger';
-
 class TransactionRepositoryMock extends TransactionRepository {
+  constructor() {
+    super();
+    this.userDiscountStatus = new Map();
+    this.cafeteriaDiscountRule = new Map();
+
+    this.userTransactionsToday = new Map();
+    this.barcodeState = new Map();
+    this.lastBarcodeTagged = new Map();
+  }
+
   getUserDiscountStatusByUserId(userId) {
-    throw new Error('Not implemented!');
+    return this.userDiscountStatus.get(userId);
   }
 
   getCafeteriaDiscountRuleByCafeteriaId(cafeteriaId) {
-    throw new Error('Not implemented!');
+    return this.cafeteriaDiscountRule.get(cafeteriaId);
   }
 
   getAllTransactionsOfUserToday(userId) {
-    throw new Error('Not implemented!');
+    return this.userTransactionsToday.get(userId) || [];
   }
 
-  tryActivateBarcode(userId) {
-    logger.verbose(`acvitating barcode of user ${userId}`);
-    return true;
+  activateBarcode(userId) {
+    this.barcodeState.set(userId, true);
   }
 
   updateBarcodeTagTime(userId) {
-    logger.verbose(`last tag time of barcode of user ${userId} updated`);
-    return true;
+    this.lastBarcodeTagged.set(userId, new Date());
   }
 
   writeDiscountTransaction(transaction) {
-    throw new Error('Not implemented!');
+    this.userTransactionsToday.set(transaction.userId, transaction);
   }
 
   removeDiscountTransaction(transaction) {
-    throw new Error('Not implemented!');
+    this.userTransactionsToday.delete(transaction.userId);
   }
 }
 
