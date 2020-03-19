@@ -30,7 +30,6 @@ import UserRepositoryMock from './mocks/UserRepositoryMock';
 import UserRepository from '../lib/domain/repositories/UserRepository';
 import TransactionRepositoryMock from './mocks/TransactionRepositoryMock';
 import TransactionRepository from '../lib/domain/repositories/TransactionRepository';
-import DiscountTransactionValidatorMock from './mocks/TransactionValidatorMock';
 import DiscountTransactionValidator from '../lib/domain/validators/DiscountTransactionValidator';
 import TokenManager from '../lib/domain/security/TokenManager';
 import TokenManagerMock from './mocks/TokenManagerMock';
@@ -50,10 +49,6 @@ const overrides = [
   {
     create: async (r) => new UserRepositoryMock(),
     as: UserRepository,
-  },
-  {
-    create: async (r) => new DiscountTransactionValidatorMock(),
-    as: DiscountTransactionValidator,
   },
   {
     create: async (r) => new TokenManagerMock(),

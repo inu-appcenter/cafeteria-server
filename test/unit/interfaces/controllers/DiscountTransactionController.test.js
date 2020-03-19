@@ -17,39 +17,88 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../../testModules';
+import {init, overrideOnce} from '../../../../lib/common/di/resolve';
 
 import DiscountTransactionController from '../../../../lib/interfaces/controllers/DiscountTransactionController';
 import requestMock from './requestMock';
+import ActivateBarcode from '../../../../lib/domain/usecases/ActivateBarcode';
+import UseCase from '../../../../lib/domain/usecases/UseCase';
+import modules from '../../../../lib/common/di/modules';
+import Boom from '@hapi/boom';
+import ValidateDiscountTransaction from '../../../../lib/domain/usecases/ValidateDiscountTransaction';
+import DiscountValidationResults from '../../../../lib/domain/constants/DiscountValidationResults';
 
 beforeAll(async () => {
-  await init(testModules);
+  await init(modules);
 });
 
-describe('# Discount transaction controller', () => {
-  it('should activate barcode', async () => {
+describe('# Barcode activation', () => {
+  const createMockedResponse = function(useCaseReturn) {
     const request = requestMock.getRequest({
-      auth: true,
+      includeAuth: true,
     });
 
-    const response = await DiscountTransactionController.activateBarcode(request, requestMock.getH());
+    overrideOnce(ActivateBarcode, new (class ActivateBarcodeMock extends UseCase {
+      onExecute(param) {
+        return useCaseReturn;
+      }
+    }));
+
+    return DiscountTransactionController.activateBarcode(request, requestMock.getH());
+  };
+
+  it('should fail', async () => {
+    const response = await createMockedResponse(false);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('should success', async () => {
+    const response = await createMockedResponse(true);
 
     expect(response.codeResult).toBe(204);
   });
+});
 
-  it('it shoud check discount availability', async () => {
+describe('# Discount availability check', () => {
+  const createMockedResponse = function(useCaseReturn) {
     const request = requestMock.getRequest({
-      query: {
-        barcode: '1210209372', /* 201701562 */
-        code: 1,
-        menu: 'blahblah',
-      },
-      auth: true,
+      query: {},
     });
 
-    const response = await DiscountTransactionController.checkDiscountAvailability(request, requestMock.getH());
+    overrideOnce(ValidateDiscountTransaction, new (class ValidateDiscountTransactionMock extends UseCase {
+      onExecute({transaction, token}) {
+        return useCaseReturn;
+      }
+    }));
 
-    expect(response.responseResult).toEqual({message: 'SUCCESS', activated: 1});
+    return DiscountTransactionController.checkDiscountAvailability(request, requestMock.getH());
+  };
+
+  it('should fail with USUAL_FAIL', async () => {
+    const response = await createMockedResponse(DiscountValidationResults.USUAL_FAIL);
+
+    expect(response.codeResult).toBe(200);
+    expect(response.responseResult).toEqual({message: 'SUCCESS', activated: 0});
+  });
+
+  it('should fail with UNUSUAL_NO_BARCODE', async () => {
+    const response = await createMockedResponse(DiscountValidationResults.UNUSUAL_NO_BARCODE);
+
+    expect(response.codeResult).toBe(400);
+    expect(response.responseResult).toEqual({message: 'BARCODE_ERROR'});
+  });
+
+  it('should fail with UNUSUAL_WRONG_PARAM', async () => {
+    const response = await createMockedResponse(DiscountValidationResults.UNUSUAL_WRONG_PARAM);
+
+    expect(response.codeResult).toBe(400);
+    expect(response.responseResult).toEqual({message: 'Parameter_Error'});
+  });
+
+  it('should fail with unknown return', async () => {
+    const response = await createMockedResponse('FUCK');
+
+    expect(response).toBeInstanceOf(Boom.Boom);
   });
 });

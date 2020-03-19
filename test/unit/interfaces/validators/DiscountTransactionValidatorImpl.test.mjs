@@ -17,40 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import DiscountTransactionValidator from '../../lib/domain/validators/DiscountTransactionValidator';
+import resolve, {init} from '../../../../lib/common/di/resolve';
+import testModules from '../../../testModules';
+import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
 
-class DiscountTransactionValidatorMock extends DiscountTransactionValidator {
-  isNotMalformed(transaction) {
-    return true;
-  }
+beforeAll(async () => {
+  await init(testModules);
+});
 
-  isInMealTime(cafeteriaId, mealType/* 0 or 1 or 2 */) {
-    return true;
-  }
-
-  cafeteriaSupportsDiscount(cafeteriaId) {
-    return true;
-  }
-
-  userExists(userId) {
-    return true;
-  }
-
-  isBarcodeActive(userId, activeDurationMinute/* in minutes */) {
-    return true;
-  }
-
-  isFirstToday(userId) {
-    return true;
-  }
-
-  barcodeNotUsedRecently(userId, intervalSec) {
-    return true;
-  }
-
-  isTokenValid(cafeteriaId, plainToken) {
-    return true;
-  }
-}
-
-export default DiscountTransactionValidatorMock;
+describe('# isNotMalformed', () => {
+  it('should catch malformed transaction', async () => {
+    const actual = resolve(DiscountTransactionValidator).isNotMalformed(null);
+    expect(actual).toBe(false);
+  });
+});
