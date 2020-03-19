@@ -31,55 +31,56 @@ const rawOutputs = [
 ];
 
 describe('# Menu converter', () => {
-  it('should convert menu', async () => {
-    const {actual, expected} = doConvertAndGetActualExpectedPair(null, 0);
+  const doTest = function(converter=null, testCaseIndex) {
+    const input = rawInputs[testCaseIndex];
+    const output = rawOutputs[testCaseIndex];
+
+    let actual;
+    if (converter) {
+      actual = convertWithConverter(input, converter);
+    } else {
+      actual = convert(input);
+    }
+
+    const expected = parseObject(output);
 
     expect(actual).toEqual(expected);
+  };
+
+  const convert = function(rawInput) {
+    const converter = new MenuConverter(config.cornerMenuKeys);
+
+    return convertWithConverter(rawInput, converter);
+  };
+
+  const convertWithConverter = function(rawInput, converter) {
+    return converter.convert(parseObject(rawInput));
+  };
+
+  const parseObject = function(raw) {
+    return JSON.parse(raw);
+  };
+
+  it('should convert menu', async () => {
+   doTest(null, 0);
   });
 
   it('should convert menu that contains html escaped characters', async () => {
-    const {actual, expected} = doConvertAndGetActualExpectedPair(null, 1);
-
-    expect(actual).toEqual(expected);
+    doTest(null, 1);
   });
 
   it('should be able to reuse converter', async () => {
     const converter = new MenuConverter(config.cornerMenuKeys);
 
     for (let i = 0; i < rawInputs.length; i++) {
-      const {actual, expected} = doConvertAndGetActualExpectedPair(converter, i);
-
-      expect(actual).toEqual(expected);
+      doTest(converter, i);
     }
+  });
+
+  it('should catch invalid params', async () => {
+    const result = new MenuConverter(null).convert('blahbblah');
+    expect(result).toBe(null);
   });
 });
 
-function doConvertAndGetActualExpectedPair(converter=null, testCaseIndex) {
-  const input = rawInputs[testCaseIndex];
-  const output = rawOutputs[testCaseIndex];
 
-  let actual;
-  if (converter) {
-    actual = convertWithConverter(input, converter);
-  } else {
-    actual = convert(input);
-  }
-
-  const expected = parseObject(output);
-
-  return {actual, expected};
-}
-
-function convert(rawInput) {
-  const converter = new MenuConverter(config.cornerMenuKeys);
-
-  return convertWithConverter(rawInput, converter);
-}
-
-function convertWithConverter(rawInput, converter) {
-  return converter.convert(parseObject(rawInput));
-}
-
-function parseObject(raw) {
-  return JSON.parse(raw);
-}

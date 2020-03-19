@@ -135,6 +135,12 @@ describe('# Commit discount transaction', () => {
     expect(response.responseResult).toEqual({message: 'ERROR'});
   });
 
+  it('should fail with unknown return', async () => {
+    const response = await createMockedResponse('yeah');
+
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
   it('should succeed with SUCCESS', async () => {
     const response = await createMockedResponse(DiscountCommitResults.SUCCESS);
 
