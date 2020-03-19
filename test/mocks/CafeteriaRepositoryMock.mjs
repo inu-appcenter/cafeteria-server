@@ -23,12 +23,14 @@ import CafeteriaRepositoryImpl from '../../lib/interfaces/storage/CafeteriaRepos
 import MenuConverter from '../../lib/interfaces/converters/MenuConverter';
 import Corner from '../../lib/domain/entities/Corner';
 
-const impl = new CafeteriaRepositoryImpl({
-    menuConverter: new MenuConverter(config.cornerMenuKeys),
-});
-
 import logger from '../../lib/common/utils/logger';
 import config from '../../config';
+import sequelize from '../../lib/infrastructure/database/sequelize';
+
+const impl = new CafeteriaRepositoryImpl({
+    db: sequelize,
+    menuConverter: new MenuConverter(config.cornerMenuKeys),
+});
 
 class CafeteriaRepositoryMock extends CafeteriaRepository {
     getCafeteriaById(id) {

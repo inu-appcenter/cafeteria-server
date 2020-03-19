@@ -18,8 +18,6 @@
  */
 
 import UserRepository from '../../lib/domain/repositories/UserRepository';
-import LoginResults from '../../lib/domain/constants/LoginResults';
-import LogoutResults from '../../lib/domain/constants/LogoutResults';
 import User from '../../lib/domain/entities/User';
 
 import logger from '../../lib/common/utils/logger';
@@ -30,28 +28,11 @@ class UserRepositoryMock extends UserRepository {
     this.user = null;
   }
 
-  tryLoginWithIdAndToken(id, token) {
-    this.user = new User({
-      id: id,
-      token: token,
-    })
-    return LoginResults.SUCCESS;
+  getRemoteLoginResult(id, password) {
+    return 'Y';
   }
 
-  tryLoginWithIdAndPassword(id, password) {
-    return LoginResults.SUCCESS;
-  }
-
-  tryLogout(id) {
-    return LogoutResults.SUCCESS;
-  }
-
-  setBarcode(id, barcode) {
-    logger.verbose(`set barcode of user ${id} to ${barcode}`);
-    return true;
-  }
-
-  getUserById(id) {
+  findUserById(id) {
     logger.verbose(`getting user of if ${id}`);
 
     return new User({
@@ -59,6 +40,18 @@ class UserRepositoryMock extends UserRepository {
       token: 'my-remember-me-token',
       barcode: 'my-barcode',
     });
+  }
+
+  addOrUpdateUser(id, {token=null, barcode=null}) {
+    logger.verbose(`update ${id}: (${token}, ${barcode})`);
+  }
+
+  updateLastLoginTimestamp(id) {
+    logger.verbose('Timestamp updated!');
+  }
+
+  updateLastLogoutTimestamp(id) {
+    logger.verbose('Timestamp updated!');
   }
 }
 
