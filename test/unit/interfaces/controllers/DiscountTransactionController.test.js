@@ -27,6 +27,8 @@ import modules from '../../../../lib/common/di/modules';
 import Boom from '@hapi/boom';
 import ValidateDiscountTransaction from '../../../../lib/domain/usecases/ValidateDiscountTransaction';
 import DiscountValidationResults from '../../../../lib/domain/constants/DiscountValidationResults';
+import CommitDiscountTransaction from '../../../../lib/domain/usecases/CommitDiscountTransaction';
+import DiscountCommitResults from '../../../../lib/domain/constants/DiscountCommitResults';
 
 beforeAll(async () => {
   await init(modules);
@@ -34,9 +36,7 @@ beforeAll(async () => {
 
 describe('# Barcode activation', () => {
   const createMockedResponse = function(useCaseReturn) {
-    const request = requestMock.getRequest({
-      includeAuth: true,
-    });
+    const request = requestMock.getRequest({includeAuth: true});
 
     overrideOnce(ActivateBarcode, new (class ActivateBarcodeMock extends UseCase {
       onExecute(param) {
@@ -62,9 +62,7 @@ describe('# Barcode activation', () => {
 
 describe('# Discount availability check', () => {
   const createMockedResponse = function(useCaseReturn) {
-    const request = requestMock.getRequest({
-      query: {},
-    });
+    const request = requestMock.getRequest({query: {}});
 
     overrideOnce(ValidateDiscountTransaction, new (class ValidateDiscountTransactionMock extends UseCase {
       onExecute({transaction, token}) {
@@ -100,5 +98,47 @@ describe('# Discount availability check', () => {
     const response = await createMockedResponse('FUCK');
 
     expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('should success with USUAL_SUCCESS', async () => {
+    const response = await createMockedResponse(DiscountValidationResults.USUAL_SUCCESS);
+
+    expect(response.codeResult).toBe(200);
+    expect(response.responseResult).toEqual({message: 'SUCCESS', activated: 1});
+  });
+});
+
+describe('# Commit discount transaction', () => {
+  const createMockedResponse = function(useCaseReturn) {
+    const request = requestMock.getRequest({query: {}});
+
+    overrideOnce(CommitDiscountTransaction, new (class CommitDiscountTransactionMock extends UseCase {
+      onExecute({transaction, confirm}) {
+        return useCaseReturn;
+      }
+    }));
+
+    return DiscountTransactionController.commitDiscountTransaction(request, requestMock.getH());
+  };
+
+  it('should fail with ALREADY_DISCOUNTED', async () => {
+    const response = await createMockedResponse(DiscountCommitResults.ALREADY_DISCOUNTED);
+
+    expect(response.codeResult).toBe(200);
+    expect(response.responseResult).toEqual({message: 'Already_Discounted'});
+  });
+
+  it('should fail with FAIL', async () => {
+    const response = await createMockedResponse(DiscountCommitResults.FAIL);
+
+    expect(response.codeResult).toBe(200);
+    expect(response.responseResult).toEqual({message: 'ERROR'});
+  });
+
+  it('should succeed with SUCCESS', async () => {
+    const response = await createMockedResponse(DiscountCommitResults.SUCCESS);
+
+    expect(response.codeResult).toBe(200);
+    expect(response.responseResult).toEqual({message: 'SUCCESS'});
   });
 });

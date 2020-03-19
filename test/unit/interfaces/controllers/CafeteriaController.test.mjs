@@ -17,38 +17,200 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../../testModules';
+import {init, overrideOnce} from '../../../../lib/common/di/resolve';
 
 import CafeteriaController from '../../../../lib/interfaces/controllers/CafeteriaController';
 import requestMock from './requestMock';
+import UseCase from '../../../../lib/domain/usecases/UseCase';
+import GetCafeteria from '../../../../lib/domain/usecases/GetCafeteria';
+
+import Boom from '@hapi/boom';
+import modules from '../../../../lib/common/di/modules';
+import Cafeteria from '../../../../lib/domain/entities/Cafeteria';
+import GetCorners from '../../../../lib/domain/usecases/GetCorners';
+import Corner from '../../../../lib/domain/entities/Corner';
+import GetMenus from '../../../../lib/domain/usecases/GetMenus';
+import Menu from '../../../../lib/domain/entities/Menu';
 
 beforeAll(async () => {
-  await init(testModules, false, false);
+  await init(modules, false, false);
 });
 
-describe('# Cafeteria controller', () => {
-  it('should get cafeteria with id 2.', async () => {
-    const request = requestMock.getRequest({params: {id: 2}});
+describe('# Get cafeteria', () => {
+  const createMockedResponse = function(useCaseReturn, params={}, query={}) {
+    const request = requestMock.getRequest({params, query});
 
-    const response = await CafeteriaController.getCafeteria(request);
+    overrideOnce(GetCafeteria, new (class GetCafeteriaMock extends UseCase {
+      onExecute({id}) {
+        return useCaseReturn;
+      }
+    }));
 
-    expect(response.id).toBe(2);
+    return CafeteriaController.getCafeteria(request, requestMock.getH());
+  };
+
+  it('should not get cafeteria', async () => {
+    const response = await createMockedResponse(null);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
   });
 
-  it('should get corner with id 3.', async () => {
-    const request = requestMock.getRequest({params: {id: 3}, query: {}});
+  it('shoult get empty cafeteria', async () => {
+    const response = await createMockedResponse([]);
 
-    const response = await CafeteriaController.getCorners(request);
-
-    expect(response.id).toEqual(3);
+    expect(response).toEqual([]);
   });
 
-  it('should get menus at 20200219 of corner with id 18.', async () => {
-    const request = requestMock.getRequest({params: {}, query: {cornerId: 18, date: '20200219'}});
+  it('should get a single cafeteria', async () => {
+    const response = await createMockedResponse(
+      new Cafeteria({
+        id: 1,
+        name: 'cafeteria1',
+        imagePath: 'path',
+        supportMenu: true,
+        supportDiscount: true,
+        supportNotification: true,
+      }),
+    );
 
-    const response = await CafeteriaController.getMenus(request);
-
-    expect(response[0]['corner-id']).toEqual(18);
+    expect(response).toEqual({
+      'id': 1,
+      'image-path': 'path',
+      'name': 'cafeteria1',
+      'support-discount': true,
+      'support-menu': true,
+      'support-notification': true,
+    });
   });
+
+  it('should get an array of single cafeteria', async () => {
+    const response = await createMockedResponse([
+      new Cafeteria({
+        id: 1,
+        name: 'cafeteria1',
+        imagePath: 'path',
+        supportMenu: true,
+        supportDiscount: true,
+        supportNotification: true,
+      }),
+    ]);
+
+    expect(response).toEqual([{
+           'id': 1,
+           'image-path': 'path',
+           'name': 'cafeteria1',
+           'support-discount': true,
+           'support-menu': true,
+           'support-notification': true,
+      }]);
+  });
+});
+
+describe('# Get corners', () => {
+  const createMockedResponse = function(useCaseReturn, params={}, query={}) {
+    const request = requestMock.getRequest({params, query});
+
+    overrideOnce(GetCorners, new (class GetCornersMock extends UseCase {
+      onExecute({id}) {
+        return useCaseReturn;
+      }
+    }));
+
+    return CafeteriaController.getCorners(request, requestMock.getH());
+  };
+
+  it('shoult not get corners', async () => {
+    const response = await createMockedResponse(null);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('shoult get empty corners', async () => {
+    const response = await createMockedResponse([]);
+
+    expect(response).toEqual([]);
+  });
+
+  it('should get a single corner', async () => {
+    const response = await createMockedResponse(
+      new Corner({
+        id: 1,
+        name: 'corner1',
+        cafeteriaId: 1,
+      }),
+    );
+
+    expect(response).toEqual(
+      {
+        'cafeteria-id': 1,
+        'id': 1,
+        'name': 'corner1',
+      },
+    );
+  });
+
+  it('should get an array of a single corner', async () => {
+    const response = await createMockedResponse([
+      new Corner({
+        id: 1,
+        name: 'corner1',
+        cafeteriaId: 1,
+      }),
+    ]);
+
+    expect(response).toEqual([
+      {
+        'cafeteria-id': 1,
+        'id': 1,
+        'name': 'corner1',
+      },
+    ]);
+  });
+});
+
+describe('# Get menus', () => {
+  const createMockedResponse = function(useCaseReturn, params={}, query={}) {
+    const request = requestMock.getRequest({params, query});
+
+    overrideOnce(GetMenus, new (class GetMenusMock extends UseCase {
+      onExecute({cornerId, date}) {
+        return useCaseReturn;
+      }
+    }));
+
+    return CafeteriaController.getMenus(request, requestMock.getH());
+  };
+
+  it('shoult not get menus', async () => {
+    const response = await createMockedResponse(null);
+
+    expect(response).toBeInstanceOf(Boom.Boom);
+  });
+
+  it('shoult get empty menus', async () => {
+    const response = await createMockedResponse([]);
+
+    expect(response).toEqual([]);
+  });
+
+  it('should get an array of a single menu', async () => {
+    const response = await createMockedResponse([
+      new Menu({
+        foods: 'foods',
+        price: 500,
+        calorie: 500,
+        cornerId: 1,
+      }),
+    ]);
+
+    expect(response).toEqual([
+      {
+        'calorie': 500,
+        'corner-id': 1,
+        'foods': 'foods',
+        'price': 500,
+      },
+    ]);
+  });
+
 });
