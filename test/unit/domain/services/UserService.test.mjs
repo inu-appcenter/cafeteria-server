@@ -22,7 +22,7 @@ import resolve, {init} from '../../../../lib/common/di/resolve';
 import UserService from '../../../../lib/domain/services/UserService';
 import LoginResults from '../../../../lib/domain/constants/LoginResults';
 import LogoutResults from '../../../../lib/domain/constants/LogoutResults';
-import testModules from '../../../testModules';
+import testModules from '../../testModules';
 
 beforeEach(async () => {
   await init(testModules, true);

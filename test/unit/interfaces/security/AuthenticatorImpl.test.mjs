@@ -18,7 +18,7 @@
  */
 
 import resolve, {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../../testModules';
+import testModules from '../../testModules';
 
 import Authenticator from '../../../../lib/domain/security/Authenticator';
 
@@ -27,6 +27,10 @@ beforeEach(async () => {
 });
 
 describe('# authenticateJwt', () => {
+  it('should say invalid to undefined id', async () => {
+    expect(await resolve(Authenticator).authenticateJwt({})).toEqual({isValid: false});
+  });
+
   it('should say invalid to non-existing id', async () => {
     expect(await resolve(Authenticator).authenticateJwt({id: 8935872235})).toEqual({isValid: false});
   });

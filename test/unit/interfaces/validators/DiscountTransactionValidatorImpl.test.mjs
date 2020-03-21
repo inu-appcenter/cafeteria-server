@@ -18,7 +18,7 @@
  */
 
 import resolve, {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../../testModules';
+import testModules from '../../testModules';
 
 import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';

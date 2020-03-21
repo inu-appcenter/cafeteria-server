@@ -22,18 +22,20 @@
  * You can override the default(production) declarations with your owns.
  */
 
-import origin from '../lib/common/di/modules';
+import origin from '../../lib/common/di/modules';
 
-import CafeteriaRepository from '../lib/domain/repositories/CafeteriaRepository';
-import CafeteriaRepositoryMock from './mocks/CafeteriaRepositoryMock';
-import UserRepositoryMock from './mocks/UserRepositoryMock';
-import UserRepository from '../lib/domain/repositories/UserRepository';
-import TransactionRepositoryMock from './mocks/TransactionRepositoryMock';
-import TransactionRepository from '../lib/domain/repositories/TransactionRepository';
-import TokenManager from '../lib/domain/security/TokenManager';
-import TokenManagerMock from './mocks/TokenManagerMock';
-import BarcodeTransformer from '../lib/domain/security/BarcodeTransformer';
-import BarcodeTransformerMock from './mocks/BarcodeTransformerMock2';
+import CafeteriaRepository from '../../lib/domain/repositories/CafeteriaRepository';
+import CafeteriaRepositoryMock from '../mocks/CafeteriaRepositoryMock';
+import UserRepositoryMock from '../mocks/UserRepositoryMock';
+import UserRepository from '../../lib/domain/repositories/UserRepository';
+import TransactionRepositoryMock from '../mocks/TransactionRepositoryMock';
+import TransactionRepository from '../../lib/domain/repositories/TransactionRepository';
+import TokenManager from '../../lib/domain/security/TokenManager';
+import TokenManagerMock from '../mocks/TokenManagerMock';
+import BarcodeTransformer from '../../lib/domain/security/BarcodeTransformer';
+import BarcodeTransformerMock from '../mocks/BarcodeTransformerMock2';
+import Sequelize from 'sequelize';
+import sequelize from './sequelizeMock';
 
 // Mocks here.
 const overrides = [
@@ -56,6 +58,11 @@ const overrides = [
   {
     create: async (r) => new BarcodeTransformerMock(),
     as: BarcodeTransformer,
+  },
+
+  {
+    create: async (r) => sequelize,
+    as: Sequelize,
   },
 ];
 
