@@ -6,9 +6,8 @@
   "scripts": {
     "start": "NODE_ENV=production && node -r esm index.mjs",
     "test": "npm run unittest && npm run integrationtest",
-    "unittest": "jest test/unit",
-    "integrationtest": "jest test/integration",
-    "coverage": "jest --coverage test/unit"
+    "unittest": "jest --coverage test/unit",
+    "integrationtest": "jest test/integration"
   },
   "repository": {
     "type": "git",
@@ -82,7 +81,12 @@
     "moduleFileExtensions": [
       "js",
       "mjs"
-    ]
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 70
+      }
+    }
   },
   "devDependencies": {
     "sequelize-mock": "^0.10.2",
