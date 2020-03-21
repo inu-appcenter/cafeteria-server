@@ -6,9 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=production && node -r esm index.mjs",
     "test": "npm run unittest && npm run integrationtest",
-    "unittest": "jest --runInBand --detectOpenHandles test/unit",
-    "coverage": "jest --coverage",
-    "integrationtest": "jest --runInBand --detectOpenHandles test/integration"
+    "unittest": "jest test/unit",
+    "integrationtest": "jest test/integration",
+    "coverage": "jest --coverage test/unit"
   },
   "repository": {
     "type": "git",

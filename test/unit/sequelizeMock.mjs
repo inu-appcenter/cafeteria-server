@@ -63,6 +63,7 @@ Object.keys(models).forEach((modelName) => {
     models[modelName].associate(models);
   }
 
+  // sequelize-mock has no findByPk. Therefore we add a proxy.
   models[modelName].findByPk = (key) => models[modelName].findById(key);
 });
 
