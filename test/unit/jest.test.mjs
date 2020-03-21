@@ -17,15 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default {
-  SUCCESS: 0x00,
+describe('# Test jest itself', () => {
+  it('should do mock', async () => {
+    const instanceA = new (class A {
+      getSome() {
+        return 'some';
+      }
+    });
 
-  WRONG_AUTH: 0x01,
-  INVALID_TOKEN: 0x08,
-  NOT_SUPPORTED: 0x02,
+    instanceA.getSome = jest.fn(() => 'haha');
 
-  /**
-   * Something got wrong!
-   */
-  FUCK: 0xDEAD,
-};
+    expect(instanceA.getSome()).toBe('haha');
+    expect(instanceA.getSome).toHaveBeenCalledTimes(1);
+  });
+});

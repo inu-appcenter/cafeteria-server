@@ -20,37 +20,40 @@
 import UserRepository from '../../lib/domain/repositories/UserRepository';
 import User from '../../lib/domain/entities/User';
 
-import logger from '../../lib/common/utils/logger';
-
+/**
+ * Serves default mock implementation for UserRepository.
+ */
 class UserRepositoryMock extends UserRepository {
   constructor() {
     super();
-
-    this.users = new Map();
   }
 
   getRemoteLoginResult(id, password) {
-    return 'Y';
+    throw new Error('Not mocked! You need extra mock here');
   }
 
   findUserById(id) {
-    return this.users.get(id);
+    if (id > 2100000000) {
+      return null;
+    }
+
+    return new User({
+      id: id,
+      token: 'token',
+      barcode: 'barcode',
+    });
   }
 
   addOrUpdateUser(id, {token=null, barcode=null}) {
-    this.users.set(id, new User({
-      id: id,
-      token: token,
-      barcode: barcode,
-    }));
+    // do nothing
   }
 
   updateLastLoginTimestamp(id) {
-    logger.verbose('Timestamp updated!');
+    // do nothing
   }
 
   updateLastLogoutTimestamp(id) {
-    logger.verbose('Timestamp updated!');
+    // do nothing
   }
 }
 

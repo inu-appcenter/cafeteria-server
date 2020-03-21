@@ -46,14 +46,8 @@ describe('# Login', () => {
     return UserController.login(request, requestMock.getH());
   };
 
-  it('should fail with WRONG_ID', async () => {
-    const response = await createMockedResponse(LoginResults.WRONG_ID);
-
-    expect(response).toBeInstanceOf(Boom.Boom);
-  });
-
-  it('should fail with WRONG_PASSWORD', async () => {
-    const response = await createMockedResponse(LoginResults.WRONG_PASSWORD);
+  it('should fail with WRONG_AUTH', async () => {
+    const response = await createMockedResponse(LoginResults.WRONG_AUTH);
 
     expect(response).toBeInstanceOf(Boom.Boom);
   });

@@ -23,7 +23,6 @@ import DiscountTransactionValidator from '../../../../lib/domain/validators/Disc
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 import CafeteriaDiscountRule from '../../../../lib/domain/entities/CafeteriaDiscountRule';
 import Cafeteria from '../../../../lib/domain/entities/Cafeteria';
-import User from '../../../../lib/domain/entities/User';
 import UserDiscountStatus from '../../../../lib/domain/entities/UserDiscountStatus';
 
 beforeAll(async () => {
@@ -211,17 +210,6 @@ describe('# cafeteriaSupportsDiscount', () => {
 });
 
 describe('# userExists', () => {
-  const setUser = function(id, token, barcode) {
-    resolve(DiscountTransactionValidator)
-      .userRepository
-      .users
-      .set(id, new User({
-        id: id,
-        token: token,
-        barcode: barcode,
-      }));
-  };
-
   const userTest = async function(userId, expectation) {
     const actual = await resolve(DiscountTransactionValidator).userExists(userId);
 
@@ -237,7 +225,6 @@ describe('# userExists', () => {
   });
 
   it('should say a user exists', async () => {
-    setUser(201701562, 'token', 'barcode');
     await userTest(201701562, true);
   });
 });
