@@ -324,3 +324,101 @@ describe('# isFirstToday', () => {
     await firstTest(201701562, false);
   });
 });
+
+describe('# barcodeNotUsedRecently', () => {
+  const resetTagHistory = function(userId) {
+    resolve(DiscountTransactionValidator)
+      .transactionRepository
+      .userDiscountStatus
+      .set(userId, {
+        lastBarcodeTagging: null,
+      });
+  };
+
+  const tagBarcode = function(userId, date=null) {
+    resolve(DiscountTransactionValidator)
+      .transactionRepository
+      .userDiscountStatus
+      .set(userId, {
+        lastBarcodeTagging: date || new Date(),
+      });
+  };
+
+  const barcodeUsedTest = async function(userId, intervalSec, expectation) {
+    const actual = await resolve(DiscountTransactionValidator).barcodeNotUsedRecently(userId, intervalSec);
+
+    expect(actual).toBe(expectation);
+  };
+
+  it('should catch null userId', async () => {
+    await barcodeUsedTest(null, 0, false);
+  });
+
+  it('should catch null intervalSec', async () => {
+    await barcodeUsedTest(201701562, null, false);
+  });
+
+  it('should catch NaN intervalSec', async () => {
+    await barcodeUsedTest(201701562, 'hi', false);
+  });
+
+  it('should catch crazy userId', async () => {
+    await barcodeUsedTest(34567, 'hi', false);
+  });
+
+  it('should return true: never used', async () => {
+    resetTagHistory(201701562);
+    await barcodeUsedTest(201701562, 15, true);
+  });
+
+  it('should return false: recently used just before', async () => {
+    tagBarcode(201701562);
+    await barcodeUsedTest(201701562, 15, false);
+  });
+
+  it('should return false: used 10 sec ago', async () => {
+    const twentySecBefore = new Date();
+    twentySecBefore.setSeconds(twentySecBefore.getSeconds() - 10);
+
+    tagBarcode(201701562, twentySecBefore);
+    await barcodeUsedTest(201701562, 15, false);
+  });
+
+  it('should return true: recently not used', async () => {
+    const twentySecBefore = new Date();
+    twentySecBefore.setSeconds(twentySecBefore.getSeconds() - 20);
+
+    tagBarcode(201701562, twentySecBefore);
+    await barcodeUsedTest(201701562, 15, true);
+  });
+});
+
+describe('# isTokenValid', () => {
+  const setRule = function(cafeteriaId, token) {
+    resolve(DiscountTransactionValidator)
+      .transactionRepository
+      .cafeteriaDiscountRule
+      .set(cafeteriaId, {
+        token: token,
+      });
+  };
+
+  const tokenTest = async function(cafeteriaId, token, expectation) {
+    const actual = await resolve(DiscountTransactionValidator).isTokenValid(cafeteriaId, token);
+
+    expect(actual).toBe(expectation);
+  };
+
+  it('should catch null params', async () => {
+    await tokenTest(null, null, false);
+  });
+
+  it('should catch crazy cafeteriaId', async () => {
+    await tokenTest(99, 'abcd', false);
+  });
+
+  it('should work', async () => {
+    setRule(9999, 'abcd');
+    await tokenTest(9999, 'abcd', true);
+  });
+});

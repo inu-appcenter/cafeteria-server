@@ -26,8 +26,6 @@ class TransactionRepositoryMock extends TransactionRepository {
     this.cafeteriaDiscountRule = new Map();
 
     this.userTransactionsToday = new Map();
-    this.barcodeState = new Map();
-    this.lastBarcodeTagged = new Map();
   }
 
   getUserDiscountStatusByUserId(userId) {
@@ -43,11 +41,27 @@ class TransactionRepositoryMock extends TransactionRepository {
   }
 
   activateBarcode(userId) {
-    this.barcodeState.set(userId, true);
+    let status = this.userDiscountStatus.get(userId);
+
+    if (status) {
+      status = {};
+    }
+
+    status.lastBarcodeActivation = new Date();
+
+    this.userDiscountStatus.set(userId, status);
   }
 
   updateBarcodeTagTime(userId) {
-    this.lastBarcodeTagged.set(userId, new Date());
+    let status = this.userDiscountStatus.get(userId);
+
+    if (status) {
+      status = {};
+    }
+
+    status.lastBarcodeTagging = new Date();
+
+    this.userDiscountStatus.set(userId, status);
   }
 
   writeDiscountTransaction(transaction) {

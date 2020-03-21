@@ -101,7 +101,7 @@ describe('# Initialize', () => {
     await expect(injector.init(declarations)).rejects.toThrow();
   });
 
-  it('should success init', async () => {
+  it('should success init: array', async () => {
     const injector = new Injector();
 
     const declarations = [
@@ -120,6 +120,22 @@ describe('# Initialize', () => {
     const instance = injector.resolve(TestClassWithDependency);
 
     expect(instance).toBeInstanceOf(TestClassWithDependency);
+    expect(instance.say()).toBe('hi');
+  });
+
+  it('should success init: single', async () => {
+    const injector = new Injector();
+
+    const declarations = {
+        create: async (r) => new TestClass(),
+        as: TestClass,
+    };
+
+    await expect(injector.init(declarations)).resolves.not.toThrow();
+
+    const instance = injector.resolve(TestClass);
+
+    expect(instance).toBeInstanceOf(TestClass);
     expect(instance.say()).toBe('hi');
   });
 });
