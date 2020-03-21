@@ -70,6 +70,7 @@ describe('# Login', () => {
   it('should succeed with correct id and correct token', async () => {
     setCompareBcryptTokenMock();
     setCreateJwtMock('mocked-jwt');
+    setCreateRememberMeMock('mocked-remember-me-token');
 
     await loginTest(201701562, 'token', null,
       {result: LoginResults.SUCCESS, jwt: 'mocked-jwt'});
@@ -78,6 +79,7 @@ describe('# Login', () => {
   it('should succeed with correct id and correct password', async () => {
     setRemoteLoginResultMock('Y');
     setCreateJwtMock('mocked-jwt');
+    setCreateRememberMeMock('mocked-remember-me-token');
 
     await loginTest(201701562, null, 'password',
       {result: LoginResults.SUCCESS, jwt: 'mocked-jwt'});
@@ -120,6 +122,14 @@ const setCreateJwtMock = function(jwt) {
   return mock;
 };
 
+const setCreateRememberMeMock = function(rememberMeToken) {
+  const mock = jest.fn(() => rememberMeToken);
+
+  resolve(UserService).tokenManager.createRememberMeToken = mock;
+
+  return mock;
+};
+
 const setCompareBcryptTokenMock = function() {
   const mock = jest.fn((a, b) => a === b);
 
@@ -127,3 +137,5 @@ const setCompareBcryptTokenMock = function() {
 
   return mock;
 };
+
+

@@ -19,14 +19,15 @@
 
 import resolve, {init} from '../../../../lib/common/di/resolve';
 import testModules from '../../../testModules';
+
 import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 import CafeteriaDiscountRule from '../../../../lib/domain/entities/CafeteriaDiscountRule';
 import Cafeteria from '../../../../lib/domain/entities/Cafeteria';
 import UserDiscountStatus from '../../../../lib/domain/entities/UserDiscountStatus';
 
-beforeAll(async () => {
-  await init(testModules);
+beforeEach(async () => {
+  await init(testModules, true);
 });
 
 describe('# isNotMalformed', () => {
@@ -106,17 +107,6 @@ describe('# isNotMalformed', () => {
 });
 
 describe('# isInMealTime', () => {
-  const setCafeteriaRule = function(cafeteriaId, token, availableMealTypes) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .cafeteriaDiscountRule
-      .set(cafeteriaId, new CafeteriaDiscountRule({
-        token: token,
-        availableMealTypes: availableMealTypes, // lunch only,
-        cafeteriaId: cafeteriaId,
-      }));
-  };
-
   const mealTimeTest = async function(cafeteriaId, mealType, expectation) {
     const actual = await resolve(DiscountTransactionValidator).isInMealTime(cafeteriaId, mealType);
 
@@ -128,6 +118,8 @@ describe('# isInMealTime', () => {
   });
 
   it('should catch negative cafeteriaId in param', async () => {
+    setCafeteriaRuleMock(1, 'token', 2);
+
     await mealTimeTest(-2, 1, false);
   });
 
@@ -136,48 +128,20 @@ describe('# isInMealTime', () => {
   });
 
   it('should ensure that cafeteria with id 1 support meal type 1', async () => {
-    setCafeteriaRule(1, 'token', 2 /* lunch */);
+    setCafeteriaRuleMock(1, 'token', 2);
+
     await mealTimeTest(1, 1, true);
   });
 
   it('should ensure that cafeteria with id 2 support meal type 0 and 2', async () => {
-    setCafeteriaRule(2, 'token', 1 + 4 /* breakfast and dinner */);
+    setCafeteriaRuleMock(2, 'token', 1 + 4);
+
     await mealTimeTest(2, 0, true);
     await mealTimeTest(2, 2, true);
   });
 });
 
 describe('# cafeteriaSupportsDiscount', () => {
-  const setCafeteria = function(id,
-                                name,
-                                imagePath,
-                                supportMenu,
-                                supportDiscount,
-                                supportNotification) {
-    resolve(DiscountTransactionValidator)
-      .cafeteriaRepository
-      .cafeteria
-      .set(id, new Cafeteria({
-        id: id,
-        name: name,
-        imagePath: imagePath,
-        supportMenu: supportMenu,
-        supportDiscount: supportDiscount,
-        supportNotification: supportNotification,
-      }));
-  };
-
-  const setCafeteriaRule = function(cafeteriaId, token, availableMealTypes) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .cafeteriaDiscountRule
-      .set(cafeteriaId, new CafeteriaDiscountRule({
-        token: token,
-        availableMealTypes: availableMealTypes, // lunch only,
-        cafeteriaId: cafeteriaId,
-      }));
-  };
-
   const discountSupportTest = async function(cafeteriaId, expectation) {
     const actual = await resolve(DiscountTransactionValidator).cafeteriaSupportsDiscount(cafeteriaId);
 
@@ -193,18 +157,22 @@ describe('# cafeteriaSupportsDiscount', () => {
   });
 
   it('should say this cafeteria does not support discount', async () => {
-    setCafeteria(1, 'cafeteria', 'path', true, false, true);
+    setCafeteriaMock(1, 'cafeteria', 'path', true, false, true);
+
     await discountSupportTest(1, false);
   });
 
   it('should say this cafeteria supports discount but has no discount rule', async () => {
-    setCafeteria(5, 'cafeteria', 'path', true, true, true);
+    setCafeteriaMock(5, 'cafeteria', 'path', true, true, true);
+    setCafeteriaRuleMock(3, 'token', 1 + 2 + 4);
+
     await discountSupportTest(5, false);
   });
 
   it('should say this cafeteria supports discount and has discount rule', async () => {
-    setCafeteria(3, 'cafeteria', 'path', true, true, true);
-    setCafeteriaRule(3, 'token', 1 + 2 + 4);
+    setCafeteriaMock(3, 'cafeteria', 'path', true, true, true);
+    setCafeteriaRuleMock(3, 'token', 1 + 2 + 4);
+
     await discountSupportTest(3, true);
   });
 });
@@ -230,21 +198,30 @@ describe('# userExists', () => {
 });
 
 describe('# isBarcodeActive', () => {
-  const setUserState = function(userId, lastBarcodeActivation, lastBarcodeTagging) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .userDiscountStatus
-      .set(userId, new UserDiscountStatus({
-        userId: userId,
-        lastBarcodeActivation: lastBarcodeActivation,
-        lastBarcodeTagging: lastBarcodeTagging,
-      }));
-  };
-
   const activationTest = async function(userId, duration, expectation) {
     const actual = await resolve(DiscountTransactionValidator).isBarcodeActive(userId, duration);
 
     expect(actual).toBe(expectation);
+  };
+
+  const setUserStateMock = function(userId, lastBarcodeActivation, lastBarcodeTagging) {
+    const mock = jest.fn((id) => {
+      if (id === userId) {
+        return new UserDiscountStatus({
+          userId: userId,
+          lastBarcodeActivation: lastBarcodeActivation,
+          lastBarcodeTagging: lastBarcodeTagging,
+        });
+      } else {
+        return null;
+      }
+    });
+
+    resolve(DiscountTransactionValidator)
+      .transactionRepository
+      .getUserDiscountStatusByUserId = mock;
+
+    return mock;
   };
 
   it('should catch null userId', async () => {
@@ -252,7 +229,9 @@ describe('# isBarcodeActive', () => {
   });
 
   it('should catch crazy userId', async () => {
-    await activationTest(248935983, 10, false);
+    setUserStateMock(201701562, null, null);
+
+    await activationTest(2489398895983, 10, false);
   });
 
   it('should catch null activeDurationMinute', async () => {
@@ -260,7 +239,8 @@ describe('# isBarcodeActive', () => {
   });
 
   it('should say user status exists but barcode is never active', async () => {
-    setUserState(201701562, null, null);
+    setUserStateMock(201701562, null, null);
+
     await activationTest(201701562, 10, false);
   });
 
@@ -268,34 +248,43 @@ describe('# isBarcodeActive', () => {
     const todayMorning = new Date();
     todayMorning.setHours(8, 25, 0);
 
-    setUserState(201701562, todayMorning, null);
+    setUserStateMock(201701562, todayMorning, null);
     await activationTest(201701562, 10, false);
   });
 
   it('should say barcode is active', async () => {
     const now = new Date();
 
-    setUserState(201701562, now, null);
+    setUserStateMock(201701562, now, null);
     await activationTest(201701562, 10, true);
   });
 });
 
 describe('# isFirstToday', () => {
-  const addTransaction = function(userId, mealType, cafeteriaId) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .userTransactionsToday
-      .set(userId, new DiscountTransaction({
-        userId: userId,
-        mealType: mealType,
-        cafeteriaId: cafeteriaId,
-      }));
-  };
-
   const firstTest = async function(userId, expectation) {
     const actual = await resolve(DiscountTransactionValidator).isFirstToday(userId);
 
     expect(actual).toBe(expectation);
+  };
+
+  const setTransactionMock = function(userId, mealType, cafeteriaId) {
+    const mock = jest.fn((id) => {
+      if (id < 2100000000 && id === userId) {
+        return [new DiscountTransaction({
+          userId: userId,
+          mealType: mealType,
+          cafeteriaId: cafeteriaId,
+        })];
+      } else {
+        return [];
+      }
+    });
+
+    resolve(DiscountTransactionValidator)
+      .transactionRepository
+      .getAllTransactionsOfUserToday = mock;
+
+    return mock;
   };
 
   it('should catch null userId in param', async () => {
@@ -303,38 +292,43 @@ describe('# isFirstToday', () => {
   });
 
   it('should catch crazy userId in param', async () => {
-    await firstTest(86756, true); // this is a right behavior
+    setTransactionMock(201701562, 2, 1);
+
+    await firstTest(8934892389289, true); // this is a right behavior
   });
 
   it('should say this user already made a transaction today', async () => {
-    addTransaction(201701562, 2, 1);
+    setTransactionMock(201701562, 2, 1);
+
     await firstTest(201701562, false);
   });
 });
 
 describe('# barcodeNotUsedRecently', () => {
-  const resetTagHistory = function(userId) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .userDiscountStatus
-      .set(userId, {
-        lastBarcodeTagging: null,
-      });
-  };
-
-  const tagBarcode = function(userId, date=null) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .userDiscountStatus
-      .set(userId, {
-        lastBarcodeTagging: date || new Date(),
-      });
-  };
-
   const barcodeUsedTest = async function(userId, intervalSec, expectation) {
     const actual = await resolve(DiscountTransactionValidator).barcodeNotUsedRecently(userId, intervalSec);
 
     expect(actual).toBe(expectation);
+  };
+
+  const setUserStatusMock = function(userId, lastBarcodeActivation, lastBarcodeTagging) {
+    const mock = jest.fn((id) => {
+      if (id > 2100000000) {
+        return null;
+      }
+
+      return new UserDiscountStatus({
+        userId: userId,
+        lastBarcodeActivation: lastBarcodeActivation,
+        lastBarcodeTagging: lastBarcodeTagging,
+      });
+    });
+
+    resolve(DiscountTransactionValidator)
+      .transactionRepository
+      .getUserDiscountStatusByUserId = mock;
+
+    return mock;
   };
 
   it('should catch null userId', async () => {
@@ -350,24 +344,29 @@ describe('# barcodeNotUsedRecently', () => {
   });
 
   it('should catch crazy userId', async () => {
-    await barcodeUsedTest(34567, 'hi', false);
+    setUserStatusMock(201701562, null, null);
+
+    await barcodeUsedTest(8976546576, 15, false);
   });
 
   it('should return true: never used', async () => {
-    resetTagHistory(201701562);
+    setUserStatusMock(201701562, null, null);
+
     await barcodeUsedTest(201701562, 15, true);
   });
 
   it('should return false: recently used just before', async () => {
-    tagBarcode(201701562);
+    setUserStatusMock(201701562, new Date(), new Date());
+
     await barcodeUsedTest(201701562, 15, false);
   });
 
   it('should return false: used 10 sec ago', async () => {
-    const twentySecBefore = new Date();
-    twentySecBefore.setSeconds(twentySecBefore.getSeconds() - 10);
+    const tenSecBefore = new Date();
+    tenSecBefore.setSeconds(tenSecBefore.getSeconds() - 10);
 
-    tagBarcode(201701562, twentySecBefore);
+    setUserStatusMock(201701562, tenSecBefore, tenSecBefore);
+
     await barcodeUsedTest(201701562, 15, false);
   });
 
@@ -375,21 +374,13 @@ describe('# barcodeNotUsedRecently', () => {
     const twentySecBefore = new Date();
     twentySecBefore.setSeconds(twentySecBefore.getSeconds() - 20);
 
-    tagBarcode(201701562, twentySecBefore);
+    setUserStatusMock(201701562, twentySecBefore, twentySecBefore);
+
     await barcodeUsedTest(201701562, 15, true);
   });
 });
 
 describe('# isTokenValid', () => {
-  const setRule = function(cafeteriaId, token) {
-    resolve(DiscountTransactionValidator)
-      .transactionRepository
-      .cafeteriaDiscountRule
-      .set(cafeteriaId, {
-        token: token,
-      });
-  };
-
   const tokenTest = async function(cafeteriaId, token, expectation) {
     const actual = await resolve(DiscountTransactionValidator).isTokenValid(cafeteriaId, token);
 
@@ -401,11 +392,62 @@ describe('# isTokenValid', () => {
   });
 
   it('should catch crazy cafeteriaId', async () => {
-    await tokenTest(99, 'abcd', false);
+    setCafeteriaRuleMock(1, 'abcd', 7);
+
+    await tokenTest(985892, 'abcd', false);
   });
 
   it('should work', async () => {
-    setRule(9999, 'abcd');
-    await tokenTest(9999, 'abcd', true);
+    setCafeteriaRuleMock(9, 'abcd', 7);
+
+    await tokenTest(9, 'abcd', true);
   });
 });
+
+const setCafeteriaRuleMock = function(cafeteriaId, token, availableMealTypes) {
+  const mock = jest.fn((id) => {
+    if (id < 100 && id === cafeteriaId) {
+      return new CafeteriaDiscountRule({
+        cafeteriaId: cafeteriaId,
+        token: token,
+        availableMealTypes: availableMealTypes,
+      });
+    } else {
+      return null;
+    }
+  });
+
+  resolve(DiscountTransactionValidator)
+    .transactionRepository
+    .getCafeteriaDiscountRuleByCafeteriaId = mock;
+
+  return mock;
+};
+
+const setCafeteriaMock = function(cafeteriaId,
+                                  name,
+                                  imagePath,
+                                  supportMenu,
+                                  supportDiscount,
+                                  supportNotification) {
+  const mock = jest.fn((id) => {
+    if (id < 100 && id === cafeteriaId) {
+      return new Cafeteria({
+        id: id,
+        name: name,
+        imagePath: imagePath,
+        supportMenu: supportMenu,
+        supportDiscount: supportDiscount,
+        supportNotification: supportNotification,
+      });
+    } else {
+      return null;
+    }
+  });
+
+  resolve(DiscountTransactionValidator)
+    .cafeteriaRepository
+    .getCafeteriaById = mock;
+
+  return mock;
+};

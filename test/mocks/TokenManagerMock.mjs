@@ -21,11 +21,11 @@ import TokenManager from '../../lib/domain/security/TokenManager';
 
 class TokenManagerMock extends TokenManager {
   createJwt(payload) {
-    return 'my-jwt';
+    throw new Error('Not mocked! You need extra mock');
   }
 
   createRememberMeToken() {
-    return 'my-remember-me-token';
+    throw new Error('Not mocked! You need extra mock');
   }
 
   compareBcryptToken(plain, hashed) {

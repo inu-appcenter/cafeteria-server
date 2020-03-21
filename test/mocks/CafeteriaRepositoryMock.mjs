@@ -18,16 +18,26 @@
  */
 
 import CafeteriaRepository from '../../lib/domain/repositories/CafeteriaRepository';
+import Cafeteria from '../../lib/domain/entities/Cafeteria';
 
 class CafeteriaRepositoryMock extends CafeteriaRepository {
   constructor() {
     super();
-
-    this.cafeteria = new Map();
   }
 
   getCafeteriaById(id) {
-    return this.cafeteria.get(id);
+    if (id > 99) {
+      return null;
+    }
+
+    return new Cafeteria({
+      id: id,
+      name: 'name',
+      imagePath: 'path',
+      supportMenu: false,
+      supportDiscount: false,
+      supportNotification: false,
+    });
   }
 
   getCornerById(id) {

@@ -22,54 +22,34 @@ import TransactionRepository from '../../lib/domain/repositories/TransactionRepo
 class TransactionRepositoryMock extends TransactionRepository {
   constructor() {
     super();
-    this.userDiscountStatus = new Map();
-    this.cafeteriaDiscountRule = new Map();
-
-    this.userTransactionsToday = new Map();
   }
 
   getUserDiscountStatusByUserId(userId) {
-    return this.userDiscountStatus.get(userId);
+    throw new Error('Not mocked! You need extra mock');
   }
 
   getCafeteriaDiscountRuleByCafeteriaId(cafeteriaId) {
-    return this.cafeteriaDiscountRule.get(cafeteriaId);
+    throw new Error('Not mocked! You need extra mock');
   }
 
   getAllTransactionsOfUserToday(userId) {
-    return this.userTransactionsToday.get(userId) || [];
+    throw new Error('Not mocked! You need extra mock');
   }
 
   activateBarcode(userId) {
-    let status = this.userDiscountStatus.get(userId);
-
-    if (status) {
-      status = {};
-    }
-
-    status.lastBarcodeActivation = new Date();
-
-    this.userDiscountStatus.set(userId, status);
+    // do nothing
   }
 
   updateBarcodeTagTime(userId) {
-    let status = this.userDiscountStatus.get(userId);
-
-    if (status) {
-      status = {};
-    }
-
-    status.lastBarcodeTagging = new Date();
-
-    this.userDiscountStatus.set(userId, status);
+    // do nothing
   }
 
   writeDiscountTransaction(transaction) {
-    this.userTransactionsToday.set(transaction.userId, transaction);
+    // do nothing
   }
 
   removeDiscountTransaction(transaction) {
-    this.userTransactionsToday.delete(transaction.userId);
+    // do nothing
   }
 }
 
