@@ -245,10 +245,11 @@ describe('# isBarcodeActive', () => {
   });
 
   it('should say user status exists but barcode is expired', async () => {
-    const todayMorning = new Date();
-    todayMorning.setHours(8, 25, 0);
+    const twentyMinsBefore = new Date();
+    twentyMinsBefore.setMinutes(twentyMinsBefore.getMinutes() - 20);
 
-    setUserStateMock(201701562, todayMorning, null);
+    setUserStateMock(201701562, twentyMinsBefore, null);
+
     await activationTest(201701562, 10, false);
   });
 
@@ -256,6 +257,7 @@ describe('# isBarcodeActive', () => {
     const now = new Date();
 
     setUserStateMock(201701562, now, null);
+
     await activationTest(201701562, 10, true);
   });
 });
