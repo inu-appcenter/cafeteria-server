@@ -38,11 +38,11 @@ describe('# isNotMalformed', () => {
   };
 
   it('should catch null transaction', async () => {
-    transactionTest(null, false);
+    await transactionTest(null, false);
   });
 
   it('should catch null mealType', async () => {
-    transactionTest(new DiscountTransaction({
+    await transactionTest(new DiscountTransaction({
       mealType: null,
       userId: 201701562,
       cafeteriaId: 1,

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {init, overrideOnce} from '../../../../lib/common/di/resolve';
+import {init, mockOnce} from '../../../../lib/common/di/resolve';
 
 import DiscountTransactionController from '../../../../lib/interfaces/controllers/DiscountTransactionController';
 import requestMock from './requestMock';
@@ -38,7 +38,7 @@ describe('# Barcode activation', () => {
   const createMockedResponse = function(useCaseReturn) {
     const request = requestMock.getRequest({credentials: {}});
 
-    overrideOnce(ActivateBarcode, new (class ActivateBarcodeMock extends UseCase {
+    mockOnce(ActivateBarcode, new (class ActivateBarcodeMock extends UseCase {
       onExecute(param) {
         return useCaseReturn;
       }
@@ -64,7 +64,7 @@ describe('# Discount availability check', () => {
   const createMockedResponse = function(useCaseReturn) {
     const request = requestMock.getRequest({query: {}});
 
-    overrideOnce(ValidateDiscountTransaction, new (class ValidateDiscountTransactionMock extends UseCase {
+    mockOnce(ValidateDiscountTransaction, new (class ValidateDiscountTransactionMock extends UseCase {
       onExecute({transaction, token}) {
         return useCaseReturn;
       }
@@ -112,7 +112,7 @@ describe('# Commit discount transaction', () => {
   const createMockedResponse = function(useCaseReturn) {
     const request = requestMock.getRequest({query: {}});
 
-    overrideOnce(CommitDiscountTransaction, new (class CommitDiscountTransactionMock extends UseCase {
+    mockOnce(CommitDiscountTransaction, new (class CommitDiscountTransactionMock extends UseCase {
       onExecute({transaction, confirm}) {
         return useCaseReturn;
       }

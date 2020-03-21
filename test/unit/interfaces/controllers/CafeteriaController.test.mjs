@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {init, overrideOnce} from '../../../../lib/common/di/resolve';
+import {init, mockOnce} from '../../../../lib/common/di/resolve';
 
 import CafeteriaController from '../../../../lib/interfaces/controllers/CafeteriaController';
 import requestMock from './requestMock';
@@ -40,7 +40,7 @@ describe('# Get cafeteria', () => {
   const createMockedResponse = function(useCaseReturn, params={}, query={}) {
     const request = requestMock.getRequest({params, query});
 
-    overrideOnce(GetCafeteria, new (class GetCafeteriaMock extends UseCase {
+    mockOnce(GetCafeteria, new (class GetCafeteriaMock extends UseCase {
       onExecute({id}) {
         return useCaseReturn;
       }
@@ -110,7 +110,7 @@ describe('# Get corners', () => {
   const createMockedResponse = function(useCaseReturn, params={}, query={}) {
     const request = requestMock.getRequest({params, query});
 
-    overrideOnce(GetCorners, new (class GetCornersMock extends UseCase {
+    mockOnce(GetCorners, new (class GetCornersMock extends UseCase {
       onExecute({id}) {
         return useCaseReturn;
       }
@@ -172,7 +172,7 @@ describe('# Get menus', () => {
   const createMockedResponse = function(useCaseReturn, params={}, query={}) {
     const request = requestMock.getRequest({params, query});
 
-    overrideOnce(GetMenus, new (class GetMenusMock extends UseCase {
+    mockOnce(GetMenus, new (class GetMenusMock extends UseCase {
       onExecute({cornerId, date}) {
         return useCaseReturn;
       }

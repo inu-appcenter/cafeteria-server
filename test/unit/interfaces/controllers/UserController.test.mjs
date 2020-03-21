@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {init, overrideOnce} from '../../../../lib/common/di/resolve';
+import {init, mockOnce} from '../../../../lib/common/di/resolve';
 
 import UserController from '../../../../lib/interfaces/controllers/UserController';
 import requestMock from './requestMock';
@@ -37,7 +37,7 @@ describe('# Login', () => {
   const createMockedResponse = function(useCaseReturn, payload={}, params={}, query={}, credentials=null) {
     const request = requestMock.getRequest({payload, params, query, credentials});
 
-    overrideOnce(Login, new (class LoginMock extends UseCase {
+    mockOnce(Login, new (class LoginMock extends UseCase {
       onExecute({id, token, password}) {
         return useCaseReturn;
       }
@@ -83,7 +83,7 @@ describe('# Login', () => {
   });
 
   it('should succeed', async () => {
-    overrideOnce(GetUser, new (class GetUserMock extends UseCase {
+    mockOnce(GetUser, new (class GetUserMock extends UseCase {
       onExecute({id}) {
         if (id !== 201701562) {
           throw new Error();
