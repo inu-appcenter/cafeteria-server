@@ -62,6 +62,8 @@ Object.keys(models).forEach((modelName) => {
   if (models[modelName].associate) {
     models[modelName].associate(models);
   }
+
+  models[modelName].findByPk = (key) => models[modelName].findById(key);
 });
 
 export default sequelize;
