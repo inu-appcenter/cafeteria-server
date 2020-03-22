@@ -31,6 +31,14 @@ describe('# Format', () => {
 });
 
 describe('# IsBetween', () => {
+  const getTodayAt = function(hours, minutes, seconds) {
+    const now = new Date();
+
+    now.setHours(hours, minutes, seconds);
+
+    return now;
+  };
+
   it('should catch null params', async () => {
     expect(() => dateUtil.isBetween(null, null, 0)).toThrow();
   });
@@ -69,7 +77,7 @@ describe('# IsBetween', () => {
 
     expect(
       dateUtil.isBetween(
-        new Date(2020, 2, 21, 8, 50, 0),
+        getTodayAt(8, 50, 0),
         timeRanges,
         0),
     ).toBe(0);
@@ -84,7 +92,7 @@ describe('# IsBetween', () => {
 
     expect(
       dateUtil.isBetween(
-        new Date(2020, 2, 21, 9, 40, 0),
+        getTodayAt(9, 40, 0),
         timeRanges,
         0),
     ).toBe(-1);
@@ -99,7 +107,7 @@ describe('# IsBetween', () => {
 
     expect(
       dateUtil.isBetween(
-        new Date(2020, 2, 21, 9, 40, 0),
+        getTodayAt(9, 40, 0),
         timeRanges,
         5),
     ).toBe(0);
