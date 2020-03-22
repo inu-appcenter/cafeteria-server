@@ -18,7 +18,7 @@
  */
 
 /**
- * This modules declaration is usef for unit test.
+ * This modules declaration is used for unit test.
  * You can override the default(production) declarations with your owns.
  */
 
@@ -36,6 +36,8 @@ import BarcodeTransformer from '../../lib/domain/security/BarcodeTransformer';
 import BarcodeTransformerMock from '../mocks/BarcodeTransformerMock2';
 import Sequelize from 'sequelize';
 import sequelize from './sequelizeMock';
+import DiscountTransactionValidatorMock from '../mocks/DiscountTransactionValidatorMock';
+import DiscountTransactionValidator from '../../lib/domain/validators/DiscountTransactionValidator';
 
 // Mocks here.
 const overrides = [

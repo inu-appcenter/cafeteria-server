@@ -121,13 +121,6 @@ describe('# Commit discount transaction', () => {
     return DiscountTransactionController.commitDiscountTransaction(request, requestMock.getH());
   };
 
-  it('should fail with ALREADY_DISCOUNTED', async () => {
-    const response = await createMockedResponse(DiscountCommitResults.ALREADY_DISCOUNTED);
-
-    expect(response.codeResult).toBe(200);
-    expect(response.responseResult).toEqual({message: 'Already_Discounted'});
-  });
-
   it('should fail with FAIL', async () => {
     const response = await createMockedResponse(DiscountCommitResults.FAIL);
 
