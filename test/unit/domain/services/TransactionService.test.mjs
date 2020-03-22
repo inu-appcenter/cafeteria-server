@@ -17,16 +17,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import resolve, {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../testModules';
+import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
 
 import TransactionService from '../../../../lib/domain/services/TransactionService';
 import DiscountValidationResults from '../../../../lib/domain/constants/DiscountValidationResults';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 import DiscountCommitResults from '../../../../lib/domain/constants/DiscountCommitResults';
+import modules from '../../../../lib/common/di/modules';
+import DiscountTransactionValidatorMock from '../../../mocks/DiscountTransactionValidatorMock';
+import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
+import TransactionRepositoryMock from '../../../mocks/TransactionRepositoryMock';
+import TransactionRepository from '../../../../lib/domain/repositories/TransactionRepository';
 
 beforeEach(async () => {
-  await init(testModules, true);
+  await initWithOverrides(modules, [
+    {
+      create: async (r) => new TransactionRepositoryMock(),
+      as: TransactionRepository,
+    },
+    {
+      create: async (r) => new DiscountTransactionValidatorMock(),
+      as: DiscountTransactionValidator,
+    },
+  ], true);
 });
 
 describe('# validateDiscountTransaction', () => {

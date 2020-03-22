@@ -17,17 +17,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import resolve, {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../testModules';
+import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
 
 import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 import CafeteriaDiscountRule from '../../../../lib/domain/entities/CafeteriaDiscountRule';
 import Cafeteria from '../../../../lib/domain/entities/Cafeteria';
 import UserDiscountStatus from '../../../../lib/domain/entities/UserDiscountStatus';
+import modules from '../../../../lib/common/di/modules';
+import TransactionRepositoryMock from '../../../mocks/TransactionRepositoryMock';
+import TransactionRepository from '../../../../lib/domain/repositories/TransactionRepository';
+import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
+import CafeteriaRepository from '../../../../lib/domain/repositories/CafeteriaRepository';
+import UserRepositoryMock from '../../../mocks/UserRepositoryMock';
+import UserRepository from '../../../../lib/domain/repositories/UserRepository';
+import TokenManagerMock from '../../../mocks/TokenManagerMock';
+import TokenManager from '../../../../lib/domain/security/TokenManager';
 
 beforeEach(async () => {
-  await init(testModules, true);
+  await initWithOverrides(modules, [
+    {
+      create: async (r) => new TransactionRepositoryMock(),
+      as: TransactionRepository,
+    },
+    {
+      create: async (r) => new CafeteriaRepositoryMock(),
+      as: CafeteriaRepository,
+    },
+    {
+      create: async (r) => new UserRepositoryMock(),
+      as: UserRepository,
+    },
+    {
+      create: async (r) => new TokenManagerMock(),
+      as: TokenManager,
+    },
+  ], true);
 });
 
 describe('# isNotMalformed', () => {

@@ -18,7 +18,7 @@
  */
 
 import UserRepositoryImpl from '../../../../lib/interfaces/storage/UserRepositoryImpl';
-import sequelize from '../../sequelizeMock';
+import sequelize from '../../infrastructure/database/sequelizeMock';
 import UserRemoteDataSource from '../../../../lib/domain/repositories/UserRemoteDataSource';
 import RemoteLoginResult from '../../../../lib/domain/constants/RemoteLoginResult';
 

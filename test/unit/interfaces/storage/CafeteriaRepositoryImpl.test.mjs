@@ -20,7 +20,7 @@
 import CafeteriaRepositoryImpl from '../../../../lib/interfaces/storage/CafeteriaRepositoryImpl';
 import MenuConverter from '../../../../lib/interfaces/converters/MenuConverter';
 import config from '../../../../config';
-import sequelize from '../../sequelizeMock';
+import sequelize from '../../infrastructure/database/sequelizeMock';
 import CafeteriaRemoteDataSource from '../../../../lib/domain/repositories/CafeteriaRemoteDataSource';
 
 describe('# getAllCafeteria', () => {

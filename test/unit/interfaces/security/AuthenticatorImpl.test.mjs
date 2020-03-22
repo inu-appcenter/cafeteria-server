@@ -17,13 +17,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import resolve, {init} from '../../../../lib/common/di/resolve';
-import testModules from '../../testModules';
+import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
 
 import Authenticator from '../../../../lib/domain/security/Authenticator';
+import modules from '../../../../lib/common/di/modules';
+import UserRepositoryMock from '../../../mocks/UserRepositoryMock';
+import UserRepository from '../../../../lib/domain/repositories/UserRepository';
 
 beforeEach(async () => {
-  await init(testModules, true);
+  await initWithOverrides(modules, [
+    {
+      create: async (r) => new UserRepositoryMock(),
+      as: UserRepository,
+    },
+  ], true);
 });
 
 describe('# authenticateJwt', () => {

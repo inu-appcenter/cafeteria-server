@@ -17,15 +17,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import resolve, {init} from '../../../../lib/common/di/resolve';
+import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
 
 import UserService from '../../../../lib/domain/services/UserService';
 import LoginResults from '../../../../lib/domain/constants/LoginResults';
 import LogoutResults from '../../../../lib/domain/constants/LogoutResults';
-import testModules from '../../testModules';
+import modules from '../../../../lib/common/di/modules';
+import UserRepositoryMock from '../../../mocks/UserRepositoryMock';
+import UserRepository from '../../../../lib/domain/repositories/UserRepository';
+import TokenManagerMock from '../../../mocks/TokenManagerMock';
+import TokenManager from '../../../../lib/domain/security/TokenManager';
+import BarcodeTransformerMock from '../../../mocks/BarcodeTransformerMock2';
+import BarcodeTransformer from '../../../../lib/domain/security/BarcodeTransformer';
 
 beforeEach(async () => {
-  await init(testModules, true);
+  await initWithOverrides(modules, [
+    {
+      create: async (r) => new UserRepositoryMock(),
+      as: UserRepository,
+    },
+    {
+      create: async (r) => new TokenManagerMock(),
+      as: TokenManager,
+    },
+    {
+      create: async (r) => new BarcodeTransformerMock(),
+      as: BarcodeTransformer,
+    },
+  ], true);
 });
 
 describe('# Login', () => {

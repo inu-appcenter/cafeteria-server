@@ -18,7 +18,7 @@
  */
 
 import InteractionRepositoryImpl from '../../../../lib/interfaces/storage/InteractionRepositoryImpl';
-import sequelize from '../../sequelizeMock';
+import sequelize from '../../infrastructure/database/sequelizeMock';
 import Feedback from '../../../../lib/domain/entities/Feedback';
 
 describe('# getNotices', () => {

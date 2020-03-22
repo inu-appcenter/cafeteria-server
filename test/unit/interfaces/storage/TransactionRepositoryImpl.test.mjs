@@ -18,7 +18,7 @@
  */
 
 import TransactionRepositoryImpl from '../../../../lib/interfaces/storage/TransactionRepositoryImpl';
-import sequelize from '../../sequelizeMock';
+import sequelize from '../../infrastructure/database/sequelizeMock';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 
 describe('# getUserDiscountStatusByUserId', () => {

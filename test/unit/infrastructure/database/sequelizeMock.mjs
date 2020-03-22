@@ -17,19 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import config from '../../config';
+import config from '../../../../config';
 
 import SequelizeMock from 'sequelize-mock';
 
-import CafeteriaDiscountRule from '../../lib/infrastructure/database/models/CafeteriaDiscountRule';
-import DiscountTransaction from '../../lib/infrastructure/database/models/DiscountTransaction';
-import UserDiscountStatus from '../../lib/infrastructure/database/models/UserDiscountStatus';
-import Cafeteria from '../../lib/infrastructure/database/models/Cafeteria';
-import Corner from '../../lib/infrastructure/database/models/Corner';
-import User from '../../lib/infrastructure/database/models/User';
-import Feedback from '../../lib/infrastructure/database/models/Feedback';
-import Notification from '../../lib/infrastructure/database/models/FeedbackReply';
-import Notice from '../../lib/infrastructure/database/models/Notice';
+import CafeteriaDiscountRule from '../../../../lib/infrastructure/database/models/CafeteriaDiscountRule';
+import DiscountTransaction from '../../../../lib/infrastructure/database/models/DiscountTransaction';
+import UserDiscountStatus from '../../../../lib/infrastructure/database/models/UserDiscountStatus';
+import Cafeteria from '../../../../lib/infrastructure/database/models/Cafeteria';
+import Corner from '../../../../lib/infrastructure/database/models/Corner';
+import User from '../../../../lib/infrastructure/database/models/User';
+import Feedback from '../../../../lib/infrastructure/database/models/Feedback';
+import Notification from '../../../../lib/infrastructure/database/models/FeedbackReply';
+import Notice from '../../../../lib/infrastructure/database/models/Notice';
 
 import seq from 'sequelize';
 const {DataTypes} = seq;
