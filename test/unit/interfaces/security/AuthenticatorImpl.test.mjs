@@ -18,9 +18,9 @@
  */
 
 import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
+import modules from '../../../../lib/common/di/modules';
 
 import Authenticator from '../../../../lib/domain/security/Authenticator';
-import modules from '../../../../lib/common/di/modules';
 import UserRepositoryMock from '../../../mocks/UserRepositoryMock';
 import UserRepository from '../../../../lib/domain/repositories/UserRepository';
 
