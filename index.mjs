@@ -25,8 +25,11 @@ import modules from './lib/common/di/modules';
 import sequelize from './lib/infrastructure/database/sequelize';
 
 import createServer from './lib/infrastructure/webserver/server';
+import getEnv from './lib/common/utils/env';
 
 async function start() {
+  logger.info(`NODE_ENV: ${getEnv('NODE_ENV', 'not set')}`);
+
   // Instantiate all.
   try {
     await init(modules, false, false);
