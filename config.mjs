@@ -17,22 +17,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (process.env.NODE_ENV === 'production') {
-  if (!process.env.PORT) throw new Error('Port not set!');
-  if (!process.env.JWT_SECRET_KEY) throw new Error('JWT secret key not set!');
-  if (!process.env.DB_USERNAME) throw new Error('DB username not set!');
-  if (!process.env.DB_PASSWORD) throw new Error('DB password not set!');
-  if (!process.env.LOGIN_KEY) throw new Error('Login key not set!');
+import path from 'path';
+import getArg from './lib/common/utils/args';
+import getEnv from './lib/common/utils/env';
+
+if (getEnv('NODE_ENV') === 'production') {
+  if (!getArg('port')) throw new Error('Port not set!');
+  if (!getArg('log-dir')) throw new Error('Log directory not set!');
+
+  if (!getEnv('JWT_SECRET_KEY')) throw new Error('JWT secret key not set!');
+  if (!getEnv('DB_USERNAME')) throw new Error('DB username not set!');
+  if (!getEnv('DB_PASSWORD')) throw new Error('DB password not set!');
+  if (!getEnv('LOGIN_KEY')) throw new Error('Login key not set!');
 }
 
 export default {
 
   server: {
-    port: process.env.PORT || 9999,
+    port: getArg('port') || 8080,
   },
 
   auth: {
-    key: process.env.JWT_SECRET_KEY || 'whatever',
+    key: getEnv('JWT_SECRET_KEY', 'whatever'),
     expiresIn: '24h',
     cookie_options: {
       encoding: 'none', // we already used JWT to encode
@@ -45,8 +51,8 @@ export default {
 
   sequelize: {
     database: 'cafeteria',
-    username: process.env.DB_USERNAME || 'user',
-    password: process.env.DB_PASSWORD || '1234',
+    username: getEnv('DB_USERNAME', 'user'),
+    password: getEnv('DB_PASSWORD', '1234'),
     host: 'localhost',
     dialect: 'mysql',
     timezone: '+09:00',
@@ -56,14 +62,14 @@ export default {
   login: {
     // Remote login server
     url: 'http://117.16.191.242:8081/login',
-    key: process.env.LOGIN_KEY || 'nothing',
+    key: getEnv('LOGIN_KEY', 'nothing'),
     success: 'Y',
     fail: 'N',
   },
 
   log: {
     ops: {interval: 60 * 60 * 1000},
-    filepath: (name) => 'logs/' + name + '/' + name + '-%DATE%.log',
+    filepath: (name) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
   },
 
   menu: {
