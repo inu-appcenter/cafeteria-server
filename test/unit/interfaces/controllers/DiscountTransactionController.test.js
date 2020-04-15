@@ -39,7 +39,7 @@ describe('# Barcode activation', () => {
     const request = requestMock.getRequest({credentials: {}});
 
     mockOnce(ActivateBarcode, new (class ActivateBarcodeMock extends UseCase {
-      onExecute(param) {
+      async onExecute(param) {
         return useCaseReturn;
       }
     }));
@@ -65,7 +65,7 @@ describe('# Discount availability check', () => {
     const request = requestMock.getRequest({query: {}});
 
     mockOnce(ValidateDiscountTransaction, new (class ValidateDiscountTransactionMock extends UseCase {
-      onExecute({transaction, token}) {
+      async onExecute({transaction, token}) {
         return useCaseReturn;
       }
     }));
@@ -113,7 +113,7 @@ describe('# Commit discount transaction', () => {
     const request = requestMock.getRequest({query: {}});
 
     mockOnce(CommitDiscountTransaction, new (class CommitDiscountTransactionMock extends UseCase {
-      onExecute({transaction, confirm}) {
+      async onExecute({transaction, confirm}) {
         return useCaseReturn;
       }
     }));

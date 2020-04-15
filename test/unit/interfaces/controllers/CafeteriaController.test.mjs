@@ -41,7 +41,7 @@ describe('# Get cafeteria', () => {
     const request = requestMock.getRequest({params, query});
 
     mockOnce(GetCafeteria, new (class GetCafeteriaMock extends UseCase {
-      onExecute({id}) {
+      async onExecute({id}) {
         return useCaseReturn;
       }
     }));
@@ -111,7 +111,7 @@ describe('# Get corners', () => {
     const request = requestMock.getRequest({params, query});
 
     mockOnce(GetCorners, new (class GetCornersMock extends UseCase {
-      onExecute({id}) {
+      async onExecute({id}) {
         return useCaseReturn;
       }
     }));
@@ -173,7 +173,7 @@ describe('# Get menus', () => {
     const request = requestMock.getRequest({params, query});
 
     mockOnce(GetMenus, new (class GetMenusMock extends UseCase {
-      onExecute({cornerId, date}) {
+      async onExecute({cornerId, date}) {
         return useCaseReturn;
       }
     }));

@@ -38,7 +38,7 @@ describe('# Login', () => {
     const request = requestMock.getRequest({payload, params, query, credentials});
 
     mockOnce(Login, new (class LoginMock extends UseCase {
-      onExecute({id, token, password}) {
+      async onExecute({id, token, password}) {
         return useCaseReturn;
       }
     }));
@@ -78,7 +78,7 @@ describe('# Login', () => {
 
   it('should succeed', async () => {
     mockOnce(GetUser, new (class GetUserMock extends UseCase {
-      onExecute({id}) {
+      async onExecute({id}) {
         if (id !== 201701562) {
           throw new Error();
         }
