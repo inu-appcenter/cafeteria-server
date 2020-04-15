@@ -74,7 +74,7 @@ app
 
 - [API 문서](/docs/API.md)
 
-- [API 테스트](http://ec2-52-79-48-231.ap-northeast-2.compute.amazonaws.com:3829/documentation#/)
+- [API 테스트](https://api.inucafeteria.gq/documentation)
 
 ## 설치
 
