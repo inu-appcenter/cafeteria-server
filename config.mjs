@@ -17,11 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import path from 'path';
 import getArg from './lib/common/utils/args';
 import getEnv from './lib/common/utils/env';
+import path from 'path';
 
 if (getEnv('NODE_ENV') === 'production') {
+  if (!getArg('host')) throw new Error('Host not set!');
   if (!getArg('port')) throw new Error('Port not set!');
   if (!getArg('log-dir')) throw new Error('Log directory not set!');
 
@@ -34,6 +35,7 @@ if (getEnv('NODE_ENV') === 'production') {
 export default {
 
   server: {
+    host: getArg('host'),
     port: getArg('port') || 8080,
   },
 
@@ -42,7 +44,7 @@ export default {
     expiresIn: '24h',
     cookie_options: {
       encoding: 'none', // we already used JWT to encode
-      isSecure: false, // https only?
+      isSecure: true, // https only?
       isHttpOnly: true, // prevent client alteration
       clearInvalid: true, // remove invalid cookies
       strictHeader: true, // don't allow violations of RFC 6265
