@@ -128,7 +128,7 @@ describe('# Logout', () => {
 const setRemoteLoginResultMock = function(result) {
   const mock = jest.fn(() => result);
 
-  resolve(UserService).userRepository.getRemoteLoginResult = mock;
+  resolve(UserService).userRepository.getLoginResult = mock;
 
   return mock;
 };
