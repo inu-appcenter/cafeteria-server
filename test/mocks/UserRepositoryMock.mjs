@@ -28,7 +28,7 @@ class UserRepositoryMock extends UserRepository {
     super();
   }
 
-  getRemoteLoginResult(id, password) {
+  getLoginResult(id, password) {
     throw new Error('Not mocked! You need extra mock here');
   }
 

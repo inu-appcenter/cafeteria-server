@@ -21,7 +21,7 @@ import CafeteriaRepositoryImpl from '../../../../lib/interfaces/storage/Cafeteri
 import MenuConverter from '../../../../lib/interfaces/converters/MenuConverter';
 import config from '../../../../config';
 import sequelize from '../../infrastructure/database/sequelizeMock';
-import CafeteriaRemoteDataSource from '../../../../lib/domain/repositories/CafeteriaRemoteDataSource';
+import CafeteriaDataSource from '../../../../lib/domain/repositories/CafeteriaDataSource';
 
 describe('# getAllCafeteria', () => {
   it('should succeed', async () => {
@@ -140,7 +140,7 @@ describe('# getMenusByCornerId', () => {
 const getRepository = function() {
   return new CafeteriaRepositoryImpl({
     db: sequelize,
-    remoteDataSource: new (class CafeteriaRemoteDataSourceMock extends CafeteriaRemoteDataSource {
+    remoteDataSource: new (class CafeteriaRemoteDataSourceMock extends CafeteriaDataSource {
       fetchRawMenus() {
         return rawMenuExample;
       }

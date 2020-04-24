@@ -44,7 +44,7 @@ export default {
     expiresIn: '24h',
     cookie_options: {
       encoding: 'none', // we already used JWT to encode
-      isSecure: true, // https only?
+      isSecure: false, // https only?
       isHttpOnly: true, // prevent client alteration
       clearInvalid: true, // remove invalid cookies
       strictHeader: true, // don't allow violations of RFC 6265
