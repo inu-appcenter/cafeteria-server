@@ -19,27 +19,27 @@
 
 import UserRepositoryImpl from '../../../../lib/interfaces/storage/UserRepositoryImpl';
 import sequelize from '../../infrastructure/database/sequelizeMock';
-import UserRemoteDataSource from '../../../../lib/domain/repositories/UserRemoteDataSource';
 import RemoteLoginResult from '../../../../lib/domain/constants/RemoteLoginResult';
+import UserDataSource from '../../../../lib/domain/repositories/UserDataSource';
 
 describe('# getRemoteLoginResult', () => {
   it('should catch null id or password', async () => {
     const repo = getRepository();
-    const result = await repo.getRemoteLoginResult(null, null);
+    const result = await repo.getLoginResult(null, null);
 
     expect(result).toBe(RemoteLoginResult.FUCK);
   });
 
   it('should fail with wrong auth', async () => {
     const repo = getRepository();
-    const result = await repo.getRemoteLoginResult(3543534242, 'hehe');
+    const result = await repo.getLoginResult(3543534242, 'hehe');
 
     expect(result).toBe(RemoteLoginResult.FAIL);
   });
 
   it('should succeed', async () => {
     const repo = getRepository();
-    const result = await repo.getRemoteLoginResult(201701562, 'password');
+    const result = await repo.getLoginResult(201701562, 'password');
 
     expect(result).toBe(RemoteLoginResult.SUCCESS);
   });
@@ -70,7 +70,7 @@ describe('# addOrUpdateUser', () => {
     const upsertMock = jest.fn();
     sequelize.model('user').upsert = upsertMock;
 
-    repo.addOrUpdateUser(null, {});
+    await repo.addOrUpdateUser(null, {});
 
     expect(upsertMock).toBeCalledTimes(0);
   });
@@ -81,7 +81,7 @@ describe('# addOrUpdateUser', () => {
     const upsertMock = jest.fn();
     sequelize.model('user').upsert = upsertMock;
 
-    repo.addOrUpdateUser(201701562, {token: 'token', barcode: 'barcode'});
+    await repo.addOrUpdateUser(201701562, {token: 'token', barcode: 'barcode'});
 
     expect(upsertMock).toBeCalledTimes(1);
     expect(upsertMock).toBeCalledWith({id: 201701562, token: 'token', barcode: 'barcode'});
@@ -95,7 +95,7 @@ describe('# updateLastLoginTimestamp', () => {
     const upsertMock = jest.fn();
     sequelize.model('user').upsert = upsertMock;
 
-    repo.updateLastLoginTimestamp(201701562);
+    await repo.updateLastLoginTimestamp(201701562);
 
     expect(upsertMock).toBeCalledTimes(1);
   });
@@ -108,16 +108,18 @@ describe('# updateLastLogoutTimestamp', () => {
     const upsertMock = jest.fn();
     sequelize.model('user').upsert = upsertMock;
 
-    repo.updateLastLogoutTimestamp(201701562);
+    await repo.updateLastLogoutTimestamp(201701562);
 
     expect(upsertMock).toBeCalledTimes(1);
   });
 });
 
 const getRepository = function() {
-  return new UserRepositoryImpl({
-    db: sequelize,
-    remoteDataSource: new (class UserRemoteDataSourceMock extends UserRemoteDataSource {
+  const dataSource = new (class UserRemoteDataSourceMock extends UserDataSource {
+      userExists(id) {
+        return true;
+      }
+
       fetchLoginResult(id, password) {
         if (id === 201701562 && password === 'password') {
           return RemoteLoginResult.SUCCESS;
@@ -125,6 +127,11 @@ const getRepository = function() {
           return RemoteLoginResult.FAIL;
         }
       }
-    }),
+    });
+
+  return new UserRepositoryImpl({
+    db: sequelize,
+    localDataSource: dataSource,
+    remoteDataSource: dataSource,
   });
 };
