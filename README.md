@@ -74,11 +74,11 @@ app
 
 - [API 문서](/docs/API.md)
 
-- [API 테스트](https://api.inucafeteria.gq/documentation)
+- [API 테스트](https://api.inu-cafeteria.app/documentation)
 
 ## 설치
 
-- [설치 및 배포 가이드](/deploy) (우분투/데비안 계열 리눅스 환경 기준으로 작성되었습니다).
+- [설치 및 배포 가이드](https://github.com/inu-appcenter/cafeteria-server-deploy)
 
 ## 업데이트 로그
 
@@ -87,7 +87,7 @@ app
 - 로그아웃 컨트롤러 500 버그 해결
 
 ### 2020.4.15 v1.2.0
-- 로그인이 안 되는 심각한 버그 해결 
+- 로그인이 안 되는 심각한 버그 해결
 - 광범위한 유닛 테스트 추가
 - 도메인과 HTTPS 적용
 
