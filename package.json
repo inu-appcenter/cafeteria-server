@@ -35,7 +35,7 @@
     "@hapi/vision": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
-    "bcrypt": "^4.0.0",
+    "bcrypt": "^5.0.0",
     "blipp": "^4.0.1",
     "esm": "^3.2.25",
     "hapi-auth-jwt2": "^9.0.1",
