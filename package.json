@@ -37,6 +37,7 @@
     "babel-jest": "^25.1.0",
     "bcrypt": "^5.0.0",
     "blipp": "^4.0.1",
+    "cheerio": "^1.0.0-rc.3",
     "esm": "^3.2.25",
     "hapi-auth-jwt2": "^9.0.1",
     "hapi-swagger": "^12.1.1",

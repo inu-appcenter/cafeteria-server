@@ -83,9 +83,9 @@ describe('# Sequelize', () => {
       // 학생식당
       {id: 1, name: '1코너중식(앞쪽)', display_name: '1코너', available_at: 2, cafeteria_id: 1},
       {id: 2, name: '1-1코너중식(앞쪽)', display_name: '1-1코너', available_at: 4, cafeteria_id: 1},
-      {id: 3, name: '2-1코너중식(앞쪽)', display_name: '2-1코너', available_at: 2, cafeteria_id: 1},
-      {id: 4, name: '2-1코너석식(앞쪽)', display_name: '2-1코너', available_at: 4, cafeteria_id: 1},
-      {id: 5, name: '2-2코너중식(앞쪽)', display_name: '2-2코너', available_at: 2, cafeteria_id: 1},
+      {id: 3, name: '2-1코너 중식(앞쪽)', display_name: '2-1코너', available_at: 2, cafeteria_id: 1},
+      {id: 4, name: '2-1코너 석식(앞쪽)', display_name: '2-1코너', available_at: 4, cafeteria_id: 1},
+      {id: 5, name: '2-2코너 중식(앞쪽)', display_name: '2-2코너', available_at: 2, cafeteria_id: 1},
       {id: 6, name: '3코너(앞쪽)', display_name: '3코너', available_at: 2|4, cafeteria_id: 1},
       {id: 7, name: '4코너(뒤쪽)', display_name: '3코너', available_at: 2|4, cafeteria_id: 1},
       {id: 8, name: '5코너(뒤쪽)', display_name: '3코너', available_at: 2|4, cafeteria_id: 1},
