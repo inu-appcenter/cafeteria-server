@@ -90,6 +90,11 @@ export default {
     },
   },
 
+  uicoop: {
+    domain: 'https://www.uicoop.ac.kr',
+    verifyUrl: 'https://www.uicoop.ac.kr/___verify',
+  },
+
   hash: {
     // bcrypt
     saltRounds: 9,
