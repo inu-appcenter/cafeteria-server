@@ -83,6 +83,7 @@
       "!lib/domain/validators/**",
       "!lib/infrastructure/database/**",
       "!lib/infrastructure/webserver/**",
+      "!lib/infrastructure/uicoop/**",
       "!**/node_modules/**",
       "!**/coverage/**"
     ],
