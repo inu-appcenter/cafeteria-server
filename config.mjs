@@ -77,7 +77,7 @@ export default {
   menu: {
     // Menu API
     url: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
-    fetchIntervalMillis: 3600000, /* millis */
+    fetchIntervalMillis: 3600000,
     parser: {
       priceAndCalorieRegex: [
         '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal',
