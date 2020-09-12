@@ -17,8 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 import BarcodeTransformerImpl from '../../../../lib/interfaces/security/BarcodeTransformerImpl';
 import LegacyTransactionConverter from '../../../../lib/interfaces/converters/LegacyTransactionConverter';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';

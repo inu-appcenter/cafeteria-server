@@ -76,13 +76,13 @@ describe('# Sequelize', () => {
         support_notification: false,
       },
     ], {
-      updateOnDuplicate: ['id'],
+      updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
     });
 
     await cornerModel.bulkCreate([
       // 학생식당
       {id: 1, name: '1코너중식(앞쪽)', display_name: '1코너', available_at: 2, cafeteria_id: 1},
-      {id: 2, name: '1-1코너중식', display_name: '1-1코너', available_at: 4, cafeteria_id: 1},
+      {id: 2, name: '1-1코너중식(앞쪽)', display_name: '1-1코너', available_at: 4, cafeteria_id: 1},
       {id: 3, name: '2-1코너중식(앞쪽)', display_name: '2-1코너', available_at: 2, cafeteria_id: 1},
       {id: 4, name: '2-1코너석식(앞쪽)', display_name: '2-1코너', available_at: 4, cafeteria_id: 1},
       {id: 5, name: '2-2코너중식(앞쪽)', display_name: '2-2코너', available_at: 2, cafeteria_id: 1},
@@ -105,10 +105,10 @@ describe('# Sequelize', () => {
       {id: 16, name: '석식', display_name: '', available_at: 4, cafeteria_id: 4},
 
       // 2호관식당
-      {id: 17, name: '중식', display_name: '점심', available_at: 2, cafeteria_id: 5},
-      {id: 18, name: '저녁', display_name: '저녁', available_at: 4, cafeteria_id: 5},
+      {id: 17, name: '중식', display_name: '', available_at: 2, cafeteria_id: 5},
+      {id: 18, name: '석식', display_name: '', available_at: 4, cafeteria_id: 5},
     ], {
-      updateOnDuplicate: ['id'],
+      updateOnDuplicate: Object.keys(cornerModel.rawAttributes), // all keys need to be noted.
     });
 
     await cafeteriaDiscountRuleModel.bulkCreate([
@@ -123,7 +123,7 @@ describe('# Sequelize', () => {
         available_meal_types: 2 | 4, /* launch and dinner only */
       },
     ], {
-      updateOnDuplicate: ['cafeteria_id'],
+      updateOnDuplicate: Object.keys(cafeteriaDiscountRuleModel.rawAttributes),
     });
   });
 
