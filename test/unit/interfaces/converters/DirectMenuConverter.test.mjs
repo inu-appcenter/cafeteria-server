@@ -19,17 +19,16 @@
 
 import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
 import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
-import fetch from '../../../../lib/common/utils/fetch';
 import config from '../../../../config';
+import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
 
 describe('# COOP as a new source', () => {
   it('should work', async () => {
     const converter = new DirectMenuConverter();
     const repo = new CafeteriaRepositoryMock();
+    const coopRepo = new CoopRepositoryImpl();
 
-    const rawHtml = await fetch.getHtml(config.menu.url, {sdt: '20200909'});
-
-    console.log(rawHtml);
+    const rawHtml = await coopRepo.visit(config.menu.url, {sdt: '20200909'});
 
     const menus = converter.convert({
       cafeteria: await repo.getAllCafeteria(),
