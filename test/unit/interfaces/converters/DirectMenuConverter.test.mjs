@@ -29,6 +29,8 @@ describe('# COOP as a new source', () => {
 
     const rawHtml = await fetch.getHtml(config.menu.url, {sdt: '20200909'});
 
+    console.log(rawHtml);
+
     const menus = converter.convert({
       cafeteria: repo.getAllCafeteria(),
       corners: repo.getAllCorners(),
