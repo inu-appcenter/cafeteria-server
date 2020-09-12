@@ -80,10 +80,11 @@ export default {
     fetchIntervalMillis: 3600000,
     parser: {
       priceAndCalorieRegex: [
-        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal',
-        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal[\n ](?<CAL2>[0-9]+)[Kk]cal',
-        '(?<PRICE>[0-9,]+)원/(?<PRICE2>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal/(?<CAL2>[0-9]+)[Kk]cal',
-        '(?<PRICE>[0-9,]+)~(?<PRICE2>[0-9,]+)원[\n ].+[0-9,]+원',
+        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal', // 3500원 350kcal
+        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal[\n ](?<CAL2>[0-9,]+)[Kk]cal', // 3500원 355kcal 390kcal
+        '(?<PRICE>[0-9,]+)원/(?<PRICE2>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal/(?<CAL2>[0-9,]+)[Kk]cal', // 3500원/4700원\n355kcal/390kcal
+        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal/(?<CAL2>[0-9,]+)[Kk]cal', // 3500원\n355kcal/390kcal
+        '(?<PRICE>[0-9,]+)~(?<PRICE2>[0-9,]+)원[\n ].+[0-9,]+원', // 2,000원~2500원\n+토핑500원
       ],
       menuSplitter: '-'.repeat(10),
     },
