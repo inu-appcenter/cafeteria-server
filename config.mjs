@@ -76,39 +76,23 @@ export default {
 
   menu: {
     // Menu API
-    url: 'https://sc.inu.ac.kr/inumportal/main/info/life/foodmenuSearch',
-    fetchInterval: 3600000, /* millis */
+    url: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
+    fetchIntervalMillis: 3600000, /* millis */
+    parser: {
+      priceAndCalorieRegex: [
+        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal',
+        '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal[\n ](?<CAL2>[0-9]+)[Kk]cal',
+        '(?<PRICE>[0-9,]+)원/(?<PRICE2>[0-9,]+)원[\n ](?<CAL>[0-9]+)[Kk]cal/(?<CAL2>[0-9]+)[Kk]cal',
+        '(?<PRICE>[0-9,]+)~(?<PRICE2>[0-9,]+)원[\n ].+[0-9,]+원',
+      ],
+      menuSplitter: '-'.repeat(10),
+    },
   },
 
   hash: {
     // bcrypt
     saltRounds: 9,
   },
-
-  cornerMenuKeys: [
-    {id: 1, TYPE1: 1, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 2, TYPE1: 2, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 3, TYPE1: 3, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 4, TYPE1: 4, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 5, TYPE1: 5, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 6, TYPE1: 6, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 7, TYPE1: 7, TYPE2: 0, FOODMENU_TYPE: 1},
-    {id: 8, TYPE1: 8, TYPE2: 0, FOODMENU_TYPE: 1},
-
-    {id: 9, TYPE1: -1, TYPE2: -1, FOODMENU_TYPE: 2},
-    {id: 10, TYPE1: -1, TYPE2: -1, FOODMENU_TYPE: 2},
-    {id: 11, TYPE1: -1, TYPE2: -1, FOODMENU_TYPE: 2},
-
-    {id: 12, TYPE1: 1, TYPE2: 2, FOODMENU_TYPE: 3},
-    {id: 13, TYPE1: 1, TYPE2: 3, FOODMENU_TYPE: 3},
-
-    {id: 14, TYPE1: -1, TYPE2: -1, FOODMENU_TYPE: 4},
-    {id: 15, TYPE1: -1, TYPE2: -1, FOODMENU_TYPE: 4},
-    {id: 16, TYPE1: -1, TYPE2: -1, FOODMENU_TYPE: 4},
-
-    {id: 17, TYPE1: 1, TYPE2: 2, FOODMENU_TYPE: 5},
-    {id: 18, TYPE1: 1, TYPE2: 3, FOODMENU_TYPE: 5},
-  ],
 
   transaction: {
     barcodeLifetimeMinutes: 10,

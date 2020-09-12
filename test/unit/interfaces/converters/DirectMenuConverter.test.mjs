@@ -20,19 +20,21 @@
 import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
 import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
 import fetch from '../../../../lib/common/utils/fetch';
+import config from '../../../../config';
 
-describe('# From HTML to JSON', () => {
-
-  it('should fetch', async () => {
+describe('# COOP as a new source', () => {
+  it('should work', async () => {
     const converter = new DirectMenuConverter();
     const repo = new CafeteriaRepositoryMock();
 
-    const rawHtml = await fetch.getHtml('https://www.uicoop.ac.kr/main.php?mkey=2&w=4&sdt=20200908');
+    const rawHtml = await fetch.getHtml(config.menu.url, {sdt: '20200909'});
 
-    converter.convert({
+    const menus = converter.convert({
       cafeteria: repo.getAllCafeteria(),
       corners: repo.getAllCorners(),
       rawHtml: rawHtml,
     });
+
+    expect(menus.length).toBe(7 + 6); // Normal 7 + empty 6
   });
 });
