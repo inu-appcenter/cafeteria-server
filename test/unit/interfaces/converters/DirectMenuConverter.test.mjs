@@ -18,15 +18,20 @@
  */
 
 import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
+import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
+import fetch from '../../../../lib/common/utils/fetch';
 
 describe('# From HTML to JSON', () => {
-  it('should not work', async () => {
+  it('should fetch', async () => {
     const converter = new DirectMenuConverter();
+    const repo = new CafeteriaRepositoryMock();
+
+    const rawHtml = await fetch.getHtml('https://www.uicoop.ac.kr/main.php?mkey=2&w=4&sdt=20200907');
 
     converter.convert({
-      cafeteria: [],
-      corners: [],
-      rawHtml: 'hehe',
+      cafeteria: repo.getAllCafeteria(),
+      corners: repo.getAllCorners(),
+      rawHtml: rawHtml,
     });
   });
 });
