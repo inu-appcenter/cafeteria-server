@@ -32,8 +32,8 @@ describe('# COOP as a new source', () => {
     console.log(rawHtml);
 
     const menus = converter.convert({
-      cafeteria: repo.getAllCafeteria(),
-      corners: repo.getAllCorners(),
+      cafeteria: await repo.getAllCafeteria(),
+      corners: await repo.getAllCorners(),
       rawHtml: rawHtml,
     });
 
