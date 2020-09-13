@@ -18,10 +18,8 @@
  */
 
 import CafeteriaRepositoryImpl from '../../../../lib/interfaces/storage/CafeteriaRepositoryImpl';
-import MenuConverter from '../../../../lib/interfaces/converters/MenuConverter';
-import config from '../../../../config';
 import sequelize from '../../infrastructure/database/sequelizeMock';
-import CafeteriaDataSource from '../../../../lib/domain/repositories/CafeteriaDataSource';
+import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
 
 describe('# getAllCafeteria', () => {
   it('should succeed', async () => {
@@ -104,18 +102,6 @@ describe('# getAllMenus', () => {
 
     expect(result).toEqual([]);
   });
-
-  it('should succeed', async () => {
-    const repo = getRepository();
-    const result = await repo.getAllMenus(null);
-
-    expect(result.length).toBeGreaterThan(0);
-
-    result.forEach((corner) => {
-      expect(corner).toHaveProperty('foods');
-      expect(corner).toHaveProperty('cornerId');
-    });
-  });
 });
 
 describe('# getMenusByCornerId', () => {
@@ -140,13 +126,6 @@ describe('# getMenusByCornerId', () => {
 const getRepository = function() {
   return new CafeteriaRepositoryImpl({
     db: sequelize,
-    remoteDataSource: new (class CafeteriaRemoteDataSourceMock extends CafeteriaDataSource {
-      fetchRawMenus() {
-        return rawMenuExample;
-      }
-    }),
-    menuConverter: new MenuConverter(config.cornerMenuKeys),
+    menuConverter: new DirectMenuConverter(),
   });
 };
-
-const rawMenuExample = JSON.parse('{"stdDate":"20200312","foodMenuType3Result":[{"TYPE2":"2","FOODMENU_TYPE":"3","STD_DATE":"20200312","MENU":"*개교기념일*","TYPE1":"1"},{"TYPE2":"3","FOODMENU_TYPE":"3","STD_DATE":"20200312","MENU":null,"TYPE1":"1"}],"afterDay":"20200313","foodMenuType5Result":[{"TYPE2":"2","FOODMENU_TYPE":"5","STD_DATE":"20200312","MENU":"*개교기념일*","TYPE1":"1"},{"TYPE2":"3","FOODMENU_TYPE":"5","STD_DATE":"20200312","MENU":"*개교기념일*","TYPE1":"1"}],"dayOfWeekString":"목","foodMenuType1Result":[{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":"춘천닭갈비카레고로케 시금치나물 콩나물국 쌀밥3500원 755kcal------------ 1-1코너 덮밥마라크림덮밥오이피클 콩나물국3000원 722kcal","TYPE1":"1"},{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":"뚝배기돼지갈비찜어묵볶음 숙주나물 두부무채국 쌀밥3800원 769kcal","TYPE1":"2"},{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":"점보돈까스*야채볶음밥오이피클 샐러드파스타 크림스프4000원 806kcal","TYPE1":"3"},{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":"떡튀순세트(눈꽃치즈떡볶이+모듬튀김+순대)두부무채국 3500원 777kcal","TYPE1":"4"},{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":"&lt;즉석조리기기&gt; 신라면진라면안성탕면너구리 짜파게티즉석라볶이","TYPE1":"5"},{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":"순대국밥 수육국밥 얼큰국밥[부추*양파초절이]4,800원 5,000원","TYPE1":"6"},{"TYPE2":"0","FOODMENU_TYPE":"1","STD_DATE":"20200312","MENU":null,"TYPE1":"7"}],"beforeDay":"20200311","foodMenuType4Result":[],"foodMenuType2Result":[]}');

@@ -32,16 +32,18 @@ describe('# Sequelize', () => {
     await cafeteriaModel.bulkCreate([
       {
         id: 1,
-        name: '복지회관 학생식당',
-        image_path: 'res/images/cafeteria-1.jpg',
+        name: '학생식당',
+        display_name: '학생 식당',
+        image_path: '',
         support_menu: true,
         support_discount: false,
         support_notification: false,
       },
       {
         id: 2,
-        name: '카페테리아',
-        image_path: 'res/images/cafeteria-2.jpg',
+        name: '27호관식당',
+        display_name: '27호관 식당',
+        image_path: '',
         support_menu: true,
         support_discount: false,
         support_notification: false,
@@ -49,71 +51,79 @@ describe('# Sequelize', () => {
       {
         id: 3,
         name: '사범대식당',
-        image_path: 'res/images/cafeteria-3.jpg',
+        display_name: '사범대 식당',
+        image_path: '',
         support_menu: true,
         support_discount: true,
         support_notification: false,
       },
       {
         id: 4,
-        name: '생활관 기숙사식당',
-        image_path: 'res/images/cafeteria-4.jpg',
+        name: '제1기숙사식당',
+        display_name: '제1기숙사 식당',
+        image_path: '',
         support_menu: true,
         support_discount: true,
         support_notification: false,
       },
       {
         id: 5,
-        name: '교직원식당',
-        image_path: 'res/images/cafeteria-5.jpg',
+        name: '2호관식당',
+        display_name: '2호관 식당',
+        image_path: '',
         support_menu: true,
         support_discount: false,
         support_notification: false,
       },
     ], {
-      updateOnDuplicate: ['id'],
+      updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
     });
 
     await cornerModel.bulkCreate([
-      {id: 1, name: '1코너 점심', cafeteria_id: 1},
-      {id: 2, name: '1코너 저녁', cafeteria_id: 1},
-      {id: 3, name: '2-1코너 점심', cafeteria_id: 1},
-      {id: 4, name: '2-2코너 저녁', cafeteria_id: 1},
-      {id: 5, name: '2-2코너 점심', cafeteria_id: 1},
-      {id: 6, name: '3코너', cafeteria_id: 1},
-      {id: 7, name: '4코너', cafeteria_id: 1},
-      {id: 8, name: '5코너', cafeteria_id: 1},
+      // 학생식당
+      {id: 1, name: '1코너중식(앞쪽)', display_name: '1코너', available_at: 2, cafeteria_id: 1},
+      {id: 2, name: '1-1코너중식(앞쪽)', display_name: '1-1코너', available_at: 4, cafeteria_id: 1},
+      {id: 3, name: '2-1코너 중식(앞쪽)', display_name: '2-1코너', available_at: 2, cafeteria_id: 1},
+      {id: 4, name: '2-1코너 석식(앞쪽)', display_name: '2-1코너', available_at: 4, cafeteria_id: 1},
+      {id: 5, name: '2-2코너 중식(앞쪽)', display_name: '2-2코너', available_at: 2, cafeteria_id: 1},
+      {id: 6, name: '3코너(앞쪽)', display_name: '3코너', available_at: 2|4, cafeteria_id: 1},
+      {id: 7, name: '4코너(뒤쪽)', display_name: '3코너', available_at: 2|4, cafeteria_id: 1},
+      {id: 8, name: '5코너(뒤쪽)', display_name: '3코너', available_at: 2|4, cafeteria_id: 1},
 
-      {id: 9, name: '점심', cafeteria_id: 2},
-      {id: 10, name: 'A코너(저녁)', cafeteria_id: 2},
-      {id: 11, name: 'B코너', cafeteria_id: 2},
+      // 27호관식당
+      {id: 9, name: 'A코너 중식', display_name: 'A코너', available_at: 2, cafeteria_id: 2},
+      {id: 10, name: 'A코너 석식', display_name: 'A코너', available_at: 4, cafeteria_id: 2},
+      {id: 11, name: 'B코너 중식', display_name: 'B코너', available_at: 2, cafeteria_id: 2},
 
-      {id: 12, name: '점심', cafeteria_id: 3},
-      {id: 13, name: '저녁', cafeteria_id: 3},
+      // 사범대식당
+      {id: 12, name: '중식', display_name: '', available_at: 2, cafeteria_id: 3},
+      {id: 13, name: '석식', display_name: '', available_at: 4, cafeteria_id: 3},
 
-      {id: 14, name: '아침', cafeteria_id: 4},
-      {id: 15, name: '점심', cafeteria_id: 4},
-      {id: 16, name: '저녁', cafeteria_id: 4},
+      // 제1기숙사식당
+      {id: 14, name: '조식', display_name: '', available_at: 1, cafeteria_id: 4},
+      {id: 15, name: '중식', display_name: '', available_at: 2, cafeteria_id: 4},
+      {id: 16, name: '석식', display_name: '', available_at: 4, cafeteria_id: 4},
 
-      {id: 17, name: '점심', cafeteria_id: 5},
-      {id: 18, name: '저녁', cafeteria_id: 5},
+      // 2호관식당
+      {id: 17, name: '중식', display_name: '', available_at: 2, cafeteria_id: 5},
+      {id: 18, name: '석식', display_name: '', available_at: 4, cafeteria_id: 5},
     ], {
-      updateOnDuplicate: ['id'],
+      updateOnDuplicate: Object.keys(cornerModel.rawAttributes), // all keys need to be noted.
     });
 
     await cafeteriaDiscountRuleModel.bulkCreate([
       {
-        cafeteria_id: 4, /* 생활원 기숙사식당 */
-        token: '$2b$09$7gXIej4V7ZAu8fPSDiEVVOBOKiLEBKJkumHONkIECver4EW829pZ2',
-        available_meal_types: 2**0, /* breakfast only */
+        cafeteria_id: 4, /* 제1기숙사식당 */
+        token: '$2b$09$7gXIej4V7ZAu8fPSDiEVVOBOKiLEBKJkumHONkIECver4EW829pZ2', // bcrypt hashed
+        available_meal_types: 1, /* breakfast only */
       },
       {
         cafeteria_id: 3, /* 사범대 */
-        token: '$2b$09$im4EsvdDUMEP00/MqJ0fOe2hgCufZbHjwPr51nyVTK3KfjWXse9HW',
-        available_meal_types: 2**1 | 2**2, /* launch and dinner only */
+        token: '$2b$09$im4EsvdDUMEP00/MqJ0fOe2hgCufZbHjwPr51nyVTK3KfjWXse9HW', // bcrypt hashed
+        available_meal_types: 2 | 4, /* launch and dinner only */
       },
     ], {
-      updateOnDuplicate: ['cafeteria_id'],
+      updateOnDuplicate: Object.keys(cafeteriaDiscountRuleModel.rawAttributes),
     });
   });
 

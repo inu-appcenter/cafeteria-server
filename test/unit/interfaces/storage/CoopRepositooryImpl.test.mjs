@@ -17,20 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({id=null, name, displayName, imagePath, supportMenu, supportDiscount, supportNotification}) {
-    this.id = id; /* primary key */
+import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
+import config from '../../../../config';
 
-    this.name = name;
-    this.displayName = displayName;
-    this.imagePath = imagePath;
+describe('# visit coop', () => {
+  it('should succeed', async () => {
+    const repo = new CoopRepositoryImpl();
 
-    this.supportMenu = supportMenu;
-    this.supportDiscount = supportDiscount;
-    this.supportNotification = supportNotification;
-  }
+    const response = await repo.visit(config.menu.url);
 
-  toString() {
-    return JSON.stringify(this);
-  }
-}
+    expect(response.includes('자동등록방지를 위해 보안절차를 거치고 있습니다.')).toBe(false);
+  });
+});
