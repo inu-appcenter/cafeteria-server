@@ -31,6 +31,9 @@
 | name | 문자열 | 식당의 실제 이름 |
 | display-name | 문자열 | 식당의 표시 이름 |
 | image-path | 문자열 | 식당 이미지 경로 |
+| support-menu | 불리언 | 식단 정보 지원 여부 |
+| support-discount | 불리언 | 할인 제공 여부 |
+| support-notification | 불리언 | 번호 알림 제공 여부 |
 
 **응답코드 400, 500**:
 
@@ -62,6 +65,9 @@
 | name | 문자열 | 식당의 실제 이름 |
 | display-name | 문자열 | 식당의 표시 이름 |
 | image-path | 문자열 | 식당 이미지 경로 |
+| support-menu | 불리언 | 식단 정보 지원 여부 |
+| support-discount | 불리언 | 할인 제공 여부 |
+| support-notification | 불리언 | 번호 알림 제공 여부 |
 
 **응답코드 400, 500**:
 
