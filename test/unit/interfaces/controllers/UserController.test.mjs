@@ -92,7 +92,7 @@ describe('# Login', () => {
     }));
 
     const response = await createMockedResponse(
-      {result: LoginResults.SUCCESS, jwt: 'abcde'},
+      {result: LoginResults.SUCCESS, jwt: 'abcde', rememberMeToken: 'token'},
       {id: 201701562},
       );
 

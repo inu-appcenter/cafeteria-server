@@ -92,7 +92,7 @@ describe('# Login', () => {
     setCreateRememberMeMock('mocked-remember-me-token');
 
     await loginTest(201701562, 'token', null,
-      {result: LoginResults.SUCCESS, jwt: 'mocked-jwt'});
+      {result: LoginResults.SUCCESS, rememberMeToken: 'mocked-remember-me-token', jwt: 'mocked-jwt'});
   });
 
   it('should succeed with correct id and correct password', async () => {
@@ -101,7 +101,7 @@ describe('# Login', () => {
     setCreateRememberMeMock('mocked-remember-me-token');
 
     await loginTest(201701562, null, 'password',
-      {result: LoginResults.SUCCESS, jwt: 'mocked-jwt'});
+      {result: LoginResults.SUCCESS, rememberMeToken: 'mocked-remember-me-token', jwt: 'mocked-jwt'});
   });
 });
 

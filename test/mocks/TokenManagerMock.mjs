@@ -18,6 +18,7 @@
  */
 
 import TokenManager from '../../lib/domain/security/TokenManager';
+import bcrypt from 'bcrypt';
 
 class TokenManagerMock extends TokenManager {
   createJwt(payload) {
@@ -30,6 +31,10 @@ class TokenManagerMock extends TokenManager {
 
   compareBcryptToken(plain, hashed) {
     return plain === hashed;
+  }
+
+  async applyHash(plain) {
+    return await bcrypt.hash(plain, 9);
   }
 }
 
