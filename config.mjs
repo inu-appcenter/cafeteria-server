@@ -86,6 +86,7 @@ export default {
         // These expressions represent a price-and-calorie part.
         // Any string matching this expressions will not be included in menu.
         // Therefore these should only capture the price-and-calorie part.
+        '(?<PRICE>[0-9,]+)원/(?<CAL>[0-9,]+)[Kk]cal', // 5,500원/850Kcal
         '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal', // 3500원 350kcal
         '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal[\n ](?<CAL2>[0-9,]+)[Kk]cal', // 3500원 355kcal 390kcal
         '(?<PRICE>[0-9,]+)원/(?<PRICE2>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal/(?<CAL2>[0-9,]+)[Kk]cal', // 3500원/4700원\n355kcal/390kcal
