@@ -89,7 +89,7 @@ export default {
         '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal/(?<CAL2>[0-9,]+)[Kk]cal', // 3500원\n355kcal/390kcal
         '(?<PRICE>[0-9,]+)~(?<PRICE2>[0-9,]+)원[\n ].+[0-9,]+원', // 2,000원~2500원\n+토핑500원
       ],
-      menuSplitter: '-'.repeat(10),
+      menuSplitterRegex: '-{8,}',
     },
   },
 
