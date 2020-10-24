@@ -113,3 +113,19 @@ describe('# IsBetween', () => {
     ).toBe(0);
   });
 });
+
+describe('# getWeek', () => {
+  it('should get proper week number', async () => {
+    const date = new Date('2020-10-26');
+    const week = dateUtil.getWeek(date, 1);
+
+    expect(week).toBe(44);
+  });
+
+  it('should get week number diff', async () => {
+    const aWeek = dateUtil.getWeek(new Date('2020-10-25'/* Sunday */), 1);
+    const anotherWeek = dateUtil.getWeek(new Date('2020-10-26'/* Monday */), 1);
+
+    expect(anotherWeek - aWeek).toBe(1);
+  });
+});

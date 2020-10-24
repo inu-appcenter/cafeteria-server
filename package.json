@@ -48,6 +48,7 @@
     "moment": "^2.27.0",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.1",
+    "qs": "^6.9.4",
     "rand-token": "^0.4.0",
     "sequelize": "^5.22.3",
     "stack-trace": "0.0.10",

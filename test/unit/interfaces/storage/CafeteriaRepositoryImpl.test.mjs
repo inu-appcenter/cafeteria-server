@@ -20,6 +20,8 @@
 import CafeteriaRepositoryImpl from '../../../../lib/interfaces/storage/CafeteriaRepositoryImpl';
 import sequelize from '../../infrastructure/database/sequelizeMock';
 import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
+import CafeteriaRemoteDataSource from '../../../../lib/interfaces/storage/CafeteriaRemoteDataSource';
+import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
 
 describe('# getAllCafeteria', () => {
   it('should succeed', async () => {
@@ -98,7 +100,7 @@ describe('# getCornersByCafeteriaId', () => {
 describe('# getAllMenus', () => {
   it('should catch bad date format', async () => {
     const repo = getRepository();
-    const result = await repo.getAllMenus('sjejakawd');
+    const result = await repo.getAllMenus('awdadwa');
 
     expect(result).toEqual([]);
   });
@@ -126,6 +128,7 @@ describe('# getMenusByCornerId', () => {
 const getRepository = function() {
   return new CafeteriaRepositoryImpl({
     db: sequelize,
+    remoteDataSource: new CafeteriaRemoteDataSource({coopRepo: new CoopRepositoryImpl()}),
     menuConverter: new DirectMenuConverter(),
   });
 };
