@@ -1,7 +1,7 @@
 {
   "name": "cafeteria-server",
   "main": "./index.mjs",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Server side application for INU Cafeteria.",
   "scripts": {
     "help": "node -r esm help.mjs",
