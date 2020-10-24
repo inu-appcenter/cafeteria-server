@@ -26,7 +26,7 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
     super();
   }
 
-  getAllCafeteria() {
+  async getAllCafeteria() {
     return [
       new Cafeteria({
         id: 1,
@@ -91,7 +91,7 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
     });
   }
 
-  getAllCorners() {
+  async getAllCorners() {
     return [
       new Corner({
         id: 1,

@@ -20,6 +20,9 @@
 import CafeteriaRepositoryImpl from '../../../../lib/interfaces/storage/CafeteriaRepositoryImpl';
 import sequelize from '../../infrastructure/database/sequelizeMock';
 import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
+import CafeteriaRemoteDataSource from '../../../../lib/interfaces/storage/CafeteriaRemoteDataSource';
+import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
+import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
 
 describe('# getAllCafeteria', () => {
   it('should succeed', async () => {
@@ -98,9 +101,17 @@ describe('# getCornersByCafeteriaId', () => {
 describe('# getAllMenus', () => {
   it('should catch bad date format', async () => {
     const repo = getRepository();
-    const result = await repo.getAllMenus('sjejakawd');
+    const result = await repo.getAllMenus('awdadwa');
 
     expect(result).toEqual([]);
+  });
+
+  it('should get menus', async () => {
+    const repo = getRepository();
+    const result = await repo.getAllMenus('20201027');
+
+    // Just see :)
+    console.log(result);
   });
 });
 
@@ -124,8 +135,16 @@ describe('# getMenusByCornerId', () => {
 });
 
 const getRepository = function() {
-  return new CafeteriaRepositoryImpl({
+  const repository = new CafeteriaRepositoryImpl({
     db: sequelize,
+    remoteDataSource: new CafeteriaRemoteDataSource({coopRepo: new CoopRepositoryImpl()}),
     menuConverter: new DirectMenuConverter(),
   });
+
+  const mockRepository = new CafeteriaRepositoryMock();
+
+  repository.getAllCafeteria = mockRepository.getAllCafeteria;
+  repository.getAllCorners = mockRepository.getAllCorners;
+
+  return repository;
 };
