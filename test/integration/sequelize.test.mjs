@@ -120,11 +120,17 @@ describe('# Sequelize', () => {
         cafeteria_id: 3, /* 사범대 */
         token: '$2b$09$im4EsvdDUMEP00/MqJ0fOe2hgCufZbHjwPr51nyVTK3KfjWXse9HW', // bcrypt hashed
         available_meal_types: 2 | 4, /* launch and dinner only */
+        time_range_breakfast: '08:30-11:00',
+        time_range_lunch: '10:20-14:10',
+        time_range_dinner: '16:30-23:40',
       },
       {
         cafeteria_id: 4, /* 제1기숙사식당 */
         token: '$2b$09$7gXIej4V7ZAu8fPSDiEVVOBOKiLEBKJkumHONkIECver4EW829pZ2', // bcrypt hashed
         available_meal_types: 1, /* breakfast only */
+        time_range_breakfast: '08:30-11:00',
+        time_range_lunch: '10:20-14:10',
+        time_range_dinner: '16:30-23:40',
       },
     ], {
       updateOnDuplicate: Object.keys(cafeteriaValidationParamsModel.rawAttributes),
