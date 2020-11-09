@@ -8,7 +8,7 @@
     "start": "node -r esm index.mjs",
     "test": "npm run unittest && npm run integrationtest",
     "unittest": "jest --coverage test/unit",
-    "integrationtest": "jest test/integration"
+    "forcesetupdb": "node -r esm setup/setup-db.mjs"
   },
   "repository": {
     "type": "git",
