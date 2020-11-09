@@ -17,27 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({token, availableMealTypes, cafeteriaId=null}) {
-    this.cafeteriaId = cafeteriaId; /* primary key */
+import timeUtil from '../../../../lib/common/utils/timeUtil';
+import moment from 'moment';
 
-    /**
-     * For a discount request, the requested token must math this one.
-     */
-    this.token = token;
+describe('# Time in range', () => {
+  it('should include start time', async () => {
+    const rangeString = '01:23-23:59';
+    const now = moment('01:23', 'hh:mm');
 
-    /**
-     * When is the discount available? (breakfast: 1,  lunch: 2, dinner: 4)
-     * breakfast only -> 1 (2^0)
-     * lunch only -> 2 (2^1)
-     * dinner only -> 4 (2^2)
-     * lunch and dinner -> 6 (2^1 + 2^2)
-     * It is like unix file permission.
-     */
-    this.availableMealTypes = availableMealTypes;
-  }
+    const result = timeUtil.isTimeInRange(rangeString, now);
 
-  toString() {
-    return JSON.stringify(this);
-  }
-}
+    expect(result).toBe(true);
+  });
+
+  it('should not include last time', async () => {
+    const rangeString = '01:23-23:59';
+    const now = moment('23:59', 'hh:mm');
+
+    const result = timeUtil.isTimeInRange(rangeString, now);
+
+    expect(result).toBe(false);
+  });
+});

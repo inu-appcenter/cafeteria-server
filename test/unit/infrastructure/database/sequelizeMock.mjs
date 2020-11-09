@@ -21,7 +21,7 @@ import config from '../../../../config';
 
 import SequelizeMock from 'sequelize-mock';
 
-import CafeteriaDiscountRule from '../../../../lib/infrastructure/database/models/CafeteriaDiscountRule';
+import CafeteriaValidationParams from '../../../../lib/infrastructure/database/models/CafeteriaValidationParams';
 import DiscountTransaction from '../../../../lib/infrastructure/database/models/DiscountTransaction';
 import UserDiscountStatus from '../../../../lib/infrastructure/database/models/UserDiscountStatus';
 import Cafeteria from '../../../../lib/infrastructure/database/models/Cafeteria';
@@ -44,7 +44,7 @@ const sequelize = new SequelizeMock(
 );
 
 const models = {
-  CafeteriaDiscountRule: CafeteriaDiscountRule(sequelize, DataTypes),
+  CafeteriaValidationParams: CafeteriaValidationParams(sequelize, DataTypes),
   DiscountTransaction: DiscountTransaction(sequelize, DataTypes),
   UserDiscountStatus: UserDiscountStatus(sequelize, DataTypes),
 

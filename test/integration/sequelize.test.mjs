@@ -27,8 +27,10 @@ describe('# Sequelize', () => {
   it('should add rows', async () => {
     const cafeteriaModel = sequelize.model('cafeteria');
     const cornerModel = sequelize.model('corner');
-    const cafeteriaDiscountRuleModel = sequelize.model('cafeteria_discount_rule');
+    const cafeteriaValidationParamsModel = sequelize.model('cafeteria_validation_params');
+    const discountRuleStatusModel = sequelize.model('discount_rule_status');
 
+    // Create Cafeteria
     await cafeteriaModel.bulkCreate([
       {
         id: 1,
@@ -79,6 +81,7 @@ describe('# Sequelize', () => {
       updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
     });
 
+    // Create corners
     await cornerModel.bulkCreate([
       // 학생식당
       {id: 1, name: '1코너중식(앞쪽)', display_name: '1코너', available_at: 2, cafeteria_id: 1},
@@ -111,19 +114,54 @@ describe('# Sequelize', () => {
       updateOnDuplicate: Object.keys(cornerModel.rawAttributes), // all keys need to be noted.
     });
 
-    await cafeteriaDiscountRuleModel.bulkCreate([
-      {
-        cafeteria_id: 4, /* 제1기숙사식당 */
-        token: '$2b$09$7gXIej4V7ZAu8fPSDiEVVOBOKiLEBKJkumHONkIECver4EW829pZ2', // bcrypt hashed
-        available_meal_types: 1, /* breakfast only */
-      },
+    // Create validation params
+    await cafeteriaValidationParamsModel.bulkCreate([
       {
         cafeteria_id: 3, /* 사범대 */
         token: '$2b$09$im4EsvdDUMEP00/MqJ0fOe2hgCufZbHjwPr51nyVTK3KfjWXse9HW', // bcrypt hashed
         available_meal_types: 2 | 4, /* launch and dinner only */
       },
+      {
+        cafeteria_id: 4, /* 제1기숙사식당 */
+        token: '$2b$09$7gXIej4V7ZAu8fPSDiEVVOBOKiLEBKJkumHONkIECver4EW829pZ2', // bcrypt hashed
+        available_meal_types: 1, /* breakfast only */
+      },
     ], {
-      updateOnDuplicate: Object.keys(cafeteriaDiscountRuleModel.rawAttributes),
+      updateOnDuplicate: Object.keys(cafeteriaValidationParamsModel.rawAttributes),
+    });
+
+    // Create discount rule statuses
+    await discountRuleStatusModel.bulkCreate([
+      {
+        id: 1,
+        enabled: true,
+      },
+      {
+        id: 2,
+        enabled: true,
+      },
+      {
+        id: 3,
+        enabled: true,
+      },
+      {
+        id: 4,
+        enabled: true,
+      },
+      {
+        id: 5,
+        enabled: true,
+      },
+      {
+        id: 6,
+        enabled: true,
+      },
+      {
+        id: 7,
+        enabled: true,
+      },
+    ], {
+      updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
     });
   });
 

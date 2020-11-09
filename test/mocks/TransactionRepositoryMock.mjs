@@ -24,11 +24,15 @@ class TransactionRepositoryMock extends TransactionRepository {
     super();
   }
 
+  getDiscountRuleStatus(ruleId) {
+    throw new Error('Not mocked! You need extra mock');
+  }
+
   getUserDiscountStatusByUserId(userId) {
     throw new Error('Not mocked! You need extra mock');
   }
 
-  getCafeteriaDiscountRuleByCafeteriaId(cafeteriaId) {
+  getCafeteriaValidationParamsByCafeteriaId(cafeteriaId) {
     throw new Error('Not mocked! You need extra mock');
   }
 

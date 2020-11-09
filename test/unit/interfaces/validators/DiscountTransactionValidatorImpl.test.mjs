@@ -21,7 +21,7 @@ import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
 
 import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
-import CafeteriaDiscountRule from '../../../../lib/domain/entities/CafeteriaDiscountRule';
+import CafeteriaValidationParams from '../../../../lib/domain/entities/CafeteriaValidationParams';
 import Cafeteria from '../../../../lib/domain/entities/Cafeteria';
 import UserDiscountStatus from '../../../../lib/domain/entities/UserDiscountStatus';
 import modules from '../../../../lib/common/di/modules';
@@ -434,7 +434,7 @@ describe('# isTokenValid', () => {
 const setCafeteriaRuleMock = function(cafeteriaId, token, availableMealTypes) {
   const mock = jest.fn((id) => {
     if (id < 100 && id === cafeteriaId) {
-      return new CafeteriaDiscountRule({
+      return new CafeteriaValidationParams({
         cafeteriaId: cafeteriaId,
         token: token,
         availableMealTypes: availableMealTypes,
@@ -446,7 +446,7 @@ const setCafeteriaRuleMock = function(cafeteriaId, token, availableMealTypes) {
 
   resolve(DiscountTransactionValidator)
     .transactionRepository
-    .getCafeteriaDiscountRuleByCafeteriaId = mock;
+    .getCafeteriaValidationParamsByCafeteriaId = mock;
 
   return mock;
 };

@@ -20,35 +20,35 @@
 import DiscountTransactionValidator from '../../lib/domain/validators/DiscountTransactionValidator';
 
 class DiscountTransactionValidatorMock extends DiscountTransactionValidator {
-  isNotMalformed(transaction) {
+  requestShouldBeNotMalformed(transaction) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  isInMealTime(cafeteriaId, mealType) {
+  requestShouldBeInMealTime(cafeteriaId, mealType) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  cafeteriaSupportsDiscount(cafeteriaId) {
+  cafeteriaShouldSupportDiscount(cafeteriaId) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  userExists(userId) {
+  userShouldExist(userId) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  isBarcodeActive(userId, activeDurationMinute) {
+  barcodeShouldBeActive(userId, activeDurationMinute) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  isFirstToday(userId) {
+  discountShouldBeFirstToday(userId) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  barcodeNotUsedRecently(userId, intervalSec) {
+  barcodeShouldNotBeUsedRecently(userId, intervalSec) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  isTokenValid(cafeteriaId, plainToken) {
+  tokenShouldBeValid(cafeteriaId, plainToken) {
     throw new Error('Not mocked! You need extra mock here');
   }
 }

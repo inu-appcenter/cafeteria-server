@@ -39,17 +39,17 @@ describe('# getUserDiscountStatusByUserId', () => {
   });
 });
 
-describe('# getCafeteriaDiscountRuleByCafeteriaId', () => {
+describe('# getCafeteriaValidationParamsByCafeteriaId', () => {
   it('should catch null id', async () => {
     const repo = getRepository();
-    const result = await repo.getCafeteriaDiscountRuleByCafeteriaId(null);
+    const result = await repo.getCafeteriaValidationParamsByCafeteriaId(null);
 
     expect(result).toBeNull;
   });
 
   it('should work', async () => {
     const repo = getRepository();
-    const result = await repo.getCafeteriaDiscountRuleByCafeteriaId(2);
+    const result = await repo.getCafeteriaValidationParamsByCafeteriaId(2);
 
     expect(result).toHaveProperty('token');
     expect(result).toHaveProperty('availableMealTypes');
