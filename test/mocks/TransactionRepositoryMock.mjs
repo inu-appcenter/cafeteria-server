@@ -25,7 +25,7 @@ class TransactionRepositoryMock extends TransactionRepository {
   }
 
   getDiscountRuleStatus(ruleId) {
-    throw new Error('Not mocked! You need extra mock');
+    return null;
   }
 
   getUserDiscountStatusByUserId(userId) {

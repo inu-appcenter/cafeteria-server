@@ -32,6 +32,7 @@ import Notification from '../../../../lib/infrastructure/database/models/Feedbac
 import Notice from '../../../../lib/infrastructure/database/models/Notice';
 
 import seq from 'sequelize';
+import DiscountRuleStatus from '../../../../lib/infrastructure/database/models/DiscountRuleStatus';
 const {DataTypes} = seq;
 
 const seqConfig = Object.assign({}, config.sequelize);
@@ -47,6 +48,7 @@ const models = {
   CafeteriaValidationParams: CafeteriaValidationParams(sequelize, DataTypes),
   DiscountTransaction: DiscountTransaction(sequelize, DataTypes),
   UserDiscountStatus: UserDiscountStatus(sequelize, DataTypes),
+  DiscountRuleStatus: DiscountRuleStatus(sequelize, DataTypes),
 
   Cafeteria: Cafeteria(sequelize, DataTypes),
   Corner: Corner(sequelize, DataTypes),
