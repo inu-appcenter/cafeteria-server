@@ -20,6 +20,7 @@
 import sequelize from '../lib/infrastructure/database/sequelize';
 import initial from './initial-db-contents';
 import logger from '../lib/common/utils/logger';
+import getArg from '../lib/common/utils/args';
 
 async function doSetUp(force) {
   logger.info(`Sync sequelize(force: ${force}).`);
@@ -66,6 +67,6 @@ async function doSetUp(force) {
   await sequelize.close();
 }
 
-doSetUp(false).then(() => {
+doSetUp(getArg('force', false)).then(() => {
   console.log('Setup finished.');
 });
