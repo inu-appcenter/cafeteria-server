@@ -112,7 +112,7 @@ export default {
     barcodeLifetimeMinutes: 10,
     barcodeTagMinimumIntervalSecs: 15,
     oldApiIdToCafeteriaId: {
-      /* Code used by ol APIs : Newly given cafeteria id */
+      /* Code used by old APIs : Newly given cafeteria id */
       1: 4, /* 제1 기숙사식당 */
       2: 3, /* 사범대식당 */
     },
