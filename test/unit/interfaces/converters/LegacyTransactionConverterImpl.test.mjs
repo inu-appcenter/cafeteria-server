@@ -20,20 +20,25 @@
 import BarcodeTransformerImpl from '../../../../lib/interfaces/security/BarcodeTransformerImpl';
 import LegacyTransactionConverter from '../../../../lib/interfaces/converters/LegacyTransactionConverter';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
+import TransactionRepositoryMock from '../../../mocks/TransactionRepositoryMock';
+import MockDate from 'mockdate';
 
 describe('# Convert', () => {
   const converter = new LegacyTransactionConverter({
     barcodeTransformer: new BarcodeTransformerImpl(),
+    transactionRepository: new TransactionRepositoryMock(),
   });
 
-  const getResult = function(barcode, code, menu, now) {
+  const getResult = async function(barcode, code) {
     return converter.convert({
-      barcode, code, menu, now,
+      barcode, code,
     });
   };
 
-  const timingTest = function(date, expectedMealType) {
-    const result = getResult('1210209372', 1, 'blah', date);
+  const timingTest = async function(date, expectedMealType) {
+    MockDate.set(date);
+
+    const result = await getResult('1210209372', 1);
 
     expect(result).toEqual(new DiscountTransaction({
       mealType: expectedMealType, /* newly added */
@@ -41,25 +46,33 @@ describe('# Convert', () => {
       userId: 201701562, /* extracted from 'barcode' */
       cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
     }));
+
+    MockDate.reset();
   };
 
-  const cafeteriaIdTest = function(code, cafeteriaId) {
+  const cafeteriaIdTest = async function(code, cafeteriaId) {
     const now = new Date();
     now.setHours(8, 50, 0);
-    const result = getResult('1210209372', code, 'blah', now);
+    MockDate.set(now);
+
+    const result = await getResult('1210209372', code);
 
     expect(result).toEqual(new DiscountTransaction({
-      mealType: 0, /* newly added */
+      mealType: result.cafeteriaId > 0 ? 0/*8:50 breakfast*/ : -1/*could not find cafeteria->no meal type*/,
 
       userId: 201701562, /* extracted from 'barcode' */
       cafeteriaId: cafeteriaId, /* 생활원식당, mapped from 'code' */
     }));
+
+    MockDate.reset();
   };
 
-  const barcodeTest = function(barcode, id) {
+  const barcodeTest = async function(barcode, id) {
     const now = new Date();
     now.setHours(8, 50, 0);
-    const result = getResult(barcode, 1, 'blah', now);
+    MockDate.set(now);
+
+    const result = await getResult(barcode, 1);
 
     expect(result).toEqual(new DiscountTransaction({
       mealType: 0, /* newly added */
@@ -67,49 +80,51 @@ describe('# Convert', () => {
       userId: id, /* extracted from 'barcode' */
       cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
     }));
+
+    MockDate.reset();
   };
 
   it('should set 0 at morning', async () => {
     const now = new Date();
     now.setHours(8, 50, 0);
-    timingTest(now, 0);
+    await timingTest(now, 0);
   });
 
   it('should set 1 at lunch', async () => {
     const now = new Date();
     now.setHours(12, 50, 0);
-    timingTest(now, 1);
+    await timingTest(now, 1);
   });
 
   it('should set 2 at dinner', async () => {
     const now = new Date();
     now.setHours(18, 50, 0);
-    timingTest(now, 2);
+    await timingTest(now, 2);
   });
 
   it('should set -1 at night', async () => {
     const now = new Date();
     now.setHours(23, 50, 0);
-    timingTest(now, -1);
+    await timingTest(now, -1);
   });
 
   it('should convert code 1 to 4(사범대식당)', async () => {
-    cafeteriaIdTest(1, 4);
+    await cafeteriaIdTest(1, 4);
   });
 
   it('should convert code 2 to 3(생활원식당)', async () => {
-    cafeteriaIdTest(2, 3);
+    await cafeteriaIdTest(2, 3);
   });
 
   it('should convert unknown code to -1', async () => {
-    cafeteriaIdTest(99, -1);
+    await cafeteriaIdTest(99, -1);
   });
 
   it('should convert barcode under 2000000000', async () => {
-    barcodeTest('1210209372', 201701562);
+    await barcodeTest('1210209372', 201701562);
   });
 
   it('should convert barcode over 2000000000', async () => {
-    barcodeTest('8068062480', 2017015620);
+    await barcodeTest('8068062480', 2017015620);
   });
 });
