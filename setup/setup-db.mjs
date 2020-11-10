@@ -66,6 +66,6 @@ async function doSetUp(force) {
   await sequelize.close();
 }
 
-doSetUp(true /* All table will be re-written. */).then(() => {
+doSetUp(false).then(() => {
   console.log('Setup finished.');
 });
