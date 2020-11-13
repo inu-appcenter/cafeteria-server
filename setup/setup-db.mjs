@@ -32,7 +32,7 @@ async function doSetUp(force) {
   const cafeteriaModel = sequelize.model('cafeteria');
   const cornerModel = sequelize.model('corner');
   const cafeteriaValidationParamsModel = sequelize.model('cafeteria_validation_params');
-  const discountRuleStatusModel = sequelize.model('discount_rule_status');
+  const cafeteriaDiscountRuleModel = sequelize.model('cafeteria_discount_rule');
 
   logger.info('Create cafeteria.');
 
@@ -58,7 +58,7 @@ async function doSetUp(force) {
   logger.info('Create discount rule statuses.');
 
   // Create discount rule statuses
-  await discountRuleStatusModel.bulkCreate(initial.ruleStatuses, {
+  await cafeteriaDiscountRuleModel.bulkCreate(initial.ruleStatuses, {
     updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
   });
 

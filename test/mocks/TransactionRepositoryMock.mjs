@@ -24,7 +24,7 @@ class TransactionRepositoryMock extends TransactionRepository {
     super();
   }
 
-  getDiscountRuleStatus(ruleId) {
+  getDiscountRule(ruleId) {
     return null;
   }
 

@@ -122,30 +122,44 @@ export default {
   ruleStatuses: [
     {
       id: 1,
+      name: 'requestShouldBeInMealTime',
+      description: '할인은 해당 식당이 정하는 시간대에만 허용합니다.',
       enabled: true,
     },
     {
       id: 2,
+      name: 'cafeteriaShouldSupportDiscount',
+      description: '해당 식당이 할인을 지원해야 합니다.',
       enabled: true,
     },
     {
       id: 3,
+      name: 'userShouldExist',
+      description: '할인받고자 하는 사용자가 존재해야 합니다.',
       enabled: true,
     },
     {
       id: 4,
+      name: 'barcodeShouldBeActive',
+      description: '사용자의 바코드가 활성화되어 있어야 합니다.',
       enabled: true,
     },
     {
       id: 5,
+      name: 'discountShouldBeFirstToday',
+      description: '같은 날짜에 할인받은 기록이 없어야 합니다.',
       enabled: true,
     },
     {
       id: 6,
+      name: 'barcodeShouldNotBeUsedRecently',
+      description: '바코드를 너무 빠르게 반복적으로 태그하지 않아야 합니다.',
       enabled: true,
     },
     {
       id: 7,
+      name: 'tokenShouldBeValid',
+      description: '식당의 고유 토큰이 유효해야 합니다.',
       enabled: true,
     },
   ],
