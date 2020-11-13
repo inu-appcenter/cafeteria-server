@@ -123,7 +123,7 @@ export default {
     {
       id: 1,
       name: 'requestShouldBeInMealTime',
-      description: '할인은 해당 식당이 정하는 시간대에만 허용합니다.',
+      description: '요청 시각이 해당 식당이 할인을 지원하는 시간대에 속해야 합니다.',
       enabled: true,
     },
     {
