@@ -26,6 +26,9 @@ if (getEnv('NODE_ENV') === 'production') {
   if (!getArg('port')) throw new Error('Port not set!');
   if (!getArg('log-dir')) throw new Error('Log directory not set!');
 
+  if (!getEnv('AWS_ACCESS_KEY_ID')) throw new Error('AWS access id not set!');
+  if (!getEnv('AWS_SECRET_ACCESS_KEY')) throw new Error('AWS secret access key id not set!');
+
   if (!getEnv('JWT_SECRET_KEY')) throw new Error('JWT secret key not set!');
   if (!getEnv('DB_USERNAME')) throw new Error('DB username not set!');
   if (!getEnv('DB_PASSWORD')) throw new Error('DB password not set!');
@@ -49,6 +52,15 @@ export default {
       clearInvalid: true, // remove invalid cookies
       strictHeader: true, // don't allow violations of RFC 6265
     },
+  },
+
+  aws: {
+    cloudwatch: {
+      logGroupName: 'cafeteria-server',
+    },
+    region: 'ap-northeast-2',
+    accessKeyId: getEnv('AWS_ACCESS_KEY_ID', 'an_aws_id'),
+    secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY'),
   },
 
   sequelize: {
