@@ -53,7 +53,7 @@ export default {
 
   sequelize: {
     database: 'cafeteria',
-    username: getEnv('DB_USERNAME', 'user'),
+    username: getEnv('DB_USERNAME', 'potados'),
     password: getEnv('DB_PASSWORD', '1234'),
     host: 'localhost',
     dialect: 'mysql',
@@ -111,6 +111,10 @@ export default {
   transaction: {
     barcodeLifetimeMinutes: 10,
     barcodeTagMinimumIntervalSecs: 15,
+    oldApiIdToCafeteriaId: {
+      /* Code used by old APIs : Newly given cafeteria id */
+      1: 4, /* 제1 기숙사식당 */
+      2: 3, /* 사범대식당 */
+    },
   },
-
 };

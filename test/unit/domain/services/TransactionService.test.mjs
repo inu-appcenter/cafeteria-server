@@ -43,8 +43,8 @@ beforeEach(async () => {
 });
 
 describe('# validateDiscountTransaction', () => {
-  const validationTest = async function(failAt, expectation) {
-    const service = getMockedService(failAt);
+  const validationTest = async function(failAt, expectation, bypass=0) {
+    const service = getMockedService(failAt, bypass);
     const result = await service.validateDiscountTransaction({transaction: getExampleTransaction(), transactionToken: 'abcd'});
 
     expect(result).toBe(expectation);
@@ -71,18 +71,28 @@ describe('# validateDiscountTransaction', () => {
   });
 
   it('should fail basic validation', async () => {
-    await validationTest('isNotMalformed', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
-    await validationTest('isInMealTime', DiscountValidationResults.USUAL_FAIL);
-    await validationTest('cafeteriaSupportsDiscount', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
-    await validationTest('userExists', DiscountValidationResults.UNUSUAL_NO_BARCODE);
-    await validationTest('isBarcodeActive', DiscountValidationResults.USUAL_FAIL);
-    await validationTest('isFirstToday', DiscountValidationResults.USUAL_FAIL);
-    await validationTest('barcodeNotUsedRecently', DiscountValidationResults.USUAL_FAIL);
-    await validationTest('isTokenValid', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
+    await validationTest('requestShouldBeNotMalformed', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
+    await validationTest('requestShouldBeInMealTime', DiscountValidationResults.USUAL_FAIL);
+    await validationTest('cafeteriaShouldSupportDiscount', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
+    await validationTest('userShouldExist', DiscountValidationResults.UNUSUAL_NO_BARCODE);
+    await validationTest('barcodeShouldBeActive', DiscountValidationResults.USUAL_FAIL);
+    await validationTest('discountShouldBeFirstToday', DiscountValidationResults.USUAL_FAIL);
+    await validationTest('barcodeShouldNotBeUsedRecently', DiscountValidationResults.USUAL_FAIL);
+    await validationTest('tokenShouldBeValid', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
+  });
+
+  it('should succeed with bypass', async () => {
+    await validationTest('requestShouldBeInMealTime', DiscountValidationResults.USUAL_SUCCESS, 1);
+    await validationTest('cafeteriaShouldSupportDiscount', DiscountValidationResults.USUAL_SUCCESS, 2);
+    await validationTest('userShouldExist', DiscountValidationResults.USUAL_SUCCESS, 3);
+    await validationTest('barcodeShouldBeActive', DiscountValidationResults.USUAL_SUCCESS, 4);
+    await validationTest('discountShouldBeFirstToday', DiscountValidationResults.USUAL_SUCCESS, 5);
+    await validationTest('barcodeShouldNotBeUsedRecently', DiscountValidationResults.USUAL_SUCCESS, 6);
+    await validationTest('tokenShouldBeValid', DiscountValidationResults.USUAL_SUCCESS, 7);
   });
 
   it('should fail token validation', async () => {
-    await validationTest('isTokenValid', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
+    await validationTest('tokenShouldBeValid', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
   });
 
   it('should succeed', async () => {
@@ -98,14 +108,14 @@ describe('# commitDiscountTransaction', () => {
     expect(result).toBe(expectation);
   };
 
-  it('should fail basic validation', async () => {
-    await commitTest('isNotMalformed', true, DiscountCommitResults.FAIL);
-    await commitTest('isInMealTime', true, DiscountCommitResults.FAIL);
-    await commitTest('cafeteriaSupportsDiscount', true, DiscountCommitResults.FAIL);
-    await commitTest('userExists', true, DiscountCommitResults.FAIL);
-    await commitTest('isBarcodeActive', true, DiscountCommitResults.FAIL);
-    await commitTest('isFirstToday', true, DiscountCommitResults.FAIL);
-    await commitTest('barcodeNotUsedRecently', true, DiscountCommitResults.FAIL);
+  it('should fail basic commit validation', async () => {
+    await commitTest('requestShouldBeNotMalformed', true, DiscountCommitResults.FAIL);
+    await commitTest('requestShouldBeInMealTime', true, DiscountCommitResults.FAIL);
+    await commitTest('cafeteriaShouldSupportDiscount', true, DiscountCommitResults.FAIL);
+    await commitTest('userShouldExist', true, DiscountCommitResults.FAIL);
+    await commitTest('barcodeShouldBeActive', true, DiscountCommitResults.FAIL);
+    await commitTest('discountShouldBeFirstToday', true, DiscountCommitResults.FAIL);
+    await commitTest('barcodeShouldNotBeUsedRecently', true, DiscountCommitResults.FAIL);
   });
 
   it('should catch null confirm', async () => {
@@ -137,21 +147,21 @@ const getExampleTransaction = function() {
   });
 };
 
-const getMockedService = function(failAt) {
+const getMockedService = function(failAt, bypass=0) {
   const service = resolve(TransactionService);
 
   const toMockInValidator = [
     // basic validation
-    'isNotMalformed',
-    'isInMealTime',
-    'cafeteriaSupportsDiscount',
-    'userExists',
-    'isBarcodeActive',
-    'isFirstToday',
-    'barcodeNotUsedRecently',
+    'requestShouldBeNotMalformed',
+    'requestShouldBeInMealTime',
+    'cafeteriaShouldSupportDiscount',
+    'userShouldExist',
+    'barcodeShouldBeActive',
+    'discountShouldBeFirstToday',
+    'barcodeShouldNotBeUsedRecently',
 
     // token validation
-    'isTokenValid',
+    'tokenShouldBeValid',
   ];
 
   const toMockInRepository = [
@@ -168,6 +178,10 @@ const getMockedService = function(failAt) {
     const toReturn = (toMockInRepository[i] !== failAt);
     service.transactionRepository[toMockInRepository[i]] = jest.fn(() => toReturn);
   }
+
+  service._isRuleEnabled = jest.fn((ruleId) => {
+    return ruleId !== bypass;
+  });
 
   return service;
 };

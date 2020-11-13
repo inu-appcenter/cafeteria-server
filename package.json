@@ -8,7 +8,7 @@
     "start": "node -r esm index.mjs",
     "test": "npm run unittest && npm run integrationtest",
     "unittest": "jest --coverage test/unit",
-    "integrationtest": "jest test/integration"
+    "setupdb": "node -r esm setup/setup-db.mjs"
   },
   "repository": {
     "type": "git",
@@ -64,7 +64,8 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-babel": "^5.3.1",
     "jest": "^25.5.4",
-    "sequelize-mock": "^0.10.2"
+    "sequelize-mock": "^0.10.2",
+    "mockdate": "^3.0.2"
   },
   "jest": {
     "testMatch": [

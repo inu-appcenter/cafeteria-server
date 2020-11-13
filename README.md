@@ -75,6 +75,18 @@ app
 
 - [API 테스트](https://api.inu-cafeteria.app/documentation)
 
+## 비즈니스 룰
+
+카페테리아 학생 할인을 제공받으려면 아래의 조건들을 만족해야 합니다:
+
+- 1: requestShouldBeInMealTime
+- 2: cafeteriaShouldSupportDiscount
+- 3: userShouldExist
+- 4: barcodeShouldBeActive
+- 5: discountShouldBeFirstToday
+- 6: barcodeShouldNotBeUsedRecently
+- 7: tokenShouldBeValid
+
 ## 설치
 
 - [설치 및 배포 가이드](https://github.com/inu-appcenter/cafeteria-server-deploy)

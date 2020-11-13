@@ -21,7 +21,7 @@ import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
 
 import DiscountTransactionValidator from '../../../../lib/domain/validators/DiscountTransactionValidator';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
-import CafeteriaDiscountRule from '../../../../lib/domain/entities/CafeteriaDiscountRule';
+import CafeteriaValidationParams from '../../../../lib/domain/entities/CafeteriaValidationParams';
 import Cafeteria from '../../../../lib/domain/entities/Cafeteria';
 import UserDiscountStatus from '../../../../lib/domain/entities/UserDiscountStatus';
 import modules from '../../../../lib/common/di/modules';
@@ -33,6 +33,8 @@ import UserRepositoryMock from '../../../mocks/UserRepositoryMock';
 import UserRepository from '../../../../lib/domain/repositories/UserRepository';
 import TokenManagerMock from '../../../mocks/TokenManagerMock';
 import TokenManager from '../../../../lib/domain/security/TokenManager';
+import moment from 'moment';
+import MockDate from 'mockdate';
 
 beforeEach(async () => {
   await initWithOverrides(modules, [
@@ -57,7 +59,7 @@ beforeEach(async () => {
 
 describe('# isNotMalformed', () => {
   const transactionTest = async function(transaction, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).isNotMalformed(transaction);
+    const actual = await resolve(DiscountTransactionValidator).requestShouldBeNotMalformed(transaction);
 
     expect(actual).toBe(expectation);
   };
@@ -132,43 +134,53 @@ describe('# isNotMalformed', () => {
 });
 
 describe('# isInMealTime', () => {
-  const mealTimeTest = async function(cafeteriaId, mealType, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).isInMealTime(cafeteriaId, mealType);
+  const mealTimeTest = async function(cafeteriaId, mealType, currentTime, expectation) {
+    MockDate.set(moment(currentTime, 'hh:mm').toDate());
+
+    const actual = await resolve(DiscountTransactionValidator).requestShouldBeInMealTime(cafeteriaId, mealType);
 
     expect(actual).toBe(expectation);
+
+    MockDate.reset();
   };
 
   it('should catch null cafeteriaId in param', async () => {
-    await mealTimeTest(null, 1, false);
+    await mealTimeTest(null, 1, '18:00', false);
   });
 
   it('should catch negative cafeteriaId in param', async () => {
-    setCafeteriaRuleMock(1, 'token', 2);
+    setValidationParamsMock(1, 'token', 2);
 
-    await mealTimeTest(-2, 1, false);
+    await mealTimeTest(-2, 1, '18:00', false);
   });
 
   it('should catch null mealType in param', async () => {
-    await mealTimeTest(3, null, false);
+    await mealTimeTest(3, null, '18:00', false);
   });
 
   it('should ensure that cafeteria with id 1 support meal type 1', async () => {
-    setCafeteriaRuleMock(1, 'token', 2);
+    setValidationParamsMock(1, 'token', 2);
 
-    await mealTimeTest(1, 1, true);
+    await mealTimeTest(1, 1, '12:00', true); // Lunch
+  });
+
+  it('should ignore lunch discount request in the middle of a night', async () => {
+    setValidationParamsMock(1, 'token', 2); // Lunch
+
+    await mealTimeTest(1, 1, '23:00', false); // Breakfast
   });
 
   it('should ensure that cafeteria with id 2 support meal type 0 and 2', async () => {
-    setCafeteriaRuleMock(2, 'token', 1 + 4);
+    setValidationParamsMock(2, 'token', 1 + 4);
 
-    await mealTimeTest(2, 0, true);
-    await mealTimeTest(2, 2, true);
+    await mealTimeTest(2, 0, '9:00', true); // Breakfast
+    await mealTimeTest(2, 2, '18:00', true); // Dinner
   });
 });
 
 describe('# cafeteriaSupportsDiscount', () => {
   const discountSupportTest = async function(cafeteriaId, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).cafeteriaSupportsDiscount(cafeteriaId);
+    const actual = await resolve(DiscountTransactionValidator).cafeteriaShouldSupportDiscount(cafeteriaId);
 
     expect(actual).toBe(expectation);
   };
@@ -189,14 +201,14 @@ describe('# cafeteriaSupportsDiscount', () => {
 
   it('should say this cafeteria supports discount but has no discount rule', async () => {
     setCafeteriaMock(5, 'cafeteria', 'path', true, true, true);
-    setCafeteriaRuleMock(3, 'token', 1 + 2 + 4);
+    setValidationParamsMock(3, 'token', 1 + 2 + 4);
 
     await discountSupportTest(5, false);
   });
 
   it('should say this cafeteria supports discount and has discount rule', async () => {
     setCafeteriaMock(3, 'cafeteria', 'path', true, true, true);
-    setCafeteriaRuleMock(3, 'token', 1 + 2 + 4);
+    setValidationParamsMock(3, 'token', 1 + 2 + 4);
 
     await discountSupportTest(3, true);
   });
@@ -204,7 +216,7 @@ describe('# cafeteriaSupportsDiscount', () => {
 
 describe('# userExists', () => {
   const userTest = async function(userId, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).userExists(userId);
+    const actual = await resolve(DiscountTransactionValidator).userShouldExist(userId);
 
     expect(actual).toBe(expectation);
   };
@@ -224,7 +236,7 @@ describe('# userExists', () => {
 
 describe('# isBarcodeActive', () => {
   const activationTest = async function(userId, duration, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).isBarcodeActive(userId, duration);
+    const actual = await resolve(DiscountTransactionValidator).barcodeShouldBeActive(userId, duration);
 
     expect(actual).toBe(expectation);
   };
@@ -289,7 +301,7 @@ describe('# isBarcodeActive', () => {
 
 describe('# isFirstToday', () => {
   const firstTest = async function(userId, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).isFirstToday(userId);
+    const actual = await resolve(DiscountTransactionValidator).discountShouldBeFirstToday(userId);
 
     expect(actual).toBe(expectation);
   };
@@ -333,7 +345,7 @@ describe('# isFirstToday', () => {
 
 describe('# barcodeNotUsedRecently', () => {
   const barcodeUsedTest = async function(userId, intervalSec, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).barcodeNotUsedRecently(userId, intervalSec);
+    const actual = await resolve(DiscountTransactionValidator).barcodeShouldNotBeUsedRecently(userId, intervalSec);
 
     expect(actual).toBe(expectation);
   };
@@ -409,7 +421,7 @@ describe('# barcodeNotUsedRecently', () => {
 
 describe('# isTokenValid', () => {
   const tokenTest = async function(cafeteriaId, token, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).isTokenValid(cafeteriaId, token);
+    const actual = await resolve(DiscountTransactionValidator).tokenShouldBeValid(cafeteriaId, token);
 
     expect(actual).toBe(expectation);
   };
@@ -419,25 +431,30 @@ describe('# isTokenValid', () => {
   });
 
   it('should catch crazy cafeteriaId', async () => {
-    setCafeteriaRuleMock(1, 'abcd', 7);
+    setValidationParamsMock(1, 'abcd', 7);
 
     await tokenTest(985892, 'abcd', false);
   });
 
   it('should work', async () => {
-    setCafeteriaRuleMock(9, 'abcd', 7);
+    setValidationParamsMock(9, 'abcd', 7);
 
     await tokenTest(9, 'abcd', true);
   });
 });
 
-const setCafeteriaRuleMock = function(cafeteriaId, token, availableMealTypes) {
+const setValidationParamsMock = function(cafeteriaId, token, availableMealTypes) {
   const mock = jest.fn((id) => {
     if (id < 100 && id === cafeteriaId) {
-      return new CafeteriaDiscountRule({
+      return new CafeteriaValidationParams({
         cafeteriaId: cafeteriaId,
         token: token,
         availableMealTypes: availableMealTypes,
+        timeRanges: {
+          breakfast: '08:30-10:30',
+          lunch: '11:30-13:30',
+          dinner: '17:00-20:00',
+        },
       });
     } else {
       return null;
@@ -446,7 +463,7 @@ const setCafeteriaRuleMock = function(cafeteriaId, token, availableMealTypes) {
 
   resolve(DiscountTransactionValidator)
     .transactionRepository
-    .getCafeteriaDiscountRuleByCafeteriaId = mock;
+    .getCafeteriaValidationParamsByCafeteriaId = mock;
 
   return mock;
 };

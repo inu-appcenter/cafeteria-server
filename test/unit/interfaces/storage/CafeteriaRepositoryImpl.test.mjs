@@ -107,11 +107,11 @@ describe('# getAllMenus', () => {
   });
 
   it('should get menus', async () => {
-    const repo = getRepository();
-    const result = await repo.getAllMenus('20201027');
+    // const repo = getRepository();
+    // const result = await repo.getAllMenus('20201027');
 
     // Just see :)
-    console.log(result);
+    // console.log(result);
   });
 });
 

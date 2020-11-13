@@ -17,10 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-describe('# Integration test', () => {
-  // Write tests in real situations.
-  // Use no mock.
+import timeUtil from '../../../../lib/common/utils/timeUtil';
+import moment from 'moment';
 
-  // From login to discount.
-  it('should be done', async () => {});
+describe('# Time in range', () => {
+  it('should include start time', async () => {
+    const rangeString = '01:23-23:59';
+    const now = moment('01:23', 'hh:mm');
+
+    const result = timeUtil.isTimeInRange(rangeString, now);
+
+    expect(result).toBe(true);
+  });
+
+  it('should not include last time', async () => {
+    const rangeString = '01:23-23:59';
+    const now = moment('23:59', 'hh:mm');
+
+    const result = timeUtil.isTimeInRange(rangeString, now);
+
+    expect(result).toBe(false);
+  });
 });
