@@ -33,6 +33,7 @@
     "@hapi/inert": "^6.0.2",
     "@hapi/joi": "^17.1.0",
     "@hapi/vision": "^6.0.1",
+    "aws-sdk": "^2.791.0",
     "axios": "^0.20.0",
     "axios-cookiejar-support": "^1.0.0",
     "babel-eslint": "^10.1.0",
@@ -55,6 +56,7 @@
     "stream": "0.0.2",
     "tough-cookie": "^4.0.0",
     "winston": "^3.3.3",
+    "winston-cloudwatch": "^2.3.2",
     "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
