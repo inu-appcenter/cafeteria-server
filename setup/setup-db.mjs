@@ -33,6 +33,7 @@ async function doSetUp(force) {
   const cornerModel = sequelize.model('corner');
   const cafeteriaValidationParamsModel = sequelize.model('cafeteria_validation_params');
   const cafeteriaDiscountRuleModel = sequelize.model('cafeteria_discount_rule');
+  const parseRegexModel = sequelize.model('parse_regex');
 
   logger.info('Create cafeteria.');
 
@@ -60,6 +61,12 @@ async function doSetUp(force) {
   // Create discount rule statuses
   await cafeteriaDiscountRuleModel.bulkCreate(initial.ruleStatuses, {
     updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
+  });
+
+  logger.info('Create parse regexes');
+
+  await parseRegexModel.bulkCreate(initial.parseRegexes, {
+    updateOnDuplicate: Object.keys(parseRegexModel.rawAttributes),
   });
 
   logger.info('Close sequelize.');

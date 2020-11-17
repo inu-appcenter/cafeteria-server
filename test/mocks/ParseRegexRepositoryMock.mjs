@@ -17,33 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import TokenManager from '../../domain/security/TokenManager';
+import ParseRegexRepository from '../../lib/domain/repositories/ParseRegexrepository';
+import initial from '../../setup/initial-db-contents';
+import ParseRegex from '../../lib/domain/entities/ParseRegex';
 
-import config from '../../../config';
-
-import randToken from 'rand-token';
-import bcrypt from 'bcrypt';
-import JWT from 'jsonwebtoken';
-
-class TokenManagerImpl extends TokenManager {
-  createJwt(payload) {
-    return JWT.sign(
-      payload,
-      config.auth.key,
-      {algorithm: 'HS256', expiresIn: config.auth.expiresIn});
+class ParseRegexRepositoryMock extends ParseRegexRepository {
+  constructor() {
+    super();
   }
 
-  async createRememberMeToken() {
-    return randToken.generate(20);
-  }
-
-  async compareBcryptToken(plain, hashed) {
-    return await bcrypt.compare(plain, hashed);
-  }
-
-  async applyHash(plain) {
-    return await bcrypt.hash(plain, config.hash.saltRounds);
+  getAllExpressions() {
+    return initial.parseRegexes.map((raw) => new ParseRegex(raw));
   }
 }
 
-export default TokenManagerImpl;
+export default ParseRegexRepositoryMock;

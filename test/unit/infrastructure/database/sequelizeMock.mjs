@@ -30,9 +30,10 @@ import User from '../../../../lib/infrastructure/database/models/User';
 import Feedback from '../../../../lib/infrastructure/database/models/Feedback';
 import Notification from '../../../../lib/infrastructure/database/models/FeedbackReply';
 import Notice from '../../../../lib/infrastructure/database/models/Notice';
+import CafeteriaDiscountRule from '../../../../lib/infrastructure/database/models/CafeteriaDiscountRule';
+import ParseRegex from '../../../../lib/infrastructure/database/models/ParseRegex';
 
 import seq from 'sequelize';
-import CafeteriaDiscountRule from '../../../../lib/infrastructure/database/models/CafeteriaDiscountRule';
 const {DataTypes} = seq;
 
 const seqConfig = Object.assign({}, config.sequelize);
@@ -57,6 +58,8 @@ const models = {
   Feedback: Feedback(sequelize, DataTypes),
   Notification: Notification(sequelize, DataTypes),
   Notice: Notice(sequelize, DataTypes),
+
+  ParseRegex: ParseRegex(sequelize, DataTypes),
 };
 
 // Do associate.
