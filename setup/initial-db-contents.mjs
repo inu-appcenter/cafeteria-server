@@ -163,4 +163,35 @@ export default {
       enabled: true,
     },
   ],
+
+  parseRegexes: [
+    {
+      id: 1,
+      regex: '(?<PRICE>[0-9,]+)원/(?<CAL>[0-9,]+)[Kk]cal',
+    },
+    {
+      id: 2,
+      regex: '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal',
+    },
+    {
+      id: 3,
+      regex: '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal[\n ](?<CAL2>[0-9,]+)[Kk]cal',
+    },
+    {
+      id: 4,
+      regex: '(?<PRICE>[0-9,]+)원/(?<PRICE2>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal/(?<CAL2>[0-9,]+)[Kk]cal',
+    },
+    {
+      id: 5,
+      regex: '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal/(?<CAL2>[0-9,]+)[Kk]cal',
+    },
+    {
+      id: 6,
+      regex: '(?<PRICE>[0-9,]+)~(?<PRICE2>[0-9,]+)원[\n ].+[0-9,]+원',
+    },
+    {
+      id: 7,
+      regex: '(?<PRICE>[0-9,]+)원',
+    },
+  ],
 };

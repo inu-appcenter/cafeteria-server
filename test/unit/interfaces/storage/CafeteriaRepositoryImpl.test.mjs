@@ -23,6 +23,7 @@ import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMen
 import CafeteriaRemoteDataSource from '../../../../lib/interfaces/storage/CafeteriaRemoteDataSource';
 import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
 import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
+import ParseRegexRepositoryMock from '../../../mocks/ParseRegexRepositoryMock';
 
 describe('# getAllCafeteria', () => {
   it('should succeed', async () => {
@@ -138,7 +139,9 @@ const getRepository = function() {
   const repository = new CafeteriaRepositoryImpl({
     db: sequelize,
     remoteDataSource: new CafeteriaRemoteDataSource({coopRepo: new CoopRepositoryImpl()}),
-    menuConverter: new DirectMenuConverter(),
+    menuConverter: new DirectMenuConverter({
+      parseRegexRepository: new ParseRegexRepositoryMock(),
+    }),
   });
 
   const mockRepository = new CafeteriaRepositoryMock();
