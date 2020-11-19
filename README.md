@@ -1,4 +1,4 @@
-# INU 카페테리아 서버
+# cafeteria-server
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inu-appcenter/cafeteria-server/Node.js%20CI)](https://github.com/inu-appcenter/cafeteria-server/actions?query=workflow%3A%22Node.js+CI%22)
 [![GitHub last commit](https://img.shields.io/github/last-commit/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/commits)
@@ -8,7 +8,20 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/inu-appcenter/cafeteria-server)
 [![GitHub license](https://img.shields.io/github/license/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/blob/master/LICENSE)
 
-> 인천대학교 식단 정보 애플리케이션 INU Cafeteria (Server)
+**Cafeteria 서버**
+
+> #### Cafeteria 관련 저장소 일람
+>
+> ##### 서비스
+> - **API 서버**: [cafeteria-server](https://github.com/inu-appcenter/cafeteria-server)
+> - Android 앱: [cafeteria-android](https://github.com/inu-appcenter/cafeteria-android)
+>
+> ##### 운영 관리
+> - 관리용 API 서버: [cafeteria-management-server](https://github.com/inu-appcenter/cafeteria-management-server)
+> - 웹 콘솔: [cafeteria-management-web](https://github.com/inu-appcenter/cafeteria-management-web)
+>
+> ##### 배포 관리
+> - API 서버 배포 스크립트: [cafeteria-server-deploy](https://github.com/inu-appcenter/cafeteria-server-deploy)
 
 ## 개요
 
