@@ -8,7 +8,7 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/inu-appcenter/cafeteria-server)
 [![GitHub license](https://img.shields.io/github/license/inu-appcenter/cafeteria-server)](https://github.com/inu-appcenter/cafeteria-server/blob/master/LICENSE)
 
-**Cafeteria 서버**
+**Cafeteria API 서버**
 
 > #### Cafeteria 관련 저장소 일람
 >
