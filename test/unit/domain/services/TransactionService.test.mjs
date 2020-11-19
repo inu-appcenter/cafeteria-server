@@ -103,7 +103,7 @@ describe('# validateDiscountTransaction', () => {
 describe('# commitDiscountTransaction', () => {
   const commitTest = async function(failAt, confirm, expectation) {
     const service = getMockedService(failAt);
-    const result = await service.commitDiscountTransaction({transaction: getExampleTransaction(), confirm: confirm});
+    const result = await service.commitDiscountTransaction({transaction: getExampleTransaction(), transactionToken: 'token', confirm: confirm});
 
     expect(result).toBe(expectation);
   };
