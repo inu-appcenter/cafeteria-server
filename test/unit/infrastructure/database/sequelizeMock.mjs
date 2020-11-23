@@ -34,6 +34,7 @@ import CafeteriaDiscountRule from '../../../../lib/infrastructure/database/model
 import ParseRegex from '../../../../lib/infrastructure/database/models/ParseRegex';
 
 import seq from 'sequelize';
+import TransactionHistory from '../../../../lib/infrastructure/database/models/TransactionHistory';
 const {DataTypes} = seq;
 
 const seqConfig = Object.assign({}, config.sequelize);
@@ -60,6 +61,7 @@ const models = {
   Notice: Notice(sequelize, DataTypes),
 
   ParseRegex: ParseRegex(sequelize, DataTypes),
+  TransactionHistory: TransactionHistory(sequelize, DataTypes),
 };
 
 // Do associate.

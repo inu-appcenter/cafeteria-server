@@ -76,14 +76,6 @@ describe('# isNotMalformed', () => {
     }), false);
   });
 
-  it('should catch negative mealType', async () => {
-    await transactionTest(new DiscountTransaction({
-      mealType: -2,
-      userId: 201701562,
-      cafeteriaId: 1,
-    }), false);
-  });
-
   it('should catch null userId', async () => {
     await transactionTest(new DiscountTransaction({
       mealType: 1,

@@ -78,6 +78,10 @@ class TransactionRepositoryMock extends TransactionRepository {
   removeDiscountTransaction(transaction) {
     // do nothing
   }
+
+  leaveTransactionHistory(transactionHistory) {
+    // do nothing
+  }
 }
 
 export default TransactionRepositoryMock;

@@ -153,7 +153,7 @@ describe('# removeDiscountTransaction', () => {
     expect(result).toBe(false);
   });
 
-  it('should work', async () => {
+  it('should not work because not exists.', async () => {
     const repo = getRepository();
 
     const destroyMock = jest.fn();
@@ -166,7 +166,7 @@ describe('# removeDiscountTransaction', () => {
     });
     const result = await repo.removeDiscountTransaction(transaction);
 
-    expect(result).toBe(true);
+    expect(result).toBe(false);
     expect(destroyMock).toBeCalledTimes(1);
   });
 });
