@@ -87,17 +87,17 @@ export default {
     {id: 11, name: 'B코너 중식', display_name: 'B코너', available_at: 2, cafeteria_id: 2},
 
     // 사범대식당
-    {id: 12, name: '중식', display_name: '', available_at: 2, cafeteria_id: 3},
-    {id: 13, name: '석식', display_name: '', available_at: 4, cafeteria_id: 3},
+    {id: 12, name: '중식', display_name: '중식', available_at: 2, cafeteria_id: 3},
+    {id: 13, name: '석식', display_name: '석식', available_at: 4, cafeteria_id: 3},
 
     // 제1기숙사식당
-    {id: 14, name: '조식', display_name: '', available_at: 1, cafeteria_id: 4},
-    {id: 15, name: '중식', display_name: '', available_at: 2, cafeteria_id: 4},
-    {id: 16, name: '석식', display_name: '', available_at: 4, cafeteria_id: 4},
+    {id: 14, name: '조식', display_name: '조식', available_at: 1, cafeteria_id: 4},
+    {id: 15, name: '중식', display_name: '중식', available_at: 2, cafeteria_id: 4},
+    {id: 16, name: '석식', display_name: '석식', available_at: 4, cafeteria_id: 4},
 
     // 2호관식당
-    {id: 17, name: '중식', display_name: '', available_at: 2, cafeteria_id: 5},
-    {id: 18, name: '석식', display_name: '', available_at: 4, cafeteria_id: 5},
+    {id: 17, name: '중식', display_name: '중식', available_at: 2, cafeteria_id: 5},
+    {id: 18, name: '석식', display_name: '석식', available_at: 4, cafeteria_id: 5},
   ],
 
   validationParams: [
