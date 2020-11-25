@@ -115,7 +115,8 @@ describe('# commitDiscountTransaction', () => {
     await commitTest('userShouldExist', true, DiscountCommitResults.FAIL);
     await commitTest('barcodeShouldBeActive', true, DiscountCommitResults.FAIL);
     await commitTest('discountShouldBeFirstToday', true, DiscountCommitResults.FAIL);
-    await commitTest('barcodeShouldNotBeUsedRecently', true, DiscountCommitResults.FAIL);
+    // await commitTest('barcodeShouldNotBeUsedRecently', true, DiscountCommitResults.FAIL);
+    /** Do not check barcode time when committing! */
   });
 
   it('should catch null confirm', async () => {

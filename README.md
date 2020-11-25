@@ -106,6 +106,10 @@ app
 
 ## 업데이트 로그
 
+### 2020.11.26 v1.4.2
+- `/isBarcode`와 `/paymentSend`에 적용되는 validation rule 각각 다르게 함
+- 중복 로깅 문제 해결
+
 ### 2020.11.24 v1.4.1
 - 사용자가 없는 상태에서도 transaction commit 가능해짐
 - 바코드 태그시 모든 성공/실패 케이스에 TransactionHistory를 남김
