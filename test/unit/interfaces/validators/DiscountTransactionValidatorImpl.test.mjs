@@ -363,21 +363,21 @@ describe('# barcodeNotUsedRecently', () => {
   };
 
   it('should catch null userId', async () => {
-    await barcodeUsedTest(null, 0, false);
+    await barcodeUsedTest(null, 0, true);
   });
 
   it('should catch null intervalSec', async () => {
-    await barcodeUsedTest(201701562, null, false);
+    await barcodeUsedTest(201701562, null, true);
   });
 
   it('should catch NaN intervalSec', async () => {
-    await barcodeUsedTest(201701562, 'hi', false);
+    await barcodeUsedTest(201701562, 'hi', true);
   });
 
   it('should catch crazy userId', async () => {
     setUserStatusMock(201701562, null, null);
 
-    await barcodeUsedTest(8976546576, 15, false);
+    await barcodeUsedTest(8976546576, 15, true);
   });
 
   it('should return true: never used', async () => {
