@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -X GET "https://api.inu-cafeteria.app/paymentSend?barcode=1210209372&code=1&menu=2200000048271&payment=N" -H "accept: application/json"

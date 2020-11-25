@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -X GET "http://10.0.1.10:9999/isBarcode?barcode=1210209372&code=1&menu=2200000048271" -H "accept: application/json"

@@ -26,9 +26,11 @@ import sequelize from './lib/infrastructure/database/sequelize';
 
 import createServer from './lib/infrastructure/webserver/server';
 import getEnv from './lib/common/utils/env';
+import getArg from './lib/common/utils/args';
 
 async function start() {
   logger.info(`NODE_ENV: ${getEnv('NODE_ENV', 'not set')}`);
+  logger.info(`Logs saved in '${getArg('log-dir', 'logs')}'.`);
 
   // Instantiate all.
   try {
