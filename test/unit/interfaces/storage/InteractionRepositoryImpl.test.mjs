@@ -19,7 +19,7 @@
 
 import InteractionRepositoryImpl from '../../../../lib/interfaces/storage/InteractionRepositoryImpl';
 import sequelize from '../../infrastructure/database/sequelizeMock';
-import Feedback from '../../../../lib/domain/entities/Question';
+import Question from '../../../../lib/domain/entities/Question';
 
 describe('# getFeedbackReplies', () => {
   it('should catch null id', async () => {
@@ -36,8 +36,11 @@ describe('# getFeedbackReplies', () => {
     result.forEach((each) => {
       expect(each).toHaveProperty('id');
       expect(each).toHaveProperty('title');
+      expect(each).toHaveProperty('body');
+      expect(each).toHaveProperty('read');
       expect(each).toHaveProperty('userId');
-      expect(each).toHaveProperty('feedbackId');
+      expect(each).toHaveProperty('questionId');
+      expect(each).toHaveProperty('createdAt');
     });
   });
 });
@@ -54,15 +57,17 @@ describe('# writeFeedback', () => {
     const repo = getRepository();
 
     const createMock = jest.fn();
-    sequelize.model('feedback').create = createMock;
+    sequelize.model('question').create = createMock;
 
-    const feedback = new Feedback({
+    const question = new Question({
       id: null,
-      userAgent: 'safari',
+      deviceInfo: 'ios safari',
+      version: '4.0.0',
       content: 'blahblah',
       userId: 201701562,
+      createdAt: Date.now(),
     });
-    const result = await repo.ask(feedback);
+    const result = await repo.ask(question);
 
     expect(createMock).toBeCalledTimes(1);
     expect(result).toBe(true);
