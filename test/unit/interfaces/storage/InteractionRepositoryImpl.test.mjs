@@ -24,7 +24,7 @@ import Feedback from '../../../../lib/domain/entities/Feedback';
 describe('# getNotices', () => {
   it('should succeed', async () => {
     const repo = getRepository();
-    const result = await repo.getNotices();
+    const result = await repo.getAllNotices();
 
     result.forEach((each) => {
       expect(each).toHaveProperty('id');
