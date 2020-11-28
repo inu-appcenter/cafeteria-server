@@ -24,53 +24,47 @@ import getArg from '../lib/common/utils/args';
 
 async function doSetUp(force) {
   logger.info(`Sync sequelize(force: ${force}).`);
-
   await sequelize.sync({force});
 
   logger.info('Acquire models.');
-
   const cafeteriaModel = sequelize.model('cafeteria');
   const cornerModel = sequelize.model('corner');
   const cafeteriaValidationParamsModel = sequelize.model('cafeteria_validation_params');
   const cafeteriaDiscountRuleModel = sequelize.model('cafeteria_discount_rule');
   const parseRegexModel = sequelize.model('parse_regex');
+  const appVersionRuleModel = sequelize.model('app_version_rule');
 
   logger.info('Create cafeteria.');
-
-  // Create Cafeteria
   await cafeteriaModel.bulkCreate(initial.cafeteria, {
     updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
   });
 
   logger.info('Create corners.');
-
-  // Create corners
   await cornerModel.bulkCreate(initial.corners, {
     updateOnDuplicate: Object.keys(cornerModel.rawAttributes), // all keys need to be noted.
   });
 
   logger.info('Create validation params.');
-
-  // Create validation params
   await cafeteriaValidationParamsModel.bulkCreate(initial.validationParams, {
     updateOnDuplicate: Object.keys(cafeteriaValidationParamsModel.rawAttributes),
   });
 
   logger.info('Create discount rule statuses.');
-
-  // Create discount rule statuses
   await cafeteriaDiscountRuleModel.bulkCreate(initial.ruleStatuses, {
     updateOnDuplicate: Object.keys(cafeteriaModel.rawAttributes),
   });
 
   logger.info('Create parse regexes');
-
   await parseRegexModel.bulkCreate(initial.parseRegexes, {
     updateOnDuplicate: Object.keys(parseRegexModel.rawAttributes),
   });
 
-  logger.info('Close sequelize.');
+  logger.info('Create app version rules');
+  await appVersionRuleModel.bulkCreate(initial.appVersionRules, {
+    updateOnDuplicate: Object.keys(appVersionRuleModel.rawAttributes),
+  });
 
+  logger.info('Close sequelize.');
   await sequelize.close();
 }
 
