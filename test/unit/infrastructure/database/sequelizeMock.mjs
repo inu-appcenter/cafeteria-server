@@ -17,9 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {createSequelizeInstance, registerModels} from '../../../../lib/infrastructure/database/configurations/sequelizeHelper';
+import {createSequelizeInstance} from '../../../../lib/infrastructure/database/configurations/sequelizeHelper';
 
 const sequelize = createSequelizeInstance({mock: true});
-registerModels(sequelize);
 
 export default sequelize;
