@@ -24,14 +24,14 @@ import Question from '../../../../lib/domain/entities/Question';
 describe('# getFeedbackReplies', () => {
   it('should catch null id', async () => {
     const repo = getRepository();
-    const result = await repo.getAnswers(null);
+    const result = await repo.getAllAnswers(null);
 
     expect(result).toEqual([]);
   });
 
   it('should succeed', async () => {
     const repo = getRepository();
-    const result = await repo.getAnswers(201701562);
+    const result = await repo.getAllAnswers(201701562);
 
     result.forEach((each) => {
       expect(each).toHaveProperty('id');
