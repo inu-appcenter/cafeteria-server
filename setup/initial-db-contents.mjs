@@ -210,4 +210,46 @@ export default {
       body: '안녕하세요.',
     },
   ],
+
+  users: [
+    {
+      id: 201701562,
+    },
+  ],
+
+  questions: [
+    {
+      id: 1,
+      device_info: 'ios safari',
+      version: '4.0.0',
+      content: '처음 문의!',
+      user_id: 201701562,
+    },
+    {
+      id: 2,
+      device_info: 'ios safari',
+      version: '4.0.0',
+      content: '또 문의!',
+      user_id: 201701562,
+    },
+  ],
+
+  answers: [
+    {
+      id: 1,
+      title: '처음 답변!',
+      body: '처음 답변입니다.',
+      read: true,
+      user_id: 201701562,
+      question_id: 1,
+    },
+    {
+      id: 2,
+      title: '또 답변!',
+      body: '또 답변입니다.',
+      read: false,
+      user_id: 201701562,
+      question_id: 2,
+    },
+  ],
 };

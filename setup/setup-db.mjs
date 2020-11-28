@@ -34,6 +34,9 @@ async function doSetUp(force) {
   const parseRegexModel = sequelize.model('parse_regex');
   const appVersionRuleModel = sequelize.model('app_version_rule');
   const noticeModel = sequelize.model('notice');
+  const userModel = sequelize.model('user');
+  const questionModel = sequelize.model('question');
+  const answerModel = sequelize.model('answer');
 
   logger.info('Create cafeteria.');
   await cafeteriaModel.bulkCreate(initial.cafeteria, {
@@ -68,6 +71,21 @@ async function doSetUp(force) {
   logger.info('Create notices');
   await noticeModel.bulkCreate(initial.notices, {
     updateOnDuplicate: Object.keys(noticeModel.rawAttributes),
+  });
+
+  logger.info('Create users');
+  await userModel.bulkCreate(initial.users, {
+    updateOnDuplicate: Object.keys(userModel.rawAttributes),
+  });
+
+  logger.info('Create questions');
+  await questionModel.bulkCreate(initial.questions, {
+    updateOnDuplicate: Object.keys(questionModel.rawAttributes),
+  });
+
+  logger.info('Create answers');
+  await answerModel.bulkCreate(initial.answers, {
+    updateOnDuplicate: Object.keys(answerModel.rawAttributes),
   });
 
   logger.info('Close sequelize.');
