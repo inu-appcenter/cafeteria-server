@@ -213,7 +213,7 @@ export default {
 
   users: [
     {
-      id: 201701562,
+      id: 202099999,
     },
   ],
 
@@ -223,14 +223,14 @@ export default {
       device_info: 'ios safari',
       version: '4.0.0',
       content: '처음 문의!',
-      user_id: 201701562,
+      user_id: 202099999,
     },
     {
       id: 2,
       device_info: 'ios safari',
       version: '4.0.0',
       content: '또 문의!',
-      user_id: 201701562,
+      user_id: 202099999,
     },
   ],
 
@@ -240,7 +240,7 @@ export default {
       title: '처음 답변!',
       body: '처음 답변입니다.',
       read: true,
-      user_id: 201701562,
+      user_id: 202099999,
       question_id: 1,
     },
     {
@@ -248,7 +248,7 @@ export default {
       title: '또 답변!',
       body: '또 답변입니다.',
       read: false,
-      user_id: 201701562,
+      user_id: 202099999,
       question_id: 2,
     },
   ],
