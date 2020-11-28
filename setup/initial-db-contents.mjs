@@ -194,4 +194,12 @@ export default {
       regex: '(?<PRICE>[0-9,]+)원',
     },
   ],
+
+  appVersionRules: [
+    {
+      id: 1,
+      os: 'android',
+      required_minimum_version: '4.0.0',
+    },
+  ],
 };
