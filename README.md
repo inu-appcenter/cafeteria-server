@@ -84,9 +84,7 @@ app
 
 ## API
 
-- [API 문서](/docs/API.md)
-
-- [API 테스트](https://api.inu-cafeteria.app/documentation)
+- [API 문서 및 테스트](https://api.inu-cafeteria.app/documentation)
 
 ## 비즈니스 룰
 
