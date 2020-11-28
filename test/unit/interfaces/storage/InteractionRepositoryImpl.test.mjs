@@ -19,7 +19,7 @@
 
 import InteractionRepositoryImpl from '../../../../lib/interfaces/storage/InteractionRepositoryImpl';
 import sequelize from '../../infrastructure/database/sequelizeMock';
-import Feedback from '../../../../lib/domain/entities/Feedback';
+import Feedback from '../../../../lib/domain/entities/Question';
 
 describe('# getFeedbackReplies', () => {
   it('should catch null id', async () => {
