@@ -33,6 +33,7 @@ async function doSetUp(force) {
   const cafeteriaDiscountRuleModel = sequelize.model('cafeteria_discount_rule');
   const parseRegexModel = sequelize.model('parse_regex');
   const appVersionRuleModel = sequelize.model('app_version_rule');
+  const noticeModel = sequelize.model('notice');
 
   logger.info('Create cafeteria.');
   await cafeteriaModel.bulkCreate(initial.cafeteria, {
@@ -62,6 +63,11 @@ async function doSetUp(force) {
   logger.info('Create app version rules');
   await appVersionRuleModel.bulkCreate(initial.appVersionRules, {
     updateOnDuplicate: Object.keys(appVersionRuleModel.rawAttributes),
+  });
+
+  logger.info('Create notices');
+  await noticeModel.bulkCreate(initial.notices, {
+    updateOnDuplicate: Object.keys(noticeModel.rawAttributes),
   });
 
   logger.info('Close sequelize.');
