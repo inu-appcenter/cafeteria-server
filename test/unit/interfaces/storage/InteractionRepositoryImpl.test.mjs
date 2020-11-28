@@ -21,19 +21,6 @@ import InteractionRepositoryImpl from '../../../../lib/interfaces/storage/Intera
 import sequelize from '../../infrastructure/database/sequelizeMock';
 import Feedback from '../../../../lib/domain/entities/Feedback';
 
-describe('# getNotices', () => {
-  it('should succeed', async () => {
-    const repo = getRepository();
-    const result = await repo.getNotices();
-
-    result.forEach((each) => {
-      expect(each).toHaveProperty('id');
-      expect(each).toHaveProperty('title');
-      expect(each).toHaveProperty('body');
-    });
-  });
-});
-
 describe('# getFeedbackReplies', () => {
   it('should catch null id', async () => {
     const repo = getRepository();

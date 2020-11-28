@@ -202,4 +202,12 @@ export default {
       required_minimum_version: '4.0.0',
     },
   ],
+
+  notices: [
+    {
+      id: 1,
+      title: '카페테리아 4.0.0',
+      body: '안녕하세요.',
+    },
+  ],
 };
