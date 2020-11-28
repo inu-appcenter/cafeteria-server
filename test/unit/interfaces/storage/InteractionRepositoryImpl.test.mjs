@@ -24,14 +24,14 @@ import Feedback from '../../../../lib/domain/entities/Question';
 describe('# getFeedbackReplies', () => {
   it('should catch null id', async () => {
     const repo = getRepository();
-    const result = await repo.getFeedbackReplies(null);
+    const result = await repo.getAnswers(null);
 
     expect(result).toEqual([]);
   });
 
   it('should succeed', async () => {
     const repo = getRepository();
-    const result = await repo.getFeedbackReplies(201701562);
+    const result = await repo.getAnswers(201701562);
 
     result.forEach((each) => {
       expect(each).toHaveProperty('id');
@@ -45,7 +45,7 @@ describe('# getFeedbackReplies', () => {
 describe('# writeFeedback', () => {
   it('should catch null feedback', async () => {
     const repo = getRepository();
-    const result = await repo.writeFeedback(null);
+    const result = await repo.ask(null);
 
     expect(result).toEqual(false);
   });
@@ -62,7 +62,7 @@ describe('# writeFeedback', () => {
       content: 'blahblah',
       userId: 201701562,
     });
-    const result = await repo.writeFeedback(feedback);
+    const result = await repo.ask(feedback);
 
     expect(createMock).toBeCalledTimes(1);
     expect(result).toBe(true);
