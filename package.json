@@ -4,11 +4,9 @@
   "version": "1.5.1",
   "description": "Server side application for INU Cafeteria.",
   "scripts": {
-
     "test": "jest --coverage test/unit",
     "setupdb": "node -r esm setup/setup-db.mjs",
     "start": "node -r esm index.mjs"
-
   },
   "repository": {
     "type": "git",
@@ -49,6 +47,7 @@
     "moment": "^2.27.0",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.1",
+    "nodemailer": "^6.4.16",
     "qs": "^6.9.4",
     "rand-token": "^0.4.0",
     "sequelize": "^5.22.3",
@@ -60,6 +59,7 @@
     "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
+    "@types/tough-cookie": "^4.0.0",
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "eslint": "^6.8.0",

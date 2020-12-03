@@ -117,4 +117,17 @@ export default {
       2: 3, /* 사범대식당 */
     },
   },
+
+  mail: {
+    sender: '카페테리아 <cs-noreply@inu-cafeteria.app>',
+    auth: {
+      user: getEnv('SMTP_USERNAME'),
+      pass: getEnv('SMTP_PASSWORD'),
+    },
+
+    addresses: {
+      admin: 'potados99@gmail.com',
+    },
+  },
+
 };
