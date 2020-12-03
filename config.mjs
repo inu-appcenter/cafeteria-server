@@ -130,4 +130,8 @@ export default {
     },
   },
 
+  question: {
+    lengthLimit: 500,
+  },
+
 };
