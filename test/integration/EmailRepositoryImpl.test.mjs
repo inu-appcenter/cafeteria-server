@@ -17,16 +17,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import EmailRepository from '../../domain/repositories/EmailRepository';
+import EmailRepositoryImpl from '../../lib/interfaces/storage/EmailRepositoryImpl';
+import EmailParams from '../../lib/domain/entities/EmailParams';
+import config from '../../config';
 
-class EmailRepositoryImpl extends EmailRepository {
-  constructor() {
-    super();
-  }
+describe('# Send email', () => {
+  it('should work', async () => {
+    const repo = new EmailRepositoryImpl();
 
-  sendEmail(params) {
-    super.sendEmail(params);
-  }
-}
-
-export default EmailRepositoryImpl;
+    // You need to set SMTP_USERNAME and SMTP_PASSWORD in env.
+    await repo.sendEmail(new EmailParams({
+      from: config.mail.sender,
+      to: config.mail.addresses.admin,
+      title: '안녕하세요!',
+      body: '작동해요!!!!!!!!!!!',
+    }));
+  });
+});
