@@ -132,7 +132,7 @@ describe('# getMenusByCornerId', () => {
       expect(corner).toHaveProperty('foods');
       expect(corner).toHaveProperty('cornerId');
     });
-  });
+  }, 10000);
 });
 
 const getRepository = function() {
