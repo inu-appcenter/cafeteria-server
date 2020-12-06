@@ -17,13 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CafeteriaRepositoryImpl from '../../../../lib/interfaces/storage/CafeteriaRepositoryImpl';
-import sequelize from '../../infrastructure/database/sequelizeMock';
-import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
-import CafeteriaRemoteDataSource from '../../../../lib/interfaces/storage/CafeteriaRemoteDataSource';
-import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
-import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
-import ParseRegexRepositoryMock from '../../../mocks/ParseRegexRepositoryMock';
+import CafeteriaRepositoryImpl from '../../lib/interfaces/storage/CafeteriaRepositoryImpl';
+import sequelize from '../unit/infrastructure/database/sequelizeMock';
+import DirectMenuConverter from '../../lib/interfaces/converters/DirectMenuConverter';
+import CafeteriaRemoteDataSource from '../../lib/interfaces/storage/CafeteriaRemoteDataSource';
+import CoopRepositoryImpl from '../../lib/interfaces/storage/CoopRepositoryImpl';
+import CafeteriaRepositoryMock from '../mocks/CafeteriaRepositoryMock';
+import ParseRegexRepositoryMock from '../mocks/ParseRegexRepositoryMock';
 
 describe('# getAllMenus', () => {
   it('should get menus', async () => {
