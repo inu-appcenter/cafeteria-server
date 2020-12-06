@@ -102,7 +102,7 @@ describe('# Login', () => {
       'barcode': 'barcode',
     });
     expect(response.cookieResult).toEqual({
-      'key': 'token',
+      'key': 'cafeteria-server-session-token',
       'val': 'abcde',
     });
     expect(response.headerResult).toEqual({

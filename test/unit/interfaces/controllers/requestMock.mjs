@@ -22,6 +22,9 @@ export default {
   getRequest({payload, params, query, credentials}) {
     return {
       payload: payload,
+      headers: {
+        'user-agent': 'Jest test',
+      },
       params: params,
       query: query,
       auth: {
