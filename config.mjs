@@ -45,13 +45,14 @@ export default {
   auth: {
     key: getEnv('JWT_SECRET_KEY', 'whatever'),
     expiresIn: '24h',
-    cookie_options: {
+    cookieOptions: {
       encoding: 'none', // we already used JWT to encode
       isSecure: false, // https only?
       isHttpOnly: true, // prevent client alteration
       clearInvalid: true, // remove invalid cookies
       strictHeader: true, // don't allow violations of RFC 6265
     },
+    cookieKey: 'cafeteria-server-session-token',
   },
 
   aws: {
