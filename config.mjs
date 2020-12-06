@@ -82,8 +82,12 @@ export default {
   },
 
   log: {
-    ops: {interval: 60 * 60 * 1000},
+    ops: {interval: 60 * 60 * 1000}, /* an hour, in millisecond */
     filepath: (name) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
+    securedPayloads: [
+      'password',
+      'token',
+    ],
   },
 
   menu: {
