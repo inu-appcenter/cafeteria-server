@@ -19,6 +19,7 @@
 
 import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
 import config from '../../../../config';
+import moment from 'moment';
 
 describe('# visit coop', () => {
   it('should succeed', async () => {
@@ -31,3 +32,69 @@ describe('# visit coop', () => {
     expect(response.includes('자동등록방지를 위해 보안절차를 거치고 있습니다.')).toBe(false);
   });
 });
+
+describe('# get week diff', () => {
+  it('finding 1', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(-1);
+  });
+
+  it('finding 2', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201205' /* Sat */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(-1);
+  });
+
+  it('finding 3', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201130' /* Mon */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(-1);
+  });
+
+  it('finding 4', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201207' /* Mon */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 5', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201209' /* Wed */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 6', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201212' /* Sat */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 6', async () => {
+    const today = moment('20201206' /* Sun */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201213' /* Sun */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+});
+

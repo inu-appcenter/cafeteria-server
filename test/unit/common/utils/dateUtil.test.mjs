@@ -18,7 +18,6 @@
  */
 
 import dateUtil from '../../../../lib/common/utils/dateUtil';
-import moment from 'moment';
 
 describe('# Format', () => {
   it('should catch null date', async () => {
@@ -128,27 +127,5 @@ describe('# getWeek', () => {
     const anotherWeek = dateUtil.getWeek(new Date('2020-10-26'/* Monday */), 1);
 
     expect(anotherWeek - aWeek).toBe(1);
-  });
-});
-
-describe('# getWeekDiff', () => {
-  it('should get week diff when day reached Sunday(next week)', async () => {
-    const theDay = moment('20201202' /* Monday */, 'YYYYMMDD').toDate();
-    const today = moment('20201206' /* Sunday */, 'YYYYMMDD').toDate();
-
-    // Week starts from Monday, so dowOffset is 1.
-    const diff = dateUtil.getWeekDiff(theDay, today);
-
-    expect(diff).toBe(-1);
-  });
-
-  it('should get week diff 0 when day reached Saturday(not yet next week)', async () => {
-    const theDay = moment('20201202' /* Monday */, 'YYYYMMDD').toDate();
-    const today = moment('20201205' /* Saturday */, 'YYYYMMDD').toDate();
-
-    // Week starts from Monday, so dowOffset is 1.
-    const diff = dateUtil.getWeekDiff(theDay, today);
-
-    expect(diff).toBe(0);
   });
 });

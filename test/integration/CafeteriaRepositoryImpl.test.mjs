@@ -28,7 +28,7 @@ import ParseRegexRepositoryMock from '../mocks/ParseRegexRepositoryMock';
 describe('# getAllMenus', () => {
   it('should get menus', async () => {
     const repo = getRepository();
-    const result = await repo.getAllMenus('20201202');
+    const result = await repo.getAllMenus('20201206');
 
     // Just see :)
     console.log(result);
