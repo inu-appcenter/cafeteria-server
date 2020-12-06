@@ -45,13 +45,14 @@ export default {
   auth: {
     key: getEnv('JWT_SECRET_KEY', 'whatever'),
     expiresIn: '24h',
-    cookie_options: {
+    cookieOptions: {
       encoding: 'none', // we already used JWT to encode
       isSecure: false, // https only?
       isHttpOnly: true, // prevent client alteration
       clearInvalid: true, // remove invalid cookies
       strictHeader: true, // don't allow violations of RFC 6265
     },
+    cookieKey: 'cafeteria-server-session-token',
   },
 
   aws: {
@@ -82,8 +83,12 @@ export default {
   },
 
   log: {
-    ops: {interval: 60 * 60 * 1000},
+    ops: {interval: 60 * 60 * 1000}, /* an hour, in millisecond */
     filepath: (name) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
+    securedPayloads: [
+      'password',
+      'token',
+    ],
   },
 
   menu: {
