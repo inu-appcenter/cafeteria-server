@@ -99,7 +99,7 @@ export default {
     weekArgName: 'jun',
     fetchIntervalMillis: 3600000, // One hour
     parser: {
-      menuSplitterRegex: '-{8,}',
+      menuSplitterRegex: '-{8,}|\n{3,}', // (8 or more of -), or (3 or more of newline).
     },
   },
 

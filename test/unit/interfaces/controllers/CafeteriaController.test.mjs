@@ -187,7 +187,7 @@ describe('# Get menus', () => {
     expect(response).toBeInstanceOf(Boom.Boom);
   });
 
-  it('shoult get empty menus', async () => {
+  it('should get empty menus', async () => {
     const response = await createMockedResponse([]);
 
     expect(response).toEqual([]);
@@ -196,19 +196,19 @@ describe('# Get menus', () => {
   it('should get an array of a single menu', async () => {
     const response = await createMockedResponse([
       new Menu({
-        foods: 'foods',
+        foods: ['foods'],
         price: 500,
         calorie: 500,
         cornerId: 1,
       }),
-    ]);
+    ], {}, {split: true});
 
     expect(response).toEqual([
       {
+        'foods': ['foods'],
+        'price': 500,
         'calorie': 500,
         'corner-id': 1,
-        'foods': 'foods',
-        'price': 500,
       },
     ]);
   });
