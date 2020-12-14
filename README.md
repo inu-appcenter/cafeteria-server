@@ -192,10 +192,3 @@ app
 ## 라이센스
 
 소스 코드에는 GPLv3 라이센스가 적용됩니다. 라이센스는 [이곳](/LICENSE)에서 확인하실 수 있습니다.
-
-## 스페셜 땡스 투
-
-- 좋은 [레퍼런스](https://github.com/jbuget/nodejs-clean-architecture-app) 제공해주신 [Jérémy Buget](https://github.com/jbuget)님
-- 바쁘신 와중에도 큰 도움 주신 [doukong](https://github.com/doukong)님, [Gowoon Jung](https://github.com/GowoonJ)님
-- 먼저 왔다 가신 jaemoon님, [Minjae Son](https://github.com/bungabear)님, jongwook님
-
