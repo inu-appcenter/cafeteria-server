@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import moment from 'moment';
+
 /**
  * These are most latest in November 2020.
  */
@@ -244,6 +246,40 @@ export default {
       read: true,
       user_id: 202099999,
       question_id: 1,
+    },
+  ],
+
+  orders: [
+    {
+      number: 3306,
+      cafeteria_id: 1,
+      fcm_token: 'potados',
+      createdAt: moment().subtract(32, 'hours').date(),
+    },
+    {
+      number: 3308,
+      cafeteria_id: 1,
+      fcm_token: 'potados',
+      createdAt: moment().subtract(32, 'hours').toDate(),
+    },
+
+    {
+      number: 4705,
+      cafeteria_id: 1,
+      fcm_token: 'mooo',
+      createdAt: moment().subtract(3, 'minutes').toDate(),
+    },
+    {
+      number: 4706,
+      cafeteria_id: 1,
+      fcm_token: 'potados',
+      createdAt: moment().subtract(2, 'minutes').toDate(),
+    },
+    {
+      number: 4708,
+      cafeteria_id: 1,
+      fcm_token: 'mooo',
+      createdAt: moment().subtract(1, 'minutes').toDate(),
     },
   ],
 };

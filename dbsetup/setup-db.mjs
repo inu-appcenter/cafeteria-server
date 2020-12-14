@@ -1,3 +1,7 @@
+import logger from '../lib/common/utils/logger.mjs';
+import sequelize from '../lib/infrastructure/database/sequelize.mjs';
+import initial from './initial-db-contents.mjs';
+
 /**
  * This file is part of INU Cafeteria.
  *
@@ -17,12 +21,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import sequelize from '../lib/infrastructure/database/sequelize';
-import initial from './initial-db-contents';
-import logger from '../lib/common/utils/logger';
-import getArg from '../lib/common/utils/args';
-
-async function doSetUp(force) {
+export default async function setupDatabase(force) {
   logger.info(`Sync sequelize(force: ${force}).`);
   await sequelize.sync({force});
 
@@ -37,6 +36,7 @@ async function doSetUp(force) {
   const userModel = sequelize.model('user');
   const questionModel = sequelize.model('question');
   const answerModel = sequelize.model('answer');
+  const orderModel = sequelize.model('order');
 
   logger.info('Create cafeteria.');
   await cafeteriaModel.bulkCreate(initial.cafeteria, {
@@ -88,10 +88,12 @@ async function doSetUp(force) {
     updateOnDuplicate: Object.keys(answerModel.rawAttributes),
   });
 
+  logger.info('Create orders');
+  await orderModel.bulkCreate(initial.orders, {
+    updateOnDuplicate: Object.keys(orderModel.rawAttributes),
+  });
+
   logger.info('Close sequelize.');
   await sequelize.close();
 }
 
-doSetUp(getArg('force', false)).then(() => {
-  console.log('Setup finished.');
-});

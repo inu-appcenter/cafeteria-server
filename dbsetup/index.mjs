@@ -17,18 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ParseRegexRepository from '../../lib/domain/repositories/ParseRegexrepository';
-import initial from '../../dbsetup/initial-db-contents';
-import ParseRegex from '../../lib/domain/entities/ParseRegex';
+import getArg from '../lib/common/utils/args';
+import setupDatabase from './setup-db.mjs';
 
-class ParseRegexRepositoryMock extends ParseRegexRepository {
-  constructor() {
-    super();
-  }
-
-  getAllExpressions() {
-    return initial.parseRegexes.map((raw) => new ParseRegex(raw));
-  }
-}
-
-export default ParseRegexRepositoryMock;
+setupDatabase(getArg('force', false)).then(() => {
+  console.log('Setup finished.');
+});

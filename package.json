@@ -5,7 +5,7 @@
   "description": "카페테리아 API 서버입니다.",
   "scripts": {
     "test": "jest --coverage test/unit",
-    "setupdb": "node -r esm setup/setup-db.mjs",
+    "setupdb": "node -r esm dbsetup/index.mjs",
     "start": "node -r esm index.mjs"
   },
   "repository": {
