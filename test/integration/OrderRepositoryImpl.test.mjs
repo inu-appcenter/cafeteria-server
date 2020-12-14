@@ -17,9 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import OrderRepositoryImpl from '../../../../lib/interfaces/storage/OrderRepositoryImpl.mjs';
-import {createSequelizeInstance} from '../../../../lib/infrastructure/database/configurations/sequelizeHelper.mjs';
-import setupDatabase from '../../../../dbsetup/setup-db.mjs';
+import OrderRepositoryImpl from '../../lib/interfaces/storage/OrderRepositoryImpl.mjs';
+import {createSequelizeInstance} from '../../lib/infrastructure/database/configurations/sequelizeHelper.mjs';
+import setupDatabase from '../../dbsetup/setup-db.mjs';
 
 beforeAll(async () => {
   await setupDatabase(true);
