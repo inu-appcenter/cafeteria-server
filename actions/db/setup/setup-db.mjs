@@ -30,7 +30,7 @@ import initial from '../initial-db-contents.mjs';
  *              Alters tables to fit models. Not recommended for production use. Deletes data in columns that were removed or had their type changed in the model.
  * @return {Promise<void>}
  */
-export default async function setupDatabase(force, alter) {
+export default async function setupDatabase(force=false, alter=false) {
   logger.info(`Sync sequelize(force: ${force}, alter: ${alter}).`);
   await sequelize.sync({force, alter});
 

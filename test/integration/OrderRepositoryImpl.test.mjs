@@ -19,10 +19,11 @@
 
 import OrderRepositoryImpl from '../../lib/interfaces/storage/OrderRepositoryImpl.mjs';
 import {createSequelizeInstance} from '../../lib/infrastructure/database/configurations/sequelizeHelper.mjs';
-import setupDatabase from '../../dbsetup/setup-db.mjs';
+import initial from '../../actions/db/initial-db-contents.mjs';
+import sequelize from '../../lib/infrastructure/database/sequelize.mjs';
 
 beforeAll(async () => {
-  await setupDatabase(true);
+  await setupOrderRecordsInDb();
 });
 
 describe('# Get orders by fcm token', () => {
@@ -48,3 +49,13 @@ describe('# Get orders by fcm token', () => {
     expect(orders.length).toBe(2);
   });
 });
+
+async function setupOrderRecordsInDb() {
+  await sequelize.sync();
+  const orderModel = sequelize.model('order');
+
+  await orderModel.destroy({where: {}});
+  await orderModel.bulkCreate(initial.orders, {
+    updateOnDuplicate: Object.keys(orderModel.rawAttributes),
+  });
+}
