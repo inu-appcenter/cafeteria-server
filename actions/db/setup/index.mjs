@@ -17,9 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import getArg from '../lib/common/utils/args';
+import logger from '../../../lib/common/utils/logger.mjs';
+import getArg from '../../../lib/common/utils/args.mjs';
 import setupDatabase from './setup-db.mjs';
 
-setupDatabase(getArg('force', false)).then(() => {
-  console.log('Setup finished.');
+setupDatabase(
+  getArg('force', false),
+  getArg('alter', false),
+).then(() => {
+  logger.info('Setup finished.');
 });

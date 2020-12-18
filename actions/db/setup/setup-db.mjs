@@ -17,10 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import sequelize from '../lib/infrastructure/database/sequelize';
-import initial from './initial-db-contents';
-import logger from '../lib/common/utils/logger';
-import getArg from '../lib/common/utils/args';
+import logger from '../../../lib/common/utils/logger.mjs';
+import sequelize from '../../../lib/infrastructure/database/sequelize.mjs';
+import initial from '../initial-db-contents.mjs';
 
 /**
  * Sync & put initial rows to DB.
@@ -31,7 +30,7 @@ import getArg from '../lib/common/utils/args';
  *              Alters tables to fit models. Not recommended for production use. Deletes data in columns that were removed or had their type changed in the model.
  * @return {Promise<void>}
  */
-async function doSetUp(force, alter) {
+export default async function setupDatabase(force, alter) {
   logger.info(`Sync sequelize(force: ${force}, alter: ${alter}).`);
   await sequelize.sync({force, alter});
 
@@ -106,10 +105,3 @@ async function doSetUp(force, alter) {
   logger.info('Close sequelize.');
   await sequelize.close();
 }
-
-doSetUp(
-  getArg('force', false),
-  getArg('alter', false),
-).then(() => {
-  logger.info('Setup finished.');
-});
