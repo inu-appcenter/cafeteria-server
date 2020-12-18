@@ -1,7 +1,3 @@
-import logger from '../lib/common/utils/logger.mjs';
-import sequelize from '../lib/infrastructure/database/sequelize.mjs';
-import initial from './initial-db-contents.mjs';
-
 /**
  * This file is part of INU Cafeteria.
  *
@@ -21,9 +17,23 @@ import initial from './initial-db-contents.mjs';
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default async function setupDatabase(force) {
-  logger.info(`Sync sequelize(force: ${force}).`);
-  await sequelize.sync({force});
+import sequelize from '../lib/infrastructure/database/sequelize';
+import initial from './initial-db-contents';
+import logger from '../lib/common/utils/logger';
+import getArg from '../lib/common/utils/args';
+
+/**
+ * Sync & put initial rows to DB.
+ * Rows will be updated on duplicate.
+ *
+ * @param force If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
+ * @param alter If alter is true, each DAO will do ALTER TABLE ... CHANGE ...
+ *              Alters tables to fit models. Not recommended for production use. Deletes data in columns that were removed or had their type changed in the model.
+ * @return {Promise<void>}
+ */
+async function doSetUp(force, alter) {
+  logger.info(`Sync sequelize(force: ${force}, alter: ${alter}).`);
+  await sequelize.sync({force, alter});
 
   logger.info('Acquire models.');
   const cafeteriaModel = sequelize.model('cafeteria');
@@ -97,3 +107,9 @@ export default async function setupDatabase(force) {
   await sequelize.close();
 }
 
+doSetUp(
+  getArg('force', false),
+  getArg('alter', false),
+).then(() => {
+  logger.info('Setup finished.');
+});

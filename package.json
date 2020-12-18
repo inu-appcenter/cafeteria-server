@@ -1,11 +1,12 @@
 {
   "name": "cafeteria-server",
   "main": "./index.mjs",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "카페테리아 API 서버입니다.",
   "scripts": {
     "test": "jest --coverage test/unit",
-    "setupdb": "node -r esm dbsetup/index.mjs",
+    "syncdb": "node -r esm setup/sync-db.mjs",
+    "setupdb": "node -r esm setup/setup-db.mjs",
     "start": "node -r esm index.mjs"
   },
   "repository": {
@@ -40,7 +41,6 @@
     "blipp": "^4.0.1",
     "cheerio": "^1.0.0-rc.3",
     "esm": "^3.2.25",
-    "firebase-admin": "^9.4.2",
     "hapi-auth-jwt2": "^9.0.1",
     "hapi-swagger": "^12.1.1",
     "jsonwebtoken": "^8.5.1",

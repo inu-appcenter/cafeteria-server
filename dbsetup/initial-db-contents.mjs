@@ -195,6 +195,10 @@ export default {
       id: 7,
       regex: '(?<PRICE>[0-9,]+)원',
     },
+    {
+      id: 8,
+      regex: '(?<PRICE>[0-9,]+)원(?<CAL>[0-9,]+)kcal',
+    },
   ],
 
   appVersionRules: [
