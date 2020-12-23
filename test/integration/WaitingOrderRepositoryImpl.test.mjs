@@ -21,18 +21,14 @@ import WaitingOrderRepositoryImpl from '../../lib/interfaces/storage/WaitingOrde
 import {createSequelizeInstance} from '../../lib/infrastructure/database/configurations/sequelizeHelper.mjs';
 import initial from '../../actions/db/initial-db-contents.mjs';
 import sequelize from '../../lib/infrastructure/database/sequelize.mjs';
+import WaitingOrder from '../../lib/domain/entities/WaitingOrder.mjs';
+import WaitingOrderMutationResult from '../../lib/domain/constants/WaitingOrderMutationResult.mjs';
 
 beforeAll(async () => {
   await setupOrderRecordsInDb();
 });
 
 describe('# Get orders by device identifier', () => {
-  function getRepository() {
-    const sequelize = createSequelizeInstance({mock: false});
-
-    return new WaitingOrderRepositoryImpl({db: sequelize});
-  }
-
   it('should fetch current(24h) order with device identifier', async () => {
     const repo = getRepository();
 
@@ -50,12 +46,28 @@ describe('# Get orders by device identifier', () => {
   });
 });
 
+describe('# Add waiting order', () => {
+  it('should block duplicated order', async () => {
+    const repo = getRepository();
+
+    const result = await repo.addWaitingOrder(new WaitingOrder(initial.orders[0]));
+
+    expect(result).toBe(WaitingOrderMutationResult.WRONG_PARAM);
+  });
+});
+
 async function setupOrderRecordsInDb() {
   await sequelize.sync();
-  const orderModel = sequelize.model('order');
+  const orderModel = sequelize.model('waiting_order');
 
   await orderModel.destroy({where: {}});
   await orderModel.bulkCreate(initial.orders, {
     updateOnDuplicate: Object.keys(orderModel.rawAttributes),
   });
+}
+
+function getRepository() {
+  const sequelize = createSequelizeInstance({mock: false});
+
+  return new WaitingOrderRepositoryImpl({db: sequelize});
 }
