@@ -257,32 +257,32 @@ export default {
     {
       number: 3306,
       cafeteria_id: 1,
-      fcm_token: 'potados',
+      device_identifier: 'potados',
       createdAt: moment().subtract(32, 'hours').date(),
     },
     {
       number: 3308,
       cafeteria_id: 1,
-      fcm_token: 'potados',
+      device_identifier: 'potados',
       createdAt: moment().subtract(32, 'hours').toDate(),
     },
 
     {
       number: 4705,
       cafeteria_id: 1,
-      fcm_token: 'mooo',
+      device_identifier: 'mooo',
       createdAt: moment().subtract(3, 'minutes').toDate(),
     },
     {
       number: 4706,
       cafeteria_id: 1,
-      fcm_token: 'potados',
+      device_identifier: 'potados',
       createdAt: moment().subtract(2, 'minutes').toDate(),
     },
     {
       number: 4708,
       cafeteria_id: 1,
-      fcm_token: 'mooo',
+      device_identifier: 'mooo',
       createdAt: moment().subtract(1, 'minutes').toDate(),
     },
   ],

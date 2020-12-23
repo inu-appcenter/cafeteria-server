@@ -65,6 +65,7 @@ app
     └ interfaces                    → 인터페이스 어댑터 레이어 (애플리케이션 비즈니스 규칙과 외부 레이어를 연결)
        └ controllers                → Hapi.js 라우터의 handler
        └ converter                  → 외부 모델을 도메인 모델로 바꾸어 주는 객체
+       └ legacy                     → 외부 레거시 API 지원을 위한 변환
        └ security                   → security 구현
        └ serializers                → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체
        └ services                   → services 구현

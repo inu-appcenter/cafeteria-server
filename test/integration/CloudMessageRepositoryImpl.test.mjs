@@ -27,7 +27,7 @@ describe('# Send push notification', () => {
     const sent = await repo.sendOrderReadyMessage(new Order({
       number: '9999',
       cafeteriaId: '1',
-      fcmToken: 'caa4-JIZS1-8C9d8npwQhH:APA91bFN_UjsyiKvyacO95KE5MwUbPPpm2tsuH_mK9UKR3aWbFDZKe7ZNgWXwjodpVbrDHrYpELILu93lod52Q7fHGBPPyJlcl7od7evjJ5SKBsEcXLjJYGnf7W78yJnA9Er9S6DpOV4',
+      deviceIdentifier: 'caa4-JIZS1-8C9d8npwQhH:APA91bFN_UjsyiKvyacO95KE5MwUbPPpm2tsuH_mK9UKR3aWbFDZKe7ZNgWXwjodpVbrDHrYpELILu93lod52Q7fHGBPPyJlcl7od7evjJ5SKBsEcXLjJYGnf7W78yJnA9Er9S6DpOV4',
     }));
 
     expect(sent).toBeTruthy();

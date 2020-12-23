@@ -26,25 +26,25 @@ beforeAll(async () => {
   await setupOrderRecordsInDb();
 });
 
-describe('# Get orders by fcm token', () => {
+describe('# Get orders by device identifier', () => {
   function getRepository() {
     const sequelize = createSequelizeInstance({mock: false});
 
     return new OrderRepositoryImpl({db: sequelize});
   }
 
-  it('should fetch current(24h) order with fcm token', async () => {
+  it('should fetch current(24h) order with device identifier', async () => {
     const repo = getRepository();
 
-    const orders = await repo.getOrdersByFcmToken('potados');
+    const orders = await repo.getOrdersByDeviceIdentifier('potados');
 
     expect(orders.length).toBe(1);
   });
 
-  it('should fetch current(24h) order with fcm token (2)', async () => {
+  it('should fetch current(24h) order with device identifier (2)', async () => {
     const repo = getRepository();
 
-    const orders = await repo.getOrdersByFcmToken('mooo');
+    const orders = await repo.getOrdersByDeviceIdentifier('mooo');
 
     expect(orders.length).toBe(2);
   });
