@@ -116,11 +116,7 @@ export default {
   transaction: {
     barcodeLifetimeMinutes: 10,
     barcodeTagMinimumIntervalSecs: 15,
-    oldApiIdToCafeteriaId: {
-      /* Code used by old APIs : Newly given cafeteria id */
-      1: 4, /* 제1 기숙사식당 */
-      2: 3, /* 사범대식당 */
-    },
+
   },
 
   mail: {
@@ -137,6 +133,22 @@ export default {
 
   question: {
     lengthLimit: 500,
+  },
+
+  legacy: {
+    isBarcode: {
+      cafeCodeToCafeteriaId: {
+        /* Cafe code : Newly given cafeteria id */
+        1: 4, /* 제1 기숙사식당 */
+        2: 3, /* 사범대식당 */
+      },
+    },
+    pushNumber: {
+      cafeCodeToCafeteriaId: {
+        /* Cafe code : Newly given cafeteria id */
+        1: 1, /* 학생식당 */
+      },
+    },
   },
 
 };
