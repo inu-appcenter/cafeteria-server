@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import OrderRepositoryImpl from '../../lib/interfaces/storage/OrderRepositoryImpl.mjs';
+import WaitingOrderRepositoryImpl from '../../lib/interfaces/storage/WaitingOrderRepositoryImpl.mjs';
 import {createSequelizeInstance} from '../../lib/infrastructure/database/configurations/sequelizeHelper.mjs';
 import initial from '../../actions/db/initial-db-contents.mjs';
 import sequelize from '../../lib/infrastructure/database/sequelize.mjs';
@@ -30,13 +30,13 @@ describe('# Get orders by device identifier', () => {
   function getRepository() {
     const sequelize = createSequelizeInstance({mock: false});
 
-    return new OrderRepositoryImpl({db: sequelize});
+    return new WaitingOrderRepositoryImpl({db: sequelize});
   }
 
   it('should fetch current(24h) order with device identifier', async () => {
     const repo = getRepository();
 
-    const orders = await repo.getOrdersByDeviceIdentifier('potados');
+    const orders = await repo.getWaitingOrdersByDeviceIdentifier('potados');
 
     expect(orders.length).toBe(1);
   });
@@ -44,7 +44,7 @@ describe('# Get orders by device identifier', () => {
   it('should fetch current(24h) order with device identifier (2)', async () => {
     const repo = getRepository();
 
-    const orders = await repo.getOrdersByDeviceIdentifier('mooo');
+    const orders = await repo.getWaitingOrdersByDeviceIdentifier('mooo');
 
     expect(orders.length).toBe(2);
   });
