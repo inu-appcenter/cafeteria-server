@@ -48,6 +48,7 @@
     "minimist": "^1.2.5",
     "moment": "^2.29.1",
     "mysql2": "^2.2.5",
+    "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.4.17",
     "qs": "^6.9.4",

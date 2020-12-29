@@ -152,4 +152,11 @@ export default {
     },
   },
 
+  waiting: {
+    orderTTL: {
+      amount: 1,
+      unit: 'hour',
+    },
+  },
+
 };

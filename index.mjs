@@ -27,6 +27,7 @@ import sequelize from './lib/infrastructure/database/sequelize';
 import createServer from './lib/infrastructure/webserver/server';
 import getEnv from './lib/common/utils/env';
 import getArg from './lib/common/utils/args';
+import scheduleTasks from './lib/infrastructure/scheduler/tasks.mjs';
 
 async function start() {
   logger.info(`NODE_ENV: ${getEnv('NODE_ENV', 'not set')}`);
@@ -62,6 +63,9 @@ async function start() {
     logger.error(e);
     process.exit(3);
   }
+
+  // Schedule tasks
+  scheduleTasks();
 }
 
 start();
