@@ -17,30 +17,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function compareIgnoringWhiteSpaces(left, right) {
-  if (left === null || left === undefined) {
-    return false;
-  }
+import {
+  compareIgnoringWhiteSpaces,
+  separateNumbersFromCommaJoinedString,
+} from '../../../../lib/common/utils/stringUtil.mjs';
 
-  if (right === null || right === undefined) {
-    return false;
-  }
+describe('# compareIgnoringWhiteSpaces', () => {
+  it('should work', async () => {
+    expect(compareIgnoringWhiteSpaces('hello world', 'h ell oworld')).toBe(true);
+  });
+});
 
-  return removeWhiteSpaces(left) === removeWhiteSpaces(right);
-}
+describe('# separateNumbersFromCommaJoinedString', () => {
+  it('should catch invalid input', async () => {
+    expect(separateNumbersFromCommaJoinedString(null)).toEqual([]);
+  });
 
-function removeWhiteSpaces(string) {
-  return string.trim().replace(/[\n\t ]/gi, '');
-}
-
-export function separateNumbersFromCommaJoinedString(joined) {
-  if (!joined) {
-    return [];
-  }
-
-  return joined
-    .split(',')
-    .map((each) => each.trim())
-    .filter((likelyNumberString) => !isNaN(likelyNumberString))
-    .map((numberInString) => Number.parseInt(numberInString));
-}
+  it('should work', async () => {
+    expect(separateNumbersFromCommaJoinedString('1,2,3,4')).toEqual([1, 2, 3, 4]);
+  });
+});
