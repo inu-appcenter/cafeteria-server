@@ -4,3 +4,4 @@ node_modules
 coverage
 logs
 .env
+cafeteria-firebase-admin-credentials.json

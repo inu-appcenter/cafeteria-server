@@ -30,7 +30,7 @@ describe('# visit coop', () => {
     });
 
     expect(response.includes('자동등록방지를 위해 보안절차를 거치고 있습니다.')).toBe(false);
-  });
+  }, 10000);
 });
 
 describe('# get week diff', () => {

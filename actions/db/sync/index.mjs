@@ -17,27 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import sequelize from '../lib/infrastructure/database/sequelize';
-import logger from '../lib/common/utils/logger';
-import getArg from '../lib/common/utils/args';
+import logger from '../../../lib/common/utils/logger.mjs';
+import getArg from '../../../lib/common/utils/args.mjs';
+import syncDatabase from './sync-db.mjs';
 
-/**
- * Sync database with Sequelize models.
- *
- * @param force If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
- * @param alter If alter is true, each DAO will do ALTER TABLE ... CHANGE ...
- *              Alters tables to fit models. Not recommended for production use. Deletes data in columns that were removed or had their type changed in the model.
- * @return {Promise<void>}
- */
-async function doSync(force, alter) {
-  logger.info(`Sync sequelize(force: ${force}, alter: ${alter}).`);
-  await sequelize.sync({force, alter});
-
-  logger.info('Close sequelize.');
-  await sequelize.close();
-}
-
-doSync(
+syncDatabase(
   getArg('force', false),
   getArg('alter', false),
 ).then(() => {

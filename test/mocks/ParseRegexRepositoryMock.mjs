@@ -18,7 +18,7 @@
  */
 
 import ParseRegexRepository from '../../lib/domain/repositories/ParseRegexrepository';
-import initial from '../../setup/initial-db-contents';
+import initial from '../../actions/db/initial-db-contents.mjs';
 import ParseRegex from '../../lib/domain/entities/ParseRegex';
 
 class ParseRegexRepositoryMock extends ParseRegexRepository {

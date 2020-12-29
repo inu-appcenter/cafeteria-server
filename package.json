@@ -5,8 +5,8 @@
   "description": "카페테리아 API 서버입니다.",
   "scripts": {
     "test": "jest --coverage test/unit",
-    "syncdb": "node -r esm setup/sync-db.mjs",
-    "setupdb": "node -r esm setup/setup-db.mjs",
+    "syncdb": "node -r esm actions/db/sync/index.mjs",
+    "setupdb": "node -r esm actions/db/setup/index.mjs",
     "start": "node -r esm index.mjs"
   },
   "repository": {
@@ -41,6 +41,7 @@
     "blipp": "^4.0.1",
     "cheerio": "^1.0.0-rc.3",
     "esm": "^3.2.25",
+    "firebase-admin": "^9.4.2",
     "hapi-auth-jwt2": "^9.0.1",
     "hapi-swagger": "^12.1.1",
     "jsonwebtoken": "^8.5.1",
@@ -105,7 +106,7 @@
     ],
     "coverageThreshold": {
       "global": {
-        "statements": 70
+        "statements": 60
       }
     }
   }

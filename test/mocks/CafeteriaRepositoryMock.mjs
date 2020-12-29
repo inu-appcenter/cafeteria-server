@@ -237,6 +237,10 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
   getMenusByCornerId(cornerId, date = null) {
 
   }
+
+  getCafeteriaIdByPosNumber(posNumber) {
+    return 1;
+  }
 }
 
 export default CafeteriaRepositoryMock;
