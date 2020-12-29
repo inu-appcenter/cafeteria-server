@@ -96,5 +96,59 @@ describe('# get week diff', () => {
 
     expect(diff).toBe(0);
   });
+
+  it('finding 7', async () => {
+    const today = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 8', async () => {
+    const today = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+    const theDay = moment('20201231' /* Thur */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 9', async () => {
+    const today = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+    const theDay = moment('20210101' /* Fri */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 10', async () => {
+    const today = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+    const theDay = moment('20210102' /* Sat */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 11', async () => {
+    const today = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+    const theDay = moment('20210103' /* Sun */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(0);
+  });
+
+  it('finding 12', async () => {
+    const today = moment('20201230' /* Wed */, 'YYYYMMDD').toDate();
+    const theDay = moment('20210104' /* Mon */, 'YYYYMMDD').toDate();
+
+    const diff = new CoopRepositoryImpl().getWeekDiff(theDay, today);
+
+    expect(diff).toBe(1);
+  });
 });
 
