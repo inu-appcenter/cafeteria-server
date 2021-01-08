@@ -35,7 +35,7 @@ import TokenManagerMock from '../../../mocks/TokenManagerMock';
 import TokenManager from '../../../../lib/domain/security/TokenManager';
 import moment from 'moment';
 import MockDate from 'mockdate';
-import MealType from '../../../../lib/domain/constants/MealType.js';
+import MealType from '../../../../lib/domain/constants/MealType.mjs';
 
 beforeEach(async () => {
   await initWithOverrides(modules, [

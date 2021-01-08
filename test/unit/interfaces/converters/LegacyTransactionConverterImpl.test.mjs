@@ -22,7 +22,7 @@ import LegacyTransactionConverter from '../../../../lib/interfaces/converters/Le
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 import TransactionRepositoryMock from '../../../mocks/TransactionRepositoryMock';
 import MockDate from 'mockdate';
-import MealType from '../../../../lib/domain/constants/MealType.js';
+import MealType from '../../../../lib/domain/constants/MealType.mjs';
 
 describe('# Convert', () => {
   const converter = new LegacyTransactionConverter({
