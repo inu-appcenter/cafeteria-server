@@ -22,6 +22,7 @@ import LegacyTransactionConverter from '../../../../lib/interfaces/converters/Le
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
 import TransactionRepositoryMock from '../../../mocks/TransactionRepositoryMock';
 import MockDate from 'mockdate';
+import MealType from '../../../../lib/domain/constants/MealType.js';
 
 describe('# Convert', () => {
   const converter = new LegacyTransactionConverter({
@@ -58,7 +59,7 @@ describe('# Convert', () => {
     const result = await getResult('1210209372', code);
 
     expect(result).toEqual(new DiscountTransaction({
-      mealType: result.cafeteriaId > 0 ? 0/*8:50 breakfast*/ : -1/*could not find cafeteria->no meal type*/,
+      mealType: result.cafeteriaId > 0 ? MealType.BREAKFAST/*fixed 8:50 breakfast*/ : MealType.NONE/*could not find cafeteria->no meal type*/,
 
       userId: 201701562, /* extracted from 'barcode' */
       cafeteriaId: cafeteriaId, /* 생활원식당, mapped from 'code' */
@@ -75,7 +76,7 @@ describe('# Convert', () => {
     const result = await getResult(barcode, 1);
 
     expect(result).toEqual(new DiscountTransaction({
-      mealType: 0, /* newly added */
+      mealType: MealType.BREAKFAST, /* fix to BREAKFAST (time is set to 08:50). */
 
       userId: id, /* extracted from 'barcode' */
       cafeteriaId: 4, /* 생활원식당, mapped from 'code' */
@@ -84,28 +85,28 @@ describe('# Convert', () => {
     MockDate.reset();
   };
 
-  it('should set 0 at morning', async () => {
+  it('should set 4 at morning', async () => {
     const now = new Date();
     now.setHours(8, 50, 0);
-    await timingTest(now, 0);
+    await timingTest(now, MealType.BREAKFAST);
   });
 
-  it('should set 1 at lunch', async () => {
+  it('should set 2 at lunch', async () => {
     const now = new Date();
     now.setHours(12, 50, 0);
-    await timingTest(now, 1);
+    await timingTest(now, MealType.LUNCH);
   });
 
-  it('should set 2 at dinner', async () => {
+  it('should set 1 at dinner', async () => {
     const now = new Date();
     now.setHours(18, 50, 0);
-    await timingTest(now, 2);
+    await timingTest(now, MealType.DINNER);
   });
 
-  it('should set -1 at night', async () => {
+  it('should set 0 at night', async () => {
     const now = new Date();
     now.setHours(23, 50, 0);
-    await timingTest(now, -1);
+    await timingTest(now, MealType.NONE);
   });
 
   it('should convert code 1 to 4(사범대식당)', async () => {

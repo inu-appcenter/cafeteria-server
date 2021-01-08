@@ -35,6 +35,7 @@ import TokenManagerMock from '../../../mocks/TokenManagerMock';
 import TokenManager from '../../../../lib/domain/security/TokenManager';
 import moment from 'moment';
 import MockDate from 'mockdate';
+import MealType from '../../../../lib/domain/constants/MealType.js';
 
 beforeEach(async () => {
   await initWithOverrides(modules, [
@@ -137,36 +138,36 @@ describe('# isInMealTime', () => {
   };
 
   it('should catch null cafeteriaId in param', async () => {
-    await mealTimeTest(null, 1, '18:00', false);
+    await mealTimeTest(null, MealType.DINNER, '18:00', false);
   });
 
   it('should catch negative cafeteriaId in param', async () => {
-    setValidationParamsMock(1, 'token', 2);
+    setValidationParamsMock(1, 'token', MealType.LUNCH);
 
-    await mealTimeTest(-2, 1, '18:00', false);
+    await mealTimeTest(-2, MealType.DINNER, '18:00', false);
   });
 
   it('should catch null mealType in param', async () => {
     await mealTimeTest(3, null, '18:00', false);
   });
 
-  it('should ensure that cafeteria with id 1 support meal type 1', async () => {
-    setValidationParamsMock(1, 'token', 2);
+  it('should ensure that cafeteria with id 1 support meal type 2', async () => {
+    setValidationParamsMock(1, 'token', MealType.LUNCH);
 
-    await mealTimeTest(1, 1, '12:00', true); // Lunch
+    await mealTimeTest(1, MealType.LUNCH, '12:00', true);
   });
 
   it('should ignore lunch discount request in the middle of a night', async () => {
-    setValidationParamsMock(1, 'token', 2); // Lunch
+    setValidationParamsMock(1, 'token', MealType.LUNCH);
 
-    await mealTimeTest(1, 1, '23:00', false); // Breakfast
+    await mealTimeTest(1, MealType.LUNCH, '23:00', false);
   });
 
-  it('should ensure that cafeteria with id 2 support meal type 0 and 2', async () => {
-    setValidationParamsMock(2, 'token', 1 + 4);
+  it('should ensure that cafeteria with id 2 support meal type 4 and 1', async () => {
+    setValidationParamsMock(2, 'token', MealType.BREAKFAST | MealType.DINNER);
 
-    await mealTimeTest(2, 0, '9:00', true); // Breakfast
-    await mealTimeTest(2, 2, '18:00', true); // Dinner
+    await mealTimeTest(2, MealType.BREAKFAST, '9:00', true);
+    await mealTimeTest(2, MealType.DINNER, '18:00', true);
   });
 });
 
