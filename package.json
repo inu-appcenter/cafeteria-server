@@ -1,7 +1,7 @@
 {
   "name": "cafeteria-server",
   "main": "./index.mjs",
-  "version": "1.6.9",
+  "version": "1.6.10",
   "description": "Cafeteria API 서버입니다.",
   "scripts": {
     "test": "jest --coverage test/unit",
