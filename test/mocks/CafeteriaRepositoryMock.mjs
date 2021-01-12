@@ -238,6 +238,14 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
 
   }
 
+  getAllComments() {
+    return [];
+  }
+
+  getCommentByCafeteriaId(cafeteriaId) {
+    return 'haha!';
+  }
+
   getCafeteriaIdByPosNumber(posNumber) {
     return 1;
   }
