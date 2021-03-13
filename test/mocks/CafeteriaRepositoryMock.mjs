@@ -102,8 +102,8 @@ class CafeteriaRepositoryMock extends CafeteriaRepository {
       }),
       new Corner({
         id: 2,
-        name: '1-1코너중식(앞쪽)',
-        displayName: '1-1코너',
+        name: '1코너 석식 (앞쪽)',
+        displayName: '1코너',
         availableAt: 4,
         cafeteriaId: 1,
       }),

@@ -17,35 +17,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
 import DirectMenuConverter from '../../../../lib/interfaces/converters/DirectMenuConverter';
 import CafeteriaRepositoryMock from '../../../mocks/CafeteriaRepositoryMock';
-import config from '../../../../config';
-import CoopRepositoryImpl from '../../../../lib/interfaces/storage/CoopRepositoryImpl';
-*/
+import ParseRegexRepositoryMock from '../../../mocks/ParseRegexRepositoryMock.mjs';
+
+import fs from 'fs';
+import path from 'path';
 
 describe('# COOP as a new source', () => {
-  it('works', () => {});
-
-  // Current data source allows max 7 day menus.
-  /*
   it('should work', async () => {
-    const converter = new DirectMenuConverter();
+    const converter = new DirectMenuConverter({
+      parseRegexRepository: new ParseRegexRepositoryMock(),
+    });
     const repo = new CafeteriaRepositoryMock();
-    const coopRepo = new CoopRepositoryImpl();
 
-    const rawHtml = await coopRepo.visit(config.menu.url, {sdt: '20200909'});
+    const htmlFilePath = path.join(__dirname, 'rawMenus.html');
+    const rawHtml = fs.readFileSync(htmlFilePath);
 
-    const menus = converter.convert({
+    const menus = await converter.convert({
       cafeteria: await repo.getAllCafeteria(),
       corners: await repo.getAllCorners(),
       rawHtml: rawHtml,
     });
 
     console.log(menus);
-
-    expect(menus.length).toBe(7 + 6); // Normal 7 + empty 6
   });
-   */
 });
 

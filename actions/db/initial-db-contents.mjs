@@ -173,7 +173,7 @@ export default {
     },
     {
       id: 2,
-      regex: '(?<PRICE>[0-9,]+)원[\n ](?<CAL>[0-9,]+)[Kk]cal',
+      regex: '(?<PRICE>[0-9,]+)원[\n ]{0,2}(?<CAL>[0-9,]+)[Kk]cal',
     },
     {
       id: 3,
