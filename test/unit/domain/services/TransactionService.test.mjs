@@ -18,7 +18,6 @@
  */
 
 import resolve, {initWithOverrides} from '../../../../lib/common/di/resolve';
-
 import TransactionService from '../../../../lib/domain/services/TransactionService';
 import DiscountValidationResults from '../../../../lib/domain/constants/DiscountValidationResults';
 import DiscountTransaction from '../../../../lib/domain/entities/DiscountTransaction';
@@ -50,9 +49,11 @@ describe('# validateDiscountTransaction', () => {
     expect(result).toBe(expectation);
   };
 
-  it('should throw on null param', async () => {
+  it('should throw on undefined param', async () => {
     const service = resolve(TransactionService);
 
+    // Sending null to the argument destructor will cause an exception.
+    // noinspection JSCheckFunctionSignatures
     await expect(service.validateDiscountTransaction(null)).rejects.toThrow();
   });
 
@@ -76,7 +77,7 @@ describe('# validateDiscountTransaction', () => {
     await validationTest('cafeteriaShouldSupportDiscount', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
     await validationTest('userShouldExist', DiscountValidationResults.UNUSUAL_NO_BARCODE);
     await validationTest('barcodeShouldBeActive', DiscountValidationResults.USUAL_FAIL);
-    await validationTest('discountShouldBeFirstToday', DiscountValidationResults.USUAL_FAIL);
+    await validationTest('discountAtThisCafeteriaShouldBeFirstToday', DiscountValidationResults.USUAL_FAIL);
     await validationTest('barcodeShouldNotBeUsedRecently', DiscountValidationResults.USUAL_FAIL);
     await validationTest('tokenShouldBeValid', DiscountValidationResults.UNUSUAL_WRONG_PARAM);
   });
@@ -86,7 +87,7 @@ describe('# validateDiscountTransaction', () => {
     await validationTest('cafeteriaShouldSupportDiscount', DiscountValidationResults.USUAL_SUCCESS, 2);
     await validationTest('userShouldExist', DiscountValidationResults.USUAL_SUCCESS, 3);
     await validationTest('barcodeShouldBeActive', DiscountValidationResults.USUAL_SUCCESS, 4);
-    await validationTest('discountShouldBeFirstToday', DiscountValidationResults.USUAL_SUCCESS, 5);
+    await validationTest('discountAtThisCafeteriaShouldBeFirstToday', DiscountValidationResults.USUAL_SUCCESS, 5);
     await validationTest('barcodeShouldNotBeUsedRecently', DiscountValidationResults.USUAL_SUCCESS, 6);
     await validationTest('tokenShouldBeValid', DiscountValidationResults.USUAL_SUCCESS, 7);
   });
@@ -114,7 +115,7 @@ describe('# commitDiscountTransaction', () => {
     await commitTest('cafeteriaShouldSupportDiscount', true, DiscountCommitResults.FAIL);
     await commitTest('userShouldExist', true, DiscountCommitResults.FAIL);
     await commitTest('barcodeShouldBeActive', true, DiscountCommitResults.FAIL);
-    await commitTest('discountShouldBeFirstToday', true, DiscountCommitResults.FAIL);
+    await commitTest('discountAtThisCafeteriaShouldBeFirstToday', true, DiscountCommitResults.FAIL);
     // await commitTest('barcodeShouldNotBeUsedRecently', true, DiscountCommitResults.FAIL);
     /** Do not check barcode time when committing! */
   });
@@ -158,7 +159,7 @@ const getMockedService = function(failAt, bypass=0) {
     'cafeteriaShouldSupportDiscount',
     'userShouldExist',
     'barcodeShouldBeActive',
-    'discountShouldBeFirstToday',
+    'discountAtThisCafeteriaShouldBeFirstToday',
     'barcodeShouldNotBeUsedRecently',
 
     // token validation

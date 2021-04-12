@@ -148,7 +148,7 @@ export default {
     },
     {
       id: 5,
-      name: 'discountShouldBeFirstToday',
+      name: 'discountAtThisCafeteriaShouldBeFirstToday',
       description: '같은 날짜에 할인받은 기록이 없어야 합니다.',
       enabled: true,
     },
