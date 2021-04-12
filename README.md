@@ -108,6 +108,9 @@ app
 
 ## 업데이트 로그
 
+### 2021.4.12 v1.8.0
+- 할인 룰 5번 수정: `discountAtThisCafeteriaShouldBeFirstToday`
+
 ### 2021.4.1 v1.7.1
 - 의존성 업데이트
 
