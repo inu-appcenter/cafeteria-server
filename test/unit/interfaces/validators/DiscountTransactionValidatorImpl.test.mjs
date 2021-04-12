@@ -293,8 +293,8 @@ describe('# isBarcodeActive', () => {
 });
 
 describe('# isFirstToday', () => {
-  const firstTest = async function(userId, expectation) {
-    const actual = await resolve(DiscountTransactionValidator).discountShouldBeFirstToday(userId);
+  const firstTest = async function(userId, cafeteriaId, expectation) {
+    const actual = await resolve(DiscountTransactionValidator).discountAtThisCafeteriaShouldBeFirstToday(userId, cafeteriaId);
 
     expect(actual).toBe(expectation);
   };
@@ -319,20 +319,26 @@ describe('# isFirstToday', () => {
     return mock;
   };
 
-  it('should catch null userId in param', async () => {
-    await firstTest(null, false);
+  it('should catch null userId and cafeteriaId in param', async () => {
+    await firstTest(null, null, false);
   });
 
   it('should catch crazy userId in param', async () => {
     setTransactionMock(201701562, 2, 1);
 
-    await firstTest(8934892389289, true); // this is a right behavior
+    await firstTest(8934892389289, 1, true); // this is a right behavior
   });
 
-  it('should say this user already made a transaction today', async () => {
+  it('should say this user already made a transaction today at cafeteria with id 1', async () => {
     setTransactionMock(201701562, 2, 1);
 
-    await firstTest(201701562, false);
+    await firstTest(201701562, 1, false);
+  });
+
+  it('should say this user already made a transaction today but not at cafeteria with id 3', async () => {
+    setTransactionMock(201701562, 2, 1);
+
+    await firstTest(201701562, 3, true);
   });
 });
 

@@ -40,7 +40,7 @@ class DiscountTransactionValidatorMock extends DiscountTransactionValidator {
     throw new Error('Not mocked! You need extra mock here');
   }
 
-  discountShouldBeFirstToday(userId) {
+  discountAtThisCafeteriaShouldBeFirstToday(userId, cafeteriaId) {
     throw new Error('Not mocked! You need extra mock here');
   }
 
