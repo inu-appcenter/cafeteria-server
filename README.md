@@ -14,7 +14,7 @@
 >
 > ##### 서비스
 > - **API 서버**: [cafeteria-server](https://github.com/inu-appcenter/cafeteria-server)
-> - 모바일 앱: [cafeteria-android](https://github.com/inu-appcenter/cafeteria-mobile)
+> - 모바일 앱: [cafeteria-mobile](https://github.com/inu-appcenter/cafeteria-mobile)
 >
 > ##### 운영 관리
 > - 콘솔 API 서버: [cafeteria-console-server](https://github.com/inu-appcenter/cafeteria-console-server)
