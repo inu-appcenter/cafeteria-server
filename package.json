@@ -7,7 +7,9 @@
     "test": "jest --coverage test/unit",
     "syncdb": "node -r esm actions/db/sync/index.mjs",
     "setupdb": "node -r esm actions/db/setup/index.mjs",
-    "start": "node -r esm index.mjs"
+    "start": "node -r esm index.mjs",
+    "preversion": "npm run test",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",

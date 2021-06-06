@@ -108,6 +108,12 @@ app
 
 ## 업데이트 로그
 
+### 2021.6.6 v1.9.0
+- 보안 취약점 업데이트
+- 문서에서 누락된 API 설명 추가
+- 정적 호스팅 파일 제거(`cafeteria-in-app-web`으로 이전)
+- 공지 노출 여부를 판단하기 위해 버전을 체크할 때에 `semver` 사용
+
 ### 2021.4.12 v1.8.0
 - 할인 룰 5번 수정: `discountAtThisCafeteriaShouldBeFirstToday`
 
