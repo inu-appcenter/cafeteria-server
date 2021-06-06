@@ -53,6 +53,7 @@
     "nodemailer": "^6.4.17",
     "qs": "^6.9.4",
     "rand-token": "^0.4.0",
+    "semver": "^7.3.5",
     "sequelize": "^5.22.3",
     "stack-trace": "0.0.10",
     "stream": "0.0.2",
