@@ -62,6 +62,69 @@ describe('# Evaluate', () => {
     })).toBe(true);
   });
 
+  it('should support ge with prerelease', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0',
+      assertion: '>=4.0.0-beta.1',
+    })).toBe(true);
+  });
+
+  it('should support ge with prerelease (2)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0',
+      assertion: '<=4.0.0-beta.1',
+    })).toBe(false);
+  });
+
+  it('should support ge with prerelease (3)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0-beta.1',
+      assertion: '<=4.0.0-beta.1',
+    })).toBe(true);
+  });
+
+  it('should support ge with prerelease (4)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0-beta.2',
+      assertion: '<=4.0.0-beta.1',
+    })).toBe(false);
+  });
+
+  it('should think release is bigger than prerelease', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0',
+      assertion: '>=4.0.0-beta.999',
+    })).toBe(true);
+  });
+
+  it('should think release is bigger than prerelease (2)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0',
+      assertion: '<=4.0.0-beta.999',
+    })).toBe(false);
+  });
+
+  it('should exclude prerelease on comparison with release', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0-beta.3',
+      assertion: '>=4.0.0',
+    })).toBe(false);
+  });
+
+  it('should support specifying beta of a single version', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0-beta.0',
+      assertion: '>4.0.0-beta <4.0.0',
+    })).toBe(true);
+  });
+
+  it('should support specifying beta of a single version (2)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.0-beta.0',
+      assertion: '>=4.0.0-beta <4.0.0',
+    })).toBe(true);
+  });
+
   it('should support range comparison', async () => {
     expect(new VersionAssertionEvaluator().evaluate({
       value: '4.0.0',
@@ -99,7 +162,7 @@ describe('# Evaluate', () => {
 
   it('should support tilde version with prerelease', async () => {
     expect(new VersionAssertionEvaluator().evaluate({
-      value: '4.5.1-beta.36',
+      value: '4.5.3-beta.36',
       assertion: '~4.5.1-beta',
     })).toBe(true);
   });
@@ -123,6 +186,20 @@ describe('# Evaluate', () => {
       value: '4.5.1-beta.36',
       assertion: '4.5.1-beta.x',
     })).toBe(false);
+  });
+
+  it('should support tilde version with prerelease (5)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.1',
+      assertion: '~4.0.0-beta.999',
+    })).toBe(true);
+  });
+
+  it('should support tilde version with prerelease (6)', async () => {
+    expect(new VersionAssertionEvaluator().evaluate({
+      value: '4.0.1-beta.999',
+      assertion: '~4.0.0',
+    })).toBe(true);
   });
 
   it('should support caret version', async () => {
