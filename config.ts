@@ -20,23 +20,22 @@
 import getArg from './lib/common/utils/args';
 import getEnv from './lib/common/utils/env';
 import path from 'path';
+import assert from 'assert';
 
 if (getEnv('NODE_ENV') === 'production') {
-  if (!getArg('host')) throw new Error('Host not set!');
-  if (!getArg('port')) throw new Error('Port not set!');
-  if (!getArg('log-dir')) throw new Error('Log directory not set!');
+  assert(getArg('host'), '호스트 설정해주세요!');
+  assert(getArg('port'), '포트 설정해주세요!');
+  assert(getArg('log-dir'), '로그 경로 설정해주세요!');
 
-  if (!getEnv('AWS_ACCESS_KEY_ID')) throw new Error('AWS access id not set!');
-  if (!getEnv('AWS_SECRET_ACCESS_KEY')) throw new Error('AWS secret access key id not set!');
-
-  if (!getEnv('JWT_SECRET_KEY')) throw new Error('JWT secret key not set!');
-  if (!getEnv('DB_USERNAME')) throw new Error('DB username not set!');
-  if (!getEnv('DB_PASSWORD')) throw new Error('DB password not set!');
-  if (!getEnv('LOGIN_KEY')) throw new Error('Login key not set!');
+  assert(getEnv('AWS_ACCESS_KEY_ID'), 'AWS access id 설정해주세요!');
+  assert(getEnv('AWS_SECRET_ACCESS_KEY'), 'AWS secret access key 설정해주세요!');
+  assert(getEnv('JWT_SECRET_KEY'), 'JWT 비밀 key 설정해주세요!');
+  assert(getEnv('DB_USERNAME'), 'DB 사용자 이름 설정해주세요!');
+  assert(getEnv('DB_PASSWORD'), 'DB 비밀번호 설정해주세요!');
+  assert(getEnv('LOGIN_KEY'), '로그인 key 설정해주세요!');
 }
 
 export default {
-
   server: {
     host: getArg('host'),
     port: getArg('port') || 9999,
@@ -45,14 +44,14 @@ export default {
   },
 
   auth: {
-    key: getEnv('JWT_SECRET_KEY', 'whatever'),
+    key: getEnv('JWT_SECRET_KEY', 'whatever haha'),
     expiresIn: '24h',
     cookieOptions: {
-      encoding: 'none', // we already used JWT to encode
-      isSecure: false, // https only?
-      isHttpOnly: true, // prevent client alteration
-      clearInvalid: true, // remove invalid cookies
-      strictHeader: true, // don't allow violations of RFC 6265
+      encoding: 'none',
+      isSecure: false,
+      isHttpOnly: true,
+      clearInvalid: true,
+      strictHeader: true,
     },
     cookieKey: 'cafeteria-server-session-token',
   },
@@ -77,31 +76,28 @@ export default {
   },
 
   login: {
-    // Remote login server
+    // 재학생 확인용 원격 로그인 서버
     url: 'http://117.16.191.242:8081/login',
-    key: getEnv('LOGIN_KEY', 'nothing'),
+    key: getEnv('LOGIN_KEY', '앱센터는 모다?'),
     success: 'Y',
     fail: 'N',
   },
 
   log: {
-    ops: {interval: 60 * 60 * 1000}, /* an hour, in millisecond */
-    filepath: (name) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
-    securedPayloads: [
-      'password',
-      'token',
-    ],
+    ops: {interval: 60 * 60 * 1000} /* 한 시간(밀리초로 나타냄) */,
+    filepath: (name: string) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
+    securedPayloads: ['password', 'token'],
   },
 
   menu: {
-    // Menu API
+    // 생협 식단 정보 페이지
     url: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
     method: 'post',
     dateArgName: 'sdt',
     weekArgName: 'jun',
-    fetchIntervalMillis: 3600000, // One hour
+    fetchIntervalMillis: 3600000, // 한 시간
     parser: {
-      menuSplitterRegex: '-{8,}|\n{3,}', // (8 or more of -), or (3 or more of newline).
+      menuSplitterRegex: '-{8,}|\n{3,}', // (8개 이상의 -), 또는 (3개 이상의 개행문자).
     },
   },
 
@@ -118,7 +114,6 @@ export default {
   transaction: {
     barcodeLifetimeMinutes: 10,
     barcodeTagMinimumIntervalSecs: 15,
-
   },
 
   mail: {
@@ -140,15 +135,15 @@ export default {
   legacy: {
     isBarcode: {
       cafeCodeToCafeteriaId: {
-        /* Cafe code : Newly given cafeteria id */
-        1: 4, /* 제1 기숙사식당 */
-        2: 3, /* 사범대식당 */
+        /* 기존의 cafe code를 cafeteriaId로 변환 */
+        1: 4 /* 제1 기숙사식당 */,
+        2: 3 /* 사범대식당 */,
       },
     },
     pushNumber: {
       cafeCodeToCafeteriaId: {
-        /* Cafe code : Newly given cafeteria id */
-        1: 1, /* 학생식당 */
+        /* 기존의 cafe code를 cafeteriaId로 변환 */
+        1: 1 /* 학생식당 */,
       },
     },
   },
@@ -159,5 +154,4 @@ export default {
       unit: 'hour',
     },
   },
-
 };
