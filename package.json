@@ -56,6 +56,7 @@
     "rand-token": "^0.4.0",
     "semver": "^7.3.5",
     "sequelize": "^5.22.3",
+    "sequelize-typescript": "^2.1.0",
     "stack-trace": "0.0.10",
     "stream": "0.0.2",
     "tough-cookie": "^4.0.0",
@@ -121,6 +122,6 @@
     "semi": true,
     "singleQuote": true,
     "bracketSpacing": false,
-    "printWidth": 140
+    "printWidth": 90
   }
 }

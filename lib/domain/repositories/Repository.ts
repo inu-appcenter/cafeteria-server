@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of INU Cafeteria.
  *
  * Copyright (C) 2020 INU Global App Center <potados99@gmail.com>
@@ -17,10 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class AppVersionRuleRepository {
-  getRequiredMinimumVersion(os) {
-    throw new Error('Not implemented!');
-  }
-}
+import Entity from '../entities/Entity';
 
-export default AppVersionRuleRepository;
+export default abstract class Repository<T extends Entity> {
+  abs;
+}

@@ -17,14 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class CoopRepository {
-  visit({url, method, searchParams, data}) {
-    throw new Error('Not implemented!');
-  }
-
-  getWeekDiff(then, now) {
-    throw new Error('Not implemented!');
-  }
+export default abstract class AppVersionRuleRepository {
+  abstract getRequiredMinimumVersion(os: string): Promise<string>;
 }
-
-export default CoopRepository;

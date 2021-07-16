@@ -17,10 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class CloudMessageRepository {
-  sendOrderReadyMessage(order) {
-    throw new Error('Not implemented');
+import UseCase from './UseCase';
+import logger from '../../common/utils/logger';
+
+/**
+ * A use case that activates a barcode.
+ */
+class ActivateBarcode extends UseCase {
+  constructor(private readonly transactionRepository: TransactionRepository) {
+    super();
+
+    this.transactionRepository = transactionRepository;
+  }
+
+  async onExecute({userId}) {
+    logger.info(`${userId} activating barcode`);
+
+    return this.transactionRepository.activateBarcode(userId);
   }
 }
 
-export default CloudMessageRepository;
+export default ActivateBarcode;

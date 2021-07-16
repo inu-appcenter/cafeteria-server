@@ -17,10 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class EmailRepository {
-  sendEmail(params) {
-    throw new Error('Not implemented!');
-  }
+export default abstract class CafeteriaDataSource {
+  abstract fetchRawMenus(): Promise<any>;
 }
-
-export default EmailRepository;

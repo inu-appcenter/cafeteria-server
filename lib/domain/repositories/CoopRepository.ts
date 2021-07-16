@@ -17,24 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from './UseCase';
-import logger from '../../common/utils/logger';
+export type CoopVisitParams = {
+  url: string;
+  method: string;
+  searchParams: any;
+  data: any;
+};
 
-/**
- * A use case that activates a barcode.
- */
-class ActivateBarcode extends UseCase {
-  constructor({transactionRepository}) {
-    super();
+export default abstract class CoopRepository {
+  abstract visit(params: CoopVisitParams): Promise<any>;
 
-    this.transactionRepository = transactionRepository;
-  }
-
-  async onExecute({userId}) {
-    logger.info(`${userId} activating barcode`);
-
-    return this.transactionRepository.activateBarcode(userId);
-  }
+  abstract getWeekDiff(then: Date, now: Date): number;
 }
-
-export default ActivateBarcode;

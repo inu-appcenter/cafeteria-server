@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of INU Cafeteria.
  *
  * Copyright (C) 2020 INU Global App Center <potados99@gmail.com>
@@ -17,26 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class InteractionRepository {
-  ask(question) {
-    throw new Error('Not implemented!');
-  }
+import WaitingOrder from '../entities/WaitingOrder';
 
-  getAllQuestions(userId) {
-    throw new Error('Not implemented!');
-  }
-
-  getAllAnswers(userId) {
-    throw new Error('Not implemented!');
-  }
-
-  getUnreadAnswers(userId) {
-    throw new Error('Not implemented!');
-  }
-
-  markAnswerRead(answerId) {
-    throw new Error('Not implemented!');
+export default class CloudMessagingService {
+  async sendOrderReadyMessage(order: WaitingOrder) {
+    // TODO
   }
 }
-
-export default InteractionRepository;
