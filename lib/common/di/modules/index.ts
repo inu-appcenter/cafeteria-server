@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of INU Cafeteria.
  *
  * Copyright (C) 2020 INU Global App Center <potados99@gmail.com>
@@ -17,24 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from './UseCase';
-import logger from '../../common/utils/logger';
+import usecases from './usecases';
+import repositories from './repositories';
+import services from './services';
+import datasources from './datasources';
+import converters from './converters';
+import serializers from './serializers';
+import validators from './validators';
+import security from './security';
+import db from './db';
 
-/**
- * A use case that activates a barcode.
- */
-class ActivateBarcode extends UseCase {
-  constructor({transactionRepository}) {
-    super();
-
-    this.transactionRepository = transactionRepository;
-  }
-
-  async onExecute({userId}) {
-    logger.info(`${userId} activating barcode`);
-
-    return this.transactionRepository.activateBarcode(userId);
-  }
-}
-
-export default ActivateBarcode;
+export default {
+  ...usecases,
+  ...services,
+  ...repositories,
+  ...datasources,
+  ...converters,
+  ...serializers,
+  ...validators,
+  ...security,
+  ...db,
+};

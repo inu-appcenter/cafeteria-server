@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of INU Cafeteria.
  *
  * Copyright (C) 2020 INU Global App Center <potados99@gmail.com>
@@ -17,24 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from './UseCase';
-import logger from '../../common/utils/logger';
+import {Declaration} from '../Injector';
+import Sequelize from 'sequelize';
 
-/**
- * A use case that activates a barcode.
- */
-class ActivateBarcode extends UseCase {
-  constructor({transactionRepository}) {
-    super();
+const modules: Declaration<any>[] = [
+  {
+    create: async (r) => sequelize,
+    as: Sequelize,
+  },
+];
 
-    this.transactionRepository = transactionRepository;
-  }
-
-  async onExecute({userId}) {
-    logger.info(`${userId} activating barcode`);
-
-    return this.transactionRepository.activateBarcode(userId);
-  }
-}
-
-export default ActivateBarcode;
+export default modules;
