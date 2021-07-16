@@ -17,8 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BaseEntity, Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {JoinColumn} from 'typeorm/browser';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 import User from '../user/User';
 import Answer from './Answer';
 
@@ -27,7 +34,7 @@ export default class Question extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.questions)
+  @ManyToOne(() => User, (user) => user.questions)
   @JoinColumn()
   user: User;
 
@@ -43,6 +50,6 @@ export default class Question extends BaseEntity {
   @Column()
   askedAt: Date;
 
-  @OneToOne(() => Answer, a => a.question)
+  @OneToOne(() => Answer, (a) => a.question)
   answer?: Answer;
 }

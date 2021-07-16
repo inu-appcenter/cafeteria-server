@@ -17,6 +17,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {startTypeORM} from './lib/external/database/typeorm';
+import User from './lib/features/user/User';
 import logger from './lib/common/logging/logger';
 
-logger.info('gdㅎㅇㅎㅇ');
+async function start() {
+  await startTypeORM(true);
+
+  const newUser = User.create({
+    studentId: '201701562',
+    phoneNumber: '01029222661',
+    rememberMeToken: 'srdtfngrefa',
+    barcode: '1212093842',
+  });
+
+  await newUser.save();
+
+  logger.info('ㅎㅇㅎㅇ');
+}
+
+start().catch((e) => console.error(`서버 시작 실패: ${e}`));

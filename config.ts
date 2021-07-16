@@ -21,6 +21,7 @@ import getArg from './lib/common/utils/args';
 import getEnv from './lib/common/utils/env';
 import path from 'path';
 import assert from 'assert';
+import {ConnectionOptions} from 'typeorm/connection/ConnectionOptions';
 
 const isTest = getEnv('NODE_ENV') === 'test';
 const isProduction = getEnv('NODE_ENV') === 'production';
@@ -74,12 +75,13 @@ export default {
     secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY'),
   },
 
-  sequelize: {
-    database: 'cafeteria',
+  database: <ConnectionOptions>{
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
     username: getEnv('DB_USERNAME', 'potados'),
     password: getEnv('DB_PASSWORD', '1234'),
-    host: 'localhost',
-    dialect: 'mysql',
+    database: 'cafeteria',
     timezone: '+09:00',
     logging: false,
   },
