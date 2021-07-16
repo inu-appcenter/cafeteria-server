@@ -26,16 +26,18 @@ const isTest = getEnv('NODE_ENV') === 'test';
 const isProduction = getEnv('NODE_ENV') === 'production';
 
 if (isProduction) {
-  assert(getArg('host'), '호스트 설정해주세요!');
-  assert(getArg('port'), '포트 설정해주세요!');
-  assert(getArg('log-dir'), '로그 경로 설정해주세요!');
+  assert(getArg('host'), '호스트(host) 설정해주세요!');
+  assert(getArg('port'), '포트(port) 설정해주세요!');
+  assert(getArg('log-dir'), '로그 경로(log-dir) 설정해주세요!');
 
+  assert(getEnv('JWT_SECRET_KEY'), 'JWT 비밀 key 설정해주세요!');
+  assert(getEnv('LOGIN_KEY'), '로그인 key 설정해주세요!');
   assert(getEnv('AWS_ACCESS_KEY_ID'), 'AWS access id 설정해주세요!');
   assert(getEnv('AWS_SECRET_ACCESS_KEY'), 'AWS secret access key 설정해주세요!');
-  assert(getEnv('JWT_SECRET_KEY'), 'JWT 비밀 key 설정해주세요!');
   assert(getEnv('DB_USERNAME'), 'DB 사용자 이름 설정해주세요!');
   assert(getEnv('DB_PASSWORD'), 'DB 비밀번호 설정해주세요!');
-  assert(getEnv('LOGIN_KEY'), '로그인 key 설정해주세요!');
+  assert(getEnv('SMTP_USERNAME'), 'SMTP 사용자 이름 설정해주세요!');
+  assert(getEnv('SMTP_PASSWORD'), 'STMP 비밀번호 설정해주세요!');
 }
 
 export default {
@@ -46,7 +48,8 @@ export default {
     host: getArg('host'),
     port: getArg('port') || 9999,
     instanceName: getArg('instance-name') || '?',
-    rootHelloMessage: '안녕하세요 카페테리아 API 서버입니다. 지금 잘 작동하는 것 맞습니다. 혹시 이상 발생하면 010-2922-2661로 연락 주세요!',
+    rootHelloMessage:
+      '안녕하세요 카페테리아 API 서버입니다. 지금 잘 작동하는 것 맞습니다. 혹시 이상 발생하면 010-2922-2661로 연락 주세요!',
   },
 
   auth: {

@@ -17,35 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {formatLog} from './utils';
-import {getLogger} from './loggerProvider';
+import winston from 'winston';
+import config from '../../../config';
 
-const loggers = {
-  event: getLogger('event'),
-  verbose: getLogger('verbose'),
-  info: getLogger('info'),
-  warn: getLogger('warn'),
-  error: getLogger('error'),
-};
+export function getConsoleFormat() {
+  return winston.format.combine(winston.format.colorize(), getFileFormat());
+}
 
-export default {
-  event(message: any) {
-    loggers.event.info(formatLog(message, false));
-  },
-
-  verbose(message: any) {
-    loggers.verbose.verbose(formatLog(message));
-  },
-
-  info(message: any) {
-    loggers.info.info(formatLog(message));
-  },
-
-  warn(message: any) {
-    loggers.warn.warn(formatLog(message));
-  },
-
-  error(message: any) {
-    loggers.error.error(formatLog(message));
-  },
-};
+export function getFileFormat() {
+  return winston.format.printf(
+    (info) =>
+      `${info.timestamp} [${config.server.instanceName}] ${
+        info.level
+      }: ${info.message.trim()}`
+  );
+}
