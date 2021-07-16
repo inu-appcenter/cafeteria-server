@@ -17,11 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({id = null, name, description, enabled}) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.enabled = enabled;
-  }
+import Entity from './Entity';
+
+export default class Answer extends Entity<Answer> {
+  id: number;
+
+  title: string;
+  body: string;
+  read: boolean;
+
+  userId: number; // TODO userId
+  questionId: number;
+
+  createdAt: Date;
 }

@@ -17,20 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * This entity will work as both transaction entity and transaction request model.
- */
-export default class {
-  constructor({mealType, userId = null, cafeteriaId = null}) {
-    /* no primary key needed in domain */
+import Entity from './Entity';
 
-    this.mealType = mealType; /* breakfast(4) | lunch(2) | dinner(1) */
+export default class CafeteriaKioskNumbers extends Entity<CafeteriaKioskNumbers> {
+  cafeteriaId: number;
 
-    this.userId = userId; /* foreign key */
-    this.cafeteriaId = cafeteriaId; /* foreign key */
-  }
-
-  toString() {
-    return JSON.stringify(this);
-  }
+  kioskNumbers: number[];
 }

@@ -17,24 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Outgoing notification to user.
- */
-export default class {
-  constructor({id = null, title, body, read, userId = null, questionId = null, createdAt = null}) {
-    this.id = id; /* primary key */
+import Entity from './Entity';
 
-    this.title = title;
-    this.body = body;
-    this.read = read;
+export default class CafeteriaComment extends Entity<CafeteriaComment> {
+  cafeteriaId: number;
 
-    this.userId = userId; /* foreign key */
-    this.questionId = questionId; /* foreign key */
-
-    this.createdAt = createdAt;
-  }
-
-  toString() {
-    return JSON.stringify(this);
-  }
+  comment: string;
 }

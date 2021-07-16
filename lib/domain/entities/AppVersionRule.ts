@@ -17,20 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({id = null, name, displayName, imagePath, supportMenu, supportDiscount, supportNotification}) {
-    this.id = id; /* primary key */
+import Entity from './Entity';
 
-    this.name = name;
-    this.displayName = displayName;
-    this.imagePath = imagePath;
+export default class AppVersionRule extends Entity<AppVersionRule> {
+  id: number;
 
-    this.supportMenu = supportMenu;
-    this.supportDiscount = supportDiscount;
-    this.supportNotification = supportNotification;
-  }
-
-  toString() {
-    return JSON.stringify(this);
-  }
+  os: string;
+  requiredMinimumVersion: string;
 }

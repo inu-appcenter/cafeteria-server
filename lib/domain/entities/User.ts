@@ -17,14 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class TransactionHistory {
-  constructor({type, transaction, failedAt, message, timestamp}) {
-    this.type = type;
-    this.userId = transaction.userId;
-    this.cafeteriaId = transaction.cafeteriaId;
-    this.mealType = transaction.mealType;
-    this.failedAt = failedAt;
-    this.message = message;
-    this.timestamp = timestamp;
-  }
+import Entity from './Entity';
+
+export default class User extends Entity<User> {
+  id: number; // TODO userId
+
+  rememberMeToken: string; // TODO rename;
+
+  /**
+   * 사용자의 id와 바코드는 1:1 매칭되며, 상호 변환 가능합니다.
+   */
+  barcode: string;
 }

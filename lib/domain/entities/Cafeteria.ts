@@ -17,21 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({id = null, deviceInfo, version, content, userId = null, createdAt = null}) {
-    this.id = id; /* primary key */
+import Entity from './Entity';
 
-    this.deviceInfo = deviceInfo;
-    this.version = version;
+export default class Cafeteria extends Entity<Cafeteria> {
+  id: number;
 
-    this.content = content;
+  name: string;
+  displayName: string;
+  imagePath: string;
 
-    this.userId = userId; /* foreign key */
-
-    this.createdAt = createdAt;
-  }
-
-  toString() {
-    return JSON.stringify(this);
-  }
+  supportMenu: boolean;
+  supportDiscount: boolean;
+  supportNotification: boolean;
 }

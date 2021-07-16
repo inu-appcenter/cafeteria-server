@@ -17,11 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({id = null, os, requiredMinimumVersion}) {
-    this.id = id;
+import Entity from './Entity';
 
-    this.os = os;
-    this.requiredMinimumVersion = requiredMinimumVersion;
-  }
+export default class Question extends Entity<Question> {
+  id: number;
+
+  deviceInfo: string;
+  version: string;
+
+  content: string;
+  askedAt: Date; // TODO rename
+
+  userId: number; // TODO userId
 }

@@ -17,15 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({lastBarcodeActivation, lastBarcodeTagging, userId = null}) {
-    this.userId = userId; /* primary key */
+import Entity from './Entity';
 
-    this.lastBarcodeActivation = lastBarcodeActivation;
-    this.lastBarcodeTagging = lastBarcodeTagging;
-  }
+export default class Menu extends Entity<Menu> {
+  /* pk 안 씀 */
 
-  toString() {
-    return JSON.stringify(this);
-  }
+  foods: string[];
+  price: number;
+  calorie: number;
+
+  cornerId: number;
 }

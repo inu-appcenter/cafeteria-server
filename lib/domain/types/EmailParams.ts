@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of INU Cafeteria.
  *
  * Copyright (C) 2020 INU Global App Center <potados99@gmail.com>
@@ -17,16 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Orders in wait
- */
-export default class WaitingOrder {
-  constructor({id = null, number, cafeteriaId, deviceIdentifier, done}) {
-    this.id = id;
-
-    this.done = done;
-    this.number = number;
-    this.cafeteriaId = cafeteriaId;
-    this.deviceIdentifier = deviceIdentifier;
-  }
-}
+export type EmailParams = {
+  from: string;
+  to: string;
+  title: string;
+  body: string;
+};

@@ -17,10 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({kioskNumbers, cafeteriaId = null}) {
-    this.cafeteriaId = cafeteriaId; /* primary key */
+import Entity from './Entity';
 
-    this.kioskNumbers = kioskNumbers;
-  }
+export default class TransactionHistory extends Entity<TransactionHistory> {
+  /* pk 안 씀 */
+
+  type: string;
+
+  userId: number; // TODO userId
+  cafeteriaId: number;
+  mealType: number;
+
+  failedAt: number;
+  message: string;
+  timestamp: Date;
 }

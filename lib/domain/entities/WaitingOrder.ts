@@ -17,20 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Broad-casted notice.
- */
-export default class {
-  constructor({id = null, title, body, createdAt = null}) {
-    this.id = id; /* primary key */
+import Entity from './Entity';
 
-    this.title = title;
-    this.body = body;
+/** @deprecated */
+export default class WaitingOrder extends Entity<WaitingOrder> {
+  id: number;
 
-    this.createdAt = createdAt;
-  }
-
-  toString() {
-    return JSON.stringify(this);
-  }
+  done: boolean;
+  number: number;
+  cafeteriaId: number;
+  deviceIdentifier: string;
 }

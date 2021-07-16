@@ -17,11 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({comment, cafeteriaId = null}) {
-    this.cafeteriaId = cafeteriaId; /* primary key */
+import Entity from './Entity';
 
-    this.comment = comment;
-  }
+export default class ParseRegex extends Entity<ParseRegex> {
+  id: number;
+
+  regex: string;
 }
-

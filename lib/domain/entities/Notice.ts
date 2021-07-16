@@ -17,10 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class ParseRegex {
-  constructor({id = null, regex}) {
-    this.id = id;
+import Entity from './Entity';
 
-    this.regex = regex;
-  }
+export default class Notice extends Entity<Notice> {
+  id: number;
+
+  title: string;
+  body: string;
+
+  createdAt: Date;
 }

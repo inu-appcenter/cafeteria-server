@@ -17,15 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({id = null, token, barcode}) {
-    this.id = id; /* primary key */
+import Entity from './Entity';
 
-    this.token = token;
-    this.barcode = barcode;
-  }
+export default class DiscountTransaction extends Entity<DiscountTransaction> {
+  /* 도메인 영역에서 pk 사용 안 함 */
 
-  toString() {
-    return JSON.stringify(this);
-  }
+  /**
+   * 아침: 4, 점심: 2, 저녁: 1
+   */
+  mealType: number;
+
+  userId: number; // TODO userId
+  cafeteriaId: number;
 }

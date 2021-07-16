@@ -17,18 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({foods, price, calorie, cornerId = null}) {
-    /* no primary key needed */
+import Entity from './Entity';
 
-    this.foods = foods;
-    this.price = price;
-    this.calorie = calorie;
+export default class UserDiscountStatus extends Entity<UserDiscountStatus> {
+  userId: number; // TODO userId
 
-    this.cornerId = cornerId; /* foreign key */
-  }
-
-  toString() {
-    return JSON.stringify(this);
-  }
+  lastBarcodeActivation: Date;
+  lastBarcodeTagging: Date;
 }

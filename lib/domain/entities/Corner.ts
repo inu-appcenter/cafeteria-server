@@ -17,11 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class {
-  constructor({from, to, title, body}) {
-    this.from = from;
-    this.to = to;
-    this.title = title;
-    this.body = body;
-  }
+import Entity from './Entity';
+
+export default class Corner extends Entity<Corner> {
+  id: number;
+
+  name: string;
+  displayName: string;
+
+  /**
+   * 0부터 7까지입니다.
+   * 아침: 4, 점심: 2, 저녁: 1
+   */
+  availableAt: number;
+
+  cafeteriaId: number;
 }
