@@ -17,22 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from '../../common/utils/logger';
+import AWS from 'aws-sdk';
+import config from '../../../config';
 
-/**
- * A base class for use cases.
- * Implement the 'onExecute' method.
- * Execute it by calling 'run'.
- */
-class UseCase {
-  async run(param) {
-    logger.verbose(`UseCase '${this.constructor.name}' is running.`);
-    return await this.onExecute(param);
-  }
-
-  async onExecute(param) {
-    throw new Error('Not implemented!');
-  }
+export function setupAWS() {
+  setupAWSGlobalConfig();
 }
 
-export default UseCase;
+function setupAWSGlobalConfig() {
+  AWS.config.update({
+    region: config.aws.region,
+    credentials: new AWS.Credentials(config.aws.accessKeyId, config.aws.secretAccessKey),
+  });
+}

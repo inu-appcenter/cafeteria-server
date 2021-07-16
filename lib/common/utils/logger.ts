@@ -17,28 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import getEnv from './env';
+import TransportStream from 'winston-transport';
 import logSetupHelper from './logSetupHelper';
+import config from '../../../config';
 
 const consoleTransport = logSetupHelper.getConsoleTransport();
-const fileTransport = (prefix) => logSetupHelper.getFileTransport(prefix);
+const fileTransport = (prefix: string) => logSetupHelper.getFileTransport(prefix);
 const combinedFileTransport = logSetupHelper.getFileTransport('combined');
-const cloudwatchTransport = (prefix) => logSetupHelper.getCloudwatchTransport(prefix);
+const cloudwatchTransport = (prefix: string) => logSetupHelper.getCloudwatchTransport(prefix);
 const combinedCloudwatchTransport = logSetupHelper.getCloudwatchTransport('combined');
 
-function getLogger(prefix) {
-  const transports = [
-    consoleTransport,
-    fileTransport(prefix),
-    combinedFileTransport,
-  ];
+function getLogger(prefix: string) {
+  const transports: TransportStream[] = [consoleTransport, fileTransport(prefix), combinedFileTransport];
+  const productionTransports: TransportStream[] = [cloudwatchTransport(prefix), combinedCloudwatchTransport];
 
-  const productionTransports = [
-    cloudwatchTransport(prefix),
-    combinedCloudwatchTransport,
-  ];
-
-  if (getEnv('NODE_ENV') === 'production') {
+  if (config.isProduction) {
     productionTransports.forEach((tp) => {
       transports.push(tp);
     });
@@ -47,7 +40,7 @@ function getLogger(prefix) {
   const logger = logSetupHelper.createLogger(transports);
 
   logger.transports.forEach((transport) => {
-    transport.silent = (getEnv('NODE_ENV') === 'test');
+    transport.silent = config.isTest;
   });
 
   return logger;
@@ -62,35 +55,23 @@ const loggers = {
 };
 
 export default {
-
-  event(message) {
-    loggers.event.info(
-      logSetupHelper.formatLog(message, false),
-    );
+  event(message: any) {
+    loggers.event.info(logSetupHelper.formatLog(message, false));
   },
 
-  verbose(message) {
-    loggers.verbose.verbose(
-      logSetupHelper.formatLog(message),
-    );
+  verbose(message: any) {
+    loggers.verbose.verbose(logSetupHelper.formatLog(message));
   },
 
-  info(message) {
-    loggers.info.info(
-      logSetupHelper.formatLog(message),
-    );
+  info(message: any) {
+    loggers.info.info(logSetupHelper.formatLog(message));
   },
 
-  warn(message) {
-    loggers.warn.warn(
-      logSetupHelper.formatLog(message),
-    );
+  warn(message: any) {
+    loggers.warn.warn(logSetupHelper.formatLog(message));
   },
 
-  error(message) {
-    loggers.error.error(
-      logSetupHelper.formatLog(message),
-    );
+  error(message: any) {
+    loggers.error.error(logSetupHelper.formatLog(message));
   },
-
 };

@@ -22,7 +22,10 @@ import getEnv from './lib/common/utils/env';
 import path from 'path';
 import assert from 'assert';
 
-if (getEnv('NODE_ENV') === 'production') {
+const isTest = getEnv('NODE_ENV') === 'test';
+const isProduction = getEnv('NODE_ENV') === 'production';
+
+if (isProduction) {
   assert(getArg('host'), '호스트 설정해주세요!');
   assert(getArg('port'), '포트 설정해주세요!');
   assert(getArg('log-dir'), '로그 경로 설정해주세요!');
@@ -36,6 +39,9 @@ if (getEnv('NODE_ENV') === 'production') {
 }
 
 export default {
+  isTest,
+  isProduction,
+
   server: {
     host: getArg('host'),
     port: getArg('port') || 9999,

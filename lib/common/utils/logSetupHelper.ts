@@ -21,12 +21,13 @@ import config from '../../../config';
 
 import WinstonCloudwatch from 'winston-cloudwatch';
 import stackTrace from 'stack-trace';
-import {setupAWS} from '../../infrastructure/cloud/aws.mjs';
+import {setupAWS} from '../../infrastructure/cloud/aws';
 import winston from 'winston';
+import TransportStream from 'winston-transport';
+
 import path from 'path';
 
-// This will add DailyRotateFile to winston.transports.
-// It is needed. Do not remove this line.
+// winston.transports에 DailyRotateFile을 추가해 줍니다.
 import _ from 'winston-daily-rotate-file';
 _;
 
@@ -37,9 +38,7 @@ function getConsoleFormat() {
 }
 
 function getFileFormat() {
-  return format.printf((info) =>
-    `${info.timestamp} [${config.server.instanceName}] ${info.level}: ${info.message.trim()}`,
-  );
+  return format.printf((info) => `${info.timestamp} [${config.server.instanceName}] ${info.level}: ${info.message.trim()}`);
 }
 
 function getConsoleTransport() {
@@ -48,7 +47,7 @@ function getConsoleTransport() {
   });
 }
 
-function getFileTransport(prefix) {
+function getFileTransport(prefix: string) {
   return new winston.transports.DailyRotateFile({
     format: getFileFormat(),
     filename: config.log.filepath(prefix),
@@ -56,7 +55,7 @@ function getFileTransport(prefix) {
   });
 }
 
-function getCloudwatchTransport(prefix) {
+function getCloudwatchTransport(prefix: string) {
   setupAWS();
 
   return new WinstonCloudwatch({
@@ -66,40 +65,42 @@ function getCloudwatchTransport(prefix) {
   });
 }
 
-function createLogger(transports) {
+function createLogger(transports: TransportStream[]) {
   return winston.createLogger({
     level: 'verbose',
     format: format.combine(
       format.timestamp({
         format: 'YYYY-MM-DD HH:mm:ss',
       }),
-      format.json(),
+      format.json()
     ),
     transports,
   });
 }
 
-function stringify(object) {
+function stringify(object: any) {
   if (object.stack) {
-    // For error objects.
+    // 에러 객체
     return object.stack;
   } else if (object.toString) {
-    // For those who can be string.
+    // 스트링이 될 수 있는 객체
     return object.toString();
   } else if (object) {
-    // For an object.
+    // 그냥 객체
     return JSON.stringify(object);
   } else {
-    // Invalid.
+    // 이도저도 아님
     return typeof object;
   }
 }
 
-function formatLog(message, showCaller = true) {
+function formatLog(message: any, showCaller = true) {
   const caller = stackTrace.get()[2]; /* to get a real caller */
 
   if (showCaller) {
-    return `${path.basename(caller.getFileName())}:${caller.getFunctionName()}:${caller.getLineNumber()}:${caller.getColumnNumber()}: ${stringify(message)}`;
+    return `${path.basename(
+      caller.getFileName()
+    )}:${caller.getFunctionName()}:${caller.getLineNumber()}:${caller.getColumnNumber()}: ${stringify(message)}`;
   } else {
     return `${stringify(message)}`;
   }

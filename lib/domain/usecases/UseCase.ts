@@ -17,16 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import AWS from 'aws-sdk';
-import config from '../../../config.mjs';
+import logger from '../../common/utils/logger';
 
-export function setupAWS() {
-  setupAWSGlobalConfig();
-}
+export default abstract class UseCase<ParamT = void, ResultT = void> {
+  async run(params: ParamT): Promise<ResultT> {
+    logger.verbose(`UseCase '${this.constructor.name}' is running.`);
 
-function setupAWSGlobalConfig() {
-  AWS.config.update({
-    region: config.aws.region,
-    credentials: new AWS.Credentials(config.aws.accessKeyId, config.aws.secretAccessKey),
-  });
+    return await this.onExecute(params);
+  }
+
+  abstract onExecute(params: ParamT): Promise<ResultT>;
 }
