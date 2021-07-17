@@ -17,17 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import ActivateBarcode from './lib/application/features/discount/ActivateBarcode';
-import Ask from './lib/application/features/qna/Ask';
+import logger from '../logging/logger';
 
-async function start() {
-  await startTypeORM(true);
+export default abstract class UseCase<ParamT = void, ResultT = void> {
+  async run(params: ParamT): Promise<ResultT> {
+    logger.verbose(`UseCase '${this.constructor.name}' 실행합니다.`);
 
-  await Ask.run({userId: 1, deviceInfo: 'dwada', appVersion: 'adwae', content: 'adwad'});
+    return await this.onExecute(params);
+  }
 
-  logger.info('ㅎㅇㅎㅇ');
+  abstract onExecute(params: ParamT): Promise<ResultT>;
 }
-
-start().catch((e) => console.error(`서버 시작 실패: ${e}`));

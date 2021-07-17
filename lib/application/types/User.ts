@@ -17,17 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import ActivateBarcode from './lib/application/features/discount/ActivateBarcode';
-import Ask from './lib/application/features/qna/Ask';
+export type UserIdentifier = {
+  userId: number;
+};
 
-async function start() {
-  await startTypeORM(true);
+export type StudentId = {
+  studentId: string;
+};
 
-  await Ask.run({userId: 1, deviceInfo: 'dwada', appVersion: 'adwae', content: 'adwad'});
-
-  logger.info('ㅎㅇㅎㅇ');
-}
-
-start().catch((e) => console.error(`서버 시작 실패: ${e}`));
+export type PhoneNumber = {
+  phoneNumber: string;
+};

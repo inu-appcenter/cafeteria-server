@@ -17,17 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import ActivateBarcode from './lib/application/features/discount/ActivateBarcode';
-import Ask from './lib/application/features/qna/Ask';
+import UseCase from '../../../common/base/UseCase';
+import {UserIdentifier} from '../../types/User';
+import {User} from '@inu-cafeteria/backend-core';
 
-async function start() {
-  await startTypeORM(true);
-
-  await Ask.run({userId: 1, deviceInfo: 'dwada', appVersion: 'adwae', content: 'adwad'});
-
-  logger.info('ㅎㅇㅎㅇ');
+class ActivateBarcode extends UseCase<UserIdentifier, void> {
+  async onExecute({userId}: UserIdentifier): Promise<void> {
+    /**
+     * 사용자가 없으면 뭐 딱히 업데이트하지 않습니다.
+     */
+    await User.update(userId, {barcodeActivatedAt: new Date()});
+  }
 }
 
-start().catch((e) => console.error(`서버 시작 실패: ${e}`));
+export default new ActivateBarcode();
