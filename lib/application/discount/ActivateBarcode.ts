@@ -19,7 +19,7 @@
 
 import UseCase from '../../common/base/UseCase';
 import {User} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/UserTypes';
+import {UserIdentifier} from '../user/Types';
 
 class ActivateBarcode extends UseCase<UserIdentifier, void> {
   async onExecute({userId}: UserIdentifier): Promise<void> {

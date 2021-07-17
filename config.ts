@@ -112,8 +112,10 @@ export default {
   },
 
   transaction: {
-    barcodeLifetimeMinutes: 10,
-    barcodeTagMinimumIntervalSecs: 15,
+    validation: {
+      barcodeLifetimeMinutes: 10,
+      barcodeTagMinimumIntervalSecs: 15,
+    },
   },
 
   mail: {

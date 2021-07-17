@@ -17,28 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {Question, User} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/UserTypes';
-
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
-
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      user: await User.findOne(userId),
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
-
-    await question.save();
-  }
+export enum ValidationResultCode {
+  USUAL_SUCCESS,
+  USUAL_FAIL,
+  UNUSUAL_NO_BARCODE,
+  UNUSUAL_WRONG_PARAM,
 }
 
-export default new Ask();
+export type ValidationResult = {
+  code: ValidationResultCode;
+  failedAt: number;
+};
