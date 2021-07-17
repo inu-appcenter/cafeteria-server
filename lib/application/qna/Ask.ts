@@ -17,17 +17,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../../common/base/UseCase';
-import {UserIdentifier} from '../../types/User';
-import {User} from '@inu-cafeteria/backend-core';
+import UseCase from '../../common/base/UseCase';
+import {Question, User} from '@inu-cafeteria/backend-core';
+import {UserIdentifier} from '../user/UserTypes';
 
-class ActivateBarcode extends UseCase<UserIdentifier, void> {
-  async onExecute({userId}: UserIdentifier): Promise<void> {
-    /**
-     * 사용자가 없으면 뭐 딱히 업데이트하지 않습니다.
-     */
-    await User.update(userId, {barcodeActivatedAt: new Date()});
+export type AskParams = {
+  deviceInfo: string;
+  appVersion: string;
+  content: string;
+} & UserIdentifier;
+
+class Ask extends UseCase<AskParams, void> {
+  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
+    await Question.create({
+      user: await User.findOne(userId),
+      deviceInfo,
+      appVersion,
+      content,
+      askedAt: new Date(),
+    }).save();
   }
 }
 
-export default new ActivateBarcode();
+export default new Ask();

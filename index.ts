@@ -19,8 +19,8 @@
 
 import logger from './lib/common/logging/logger';
 import {startTypeORM} from '@inu-cafeteria/backend-core';
-import ActivateBarcode from './lib/application/features/discount/ActivateBarcode';
-import Ask from './lib/application/features/qna/Ask';
+import ActivateBarcode from './lib/application/discount/ActivateBarcode';
+import Ask from './lib/application/qna/Ask';
 
 async function start() {
   await startTypeORM(true);
