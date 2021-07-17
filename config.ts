@@ -75,17 +75,6 @@ export default {
     secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY'),
   },
 
-  database: <ConnectionOptions>{
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: getEnv('DB_USERNAME', 'potados'),
-    password: getEnv('DB_PASSWORD', '1234'),
-    database: 'cafeteria',
-    timezone: '+09:00',
-    logging: false,
-  },
-
   login: {
     // 재학생 확인용 원격 로그인 서버
     url: 'http://117.16.191.242:8081/login',

@@ -17,9 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {startTypeORM} from './lib/external/database/typeorm';
-import User from './lib/features/user/User';
 import logger from './lib/common/logging/logger';
+import {startTypeORM, User} from '@inu-cafeteria/backend-core';
 
 async function start() {
   await startTypeORM(true);
