@@ -18,10 +18,8 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Cafeteria, DiscountHistory, DiscountTransaction, User} from '@inu-cafeteria/backend-core';
-import DiscountTransactionValidator from './validation/DiscountTransactionValidator';
-import {ValidationResultCode} from './validation/ValidationResult';
-import logger from '../../common/logging/logger';
+import {DiscountTransaction} from '@inu-cafeteria/backend-core';
+import CommitHandler from './CommitHandler';
 
 export type CommitDiscountTransactionParams = {
   transaction: DiscountTransaction;
@@ -31,80 +29,7 @@ export type CommitDiscountTransactionParams = {
 
 class CommitDiscountTransaction extends UseCase<CommitDiscountTransactionParams, void> {
   async onExecute(params: CommitDiscountTransactionParams): Promise<void> {
-    if (params.confirm) {
-      await this.doFor(params, 'Commit', '할인 트랜잭션 확정');
-    } else {
-      await this.doFor(params, 'Cancel', '할인 트랜잭션 취소');
-    }
-  }
-
-  private async doFor(params: CommitDiscountTransactionParams, type: string, description: string) {
-    const {transaction, transactionToken} = params;
-
-    const {code, failedAt} = await new DiscountTransactionValidator(
-      transaction,
-      transactionToken
-    ).validateForCancel();
-
-    if (code === ValidationResultCode.USUAL_SUCCESS) {
-      await this.onSuccess(params, type, description);
-    } else {
-      await this.onFail(params, failedAt, type, description);
-    }
-  }
-
-  private async onSuccess(
-    {transaction}: CommitDiscountTransactionParams,
-    type: string,
-    description: string
-  ) {
-    const {studentId} = transaction;
-
-    logger.info(`${studentId} ${description} 성공`);
-
-    await this.leaveHistory(transaction, 0, type);
-  }
-
-  private async onFail(
-    {transaction}: CommitDiscountTransactionParams,
-    failedAt: number,
-    type: string,
-    description: string
-  ) {
-    const {studentId} = transaction;
-    const transactionString = JSON.stringify(transaction);
-
-    logger.warn(
-      `${studentId} ${description} 실패: 규칙 ${failedAt} 검증 실패: ${transactionString}`
-    );
-
-    await this.leaveHistory(
-      transaction,
-      failedAt,
-      type,
-      `${description} 실패: 규칙 ${failedAt} 검증 실패`
-    );
-  }
-
-  private async leaveHistory(
-    transaction: DiscountTransaction,
-    failedAt: number,
-    type: string,
-    message: string = ''
-  ) {
-    const {studentId, cafeteriaId, mealType} = transaction;
-
-    const history = DiscountHistory.create({
-      type: type,
-      user: await User.findOneOrFail({studentId}),
-      cafeteria: await Cafeteria.findOneOrFail(cafeteriaId),
-      mealType: mealType,
-      failedAt: failedAt,
-      message: message,
-      timestamp: new Date(),
-    });
-
-    await history.save();
+    await new CommitHandler(params).handle();
   }
 }
 
