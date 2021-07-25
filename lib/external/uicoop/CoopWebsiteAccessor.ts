@@ -31,6 +31,13 @@ export type CoopRequestParams = {
   data?: Record<string, any>;
 };
 
+/**
+ * 생협 홈페이지에 별 탈 없이 요청을 보내고 응답을 받기 위해서는
+ * Cafe24 방화벽을 뚫어야 합니다.
+ *
+ * 이 클래스가 그걸 해줍니다.
+ * 매 요청마다 생성해서 쓰면 됩니다.
+ */
 export default class CoopWebsiteAccessor {
   constructor(private readonly params: CoopRequestParams) {}
 
