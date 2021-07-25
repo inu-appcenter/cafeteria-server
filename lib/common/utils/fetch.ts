@@ -17,17 +17,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function appendQueryStringParameters(url: string, parameters: Record<string, any>) {
-  if (isEmpty(parameters)) {
-    return url;
-  } else {
-    const prefix = url.includes('?') ? '&' : '?';
-    const urlencoded = new URLSearchParams(parameters).toString();
+import fetch, {RequestInfo, RequestInit} from 'node-fetch';
 
-    return url + prefix + urlencoded;
-  }
+export function fetchWithTimeout(
+  url: RequestInfo,
+  options: RequestInit,
+  timeout: number = 5000
+): Promise<Response> {
+  const fetched = fetch(url, options);
+  const timedOut = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('요청 타임아웃!!')), timeout)
+  );
+
+  // @ts-ignore
+  return Promise.race([fetched, timedOut]);
 }
 
-function isEmpty(record: Record<string, any>) {
-  return Object.keys(record).length === 0;
+export async function postAndGetResponseText(url: RequestInfo, body: Record<string, any>) {
+  const response = await fetchWithTimeout(url, {
+    method: 'POST',
+    body: new URLSearchParams(body).toString(),
+  });
+
+  return response.text();
 }

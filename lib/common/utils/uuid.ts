@@ -17,17 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function appendQueryStringParameters(url: string, parameters: Record<string, any>) {
-  if (isEmpty(parameters)) {
-    return url;
-  } else {
-    const prefix = url.includes('?') ? '&' : '?';
-    const urlencoded = new URLSearchParams(parameters).toString();
+import uuid from 'uuid-with-v6';
 
-    return url + prefix + urlencoded;
-  }
-}
-
-function isEmpty(record: Record<string, any>) {
-  return Object.keys(record).length === 0;
+/**
+ * UUIDv6 생성합니다.
+ * 타임스탬프 + 랜덤 구성입니다.
+ */
+export function generateUUID(): string {
+  return uuid.v6();
 }

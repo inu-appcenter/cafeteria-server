@@ -17,17 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function appendQueryStringParameters(url: string, parameters: Record<string, any>) {
-  if (isEmpty(parameters)) {
-    return url;
-  } else {
-    const prefix = url.includes('?') ? '&' : '?';
-    const urlencoded = new URLSearchParams(parameters).toString();
+import bcrypt from 'bcrypt';
+import config from '../../../config';
 
-    return url + prefix + urlencoded;
-  }
+export async function compareBcryptHash(plain: string, hashed: string) {
+  return await bcrypt.compare(plain, hashed);
 }
 
-function isEmpty(record: Record<string, any>) {
-  return Object.keys(record).length === 0;
+export async function applyBcryptHash(plain: string) {
+  return await bcrypt.hash(plain, config.hash.saltRounds);
 }

@@ -17,17 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function appendQueryStringParameters(url: string, parameters: Record<string, any>) {
-  if (isEmpty(parameters)) {
-    return url;
-  } else {
-    const prefix = url.includes('?') ? '&' : '?';
-    const urlencoded = new URLSearchParams(parameters).toString();
+import jwt from 'jsonwebtoken';
+import config from '../../../config';
 
-    return url + prefix + urlencoded;
-  }
-}
-
-function isEmpty(record: Record<string, any>) {
-  return Object.keys(record).length === 0;
+export function createJwt(payload: Record<string, any>) {
+  return jwt.sign(payload, config.auth.key, {algorithm: 'HS256', expiresIn: config.auth.expiresIn});
 }
