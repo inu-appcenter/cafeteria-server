@@ -19,18 +19,12 @@
 
 import UseCase from '../../common/base/UseCase';
 import {UserIdentifier} from '../user/Types';
-import {Answer} from '@inu-cafeteria/backend-core';
+import {Question} from '@inu-cafeteria/backend-core';
 
-class GetUnreadAnswers extends UseCase<UserIdentifier, Answer[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Answer[]> {
-    // Answer에는 userId가 없어 Question과의 join을 통해야 합니다.
-
-    return await Answer.createQueryBuilder('answer')
-      .innerJoin('answer.question', 'question') // question 필드에 join을 찰싹.
-      .where('question.userId = :userId', {userId}) // 그 question의 userId로 필터.
-      .andWhere('answer.read = :read', {read: false}) // 물론 answer는 unread인 것만.
-      .getMany(); // 마니마니챙겨와
+class GetQuestions extends UseCase<UserIdentifier, Question[]> {
+  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
+    return await Question.find({where: {userId}});
   }
 }
 
-export default new GetUnreadAnswers();
+export default new GetQuestions();

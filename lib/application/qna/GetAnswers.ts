@@ -19,12 +19,12 @@
 
 import UseCase from '../../common/base/UseCase';
 import {UserIdentifier} from '../user/Types';
-import {Question} from '@inu-cafeteria/backend-core';
+import {Answer} from '@inu-cafeteria/backend-core';
 
-class GetQnAs extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}, relations: ['answer']});
+class GetAnswers extends UseCase<UserIdentifier, Answer[]> {
+  async onExecute({userId}: UserIdentifier): Promise<Answer[]> {
+    return await Answer.find({where: {userId}});
   }
 }
 
-export default new GetQnAs();
+export default new GetAnswers();
