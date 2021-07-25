@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CoopRepository from '../lib/application/menu/CoopRepository';
+import CoopRepository from '../../lib/application/menu/CoopRepository';
 
 describe('생협 홈페이지에서 식단 가져오기', () => {
   it('회피기동 잘 해야 합니다.', async () => {

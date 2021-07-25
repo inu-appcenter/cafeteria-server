@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import MenuRepository from '../lib/application/menu/MenuRepository';
+import MenuRepository from '../../lib/application/menu/MenuRepository';
 import {startTypeORM} from '@inu-cafeteria/backend-core';
 
 beforeAll(async () => {

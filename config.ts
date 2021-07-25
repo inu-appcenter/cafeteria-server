@@ -21,7 +21,6 @@ import getArg from './lib/common/utils/args';
 import getEnv from './lib/common/utils/env';
 import path from 'path';
 import assert from 'assert';
-import {ConnectionOptions} from 'typeorm/connection/ConnectionOptions';
 
 const isTest = getEnv('NODE_ENV') === 'test';
 const isProduction = getEnv('NODE_ENV') === 'production';
