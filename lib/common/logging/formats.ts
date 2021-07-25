@@ -1,7 +1,7 @@
 /**
  * This file is part of INU Cafeteria.
  *
- * Copyright (C) 2020 INU Global App Center <potados99@gmail.com>
+ * Copyright (C) 2021 INU Global App Center <potados99@gmail.com>
  *
  * INU Cafeteria is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@ export function getConsoleFormat() {
 export function getFileFormat() {
   return winston.format.printf(
     (info) =>
-      `${info.timestamp} [${config.server.instanceName}] ${
-        info.level
-      }: ${info.message.trim()}`
+      `${info.timestamp} [${config.server.instanceName}] ${info.level}: ${info.message.trim()}`
   );
 }
