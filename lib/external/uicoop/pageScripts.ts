@@ -17,8 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import getCupidCookie from './embeded/script';
+import getCupidCookie from './embedded/script';
 
+/**
+ * 생협 홈페이지를 해외 ip로 접근하려면 cafe24 방화벽을 뚫어야 합니다.
+ * 그걸 하려면 페이지에 삽입된 내용과 페이지에 심어진 스크립트를 참고하여 CUPID 쿠키(무슨뜻인지모름)를 구해와야 합니다.
+ *
+ * 페이지 스크립트는 ./embedded 디렉토리에 들어 있습니다.
+ * 이 파일은 호출을 편하게 해주는 wrapper입니다.
+ *
+ * @param pageContent 페이지 html.
+ */
 export function imitateCupidCookie(pageContent: string) {
   const result =
     /a=toNumbers\("(?<A>.+)"\),b=toNumbers\("(?<B>.+)"\),c=toNumbers\("(?<C>.+)"\)/.exec(
