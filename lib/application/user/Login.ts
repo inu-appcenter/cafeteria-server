@@ -47,8 +47,8 @@ class Login extends UseCase<LoginParams, LoginResult> {
     const user = await this.getOrCreateUser(studentId);
     const newRememberMeToken = generateUUID();
 
-    user.lastLoginAt = new Date();
     user.rememberMeToken = await applyBcryptHash(newRememberMeToken);
+    user.lastLoginAt = new Date();
     user.barcode = await GenerateBarcode.run({studentId});
 
     await user.save();
