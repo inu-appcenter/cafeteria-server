@@ -1,9 +1,3 @@
-import DiscountTransactionValidator from './validation/DiscountTransactionValidator';
-import {ValidationResult, ValidationResultCode} from './validation/ValidationResult';
-import logger from '../../common/logging/logger';
-import {Cafeteria, DiscountHistory, DiscountTransaction, User} from '@inu-cafeteria/backend-core';
-import {CommitDiscountTransactionParams} from './CommitDiscountTransaction';
-
 /**
  * This file is part of INU Cafeteria.
  *
@@ -23,6 +17,15 @@ import {CommitDiscountTransactionParams} from './CommitDiscountTransaction';
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import DiscountTransactionValidator from './validation/DiscountTransactionValidator';
+import {ValidationResult, ValidationResultCode} from './validation/ValidationResult';
+import logger from '../../common/logging/logger';
+import {Cafeteria, DiscountHistory, User} from '@inu-cafeteria/backend-core';
+import {CommitDiscountTransactionParams} from './CommitDiscountTransaction';
+
+/**
+ * 할인 Commit 또는 Cancel과 관련된 일은 얘가 다 합니다.
+ */
 export default class CommitHandler {
   constructor(private readonly params: CommitDiscountTransactionParams) {}
 

@@ -20,6 +20,7 @@
 import UseCase from '../../common/base/UseCase';
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
 import CommitHandler from './CommitHandler';
+import logger from '../../common/logging/logger';
 
 export type CommitDiscountTransactionParams = {
   transaction: DiscountTransaction;
@@ -29,6 +30,8 @@ export type CommitDiscountTransactionParams = {
 
 class CommitDiscountTransaction extends UseCase<CommitDiscountTransactionParams, void> {
   async onExecute(params: CommitDiscountTransactionParams): Promise<void> {
+    logger.info(`할인 트랜잭션 Commit을 처리합니다.`);
+
     await new CommitHandler(params).handle();
   }
 }
