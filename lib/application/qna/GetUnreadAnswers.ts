@@ -18,27 +18,19 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Question, User} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/Types';
+import {Answer} from '@inu-cafeteria/backend-core';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
+class GetUnreadAnswers extends UseCase<UserIdentifier, Answer[]> {
+  async onExecute({userId}: UserIdentifier): Promise<Answer[]> {
+    // Answer에는 userId가 없어 Question과의 join을 통해야 합니다.
 
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
-
-    await question.save();
+    return await Answer.createQueryBuilder('answer')
+      .innerJoin('answer.question', 'question')
+      .where('question.userId = :userId', {userId})
+      .andWhere('answer.read = :read', {read: false})
+      .getMany();
   }
 }
 
-export default new Ask();
+export default new GetUnreadAnswers();

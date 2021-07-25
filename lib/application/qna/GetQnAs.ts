@@ -18,27 +18,13 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Question, User} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/Types';
+import {Question} from '@inu-cafeteria/backend-core';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
-
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
-
-    await question.save();
+class GetQnAs extends UseCase<UserIdentifier, Question[]> {
+  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
+    return await Question.find({where: {userId}, relations: ['answer']});
   }
 }
 
-export default new Ask();
+export default new GetQnAs();
