@@ -5,10 +5,13 @@
       <w>appcenter</w>
       <w>bcrypt</w>
       <w>blipp</w>
+      <w>body는</w>
       <w>cancel과</w>
       <w>code를</w>
       <w>commit을</w>
       <w>datasources</w>
+      <w>diff는</w>
+      <w>entitizer</w>
       <w>file을</w>
       <w>hapi</w>
       <w>inucafeteria</w>
@@ -23,6 +26,7 @@
       <w>usecases</w>
       <w>waitings</w>
       <w>yyyymmdd</w>
+      <w>yyyymmdd만</w>
     </words>
   </dictionary>
 </component>

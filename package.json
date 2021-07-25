@@ -32,7 +32,8 @@
     "@hapi/inert": "^6.0.3",
     "@hapi/joi": "^17.1.0",
     "@hapi/vision": "^6.0.1",
-    "@inu-cafeteria/backend-core": "^0.1.8",
+    "@inu-cafeteria/backend-core": "^0.1.9",
+    "@types/moment": "^2.13.0",
     "aws-sdk": "^2.818.0",
     "axios": "^0.21.1",
     "axios-cookiejar-support": "^1.0.1",
@@ -60,53 +61,27 @@
     "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.24",
     "@types/minimist": "^1.2.2",
     "@types/node": "^16.3.2",
+    "@types/qs": "^6.9.7",
     "@types/stack-trace": "0.0.29",
     "@types/tough-cookie": "^4.0.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.6",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
   "jest": {
-    "testMatch": [
-      "**/__tests__/**/*.?(m)js?(x)",
-      "**/?(*.)(spec|test).?(m)js?(x)"
-    ],
-    "collectCoverageFrom": [
-      "**/*.{mjs,js,}",
-      "!index.mjs",
-      "!config.mjs",
-      "!test/**",
-      "!lib/domain/constants/**",
-      "!lib/domain/entities/**",
-      "!lib/domain/repositories/**",
-      "!lib/domain/security/**",
-      "!lib/domain/usecases/**",
-      "!lib/domain/validators/**",
-      "!lib/infrastructure/database/**",
-      "!lib/infrastructure/webserver/**",
-      "!lib/infrastructure/uicoop/**",
-      "!**/node_modules/**",
-      "!**/coverage/**"
-    ],
-    "testEnvironment": "node",
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
-    "transformIgnorePatterns": [
-      "./node_modules/"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "mjs"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 60
+    "testRegex": "\\.test\\.ts$",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
       }
     }
   },

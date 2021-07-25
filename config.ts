@@ -156,4 +156,4 @@ export default {
       unit: 'hour',
     },
   },
-};
+} as const;
