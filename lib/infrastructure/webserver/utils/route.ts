@@ -17,18 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import startServer from './lib/infrastructure/webserver/server';
+import {ServerRoute} from '@hapi/hapi';
 
-async function start() {
-  logger.info('TypeORM 시작합니다.');
-  await startTypeORM(true);
-
-  logger.info('ㅎㅇㅎㅇ');
-  await startServer();
+export function defineRoute(
+  method: ServerRoute['method'],
+  path: ServerRoute['path'],
+  handler: ServerRoute['handler'],
+  options?: ServerRoute['options']
+): ServerRoute {
+  return {
+    method,
+    path,
+    handler,
+    options,
+  };
 }
-
-start()
-  .then((e) => console.log('서버 시작!'))
-  .catch((e) => console.error(`서버 시작 실패: ${e}`));

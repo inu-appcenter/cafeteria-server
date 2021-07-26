@@ -25,6 +25,7 @@ import {stringifyError} from '../../common/utils/error';
 export type SendMailParams = {
   from: string;
   to: string;
+
   title: string;
   body: string;
 };

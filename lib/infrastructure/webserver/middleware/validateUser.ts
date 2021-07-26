@@ -17,18 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import startServer from './lib/infrastructure/webserver/server';
+import {SessionTokenContents} from '../../../application/user/base/Types';
+import CheckIfUserExists from '../../../application/user/CheckIfUserExists';
 
-async function start() {
-  logger.info('TypeORM 시작합니다.');
-  await startTypeORM(true);
+export default async function validateUser({userId}: SessionTokenContents) {
+  const isValid = userId && (await CheckIfUserExists.run({userId}));
 
-  logger.info('ㅎㅇㅎㅇ');
-  await startServer();
+  return {isValid};
 }
-
-start()
-  .then((e) => console.log('서버 시작!'))
-  .catch((e) => console.error(`서버 시작 실패: ${e}`));

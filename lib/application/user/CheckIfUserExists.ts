@@ -17,18 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import startServer from './lib/infrastructure/webserver/server';
+import UseCase from '../../common/base/UseCase';
+import {UserIdentifier} from './base/Types';
+import {User} from '@inu-cafeteria/backend-core';
 
-async function start() {
-  logger.info('TypeORM 시작합니다.');
-  await startTypeORM(true);
+class CheckIfUserExists extends UseCase<UserIdentifier, boolean> {
+  async onExecute({userId}: UserIdentifier): Promise<boolean> {
+    const found = await User.findOne(userId);
 
-  logger.info('ㅎㅇㅎㅇ');
-  await startServer();
+    return !!found;
+  }
 }
 
-start()
-  .then((e) => console.log('서버 시작!'))
-  .catch((e) => console.error(`서버 시작 실패: ${e}`));
+export default new CheckIfUserExists();

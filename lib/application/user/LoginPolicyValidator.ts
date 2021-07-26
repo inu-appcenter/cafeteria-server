@@ -18,7 +18,7 @@
  */
 
 import {LoginParams} from './Login';
-import StudentAccountValidator from '../../external/univ/StudentAccountValidator';
+import StudentAccountValidator from '../../external/inu/StudentAccountValidator';
 import {User} from '@inu-cafeteria/backend-core';
 import {compareBcryptHash} from '../../common/utils/bcrypt';
 import assert from 'assert';

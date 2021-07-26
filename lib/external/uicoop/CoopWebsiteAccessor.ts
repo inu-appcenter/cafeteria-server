@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {appendQueryStringParameters} from '../../common/utils/url';
 import qs from 'qs';
 import logger from '../../common/logging/logger';
-import {newAxiosInstance, newCookieJar} from '../../common/utils/axios';
 import config from '../../../config';
-import {imitateCupidCookie} from './pageScripts';
+import {imitateCupidCookie} from './embedded/pageScripts';
+import {appendQueryStringParameters} from '../../common/utils/url';
+import {newAxiosInstance, newCookieJar} from '../../common/utils/axios';
 
 export type CoopRequestParams = {
   url: string;

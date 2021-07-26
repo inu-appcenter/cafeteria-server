@@ -34,3 +34,7 @@ export type Session = {
   rememberMeToken: string;
   barcode?: string;
 };
+
+export type SessionTokenContents = {
+  userId: number;
+};

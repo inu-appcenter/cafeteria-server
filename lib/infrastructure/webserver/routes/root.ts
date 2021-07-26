@@ -17,18 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import startServer from './lib/infrastructure/webserver/server';
+import {defineRoute} from '../utils/route';
+import Joi from 'joi';
+import {defineHandler} from '../utils/handler';
 
-async function start() {
-  logger.info('TypeORM 시작합니다.');
-  await startTypeORM(true);
+const getRootQuery = Joi.object({
+  name: Joi.string().required().description('당신의 이름'),
+}).label('최상위 hello 요청 쿼리스트링 파라미터');
 
-  logger.info('ㅎㅇㅎㅇ');
-  await startServer();
-}
+const handler = defineHandler(async (request) => {
+  return `안녕 ${request.query.name}!`;
+});
 
-start()
-  .then((e) => console.log('서버 시작!'))
-  .catch((e) => console.error(`서버 시작 실패: ${e}`));
+export default defineRoute('get', '/', handler, {
+  validate: {
+    query: getRootQuery,
+  },
+  auth: false,
+});

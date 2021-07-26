@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import getCupidCookie from './embedded/script';
+import getCupidCookie from './script';
 
 /**
  * 생협 홈페이지를 해외 ip로 접근하려면 cafe24 방화벽을 뚫어야 합니다.
