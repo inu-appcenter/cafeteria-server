@@ -28,3 +28,9 @@ export type StudentId = {
 export type PhoneNumber = {
   phoneNumber: string;
 };
+
+export type Session = {
+  jwt: string;
+  rememberMeToken: string;
+  barcode?: string;
+};

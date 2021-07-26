@@ -24,6 +24,7 @@ import {generateUUID} from '../../common/utils/uuid';
 import GenerateBarcode from '../barcode/GenerateBarcode';
 import {applyBcryptHash} from '../../common/utils/bcrypt';
 import LoginPolicyValidator from './LoginPolicyValidator';
+import {Session} from './Types';
 
 export type LoginParams = {
   studentId: string;
@@ -31,31 +32,28 @@ export type LoginParams = {
   rememberMeToken?: string;
 };
 
-export type LoginResult = {
-  jwt: string;
-  rememberMeToken: string;
-};
-
-class Login extends UseCase<LoginParams, LoginResult> {
-  async onExecute(params: LoginParams): Promise<LoginResult> {
+class Login extends UseCase<LoginParams, Session> {
+  async onExecute(params: LoginParams): Promise<Session> {
     await new LoginPolicyValidator(params).validate();
 
     return await this.updateUserAndCreateSession(params.studentId);
   }
 
-  private async updateUserAndCreateSession(studentId: string) {
+  private async updateUserAndCreateSession(studentId: string): Promise<Session> {
     const user = await this.getOrCreateUser(studentId);
     const newRememberMeToken = generateUUID();
+    const newBarcode = await GenerateBarcode.run({studentId});
 
     user.rememberMeToken = await applyBcryptHash(newRememberMeToken);
     user.lastLoginAt = new Date();
-    user.barcode = await GenerateBarcode.run({studentId});
+    user.barcode = newBarcode;
 
     await user.save();
 
     return {
       jwt: createJwt({userId: user.id}),
       rememberMeToken: newRememberMeToken,
+      barcode: newBarcode,
     };
   }
 
