@@ -18,13 +18,13 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/base/Types';
-import {Question} from '@inu-cafeteria/backend-core';
 
-class GetQuestions extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}});
+export type NotifyNewQuestionParams = {
+  // TODO
+};
+
+class NotifyNewQuestion extends UseCase<NotifyNewQuestionParams, void> {
+  async onExecute(params: NotifyNewQuestionParams): Promise<void> {
+    return Promise.resolve(undefined); // TODO
   }
 }
-
-export default new GetQuestions();

@@ -18,13 +18,21 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/base/Types';
-import {Question} from '@inu-cafeteria/backend-core';
+import logger from '../../common/logging/logger';
+import CancelHandler from './handler/CancelHandler';
+import {DiscountTransactionParams} from './base/Types';
 
-class GetQuestions extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}});
+class CancelDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
+  async onExecute({transaction, transactionToken}: DiscountTransactionParams): Promise<void> {
+    logger.info(`할인 트랜잭션 Cancel을 처리합니다.`);
+
+    await new CancelHandler({
+      transaction,
+      transactionToken,
+      taskType: 'Cancel',
+      taskName: '할인 트랜잭션 취소',
+    }).handle();
   }
 }
 
-export default new GetQuestions();
+export default new CancelDiscountTransaction();

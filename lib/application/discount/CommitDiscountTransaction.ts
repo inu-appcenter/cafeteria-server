@@ -19,20 +19,21 @@
 
 import UseCase from '../../common/base/UseCase';
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
-import CommitHandler from './CommitHandler';
+import CommitHandler from './handler/CommitHandler';
 import logger from '../../common/logging/logger';
+import CancelHandler from './handler/CancelHandler';
+import {DiscountTransactionParams} from './base/Types';
 
-export type CommitDiscountTransactionParams = {
-  transaction: DiscountTransaction;
-  transactionToken: string;
-  confirm: boolean;
-};
-
-class CommitDiscountTransaction extends UseCase<CommitDiscountTransactionParams, void> {
-  async onExecute(params: CommitDiscountTransactionParams): Promise<void> {
+class CommitDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
+  async onExecute({transaction, transactionToken}: DiscountTransactionParams): Promise<void> {
     logger.info(`할인 트랜잭션 Commit을 처리합니다.`);
 
-    await new CommitHandler(params).handle();
+    await new CommitHandler({
+      transaction,
+      transactionToken,
+      taskType: 'Commit',
+      taskName: '할인 트랜잭션 확정',
+    }).handle();
   }
 }
 

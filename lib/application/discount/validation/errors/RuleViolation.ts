@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ValidationResult} from '../ValidationResult';
+import {ValidationResult} from './ValidationResult';
 
 export default class RuleViolation extends Error {
   constructor(readonly result: ValidationResult) {

@@ -19,7 +19,7 @@
 
 import UseCase from '../../common/base/UseCase';
 import assert from 'assert';
-import {StudentId} from '../user/Types';
+import {StudentId} from '../user/base/Types';
 
 class ParseBarcode extends UseCase<string, StudentId> {
   async onExecute(barcode: string): Promise<StudentId> {

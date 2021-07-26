@@ -18,7 +18,7 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/Types';
+import {UserIdentifier} from '../user/base/Types';
 import {Answer} from '@inu-cafeteria/backend-core';
 
 class GetUnreadAnswers extends UseCase<UserIdentifier, Answer[]> {

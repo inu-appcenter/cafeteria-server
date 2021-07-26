@@ -17,14 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/base/Types';
-import {Question} from '@inu-cafeteria/backend-core';
+import {DiscountTransaction} from '@inu-cafeteria/backend-core';
 
-class GetQuestions extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}});
-  }
-}
-
-export default new GetQuestions();
+export type DiscountTransactionParams = {
+  transaction: DiscountTransaction;
+  transactionToken: string;
+};

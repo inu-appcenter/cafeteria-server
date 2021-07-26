@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ValidationResultCode} from '../ValidationResult';
+import {ValidationResultCode} from '../errors/ValidationResult';
 
 /**
  * This file is part of INU Cafeteria.

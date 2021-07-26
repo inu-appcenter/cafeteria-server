@@ -18,27 +18,21 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Question, User} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/Types';
+import {DiscountTransactionParams} from './base/Types';
+import logger from '../../common/logging/logger';
+import CommitHandler from './handler/CommitHandler';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
+class VerifyDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
+  async onExecute({transaction, transactionToken}: DiscountTransactionParams): Promise<void> {
+    logger.info(`할인 트랜잭션 Verify 시작합니다.`);
 
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
-
-    await question.save();
+    await new CommitHandler({
+      transaction,
+      transactionToken,
+      taskType: 'Verify',
+      taskName: '할인 트랜잭션 검증',
+    }).handle();
   }
 }
 
-export default new Ask();
+export default new VerifyDiscountTransaction();

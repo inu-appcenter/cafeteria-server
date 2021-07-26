@@ -18,13 +18,27 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/base/Types';
 import {Question} from '@inu-cafeteria/backend-core';
+import {UserIdentifier} from '../user/base/Types';
 
-class GetQuestions extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}});
+export type MakeInquiryParams = {
+  deviceInfo: string;
+  appVersion: string;
+  content: string;
+} & UserIdentifier;
+
+class MakeInquiry extends UseCase<MakeInquiryParams, void> {
+  async onExecute({userId, deviceInfo, appVersion, content}: MakeInquiryParams): Promise<void> {
+    const question = Question.create({
+      userId,
+      deviceInfo,
+      appVersion,
+      content,
+      askedAt: new Date(),
+    });
+
+    await question.save();
   }
 }
 
-export default new GetQuestions();
+export default new MakeInquiry();

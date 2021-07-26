@@ -17,14 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/base/Types';
-import {Question} from '@inu-cafeteria/backend-core';
+import DiscountTransactionValidator from '../validation/DiscountTransactionValidator';
+import {ValidationResult} from '../validation/errors/ValidationResult';
+import TransactionHandler from './base/TransactionHandler';
 
-class GetQuestions extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}});
+export default class VerifyHandler extends TransactionHandler {
+  async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
+    return await validator.validateForVerify();
   }
 }
-
-export default new GetQuestions();

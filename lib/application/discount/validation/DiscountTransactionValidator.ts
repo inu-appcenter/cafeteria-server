@@ -22,7 +22,7 @@ import DiscountRulesChecker from './rules/DiscountRulesChecker';
 import config from '../../../../config';
 import RuleViolation from './errors/RuleViolation';
 import TestRunner from './tests/TestRunner';
-import {ValidationResult, ValidationResultCode} from './ValidationResult';
+import {ValidationResult, ValidationResultCode} from './errors/ValidationResult';
 import {Test} from './tests/Test';
 
 export default class DiscountTransactionValidator {
@@ -31,7 +31,7 @@ export default class DiscountTransactionValidator {
     private readonly transactionToken: string
   ) {}
 
-  async validateForBarcodeChecking() {
+  async validateForVerify() {
     return await this.validate(async () => {
       await this.testRequestFormat();
       await this.testBasicRules();
