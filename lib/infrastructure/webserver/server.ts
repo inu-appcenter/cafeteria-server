@@ -17,75 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Hapi from '@hapi/hapi';
-import Inert from '@hapi/inert';
-import Vision from '@hapi/vision';
-import HapiSwagger from 'hapi-swagger';
-import HapiAuthJwt2 from 'hapi-auth-jwt2';
+import express from 'express';
 import config from '../../../config';
-import thisPackage from '../../../package.json';
-import validateUser from './middleware/validateUser';
-import root from './routes/root';
+import {registerRoutes} from './utils/register';
 
 export default async function startServer() {
-  const server = await createServer();
+  const app = express();
 
-  return server.start();
-}
+  app.use(express.json());
+  app.use(express.urlencoded({extended: true}));
 
-async function createServer() {
-  const server = Hapi.server({
-    host: config.server.host,
-    port: config.server.port,
-  });
+  await registerRoutes(app, __dirname + '/routes');
 
-  await registerPlugins(server);
-  await setAuthStrategy(server);
-  await registerRoutes(server);
-
-  return server;
-}
-
-async function registerPlugins(server: Hapi.Server) {
-  const auth = {
-    plugin: HapiAuthJwt2,
-  };
-
-  const inert = {
-    plugin: Inert, // Swagger UI 위해 필요함.
-  };
-
-  const vision = {
-    plugin: Vision, // Swagger UI 위해 필요함.
-  };
-
-  const swagger = {
-    plugin: HapiSwagger,
-    options: {
-      host: config.server.host,
-      schemes: ['https', 'http'],
-      info: {
-        title: '카페테리아 서버 API',
-        version: thisPackage.version,
-      },
-    },
-  };
-
-  await server.register([auth, inert, vision, swagger]);
-}
-
-function setAuthStrategy(server: Hapi.Server) {
-  const jwtOptions = {
-    key: config.auth.key,
-    cookieKey: config.auth.cookieKey,
-    validate: validateUser,
-    verifyOptions: {algorithms: ['HS256'], expiresIn: config.auth.expiresIn},
-  };
-
-  server.auth.strategy('standard', 'jwt', jwtOptions);
-  server.auth.default('standard');
-}
-
-function registerRoutes(server: Hapi.Server) {
-  server.route([root]);
+  app.listen(config.server.port, config.server.host);
 }

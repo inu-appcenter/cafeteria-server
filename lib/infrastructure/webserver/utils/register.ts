@@ -17,8 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ServerRoute} from '@hapi/hapi';
+import * as fs from 'fs';
+import express from 'express';
+import logger from '../../../common/logging/logger';
 
-export function defineHandler(handler: ServerRoute['handler']): ServerRoute['handler'] {
-  return handler;
+export async function registerRoutes(app: express.Application, dir: string = '/routes') {
+  const files = fs.readdirSync(dir);
+
+  for (const path of files) {
+    const filePath = dir + '/' + path;
+    const stats = fs.lstatSync(filePath);
+
+    if (stats.isFile()) {
+      logger.info(`라우터를 등록합니다: ${filePath}`);
+
+      const router = (await import(filePath)).default as express.Router;
+
+      app.use(router);
+    } else if (stats.isDirectory()) {
+      await registerRoutes(app, filePath);
+    }
+  }
 }

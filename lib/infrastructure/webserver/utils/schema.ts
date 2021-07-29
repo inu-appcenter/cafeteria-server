@@ -1,3 +1,5 @@
+import {RequestValidation} from 'zod-express-middleware';
+
 /**
  * This file is part of INU Cafeteria.
  *
@@ -17,18 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import express, {RequestHandler} from 'express';
-import {RequestValidation, validateRequest} from 'zod-express-middleware';
-
-export function defineRoute<TParams = any, TQuery = any, TBody = any>(
-  method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
-  path: string,
-  schema: RequestValidation<TParams, TQuery, TBody>,
-  handler: RequestHandler<TParams, any, TBody, TQuery>
-): express.Router {
-  const router = express.Router();
-
-  router[method](path, validateRequest(schema), handler);
-
-  return router;
+export function defineSchema<TParams = any, TQuery = any, TBody = any>(
+  schema: RequestValidation<TParams, TQuery, TBody>
+): RequestValidation<TParams, TQuery, TBody> {
+  return schema;
 }

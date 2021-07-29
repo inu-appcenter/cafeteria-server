@@ -17,21 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {z} from 'zod';
 import {defineRoute} from '../utils/route';
-import Joi from 'joi';
-import {defineHandler} from '../utils/handler';
+import {defineSchema} from '../utils/schema';
 
-const getRootQuery = Joi.object({
-  name: Joi.string().required().description('당신의 이름'),
-}).label('최상위 hello 요청 쿼리스트링 파라미터');
-
-const handler = defineHandler(async (request) => {
-  return `안녕 ${request.query.name}!`;
+const schema = defineSchema({
+  query: z.object({
+    name: z.string(),
+  }),
 });
 
-export default defineRoute('get', '/', handler, {
-  validate: {
-    query: getRootQuery,
-  },
-  auth: false,
+export default defineRoute('get', '/', schema, async (req, res) => {
+  res.send(`안녕 ${req.query.name}!`);
 });
