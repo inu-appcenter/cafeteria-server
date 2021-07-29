@@ -25,6 +25,10 @@ export async function registerRoutes(app: express.Application, dir: string = '/r
   const files = fs.readdirSync(dir);
 
   for (const path of files) {
+    if (path.startsWith('.') || path.startsWith('_')) {
+      continue;
+    }
+
     const filePath = dir + '/' + path;
     const stats = fs.lstatSync(filePath);
 
