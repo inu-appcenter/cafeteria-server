@@ -17,21 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
-import GetCorners from '../../../../application/cafeteria/GetCorners';
-import {z} from 'zod';
-
-const schema = defineSchema({
-  params: {
-    id: z.number(),
-  },
-});
-
-export default defineRoute('get', '/corners/:id', schema, async (req, res) => {
-  const {id} = req.params;
-
-  const corner = await GetCorners.run({id});
-
-  return res.json(corner);
-});
+export function isNumeric(value: string) {
+  return /^-?\d+$/.test(value);
+}

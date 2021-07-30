@@ -17,25 +17,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
-import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
-import {z} from 'zod';
+import GetNotices from '../../../../application/notice/GetNotices';
 
 const schema = defineSchema({
   params: {
-    id: z.number(),
+    id: z.number().optional(),
   },
   query: {
-    withCorners: z.boolean().optional(),
+    os: z.string().optional(),
+    version: z.string().optional(),
   },
 });
 
-export default defineRoute('get', '/cafeteria/:id', schema, async (req, res) => {
+export default defineRoute('get', '/notices/:id?', schema, async (req, res) => {
   const {id} = req.params;
-  const {withCorners} = req.query;
+  const {os, version} = req.query;
 
-  const cafeteria = await GetCafeteria.run({id, withCorners});
+  const notices = await GetNotices.run({id, os, version});
 
-  return res.json(cafeteria);
+  return res.json(notices);
 });

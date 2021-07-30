@@ -23,15 +23,19 @@ import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
 import {z} from 'zod';
 
 const schema = defineSchema({
+  params: {
+    id: z.number().optional(),
+  },
   query: {
     withCorners: z.boolean().optional(),
   },
 });
 
-export default defineRoute('get', '/cafeteria', schema, async (req, res) => {
+export default defineRoute('get', '/cafeteria/:id?', schema, async (req, res) => {
+  const {id} = req.params;
   const {withCorners} = req.query;
 
-  const allCafeteria = await GetCafeteria.run({withCorners});
+  const cafeteria = await GetCafeteria.run({id, withCorners});
 
-  return res.json(allCafeteria);
+  return res.json(cafeteria);
 });

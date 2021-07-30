@@ -23,15 +23,15 @@ import GetCorners from '../../../../application/cafeteria/GetCorners';
 import {z} from 'zod';
 
 const schema = defineSchema({
-  query: {
-    cafeteriaId: z.number().optional(),
+  params: {
+    id: z.number().optional(),
   },
 });
 
-export default defineRoute('get', '/corners', schema, async (req, res) => {
-  const {cafeteriaId} = req.query;
+export default defineRoute('get', '/corners/:id?', schema, async (req, res) => {
+  const {id} = req.params;
 
-  const allCorners = await GetCorners.run({cafeteriaId});
+  const corner = await GetCorners.run({id});
 
-  return res.json(allCorners);
+  return res.json(corner);
 });

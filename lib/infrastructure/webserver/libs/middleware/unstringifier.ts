@@ -18,6 +18,7 @@
  */
 
 import {RequestHandler} from 'express';
+import {isNumeric} from '../../../../common/utils/number';
 
 type Catcher<T> = {
   catch: (value: string) => boolean;
@@ -25,7 +26,7 @@ type Catcher<T> = {
 };
 
 const intCatcher: Catcher<number> = {
-  catch: (value) => !Number.isNaN(parseInt(value)),
+  catch: (value) => isNumeric(value),
   parse: (value) => parseInt(value, 10),
 };
 
