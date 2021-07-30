@@ -19,6 +19,8 @@
 
 import UseCase from '../../common/base/UseCase';
 import {CafeteriaComment} from '@inu-cafeteria/backend-core';
+import assert from 'assert';
+import {ResourceNotFound} from '../../common/errors/Errors';
 
 export type GetCafeteriaCommentParams = {
   id?: number;
@@ -32,7 +34,11 @@ class GetCafeteriaComment extends UseCase<
     id,
   }: GetCafeteriaCommentParams): Promise<CafeteriaComment | CafeteriaComment[] | undefined> {
     if (id) {
-      return await CafeteriaComment.findOneOrFail(id);
+      const found = await CafeteriaComment.findOne(id);
+
+      assert(found, ResourceNotFound());
+
+      return found;
     } else {
       return await CafeteriaComment.find();
     }

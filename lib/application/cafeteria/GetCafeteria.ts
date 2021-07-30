@@ -19,6 +19,8 @@
 
 import UseCase from '../../common/base/UseCase';
 import {Cafeteria} from '@inu-cafeteria/backend-core';
+import assert from 'assert';
+import {ResourceNotFound} from '../../common/errors/Errors';
 
 export type GetCafeteriaParams = {
   id?: number;
@@ -33,7 +35,11 @@ class GetCafeteria extends UseCase<GetCafeteriaParams, Cafeteria | Cafeteria[] |
     const options = withCorners ? {relations: ['corners']} : {};
 
     if (id) {
-      return await Cafeteria.findOneOrFail(id, options);
+      const found = await Cafeteria.findOne(id, options);
+
+      assert(found, ResourceNotFound());
+
+      return found;
     } else {
       return await Cafeteria.find(options);
     }

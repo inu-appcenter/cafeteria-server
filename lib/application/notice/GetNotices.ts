@@ -20,6 +20,8 @@
 import UseCase from '../../common/base/UseCase';
 import {Notice} from '@inu-cafeteria/backend-core';
 import NoticeFilter from './NoticeFilter';
+import assert from 'assert';
+import {ResourceNotFound} from '../../common/errors/Errors';
 
 export type GetNoticesParams = {
   id?: number;
@@ -30,7 +32,11 @@ export type GetNoticesParams = {
 class GetNotices extends UseCase<GetNoticesParams, Notice | Notice[] | undefined> {
   async onExecute({id, os, version}: GetNoticesParams): Promise<Notice | Notice[] | undefined> {
     if (id) {
-      return await Notice.findOneOrFail(id);
+      const found = await Notice.findOne(id);
+
+      assert(found, ResourceNotFound());
+
+      return found;
     } else {
       const all = await Notice.find();
       const filter = new NoticeFilter({os, version});

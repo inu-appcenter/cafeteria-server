@@ -17,30 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {Corner} from '@inu-cafeteria/backend-core';
-import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/Errors';
+import NotFound from './http/NotFound';
+import InternalServerError from './http/InternalServerError';
 
-export type GetCornersParams = {
-  id?: number;
-  cafeteriaId?: number;
-};
+export const ResourceNotFound = NotFound.of(
+  'resource_not_found',
+  '요청한 리소스를 찾을 수 없습니다.'
+);
 
-class GetCorners extends UseCase<GetCornersParams, Corner | Corner[] | undefined> {
-  async onExecute({id, cafeteriaId}: GetCornersParams): Promise<Corner | Corner[] | undefined> {
-    if (id) {
-      const found = await Corner.findOne(id);
-
-      assert(found, ResourceNotFound());
-
-      return found;
-    } else if (cafeteriaId) {
-      return await Corner.find({where: {cafeteriaId}});
-    } else {
-      return await Corner.find();
-    }
-  }
-}
-
-export default new GetCorners();
+export const ThisWillNeverHappen = InternalServerError.of(
+  'this_will_never_happen',
+  '있을 수 없는 일이 일어났습니다.'
+);
