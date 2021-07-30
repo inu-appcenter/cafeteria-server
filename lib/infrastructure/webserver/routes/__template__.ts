@@ -22,7 +22,7 @@ import {defineSchema} from '../libs/schema';
 import {defineRoute} from '../libs/route';
 
 const schema = defineSchema({
-  body: z.object({}),
+  body: {},
 });
 
 export default defineRoute('get', '/', schema, async (req, res) => {

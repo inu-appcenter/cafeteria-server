@@ -22,7 +22,6 @@ import {startTypeORM} from '@inu-cafeteria/backend-core';
 import startServer from './lib/infrastructure/webserver/server';
 import {printInBox} from './lib/infrastructure/webserver/utils/printer';
 import config from './config';
-import {stringifyError} from './lib/common/utils/error';
 
 async function start() {
   logger.info('TypeORM과 데이터베이스 연결을 시작합니다.');
@@ -34,4 +33,4 @@ async function start() {
 
 start()
   .then(() => printInBox('SERVER STARTED', `Listening on ${config.server.port}`, '#'))
-  .catch((e) => printInBox('FAILURE', stringifyError(e), '!', 79));
+  .catch((e) => console.log(e));

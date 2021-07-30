@@ -23,9 +23,9 @@ import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
 import {z} from 'zod';
 
 const schema = defineSchema({
-  params: z.object({
+  params: {
     id: z.number(),
-  }),
+  },
 });
 
 export default defineRoute('get', '/cafeteria/:id', schema, async (req, res) => {

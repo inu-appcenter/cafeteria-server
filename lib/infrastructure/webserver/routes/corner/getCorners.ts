@@ -17,27 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ZodRawShape} from 'zod/lib/types';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import GetCorners from '../../../../application/cafeteria/GetCorners';
 import {z} from 'zod';
 
-type RawSchema<
-  TParams extends ZodRawShape,
-  TQuery extends ZodRawShape,
-  TBody extends ZodRawShape
-> = {
-  params?: TParams;
-  query?: TQuery;
-  body?: TBody;
-};
+const schema = defineSchema({
+  query: {
+    cafeteriaId: z.number().optional(),
+  },
+});
 
-export function defineSchema<
-  TParams extends ZodRawShape,
-  TQuery extends ZodRawShape,
-  TBody extends ZodRawShape
->(raw: RawSchema<TParams, TQuery, TBody>) {
-  return {
-    params: raw.params ? z.object(raw.params) : undefined,
-    query: raw.query ? z.object(raw.query) : undefined,
-    body: raw.body ? z.object(raw.body) : undefined,
-  };
-}
+export default defineRoute('get', '/corners', schema, async (req, res) => {
+  const {cafeteriaId} = req.query;
+
+  const allCorners = await GetCorners.run({cafeteriaId});
+
+  return res.json(allCorners);
+});

@@ -24,11 +24,11 @@ import Login from '../../../../application/user/Login';
 import config from '../../../../../config';
 
 const schema = defineSchema({
-  body: z.object({
+  body: {
     studentId: z.string(),
     password: z.string().optional(),
     rememberMeToken: z.string().optional(),
-  }),
+  },
 });
 
 export default defineRoute('post', '/login', schema, async (req, res) => {
