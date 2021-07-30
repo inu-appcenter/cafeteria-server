@@ -20,11 +20,26 @@
 import DiscountTransactionValidator, {
   ValidationResult,
 } from '../validation/DiscountTransactionValidator';
-import TransactionHandler from './base/TransactionHandler';
+import DiscountTransactionHandler from './base/DiscountTransactionHandler';
+import {User} from '@inu-cafeteria/backend-core';
 
-export default class VerifyHandler extends TransactionHandler {
+export default class VerifyHandler extends DiscountTransactionHandler {
   taskType = 'Verify' as const;
   taskName = '할인 트랜잭션 검증';
+
+  protected async beforeValidation(): Promise<void> {
+    /**
+     * 이 핸들러(VerifyHandler)는 바코드 태그 직후에 실행됩니다.
+     * 따라서 즉시 바코드 태그 시각을 기록한 후에 유효성 검증을 진행합니다.
+     */
+    await this.updateBarcodeTagTime();
+  }
+
+  protected async updateBarcodeTagTime() {
+    const {studentId} = this.transaction;
+
+    await User.update({studentId}, {barcodeTaggedAt: new Date()});
+  }
 
   async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
     return await validator.validateForVerify();

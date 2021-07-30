@@ -23,7 +23,7 @@ import DiscountTransactionValidator, {
 } from '../../validation/DiscountTransactionValidator';
 import logger from '../../../../common/logging/logger';
 
-export default abstract class TransactionHandler {
+export default abstract class DiscountTransactionHandler {
   constructor(protected readonly transaction: DiscountTransaction) {}
 
   abstract taskType: 'Verify' | 'Confirm' | 'Cancel';
@@ -44,6 +44,8 @@ export default abstract class TransactionHandler {
     const {transaction} = this;
     const validator = new DiscountTransactionValidator({transaction});
 
+    await this.beforeValidation();
+
     const {error, failedAt} = await this.validate(validator);
 
     if (error == null) {
@@ -55,6 +57,14 @@ export default abstract class TransactionHandler {
     }
   }
 
+  /**
+   * 검증 작업을 시작하기 전에 수행할 작업을 여기에 오버라이드합니다.
+   */
+  protected async beforeValidation(): Promise<void> {}
+
+  /**
+   * taskType에 따른 적절한 검증을 수행합니다.
+   */
   abstract validate(validator: DiscountTransactionValidator): Promise<ValidationResult>;
 
   private async onSuccess() {

@@ -18,12 +18,12 @@
  */
 
 import UseCase from '../../common/base/UseCase';
+import VerifyHandler from './handler/VerifyHandler';
 import {DiscountTransactionParams} from './common/Types';
-import ConfirmHandler from './handler/ConfirmHandler';
 
 class VerifyDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
   async onExecute({transaction}: DiscountTransactionParams): Promise<void> {
-    await new ConfirmHandler(transaction).handle();
+    await new VerifyHandler(transaction).handle();
   }
 }
 

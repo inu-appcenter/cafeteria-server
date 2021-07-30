@@ -18,8 +18,8 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {DiscountTransactionParams} from './common/Types';
 import ConfirmHandler from './handler/ConfirmHandler';
+import {DiscountTransactionParams} from './common/Types';
 
 class ConfirmDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
   async onExecute({transaction}: DiscountTransactionParams): Promise<void> {

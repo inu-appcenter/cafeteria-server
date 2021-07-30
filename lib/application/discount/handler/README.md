@@ -10,7 +10,7 @@
 
 ## 사용법
 
-요청 유형(`Verify`, `Confirm`, `Cancel`)에 따라 적절한 `TransactionHandler`를 사용합니다.
+요청 유형(`Verify`, `Confirm`, `Cancel`)에 따라 적절한 `DiscountTransactionHandler`를 사용합니다.
 
 ```ts
 // 바코드 찍을 때 보내는 요청에 사용.
@@ -25,4 +25,4 @@ await new CancelHandler(transactionFromRequest).handle();
 
 ## 수정
 
-핵심 로직은 `base/TransactionHandler.ts`에 다 있습니다. 알아서 수정하세용!
+핵심 로직은 `base/DiscountTransactionHandler.ts`에 다 있습니다. 알아서 수정하세용!

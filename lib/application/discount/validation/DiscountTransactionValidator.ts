@@ -55,7 +55,7 @@ export default class DiscountTransactionValidator {
   async validateForConfirm() {
     return await this.validate(async () => {
       await this.testRequestFormat();
-      await this.testBasicRules([6 /** ignore rule 6: barcodeShouldNotBeUsedRecently */]);
+      await this.testBasicRules([5 /** ignore rule 5: barcodeShouldNotBeUsedRecently */]);
     });
   }
 
@@ -63,8 +63,8 @@ export default class DiscountTransactionValidator {
     return await this.validate(async () => {
       await this.testRequestFormat();
       await this.testBasicRules([
-        5 /** ignore rule 5: discountAtThisCafeteriaShouldBeFirstToday (should rather exist) */,
-        6 /** ignore rule 6: barcodeShouldNotBeUsedRecently */,
+        5 /** ignore rule 5: barcodeShouldNotBeUsedRecently */,
+        6 /** ignore rule 6: discountAtThisCafeteriaShouldBeFirstToday (should rather exist) */,
       ]);
     });
   }

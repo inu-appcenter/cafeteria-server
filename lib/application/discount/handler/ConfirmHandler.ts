@@ -20,9 +20,9 @@
 import DiscountTransactionValidator, {
   ValidationResult,
 } from '../validation/DiscountTransactionValidator';
-import TransactionHandler from './base/TransactionHandler';
+import DiscountTransactionHandler from './base/DiscountTransactionHandler';
 
-export default class ConfirmHandler extends TransactionHandler {
+export default class ConfirmHandler extends DiscountTransactionHandler {
   taskType = 'Confirm' as const;
   taskName = '할인 트랜잭션 확정';
 
