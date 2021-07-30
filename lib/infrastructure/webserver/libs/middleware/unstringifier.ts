@@ -19,46 +19,46 @@
 
 import {RequestHandler} from 'express';
 
+type Catcher<T> = {
+  catch: (value: string) => boolean;
+  parse: (value: string) => T;
+};
+
+const intCatcher: Catcher<number> = {
+  catch: (value) => !Number.isNaN(parseInt(value)),
+  parse: (value) => parseInt(value, 10),
+};
+
+const booleanCatcher: Catcher<boolean> = {
+  catch: (value) => ['true', 'false'].includes(value),
+  parse: (value) => value === 'true',
+};
+
+const primitiveCatchers = [intCatcher, booleanCatcher];
+
 /**
  * Express는 경로 파라미터와 쿼리 파라미터로 들어온 값들을 모두 스트링으로 다룹니다.
  * https://stackoverflow.com/questions/18057850/req-params-number-is-string-in-expressjs
  *
- * Zod를 제대로 쓰려면 숫자일 수 있는 것들은 숫자로 미리 바꿔주어야 합니다.
+ * Zod를 제대로 쓰려면 숫자나 boolean처럼 스트링으로 포괄적으로 나타내어지는 타입들을 구분해내야 합니다.
  */
-export function numberParser(): RequestHandler<any, any, any, any> {
+export function unstringifier(): RequestHandler<any, any, any, any> {
   return (req, res, next) => {
-    // 경로 파라미터
-    for (const propName of Object.keys(req.params)) {
-      const value = req.params[propName];
-
-      if (isEffectivelyNumber(value)) {
-        // @ts-ignore
-        req.params[propName] = toNumber(value);
-      }
-    }
-
-    // 쿼리 파라미터
-    for (const propName of Object.keys(req.query)) {
-      const value = req.query[propName];
-
-      if (typeof value !== 'string') {
-        continue;
-      }
-
-      if (isEffectivelyNumber(value)) {
-        // @ts-ignore
-        req.query[propName] = toNumber(value);
-      }
-    }
+    transformFields(req.params, primitiveCatchers);
+    transformFields(req.query, primitiveCatchers);
 
     next();
   };
 }
 
-function isEffectivelyNumber(numberLike: string) {
-  return !Number.isNaN(toNumber(numberLike));
-}
+function transformFields(object: Record<string, any>, catchers: Catcher<any>[]) {
+  for (const propName of Object.keys(object)) {
+    const value = object[propName];
 
-function toNumber(numberLike: string) {
-  return parseInt(numberLike, 10);
+    for (const catcher of catchers) {
+      if (catcher.catch(value)) {
+        object[propName] = catcher.parse(value);
+      }
+    }
+  }
 }

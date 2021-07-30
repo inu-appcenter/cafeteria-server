@@ -22,14 +22,20 @@ import {Cafeteria} from '@inu-cafeteria/backend-core';
 
 export type GetCafeteriaParams = {
   id?: number;
+  withCorners?: boolean;
 };
 
 class GetCafeteria extends UseCase<GetCafeteriaParams, Cafeteria | Cafeteria[] | undefined> {
-  async onExecute({id}: GetCafeteriaParams): Promise<Cafeteria | Cafeteria[] | undefined> {
+  async onExecute({
+    id,
+    withCorners,
+  }: GetCafeteriaParams): Promise<Cafeteria | Cafeteria[] | undefined> {
+    const options = withCorners ? {relations: ['corners']} : {};
+
     if (id) {
-      return await Cafeteria.findOneOrFail(id);
+      return await Cafeteria.findOneOrFail(id, options);
     } else {
-      return await Cafeteria.find();
+      return await Cafeteria.find(options);
     }
   }
 }

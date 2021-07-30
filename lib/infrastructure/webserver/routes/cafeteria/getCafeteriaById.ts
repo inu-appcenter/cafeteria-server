@@ -26,12 +26,16 @@ const schema = defineSchema({
   params: {
     id: z.number(),
   },
+  query: {
+    withCorners: z.boolean().optional(),
+  },
 });
 
 export default defineRoute('get', '/cafeteria/:id', schema, async (req, res) => {
   const {id} = req.params;
+  const {withCorners} = req.query;
 
-  const cafeteria = await GetCafeteria.run({id});
+  const cafeteria = await GetCafeteria.run({id, withCorners});
 
   return res.json(cafeteria);
 });

@@ -20,11 +20,18 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
+import {z} from 'zod';
 
-const schema = defineSchema({});
+const schema = defineSchema({
+  query: {
+    withCorners: z.boolean().optional(),
+  },
+});
 
 export default defineRoute('get', '/cafeteria', schema, async (req, res) => {
-  const allCafeteria = await GetCafeteria.run({});
+  const {withCorners} = req.query;
+
+  const allCafeteria = await GetCafeteria.run({withCorners});
 
   return res.json(allCafeteria);
 });
