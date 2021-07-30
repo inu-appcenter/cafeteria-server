@@ -17,21 +17,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from './lib/common/logging/logger';
-import {startTypeORM} from '@inu-cafeteria/backend-core';
-import startServer from './lib/infrastructure/webserver/server';
-import {printInBox} from './lib/infrastructure/webserver/utils/printer';
-import config from './config';
-import {stringifyError} from './lib/common/utils/error';
+export function printInBox(
+  title: string,
+  message: string,
+  border: string = '*',
+  boxWidth: number = 64
+) {
+  const top =
+    border.repeat(Math.floor((boxWidth - title.length - 2) / 2)) +
+    ` ${title} ` +
+    border.repeat(Math.ceil((boxWidth - title.length - 2) / 2));
 
-async function start() {
-  logger.info('TypeORM과 데이터베이스 연결을 시작합니다.');
-  await startTypeORM(true);
+  const middles = chunkString(message, boxWidth - 4).map(
+    (line) => `${border} ` + line + ' '.repeat(boxWidth - 4 - line.length) + ` ${border}`
+  );
 
-  logger.info('서버를 시작합니다.');
-  await startServer();
+  const bottom = border.repeat(boxWidth);
+
+  console.log('\n' + top);
+  console.log(middles.join('\n'));
+  console.log(bottom + '\n');
 }
 
-start()
-  .then(() => printInBox('SERVER STARTED', `Listening on ${config.server.port}`, '#'))
-  .catch((e) => printInBox('FAILURE', stringifyError(e), '!', 79));
+function chunkString(str: string, length: number) {
+  return str.match(new RegExp('.{1,' + length + '}', 'g')) || [];
+}
