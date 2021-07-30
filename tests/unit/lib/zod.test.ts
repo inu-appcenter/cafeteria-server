@@ -17,20 +17,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import express, {RequestHandler} from 'express';
-import {RequestValidation, validateRequest} from 'zod-express-middleware';
-import {asyncHandler} from './handler';
-import {numberParser} from './middleware/numberParser';
+import {z} from 'zod';
 
-export function defineRoute<TParams = any, TQuery = any, TBody = any>(
-  method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
-  path: string,
-  schema: RequestValidation<TParams, TQuery, TBody>,
-  handler: RequestHandler<TParams, any, TBody, TQuery>
-): express.Router {
-  const router = express.Router();
+describe('schema의 safeParse', () => {
+  it('숫자 스케마 잘 작동하나?', async () => {
+    const raw = {
+      id: 3,
+    };
 
-  router[method](path, numberParser, validateRequest(schema), asyncHandler(handler));
+    const schema = z.object({
+      id: z.number(),
+    });
 
-  return router;
-}
+    const parsed = schema.safeParse(raw);
+
+    expect(parsed.success).toBe(true);
+  });
+});

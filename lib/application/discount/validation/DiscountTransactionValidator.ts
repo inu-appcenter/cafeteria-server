@@ -29,7 +29,7 @@ import {
   DiscountAlreadyMadeHereToday,
   DiscountNotSupportedHere,
   DiscountNotAvailableNow,
-  RequestIsMalformed,
+  RequestMalformed,
   UserNotIdentified,
 } from '../common/Errors';
 
@@ -89,7 +89,7 @@ export default class DiscountTransactionValidator {
   private async testRequestFormat() {
     const malformed = !DiscountRulesChecker.requestShouldBeNotMalformed(this.params.transaction);
     if (malformed) {
-      throw new RuleViolation({error: RequestIsMalformed(), failedAt: -1});
+      throw new RuleViolation({error: RequestMalformed(), failedAt: -1});
     }
   }
 

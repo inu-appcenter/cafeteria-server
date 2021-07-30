@@ -18,15 +18,30 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../libs/schema';
-import {defineRoute} from '../libs/route';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import Login from '../../../../application/user/Login';
+import config from '../../../../../config';
 
 const schema = defineSchema({
-  query: z.object({
-    name: z.number(),
+  body: z.object({
+    studentId: z.string(),
+    password: z.string().optional(),
+    rememberMeToken: z.string().optional(),
   }),
 });
 
-export default defineRoute('get', '/', schema, async (req, res) => {
-  res.send(`안녕 ${req.query.name}!`);
+export default defineRoute('post', '/login', schema, async (req, res) => {
+  const {studentId, password, rememberMeToken} = req.body;
+
+  const result = await Login.run({
+    studentId,
+    password,
+    rememberMeToken,
+  });
+
+  return res.cookie(config.auth.cookieKey, result.jwt, config.auth.cookieOptions).json({
+    barcode: result.barcode,
+    rememberMeToken: result.rememberMeToken,
+  });
 });

@@ -17,20 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import express, {RequestHandler} from 'express';
-import {RequestValidation, validateRequest} from 'zod-express-middleware';
-import {asyncHandler} from './handler';
-import {numberParser} from './middleware/numberParser';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
 
-export function defineRoute<TParams = any, TQuery = any, TBody = any>(
-  method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
-  path: string,
-  schema: RequestValidation<TParams, TQuery, TBody>,
-  handler: RequestHandler<TParams, any, TBody, TQuery>
-): express.Router {
-  const router = express.Router();
+const schema = defineSchema({});
 
-  router[method](path, numberParser, validateRequest(schema), asyncHandler(handler));
+export default defineRoute('get', '/cafeteria', schema, async (req, res) => {
+  const allCafeteria = await GetCafeteria.run({});
 
-  return router;
-}
+  return res.json(allCafeteria);
+});

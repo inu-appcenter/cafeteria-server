@@ -17,31 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
 import {z} from 'zod';
-import {defineSchema} from '../libs/schema';
-import {defineRoute} from '../libs/route';
-import Login from '../../../application/user/Login';
-import config from '../../../../config';
 
 const schema = defineSchema({
-  body: z.object({
-    studentId: z.string(),
-    password: z.string().optional(),
-    rememberMeToken: z.string().optional(),
+  params: z.object({
+    id: z.number(),
   }),
 });
 
-export default defineRoute('post', '/login', schema, async (req, res) => {
-  const {studentId, password, rememberMeToken} = req.body;
+export default defineRoute('get', '/cafeteria/:id', schema, async (req, res) => {
+  const {id} = req.params;
 
-  const result = await Login.run({
-    studentId,
-    password,
-    rememberMeToken,
-  });
+  const cafeteria = await GetCafeteria.run({id});
 
-  return res.cookie(config.auth.cookieKey, result.jwt, config.auth.cookieOptions).json({
-    barcode: result.barcode,
-    rememberMeToken: result.rememberMeToken,
-  });
+  return res.json(cafeteria);
 });
