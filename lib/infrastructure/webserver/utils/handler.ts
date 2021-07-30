@@ -17,19 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import express, {RequestHandler} from 'express';
-import {RequestValidation, validateRequest} from 'zod-express-middleware';
-import {asyncHandler} from './handler';
+import {RequestHandler} from 'express';
 
-export function defineRoute<TParams = any, TQuery = any, TBody = any>(
-  method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
-  path: string,
-  schema: RequestValidation<TParams, TQuery, TBody>,
+/**
+ * Express 4에서는 기본적으로 Promise rejection을 잡지 못합니다.
+ * 그래서 이걸로 한 번 감싸줍니다.
+ *
+ * @param handler 원래 핸들러.
+ */
+export function asyncHandler<TParams = any, TQuery = any, TBody = any>(
   handler: RequestHandler<TParams, any, TBody, TQuery>
-): express.Router {
-  const router = express.Router();
-
-  router[method](path, validateRequest(schema), asyncHandler(handler));
-
-  return router;
+): RequestHandler<TParams, any, TBody, TQuery> {
+  return async (req, res, next) => {
+    return Promise.resolve(handler(req, res, next)).catch(next);
+  };
 }

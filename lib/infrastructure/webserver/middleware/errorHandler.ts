@@ -16,12 +16,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import {SessionTokenContents} from '../../../application/user/base/Types';
-import CheckIfUserExists from '../../../application/user/CheckIfUserExists';
-
-export default async function validateUser({userId}: SessionTokenContents) {
-  const isValid = userId && (await CheckIfUserExists.run({userId}));
-
-  return {isValid};
-}

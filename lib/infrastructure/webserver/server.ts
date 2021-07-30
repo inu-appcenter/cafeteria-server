@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import express from 'express';
 import config from '../../../config';
+import express from 'express';
 import {registerRoutes} from './utils/register';
 
 export default async function startServer() {
