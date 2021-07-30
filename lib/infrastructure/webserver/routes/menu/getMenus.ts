@@ -17,25 +17,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import config from '../../../config';
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import {errorHandler} from './libs/middleware/errorHandler';
-import {registerRoutes} from './utils/register';
-import {authorizer} from './libs/middleware/authorizer';
+import {z} from 'zod';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import GetMenus from '../../../../application/menu/GetMenus';
 
-export default async function startServer() {
-  const app = express();
+const schema = defineSchema({
+  query: {
+    cornerId: z.number().optional(),
+    date: z.number().optional(),
+    dateOffset: z.number().optional(),
+  },
+});
 
-  app.use(cookieParser());
-  app.use(authorizer({exclude: ['/', '/login']}));
+export default defineRoute('get', '/menus', schema, async (req, res) => {
+  const {cornerId, date, dateOffset} = req.query;
 
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
+  const menus = await GetMenus.run({cornerId, date: date?.toString(), dateOffset});
 
-  await registerRoutes(app, __dirname + '/routes');
-
-  app.use(errorHandler());
-
-  app.listen(config.server.port, config.server.host);
-}
+  return res.json(menus);
+});

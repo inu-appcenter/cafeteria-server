@@ -20,19 +20,44 @@
 import UseCase from '../../common/base/UseCase';
 import {Menu} from '@inu-cafeteria/backend-core';
 import MenuRepository from './MenuRepository';
+import moment from 'moment';
 
 export type GetMenusParams = {
+  /**
+   * 식단을 가져올 코너의 id.
+   * 없으면 전체 다 가져와요.
+   */
   cornerId?: number;
-  date: string; // YYYYMMDD
+
+  /**
+   * 가져올 식단의 날짜.
+   * 없으면 오늘로 정해져요.
+   */
+  date?: string; // YYYYMMDD
+
+  /**
+   * 위의 date에 추가적으로 날짜를 더하고 뺄 수 있습니다.
+   * 예를 들어 '내일' 식단을 가져오고 싶으면, date을 비워놓고 dateOffset=1로 주면 됩니다.
+   */
+  dateOffset?: number; // date으로부터 n일 후
 };
 
 class GetMenus extends UseCase<GetMenusParams, Menu[]> {
-  async onExecute({cornerId, date}: GetMenusParams): Promise<Menu[]> {
+  async onExecute({cornerId, date, dateOffset}: GetMenusParams): Promise<Menu[]> {
+    const dateString = this.formatActualDateString(date, dateOffset);
+
     if (cornerId) {
-      return MenuRepository.getMenusByCornerId(cornerId, date);
+      return MenuRepository.getMenusByCornerId(cornerId, dateString);
     } else {
-      return MenuRepository.getAllMenus(date);
+      return MenuRepository.getAllMenus(dateString);
     }
+  }
+
+  private formatActualDateString(date?: string, dateOffset?: number) {
+    const specifiedDate = date ? moment(date, 'YYYYMMDD') : moment();
+    const offsetAdded = specifiedDate.add(dateOffset, 'days');
+
+    return offsetAdded.format('YYYYMMDD');
   }
 }
 
