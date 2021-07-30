@@ -58,8 +58,8 @@ export default {
     expiresIn: '24h',
     cookieOptions: {
       encoding: 'none',
-      isSecure: false,
-      isHttpOnly: true,
+      secure: false,
+      httpOnly: true,
       clearInvalid: true,
       strictHeader: true,
     },

@@ -33,10 +33,13 @@ export function fetchWithTimeout(
   return Promise.race([fetched, timedOut]);
 }
 
-export async function postAndGetResponseText(url: RequestInfo, body: Record<string, any>) {
+export async function postUrlencoded(url: RequestInfo, body: Record<string, any> | string) {
   const response = await fetchWithTimeout(url, {
     method: 'POST',
-    body: new URLSearchParams(body).toString(),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    },
+    body: typeof body === 'string' ? body : new URLSearchParams(body).toString(),
   });
 
   return response.text();

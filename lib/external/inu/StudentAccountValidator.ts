@@ -19,16 +19,16 @@
 
 import assert from 'assert';
 import config from '../../../config';
-import {postAndGetResponseText} from '../../common/utils/fetch';
+import {postUrlencoded} from '../../common/utils/fetch';
 import {encryptForRemoteLogin} from '../../common/utils/encrypt';
 
 export default class StudentAccountValidator {
   constructor(private readonly studentId: string, private readonly password: string) {}
 
   async isStudent(): Promise<boolean> {
-    const response = await postAndGetResponseText(config.login.url, {
+    const response = await postUrlencoded(config.login.url, {
       sno: this.studentId,
-      pw: this.encryptedPassword,
+      pw: this.encryptPassword(),
     });
 
     assert(
@@ -39,7 +39,7 @@ export default class StudentAccountValidator {
     return response === config.login.success;
   }
 
-  private encryptedPassword() {
+  private encryptPassword() {
     return encryptForRemoteLogin(this.password, config.login.key);
   }
 }

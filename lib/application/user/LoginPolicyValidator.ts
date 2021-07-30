@@ -22,7 +22,6 @@ import StudentAccountValidator from '../../external/inu/StudentAccountValidator'
 import {User} from '@inu-cafeteria/backend-core';
 import {compareBcryptHash} from '../../common/utils/bcrypt';
 import assert from 'assert';
-import Boom from '@hapi/boom';
 
 export default class LoginPolicyValidator {
   constructor(private readonly params: LoginParams) {}
@@ -30,12 +29,13 @@ export default class LoginPolicyValidator {
   async validate() {
     const {studentId, password, rememberMeToken} = this.params;
 
-    if (studentId && password) {
+    assert(studentId, '학번이 필요합니다!');
+    assert(password || rememberMeToken, '비밀번호 또는 자동로그인 토큰이 필요합니다!');
+
+    if (password) {
       await this.validateForPasswordLogin();
-    } else if (studentId && rememberMeToken) {
-      await this.validateForRememberedLogin();
     } else {
-      throw Boom.badRequest(`학번과 비밀번호 또는 토큰이 필요합니다!`);
+      await this.validateForRememberedLogin();
     }
   }
 
