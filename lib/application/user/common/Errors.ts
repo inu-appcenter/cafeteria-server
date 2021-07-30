@@ -26,3 +26,7 @@ export const InvalidRememberMeToken = Unauthorized.of(
   'invalid_remember_me_token',
   '유효하지 않은 자동로그인 토큰입니다.'
 );
+
+export const NotLoggedIn = Unauthorized.of('not_logged_in', '로그인해주세요!');
+
+export const InvalidJwt = Unauthorized.of('invalid_jwt', '로그인해주세요!');

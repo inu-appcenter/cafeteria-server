@@ -63,7 +63,7 @@ export default {
       clearInvalid: true,
       strictHeader: true,
     },
-    cookieKey: 'cafeteria-server-session-token',
+    cookieName: 'cafeteria-server-session-token',
   },
 
   aws: {

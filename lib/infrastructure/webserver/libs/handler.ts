@@ -28,7 +28,7 @@ import {RequestHandler} from 'express';
 export function asyncHandler<TParams = any, TQuery = any, TBody = any>(
   handler: RequestHandler<TParams, any, TBody, TQuery>
 ): RequestHandler<TParams, any, TBody, TQuery> {
-  return async (req, res, next) => {
+  return (req, res, next) => {
     return Promise.resolve(handler(req, res, next)).catch(next);
   };
 }

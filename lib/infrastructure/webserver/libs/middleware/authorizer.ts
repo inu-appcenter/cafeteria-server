@@ -17,13 +17,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import jwt from 'jsonwebtoken';
-import config from '../../../config';
+import {RequestHandler} from 'express';
+import {decodeJwt} from '../../../../common/utils/token';
+import config from '../../../../../config';
+import {InvalidJwt, NotLoggedIn} from '../../../../application/user/common/Errors';
 
-export function createJwt(payload: Record<string, any>) {
-  return jwt.sign(payload, config.auth.key, {algorithm: 'HS256', expiresIn: config.auth.expiresIn});
-}
+export type AuthorizerConfig = {
+  exclude?: string[];
+};
 
-export function decodeJwt(token: string) {
-  return jwt.verify(token, config.auth.key);
+export function authorizer({exclude}: AuthorizerConfig): RequestHandler {
+  return (req, res, next) => {
+    if (exclude?.includes(req.path)) {
+      return next();
+    }
+
+    const tokenFromCookie = req.cookies[config.auth.cookieName];
+    if (tokenFromCookie == null) {
+      return next(NotLoggedIn());
+    }
+
+    try {
+      decodeJwt(tokenFromCookie);
+
+      return next();
+    } catch (e) {
+      return next(InvalidJwt());
+    }
+  };
 }

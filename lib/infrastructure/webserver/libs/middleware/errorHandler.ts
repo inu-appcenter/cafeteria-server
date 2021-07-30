@@ -24,35 +24,37 @@ import logger from '../../../../common/logging/logger';
 import {AssertionError} from 'assert';
 import CustomError from '../../../../common/errors/custom/base/CustomError';
 
-export const errorHandler: ErrorRequestHandler = (err, req, res) => {
-  if (isHttpError(err)) {
-    logger.info(`HTTP 에러가 발생했습니다: ${stringifyError(err)}`);
+export function errorHandler(): ErrorRequestHandler {
+  return (err, req, res, _ /** 파라미터 4개 없으면 작동 안함! */) => {
+    if (isHttpError(err)) {
+      logger.info(`HTTP 에러가 발생했습니다: ${stringifyError(err)}`);
 
-    return res.status(err.statusCode).json(err.responseBody);
-  } else if (isCustomError(err)) {
-    logger.warn(`Custom 에러가 발생했습니다: ${stringifyError(err)}`);
+      return res.status(err.statusCode).json(err.responseBody);
+    } else if (isCustomError(err)) {
+      logger.warn(`Custom 에러가 발생했습니다: ${stringifyError(err)}`);
 
-    return res.status(err.statusCode).json(err.responseBody);
-  } else if (isAssertionError(err)) {
-    logger.warn(`Assertion 에러가 발생했습니다: ${stringifyError(err)}`);
+      return res.status(err.statusCode).json(err.responseBody);
+    } else if (isAssertionError(err)) {
+      logger.warn(`Assertion 에러가 발생했습니다: ${stringifyError(err)}`);
 
-    const {message} = err;
+      const {message} = err;
 
-    return res.status(500).json({
-      statusCode: 500,
-      error: 'assertion_failed',
-      message,
-    });
-  } else {
-    logger.error(`처리되지 않은 에러가 발생했습니다: ${stringifyError(err)}`);
+      return res.status(500).json({
+        statusCode: 500,
+        error: 'assertion_failed',
+        message,
+      });
+    } else {
+      logger.error(`처리되지 않은 에러가 발생했습니다: ${stringifyError(err)}`);
 
-    return res.status(500).json({
-      statusCode: 500,
-      error: 'unhandled',
-      message: stringifyError(err),
-    });
-  }
-};
+      return res.status(500).json({
+        statusCode: 500,
+        error: 'unhandled',
+        message: stringifyError(err),
+      });
+    }
+  };
+}
 
 function isHttpError(error: Error): error is HttpError {
   return error instanceof HttpError;

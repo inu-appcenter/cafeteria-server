@@ -25,33 +25,35 @@ import {RequestHandler} from 'express';
  *
  * Zod를 제대로 쓰려면 숫자일 수 있는 것들은 숫자로 미리 바꿔주어야 합니다.
  */
-export const numberParser: RequestHandler<any, any, any, any> = (req, res, next) => {
-  // 경로 파라미터
-  for (const propName of Object.keys(req.params)) {
-    const value = req.params[propName];
+export function numberParser(): RequestHandler<any, any, any, any> {
+  return (req, res, next) => {
+    // 경로 파라미터
+    for (const propName of Object.keys(req.params)) {
+      const value = req.params[propName];
 
-    if (isEffectivelyNumber(value)) {
-      // @ts-ignore
-      req.params[propName] = toNumber(value);
-    }
-  }
-
-  // 쿼리 파라미터
-  for (const propName of Object.keys(req.query)) {
-    const value = req.query[propName];
-
-    if (typeof value !== 'string') {
-      continue;
+      if (isEffectivelyNumber(value)) {
+        // @ts-ignore
+        req.params[propName] = toNumber(value);
+      }
     }
 
-    if (isEffectivelyNumber(value)) {
-      // @ts-ignore
-      req.query[propName] = toNumber(value);
-    }
-  }
+    // 쿼리 파라미터
+    for (const propName of Object.keys(req.query)) {
+      const value = req.query[propName];
 
-  next();
-};
+      if (typeof value !== 'string') {
+        continue;
+      }
+
+      if (isEffectivelyNumber(value)) {
+        // @ts-ignore
+        req.query[propName] = toNumber(value);
+      }
+    }
+
+    next();
+  };
+}
 
 function isEffectivelyNumber(numberLike: string) {
   return !Number.isNaN(toNumber(numberLike));

@@ -30,7 +30,7 @@ export function defineRoute<TParams = any, TQuery = any, TBody = any>(
 ): express.Router {
   const router = express.Router();
 
-  router[method](path, numberParser, validateRequest(schema), asyncHandler(handler));
+  router[method](path, numberParser(), validateRequest(schema), asyncHandler(handler));
 
   return router;
 }

@@ -19,18 +19,23 @@
 
 import config from '../../../config';
 import express from 'express';
-import {registerRoutes} from './utils/register';
+import cookieParser from 'cookie-parser';
 import {errorHandler} from './libs/middleware/errorHandler';
+import {registerRoutes} from './utils/register';
+import {authorizer} from './libs/middleware/authorizer';
 
 export default async function startServer() {
   const app = express();
+
+  app.use(cookieParser());
+  app.use(authorizer({exclude: ['/login']}));
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
 
   await registerRoutes(app, __dirname + '/routes');
 
-  app.use(errorHandler);
+  app.use(errorHandler());
 
   app.listen(config.server.port, config.server.host);
 }
