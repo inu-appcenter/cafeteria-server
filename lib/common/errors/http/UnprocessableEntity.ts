@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import HttpError from './HttpError';
+import HttpError from './base/HttpError';
 
-export default class UnprocessableEntity extends HttpError {
+export default class UnprocessableEntity {
   static of = HttpError.with(422);
 }

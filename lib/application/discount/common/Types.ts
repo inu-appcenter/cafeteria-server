@@ -17,24 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
-import CommitHandler from './handler/CommitHandler';
-import logger from '../../common/logging/logger';
-import CancelHandler from './handler/CancelHandler';
-import {DiscountTransactionParams} from './base/Types';
 
-class CommitDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
-  async onExecute({transaction, transactionToken}: DiscountTransactionParams): Promise<void> {
-    logger.info(`할인 트랜잭션 Commit을 처리합니다.`);
+export type DiscountTransactionParams = {
+  transaction: DiscountTransaction;
+};
 
-    await new CommitHandler({
-      transaction,
-      transactionToken,
-      taskType: 'Commit',
-      taskName: '할인 트랜잭션 확정',
-    }).handle();
-  }
-}
+export type VerifyResponse = {
+  message: string;
+  activated: number;
+};
 
-export default new CommitDiscountTransaction();
+export type CommitResponse = {
+  message: string;
+};

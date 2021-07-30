@@ -22,7 +22,7 @@ import StudentAccountValidator from '../../external/inu/StudentAccountValidator'
 import {User} from '@inu-cafeteria/backend-core';
 import {compareBcryptHash} from '../../common/utils/bcrypt';
 import assert from 'assert';
-import {InvalidRememberMeToken, UserNotExist} from './common/Errors';
+import {InvalidRememberMeToken, StupidInvalid, UserNotExist} from './common/Errors';
 
 export default class LoginPolicyValidator {
   constructor(private readonly params: LoginParams) {}
@@ -61,6 +61,6 @@ export default class LoginPolicyValidator {
 
     const hasValidToken = await compareBcryptHash(rememberMeToken, user.rememberMeToken);
 
-    assert(hasValidToken, InvalidRememberMeToken());
+    assert(hasValidToken, StupidInvalid());
   }
 }

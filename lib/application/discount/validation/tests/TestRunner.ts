@@ -19,7 +19,7 @@
 
 import logger from '../../../../common/logging/logger';
 import {CafeteriaDiscountRule} from '@inu-cafeteria/backend-core';
-import RuleViolation from '../errors/RuleViolation';
+import RuleViolation from './RuleViolation';
 import {Test, TestContext} from './Test';
 
 export default class TestRunner {
@@ -47,7 +47,7 @@ export default class TestRunner {
           logger.info(`${studentId} 우회 ${ruleSummary}`);
         } else {
           logger.warn(`${studentId} 실패 ${ruleSummary}`);
-          throw new RuleViolation({code: test.failureCode, failedAt: test.ruleId});
+          throw new RuleViolation({error: test.failure, failedAt: test.ruleId});
         }
       }
     }

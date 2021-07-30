@@ -1,9 +1,3 @@
-import {ErrorRequestHandler, RequestHandler} from 'express';
-import HttpError from '../../../common/errors/http/HttpError';
-import {stringifyError} from '../../../common/utils/error';
-import logger from '../../../common/logging/logger';
-import {AssertionError} from 'assert';
-
 /**
  * This file is part of INU Cafeteria.
  *
@@ -23,17 +17,22 @@ import {AssertionError} from 'assert';
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+import {ErrorRequestHandler} from 'express';
+import HttpError from '../../../../common/errors/http/base/HttpError';
+import {stringifyError} from '../../../../common/utils/error';
+import logger from '../../../../common/logging/logger';
+import {AssertionError} from 'assert';
+import CustomError from '../../../../common/errors/custom/base/CustomError';
+
+export const errorHandler: ErrorRequestHandler = (err, req, res) => {
   if (isHttpError(err)) {
     logger.info(`HTTP 에러가 발생했습니다: ${stringifyError(err)}`);
 
-    const {statusCode, error, message} = err;
+    return res.status(err.statusCode).json(err.responseBody);
+  } else if (isCustomError(err)) {
+    logger.warn(`Custom 에러가 발생했습니다: ${stringifyError(err)}`);
 
-    return res.status(statusCode).json({
-      statusCode,
-      error,
-      message,
-    });
+    return res.status(err.statusCode).json(err.responseBody);
   } else if (isAssertionError(err)) {
     logger.warn(`Assertion 에러가 발생했습니다: ${stringifyError(err)}`);
 
@@ -57,6 +56,10 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 function isHttpError(error: Error): error is HttpError {
   return error instanceof HttpError;
+}
+
+function isCustomError(error: Error): error is CustomError<any> {
+  return error instanceof CustomError;
 }
 
 function isAssertionError(error: Error): error is AssertionError {

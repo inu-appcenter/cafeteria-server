@@ -20,7 +20,7 @@
 import config from '../../../config';
 import express from 'express';
 import {registerRoutes} from './utils/register';
-import {errorHandler} from './middleware/errorHandler';
+import {errorHandler} from './libs/middleware/errorHandler';
 
 export default async function startServer() {
   const app = express();

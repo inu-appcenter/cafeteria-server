@@ -17,11 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import DiscountTransactionValidator from '../validation/DiscountTransactionValidator';
-import {ValidationResult} from '../validation/errors/ValidationResult';
+import DiscountTransactionValidator, {
+  ValidationResult,
+} from '../validation/DiscountTransactionValidator';
 import TransactionHandler from './base/TransactionHandler';
 
 export default class CancelHandler extends TransactionHandler {
+  taskType = 'Cancel' as const;
+  taskName = '할인 트랜잭션 취소';
+
   async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
     return await validator.validateForCancel();
   }

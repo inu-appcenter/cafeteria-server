@@ -18,20 +18,12 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {DiscountTransactionParams} from './base/Types';
-import logger from '../../common/logging/logger';
-import CommitHandler from './handler/CommitHandler';
+import {DiscountTransactionParams} from './common/Types';
+import ConfirmHandler from './handler/ConfirmHandler';
 
 class VerifyDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
-  async onExecute({transaction, transactionToken}: DiscountTransactionParams): Promise<void> {
-    logger.info(`할인 트랜잭션 Verify 시작합니다.`);
-
-    await new CommitHandler({
-      transaction,
-      transactionToken,
-      taskType: 'Verify',
-      taskName: '할인 트랜잭션 검증',
-    }).handle();
+  async onExecute({transaction}: DiscountTransactionParams): Promise<void> {
+    await new ConfirmHandler(transaction).handle();
   }
 }
 

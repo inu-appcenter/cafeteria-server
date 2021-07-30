@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import HttpError from './HttpError';
+import HttpError from './base/HttpError';
 
-export default class BadRequest extends HttpError {
+export default class BadRequest {
   static of = HttpError.with(400);
 }

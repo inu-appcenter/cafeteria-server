@@ -17,37 +17,48 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DiscountHistory, User} from '@inu-cafeteria/backend-core';
-import DiscountTransactionValidator from '../../validation/DiscountTransactionValidator';
-import {ValidationResult, ValidationResultCode} from '../../validation/errors/ValidationResult';
+import {DiscountHistory, DiscountTransaction, User} from '@inu-cafeteria/backend-core';
+import DiscountTransactionValidator, {
+  ValidationResult,
+} from '../../validation/DiscountTransactionValidator';
 import logger from '../../../../common/logging/logger';
-import {DiscountTransactionParams} from '../../base/Types';
-
-export type TransactionHandlerParams = DiscountTransactionParams & {
-  taskType: 'Verify' | 'Commit' | 'Cancel';
-  taskName: string;
-};
 
 export default abstract class TransactionHandler {
-  constructor(protected readonly params: TransactionHandlerParams) {}
+  constructor(protected readonly transaction: DiscountTransaction) {}
 
-  async handle() {
-    const {transaction, transactionToken} = this.params;
-    const validator = new DiscountTransactionValidator(transaction, transactionToken);
+  abstract taskType: 'Verify' | 'Confirm' | 'Cancel';
+  abstract taskName: string;
 
-    const {code, failedAt} = await this.validate(validator);
+  /**
+   * 할인 Verify(바코드 처음 태그시), Confirm(결제시), Cancel(결제 취소시) 요청을 처리합니다.
+   * 잘 처리되면 예외 없이 메소드가 종료됩니다.
+   *
+   * 만약 validation 과정에서 요청의 문제가 포착되면,
+   * 후속 작업을 모두 마친 뒤에 해당 Error를 던집니다.
+   *
+   * 모든 할인 관련 요청은 성공 여부와 관계없이 영구히 기록됩니다.
+   */
+  async handle(): Promise<void> {
+    logger.info(`${this.taskName}을 시작합니다.`);
 
-    if (code === ValidationResultCode.USUAL_SUCCESS) {
+    const {transaction} = this;
+    const validator = new DiscountTransactionValidator({transaction});
+
+    const {error, failedAt} = await this.validate(validator);
+
+    if (error == null) {
       await this.onSuccess();
     } else {
       await this.onFail(failedAt);
+
+      throw error;
     }
   }
 
   abstract validate(validator: DiscountTransactionValidator): Promise<ValidationResult>;
 
   private async onSuccess() {
-    const {transaction, taskType, taskName} = this.params;
+    const {transaction, taskType, taskName} = this;
     const {studentId} = transaction;
 
     logger.info(`${studentId} ${taskName} 성공`);
@@ -56,7 +67,7 @@ export default abstract class TransactionHandler {
   }
 
   private async onFail(failedAt: number) {
-    const {transaction, taskType, taskName} = this.params;
+    const {transaction, taskType, taskName} = this;
     const {studentId} = transaction;
     const transactionString = JSON.stringify(transaction);
 
@@ -66,7 +77,7 @@ export default abstract class TransactionHandler {
   }
 
   private async leaveHistory(failedAt: number, taskType: string, message: string = '') {
-    const {transaction} = this.params;
+    const {transaction} = this;
     const {studentId, cafeteriaId, mealType} = transaction;
 
     const history = DiscountHistory.create({

@@ -19,6 +19,7 @@
 
 import BadRequest from '../../../common/errors/http/BadRequest';
 import Unauthorized from '../../../common/errors/http/Unauthorized';
+import VerifyFailure from '../../../common/errors/custom/BarcodeCheckFailure';
 
 export const UserNotExist = BadRequest.of('user_not_exist', '사용자가 존재하지 않습니다.');
 
@@ -26,3 +27,8 @@ export const InvalidRememberMeToken = Unauthorized.of(
   'invalid_remember_me_token',
   '유효하지 않은 자동로그인 토큰입니다.'
 );
+
+export const StupidInvalid = VerifyFailure.of({
+  code: 99,
+  message: '하하',
+});

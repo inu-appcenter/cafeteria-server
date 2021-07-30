@@ -17,14 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum ValidationResultCode {
-  USUAL_SUCCESS,
-  USUAL_FAIL,
-  UNUSUAL_NO_BARCODE,
-  UNUSUAL_WRONG_PARAM,
-}
+import {ValidationResult} from '../DiscountTransactionValidator';
 
-export type ValidationResult = {
-  code: ValidationResultCode;
-  failedAt: number;
-};
+export default class RuleViolation extends Error {
+  constructor(readonly result: ValidationResult) {
+    super();
+  }
+}

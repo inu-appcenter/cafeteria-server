@@ -18,20 +18,12 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import logger from '../../common/logging/logger';
 import CancelHandler from './handler/CancelHandler';
-import {DiscountTransactionParams} from './base/Types';
+import {DiscountTransactionParams} from './common/Types';
 
 class CancelDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
-  async onExecute({transaction, transactionToken}: DiscountTransactionParams): Promise<void> {
-    logger.info(`할인 트랜잭션 Cancel을 처리합니다.`);
-
-    await new CancelHandler({
-      transaction,
-      transactionToken,
-      taskType: 'Cancel',
-      taskName: '할인 트랜잭션 취소',
-    }).handle();
+  async onExecute({transaction}: DiscountTransactionParams): Promise<void> {
+    await new CancelHandler(transaction).handle();
   }
 }
 

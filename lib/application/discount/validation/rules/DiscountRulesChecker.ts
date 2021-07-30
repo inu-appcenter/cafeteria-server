@@ -20,18 +20,16 @@
 import DiscountRules from './DiscountRules';
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
 
-// TODO
-
 class DiscountRulesChecker implements DiscountRules {
   requestShouldBeNotMalformed(transaction: DiscountTransaction): boolean {
     return false;
   }
 
-  async requestShouldBeInMealTime(cafeteriaId: number, mealType: number): Promise<boolean> {
+  async cafeteriaShouldSupportDiscount(cafeteriaId: number): Promise<boolean> {
     return false;
   }
 
-  async cafeteriaShouldSupportDiscount(cafeteriaId: number): Promise<boolean> {
+  async requestShouldBeInMealTime(cafeteriaId: number, mealType: number): Promise<boolean> {
     return false;
   }
 
@@ -46,18 +44,14 @@ class DiscountRulesChecker implements DiscountRules {
     return false;
   }
 
-  async discountAtThisCafeteriaShouldBeFirstToday(
-    studentId: string,
-    cafeteriaId: number
-  ): Promise<boolean> {
-    return false;
-  }
-
   async barcodeShouldNotBeUsedRecently(studentId: string, intervalSec: number): Promise<boolean> {
     return false;
   }
 
-  async tokenShouldBeValid(cafeteriaId: number, plainToken: string): Promise<boolean> {
+  async discountAtThisCafeteriaShouldBeFirstToday(
+    studentId: string,
+    cafeteriaId: number
+  ): Promise<boolean> {
     return false;
   }
 }

@@ -20,30 +20,42 @@
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
 import DiscountRulesChecker from './rules/DiscountRulesChecker';
 import config from '../../../../config';
-import RuleViolation from './errors/RuleViolation';
+import RuleViolation from './tests/RuleViolation';
 import TestRunner from './tests/TestRunner';
-import {ValidationResult, ValidationResultCode} from './errors/ValidationResult';
 import {Test} from './tests/Test';
+import {
+  BarcodeNotActivated,
+  BarcodeUsedRecently,
+  DiscountAlreadyMadeHereToday,
+  DiscountNotSupportedHere,
+  DiscountNotAvailableNow,
+  RequestIsMalformed,
+  UserNotIdentified,
+} from '../common/Errors';
+
+export type ValidationParams = {
+  transaction: DiscountTransaction;
+};
+
+export type ValidationResult = {
+  error: Error | null;
+  failedAt: number;
+};
 
 export default class DiscountTransactionValidator {
-  constructor(
-    private readonly transaction: DiscountTransaction,
-    private readonly transactionToken: string
-  ) {}
+  constructor(private readonly params: ValidationParams) {}
 
   async validateForVerify() {
     return await this.validate(async () => {
       await this.testRequestFormat();
       await this.testBasicRules();
-      await this.testTokenRule();
     });
   }
 
-  async validateForCommit() {
+  async validateForConfirm() {
     return await this.validate(async () => {
       await this.testRequestFormat();
       await this.testBasicRules([6 /** ignore rule 6: barcodeShouldNotBeUsedRecently */]);
-      await this.testTokenRule();
     });
   }
 
@@ -54,7 +66,6 @@ export default class DiscountTransactionValidator {
         5 /** ignore rule 5: discountAtThisCafeteriaShouldBeFirstToday (should rather exist) */,
         6 /** ignore rule 6: barcodeShouldNotBeUsedRecently */,
       ]);
-      await this.testTokenRule();
     });
   }
 
@@ -70,77 +81,62 @@ export default class DiscountTransactionValidator {
     }
 
     return {
-      code: ValidationResultCode.USUAL_SUCCESS,
+      error: null,
       failedAt: 0,
     };
   }
 
   private async testRequestFormat() {
-    const malformed = !DiscountRulesChecker.requestShouldBeNotMalformed(this.transaction);
+    const malformed = !DiscountRulesChecker.requestShouldBeNotMalformed(this.params.transaction);
     if (malformed) {
-      throw new RuleViolation({code: ValidationResultCode.UNUSUAL_WRONG_PARAM, failedAt: -1});
+      throw new RuleViolation({error: RequestIsMalformed(), failedAt: -1});
     }
   }
 
   private async testBasicRules(excludedRuleIds: number[] = []) {
-    const {transaction} = this;
+    const {transaction} = this.params;
     const {studentId, cafeteriaId, mealType} = transaction;
     const {barcodeLifetimeMinutes, barcodeTagMinimumIntervalSecs} = config.transaction.validation;
 
     const tests: Test[] = [
       {
         ruleId: 1,
-        validate: () => DiscountRulesChecker.requestShouldBeInMealTime(cafeteriaId, mealType),
-        failureCode: ValidationResultCode.USUAL_FAIL,
+        validate: () => DiscountRulesChecker.cafeteriaShouldSupportDiscount(cafeteriaId),
+        failure: DiscountNotSupportedHere(),
       },
       {
         ruleId: 2,
-        validate: () => DiscountRulesChecker.cafeteriaShouldSupportDiscount(cafeteriaId),
-        failureCode: ValidationResultCode.UNUSUAL_WRONG_PARAM,
+        validate: () => DiscountRulesChecker.requestShouldBeInMealTime(cafeteriaId, mealType),
+        failure: DiscountNotAvailableNow(),
       },
       {
         ruleId: 3,
         validate: () => DiscountRulesChecker.userShouldExist(studentId),
-        failureCode: ValidationResultCode.UNUSUAL_NO_BARCODE,
+        failure: UserNotIdentified(),
       },
       {
         ruleId: 4,
         validate: () =>
           DiscountRulesChecker.barcodeShouldBeActive(studentId, barcodeLifetimeMinutes),
-        failureCode: ValidationResultCode.USUAL_FAIL,
+        failure: BarcodeNotActivated(),
       },
       {
         ruleId: 5,
-        validate: () =>
-          DiscountRulesChecker.discountAtThisCafeteriaShouldBeFirstToday(studentId, cafeteriaId),
-        failureCode: ValidationResultCode.USUAL_FAIL,
-      },
-      {
-        ruleId: 6,
         validate: () =>
           DiscountRulesChecker.barcodeShouldNotBeUsedRecently(
             studentId,
             barcodeTagMinimumIntervalSecs
           ),
-        failureCode: ValidationResultCode.USUAL_FAIL,
+        failure: BarcodeUsedRecently(),
+      },
+      {
+        ruleId: 6,
+        validate: () =>
+          DiscountRulesChecker.discountAtThisCafeteriaShouldBeFirstToday(studentId, cafeteriaId),
+        failure: DiscountAlreadyMadeHereToday(),
       },
     ];
 
     await new TestRunner(tests, {studentId, excludedRuleIds}).runTests();
-  }
-
-  private async testTokenRule() {
-    const {transaction, transactionToken} = this;
-    const {studentId, cafeteriaId} = transaction;
-
-    const tests: Test[] = [
-      {
-        ruleId: 7,
-        validate: () => DiscountRulesChecker.tokenShouldBeValid(cafeteriaId, transactionToken),
-        failureCode: ValidationResultCode.UNUSUAL_WRONG_PARAM,
-      },
-    ];
-
-    await new TestRunner(tests, {studentId, excludedRuleIds: []}).runTests();
   }
 }

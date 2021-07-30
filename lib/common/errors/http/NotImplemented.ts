@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import HttpError from './HttpError';
+import HttpError from './base/HttpError';
 
-export default class NotImplemented extends HttpError {
+export default class NotImplemented {
   static of = HttpError.with(501);
 }

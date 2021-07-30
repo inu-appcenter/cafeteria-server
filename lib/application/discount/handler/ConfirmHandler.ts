@@ -17,9 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DiscountTransaction} from '@inu-cafeteria/backend-core';
+import DiscountTransactionValidator, {
+  ValidationResult,
+} from '../validation/DiscountTransactionValidator';
+import TransactionHandler from './base/TransactionHandler';
 
-export type DiscountTransactionParams = {
-  transaction: DiscountTransaction;
-  transactionToken: string;
-};
+export default class ConfirmHandler extends TransactionHandler {
+  taskType = 'Confirm' as const;
+  taskName = '할인 트랜잭션 확정';
+
+  async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
+    return await validator.validateForConfirm();
+  }
+}

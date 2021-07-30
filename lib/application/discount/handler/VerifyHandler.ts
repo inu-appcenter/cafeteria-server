@@ -17,11 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import DiscountTransactionValidator from '../validation/DiscountTransactionValidator';
-import {ValidationResult} from '../validation/errors/ValidationResult';
+import DiscountTransactionValidator, {
+  ValidationResult,
+} from '../validation/DiscountTransactionValidator';
 import TransactionHandler from './base/TransactionHandler';
 
 export default class VerifyHandler extends TransactionHandler {
+  taskType = 'Verify' as const;
+  taskName = '할인 트랜잭션 검증';
+
   async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
     return await validator.validateForVerify();
   }

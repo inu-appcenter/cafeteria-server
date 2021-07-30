@@ -17,12 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import DiscountTransactionValidator from '../validation/DiscountTransactionValidator';
-import {ValidationResult} from '../validation/errors/ValidationResult';
-import TransactionHandler from './base/TransactionHandler';
+import UseCase from '../../common/base/UseCase';
+import {DiscountTransactionParams} from './common/Types';
+import ConfirmHandler from './handler/ConfirmHandler';
 
-export default class CommitHandler extends TransactionHandler {
-  async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
-    return await validator.validateForCommit();
+class ConfirmDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
+  async onExecute({transaction}: DiscountTransactionParams): Promise<void> {
+    await new ConfirmHandler(transaction).handle();
   }
 }
+
+export default new ConfirmDiscountTransaction();

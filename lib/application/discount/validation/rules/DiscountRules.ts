@@ -25,12 +25,12 @@ export default interface DiscountRules {
   /**
    * RULE NUMBER 1
    */
-  requestShouldBeInMealTime(cafeteriaId: number, mealType: number): Promise<boolean>;
+  cafeteriaShouldSupportDiscount(cafeteriaId: number): Promise<boolean>;
 
   /**
    * RULE NUMBER 2
    */
-  cafeteriaShouldSupportDiscount(cafeteriaId: number): Promise<boolean>;
+  requestShouldBeInMealTime(cafeteriaId: number, mealType: number): Promise<boolean>;
 
   /**
    * RULE NUMBER 3
@@ -48,18 +48,13 @@ export default interface DiscountRules {
   /**
    * RULE NUMBER 5
    */
-  discountAtThisCafeteriaShouldBeFirstToday(
-    studentId: string,
-    cafeteriaId: number
-  ): Promise<boolean>;
+  barcodeShouldNotBeUsedRecently(studentId: string, intervalSec: number): Promise<boolean>;
 
   /**
    * RULE NUMBER 6
    */
-  barcodeShouldNotBeUsedRecently(studentId: string, intervalSec: number): Promise<boolean>;
-
-  /**
-   * RULE NUMBER 7
-   */
-  tokenShouldBeValid(cafeteriaId: number, plainToken: string): Promise<boolean>;
+  discountAtThisCafeteriaShouldBeFirstToday(
+    studentId: string,
+    cafeteriaId: number
+  ): Promise<boolean>;
 }
