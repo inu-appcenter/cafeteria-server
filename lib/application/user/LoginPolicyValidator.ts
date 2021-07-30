@@ -22,6 +22,7 @@ import StudentAccountValidator from '../../external/inu/StudentAccountValidator'
 import {User} from '@inu-cafeteria/backend-core';
 import {compareBcryptHash} from '../../common/utils/bcrypt';
 import assert from 'assert';
+import {InvalidRememberMeToken, UserNotExist} from './common/Errors';
 
 export default class LoginPolicyValidator {
   constructor(private readonly params: LoginParams) {}
@@ -52,14 +53,14 @@ export default class LoginPolicyValidator {
   private async validateForRememberedLogin() {
     const {studentId, rememberMeToken} = this.params;
 
-    assert(rememberMeToken, '토큰이 있어야 합니다!');
+    assert(rememberMeToken, InvalidRememberMeToken());
 
     const user = await User.findOne({where: {studentId}});
 
-    assert(user, '사용자가 존재해야 합니다!');
+    assert(user, UserNotExist());
 
     const hasValidToken = await compareBcryptHash(rememberMeToken, user.rememberMeToken);
 
-    assert(hasValidToken, '토큰이 유효하지 않습니다!');
+    assert(hasValidToken, InvalidRememberMeToken());
   }
 }

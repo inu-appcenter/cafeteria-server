@@ -17,20 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import config from '../../../config';
-import express from 'express';
-import {registerRoutes} from './utils/register';
-import {errorHandler} from './middleware/errorHandler';
+import HttpError from './HttpError';
 
-export default async function startServer() {
-  const app = express();
-
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
-
-  await registerRoutes(app, __dirname + '/routes');
-
-  app.use(errorHandler);
-
-  app.listen(config.server.port, config.server.host);
+export default class Forbidden extends HttpError {
+  static of = HttpError.with(403);
 }

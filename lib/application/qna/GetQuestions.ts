@@ -18,7 +18,7 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/base/Types';
+import {UserIdentifier} from '../user/common/Types';
 import {Question} from '@inu-cafeteria/backend-core';
 
 class GetQuestions extends UseCase<UserIdentifier, Question[]> {

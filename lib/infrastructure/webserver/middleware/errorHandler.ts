@@ -1,3 +1,9 @@
+import {ErrorRequestHandler, RequestHandler} from 'express';
+import HttpError from '../../../common/errors/http/HttpError';
+import {stringifyError} from '../../../common/utils/error';
+import logger from '../../../common/logging/logger';
+import {AssertionError} from 'assert';
+
 /**
  * This file is part of INU Cafeteria.
  *
@@ -16,3 +22,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  if (isHttpError(err)) {
+    logger.info(`HTTP 에러가 발생했습니다: ${stringifyError(err)}`);
+
+    const {statusCode, error, message} = err;
+
+    return res.status(statusCode).json({
+      statusCode,
+      error,
+      message,
+    });
+  } else if (isAssertionError(err)) {
+    logger.warn(`Assertion 에러가 발생했습니다: ${stringifyError(err)}`);
+
+    const {message} = err;
+
+    return res.status(500).json({
+      statusCode: 500,
+      error: 'assertion_failed',
+      message,
+    });
+  } else {
+    logger.error(`처리되지 않은 에러가 발생했습니다: ${stringifyError(err)}`);
+
+    return res.status(500).json({
+      statusCode: 500,
+      error: 'unhandled',
+      message: stringifyError(err),
+    });
+  }
+};
+
+function isHttpError(error: Error): error is HttpError {
+  return error instanceof HttpError;
+}
+
+function isAssertionError(error: Error): error is AssertionError {
+  return error instanceof AssertionError;
+}

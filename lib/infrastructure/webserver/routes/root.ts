@@ -18,8 +18,8 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../utils/schema';
-import {defineRoute} from '../utils/route';
+import {defineSchema} from '../libs/schema';
+import {defineRoute} from '../libs/route';
 
 const schema = defineSchema({
   query: z.object({

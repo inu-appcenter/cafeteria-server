@@ -17,20 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import config from '../../../config';
-import express from 'express';
-import {registerRoutes} from './utils/register';
-import {errorHandler} from './middleware/errorHandler';
+import BadRequest from '../../../common/errors/http/BadRequest';
+import Unauthorized from '../../../common/errors/http/Unauthorized';
 
-export default async function startServer() {
-  const app = express();
+export const UserNotExist = BadRequest.of('user_not_exist', '사용자가 존재하지 않습니다.');
 
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
-
-  await registerRoutes(app, __dirname + '/routes');
-
-  app.use(errorHandler);
-
-  app.listen(config.server.port, config.server.host);
-}
+export const InvalidRememberMeToken = Unauthorized.of(
+  'invalid_remember_me_token',
+  '유효하지 않은 자동로그인 토큰입니다.'
+);

@@ -17,20 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import config from '../../../config';
-import express from 'express';
-import {registerRoutes} from './utils/register';
-import {errorHandler} from './middleware/errorHandler';
+export default class HttpError extends Error {
+  statusCode: number;
+  error: string; // 에러 식별자. 서비스 내부에서만 쓰이는 디테일을 표현. 예를 들어 invalid_remember_me_token 이라든가...
+  message: string; // 에러에 대한 해설.
 
-export default async function startServer() {
-  const app = express();
+  constructor(statusCode: number, error: string, message: string) {
+    super();
 
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
+    this.statusCode = statusCode;
+    this.error = error;
+    this.message = message;
+  }
 
-  await registerRoutes(app, __dirname + '/routes');
+  static with(statusCode: number): ErrorConstructorGenerator {
+    return (error: string, message: string) => () => new HttpError(statusCode, error, message);
+  }
 
-  app.use(errorHandler);
-
-  app.listen(config.server.port, config.server.host);
+  static of: ErrorConstructorGenerator;
 }
+
+export type ErrorConstructorGenerator = (error: string, message: string) => () => HttpError;

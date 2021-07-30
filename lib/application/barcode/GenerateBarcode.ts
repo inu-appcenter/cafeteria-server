@@ -18,7 +18,7 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {StudentId} from '../user/base/Types';
+import {StudentId} from '../user/common/Types';
 import assert from 'assert';
 
 class GenerateBarcode extends UseCase<StudentId, string> {

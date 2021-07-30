@@ -19,7 +19,7 @@
 
 import UseCase from '../../common/base/UseCase';
 import {Question} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/base/Types';
+import {UserIdentifier} from '../user/common/Types';
 
 export type MakeInquiryParams = {
   deviceInfo: string;

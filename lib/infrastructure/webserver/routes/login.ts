@@ -18,8 +18,8 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../utils/schema';
-import {defineRoute} from '../utils/route';
+import {defineSchema} from '../libs/schema';
+import {defineRoute} from '../libs/route';
 import Login from '../../../application/user/Login';
 import config from '../../../../config';
 

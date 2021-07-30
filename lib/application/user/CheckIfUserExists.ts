@@ -18,7 +18,7 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from './base/Types';
+import {UserIdentifier} from './common/Types';
 import {User} from '@inu-cafeteria/backend-core';
 
 class CheckIfUserExists extends UseCase<UserIdentifier, boolean> {
