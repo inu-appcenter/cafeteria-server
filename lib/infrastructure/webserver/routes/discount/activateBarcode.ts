@@ -17,14 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import jwt from 'jsonwebtoken';
-import config from '../../../config';
-import {SessionTokenContents} from '../../application/user/common/Types';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import ActivateBarcode from '../../../../application/discount/ActivateBarcode';
 
-export function createJwt(payload: SessionTokenContents) {
-  return jwt.sign(payload, config.auth.key, {algorithm: 'HS256', expiresIn: config.auth.expiresIn});
-}
+const schema = defineSchema({});
 
-export function decodeJwt(token: string): SessionTokenContents {
-  return jwt.verify(token, config.auth.key) as SessionTokenContents;
-}
+export default defineRoute('post', '/activateBarcode', schema, async (req, res) => {
+  const {userId} = req;
+
+  await ActivateBarcode.run({userId});
+
+  return res.send();
+});

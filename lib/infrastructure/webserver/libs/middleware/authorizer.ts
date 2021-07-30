@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {RequestHandler} from 'express';
+import express, {RequestHandler} from 'express';
 import {decodeJwt} from '../../../../common/utils/token';
 import config from '../../../../../config';
 import {InvalidJwt, NotLoggedIn} from '../../../../application/user/common/Errors';
@@ -29,6 +29,8 @@ export type AuthorizerConfig = {
 export function authorizer({exclude}: AuthorizerConfig): RequestHandler {
   return (req, res, next) => {
     if (exclude?.includes(req.path)) {
+      assignGetter(req);
+
       return next();
     }
 
@@ -38,11 +40,25 @@ export function authorizer({exclude}: AuthorizerConfig): RequestHandler {
     }
 
     try {
-      decodeJwt(tokenFromCookie);
+      const {userId} = decodeJwt(tokenFromCookie);
+
+      assignGetter(req, userId);
 
       return next();
     } catch (e) {
       return next(InvalidJwt());
     }
   };
+}
+
+function assignGetter(req: express.Request, initial?: number) {
+  Object.defineProperty(req, 'userId', {
+    get() {
+      if (initial) {
+        return initial;
+      } else {
+        throw NotLoggedIn();
+      }
+    },
+  });
 }
