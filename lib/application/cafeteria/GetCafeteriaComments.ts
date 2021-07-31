@@ -18,39 +18,31 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Cafeteria} from '@inu-cafeteria/backend-core';
+import {CafeteriaComment} from '@inu-cafeteria/backend-core';
 import assert from 'assert';
 import {ResourceNotFound} from '../../common/errors/General';
 
-export type GetCafeteriaParams = {
+export type GetCafeteriaCommentsParams = {
   id?: number;
-  withCorners?: boolean;
-  withComment?: boolean;
 };
 
-class GetCafeteria extends UseCase<GetCafeteriaParams, Cafeteria | Cafeteria[] | undefined> {
+class GetCafeteriaComments extends UseCase<
+  GetCafeteriaCommentsParams,
+  CafeteriaComment | CafeteriaComment[] | undefined
+> {
   async onExecute({
     id,
-    withCorners,
-    withComment,
-  }: GetCafeteriaParams): Promise<Cafeteria | Cafeteria[] | undefined> {
-    const relations = [
-      withCorners ? 'corners' : undefined,
-      withComment ? 'comment' : undefined,
-    ].filter((r) => r) as string[];
-
-    const options = {relations};
-
+  }: GetCafeteriaCommentsParams): Promise<CafeteriaComment | CafeteriaComment[] | undefined> {
     if (id) {
-      const found = await Cafeteria.findOne(id, options);
+      const found = await CafeteriaComment.findOne(id);
 
       assert(found, ResourceNotFound());
 
       return found;
     } else {
-      return await Cafeteria.find(options);
+      return await CafeteriaComment.find();
     }
   }
 }
 
-export default new GetCafeteria();
+export default new GetCafeteriaComments();

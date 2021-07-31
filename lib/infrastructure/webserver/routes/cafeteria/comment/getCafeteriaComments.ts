@@ -17,32 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {CafeteriaComment} from '@inu-cafeteria/backend-core';
-import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/General';
+import {z} from 'zod';
+import {defineSchema} from '../../../libs/schema';
+import {defineRoute} from '../../../libs/route';
+import GetCafeteriaComments from '../../../../../application/cafeteria/GetCafeteriaComments';
 
-export type GetCafeteriaCommentParams = {
-  id?: number;
-};
+const schema = defineSchema({
+  params: {
+    id: z.number().optional(),
+  },
+});
 
-class GetCafeteriaComment extends UseCase<
-  GetCafeteriaCommentParams,
-  CafeteriaComment | CafeteriaComment[] | undefined
-> {
-  async onExecute({
-    id,
-  }: GetCafeteriaCommentParams): Promise<CafeteriaComment | CafeteriaComment[] | undefined> {
-    if (id) {
-      const found = await CafeteriaComment.findOne(id);
+export default defineRoute('get', '/cafeteria/comments/:id?', schema, async (req, res) => {
+  const {id} = req.params;
 
-      assert(found, ResourceNotFound());
+  const comments = await GetCafeteriaComments.run({id});
 
-      return found;
-    } else {
-      return await CafeteriaComment.find();
-    }
-  }
-}
-
-export default new GetCafeteriaComment();
+  return res.json(comments);
+});
