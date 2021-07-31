@@ -22,13 +22,19 @@ import RawMenuTextRetriever from './stage1/RawMenuTextRetriever';
 import MenuTokenizer from './stage2/MenuTokenizer';
 import Entitizer from './stage3/Entitizer';
 
-export default class MenuParser {
-  constructor(
-    private readonly rawHtml: string,
-    private readonly cafeteriaWithCorners: Cafeteria[]
-  ) {}
+export type MenuParserParams = {
+  rawHtml: string;
+  cafeteriaWithCorners: Cafeteria[];
+};
 
-  private rawMenuTextRetriever = new RawMenuTextRetriever(this.rawHtml); // stage 1
+/**
+ * 메뉴 파싱 얘한테 그냥 맡겨버려요!
+ * 카페테리아와 함께 식단페이지 HTML을 넘겨주면 알아서 만들어 옵니다.
+ */
+export default class MenuParser {
+  constructor(private readonly params: MenuParserParams) {}
+
+  private rawMenuTextRetriever = new RawMenuTextRetriever(this.params.rawHtml); // stage 1
   private menuTokenizer = new MenuTokenizer(); // stage 2
   private entitizer = new Entitizer(); // stage 3
 
@@ -37,7 +43,7 @@ export default class MenuParser {
     const menuParseRegexes = await MenuParseRegex.find();
     const metadataExpressions = menuParseRegexes.map((r) => r.regex);
 
-    for (const cafeteria of this.cafeteriaWithCorners) {
+    for (const cafeteria of this.params.cafeteriaWithCorners) {
       for (const corner of cafeteria.corners) {
         const parsed = await this.parsePerCafeteriaAndCorner(
           cafeteria,

@@ -28,7 +28,7 @@ type MenuProcessed = {
 
 export default class Entitizer {
   toEntity(processed: MenuProcessed[], cornerId: number) {
-    logger.info(`<메뉴 파싱 stage 3> 처리가 완료된 메뉴 데이터를 엔티티로 변환합니다.`);
+    logger.verbose(`<메뉴 파싱 stage 3> 처리가 완료된 메뉴 데이터를 엔티티로 변환합니다.`);
 
     return processed
       .filter((m) => m.foods.length > 0)

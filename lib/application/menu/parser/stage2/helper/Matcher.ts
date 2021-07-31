@@ -22,6 +22,9 @@ export type RegexResult = RegExpExecArray | null;
 export default class Matcher {
   constructor(private readonly text: string, private readonly expressions: string[]) {}
 
+  /**
+   * 여러 정규식 중에서 가장 긴 매치를 내놓는 녀석의 결과를 가져옵니다.
+   */
   longestMatch() {
     const results = this.expressions
       .map((exprString) => new RegExp(exprString))

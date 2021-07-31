@@ -67,7 +67,7 @@ class MenuRepository {
     const rawHtml = await CoopRepository.fetchRawMenusPage(dateString);
     const cafeteriaWithCorners = await Cafeteria.find({relations: ['corners']});
 
-    const parsed = await new MenuParser(rawHtml, cafeteriaWithCorners).parse();
+    const parsed = await new MenuParser({rawHtml, cafeteriaWithCorners}).parse();
 
     this.menuCache.menus.set(dateString, parsed);
     this.menuCache.lastUpdatedMillis = Date.now();

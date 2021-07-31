@@ -22,7 +22,7 @@ import Matcher, {RegexResult} from './helper/Matcher';
 
 export default class MenuTokenizer {
   splitFoodsAndMetadata(rawMenuText: string, metadataExpressions: string[] = []) {
-    logger.info(
+    logger.verbose(
       `<메뉴 파싱 stage 2> 가져온 메뉴 스트링을 분석하여 식단과 가격, 열량을 분리합니다.`
     );
 

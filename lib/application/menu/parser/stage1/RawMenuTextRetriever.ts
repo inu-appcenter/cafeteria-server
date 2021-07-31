@@ -26,7 +26,7 @@ export default class RawMenuTextRetriever {
   constructor(private readonly rawHtml: string) {}
 
   retrieve(cafeteriaName: string, cornerName: string) {
-    logger.info(
+    logger.verbose(
       `<메뉴 파싱 stage 1> ${cornerName}(${cornerName})의 메뉴 정보 스트링을 모두 가져옵니다.`
     );
 
