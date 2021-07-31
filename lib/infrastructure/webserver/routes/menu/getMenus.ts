@@ -25,7 +25,7 @@ import {stringAsInt, stringInYYYYMMDD} from '../../utils/zodTypes';
 const schema = defineSchema({
   query: {
     cornerId: stringAsInt.optional(),
-    date: stringInYYYYMMDD,
+    date: stringInYYYYMMDD.optional(),
     dateOffset: stringAsInt.optional(),
   },
 });
