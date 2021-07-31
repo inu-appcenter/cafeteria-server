@@ -20,11 +20,11 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetCorners from '../../../../application/cafeteria/GetCorners';
-import {z} from 'zod';
+import {stringAsInt} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   params: {
-    id: z.number().optional(),
+    id: stringAsInt.optional(),
   },
 });
 

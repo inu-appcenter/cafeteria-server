@@ -29,14 +29,10 @@ export async function registerRoutes(app: express.Application, dir: string = '/r
       continue;
     }
 
-    if (!path.endsWith('.ts')) {
-      continue;
-    }
-
     const filePath = dir + '/' + path;
     const stats = fs.lstatSync(filePath);
 
-    if (stats.isFile()) {
+    if (stats.isFile() && path.endsWith('.ts')) {
       logger.info(`라우터를 등록합니다: ${path}`);
 
       const router = (await import(filePath)).default as express.Router;

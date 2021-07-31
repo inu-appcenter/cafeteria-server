@@ -17,17 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
-import VerifyDiscountTransaction from '../../../../application/discount/VerifyDiscountTransaction';
+import {isNumeric} from '../../../common/utils/number';
+import {checkDateStringFormat} from '../../../common/utils/date';
 
-const schema = defineSchema({
-  query: {},
-});
+export function isInt(value: string) {
+  return isNumeric(value);
+}
 
-export default defineRoute('get', '/isBarcode', schema, async (req, res) => {
-  await VerifyDiscountTransaction.run({});
+export function toInt(value?: string): number | undefined {
+  return value ? parseInt(value, 10) : undefined;
+}
 
-  res.send();
-});
+export function isBoolean(value: string) {
+  return ['true', 'false'].includes(value);
+}
+
+export function toBoolean(value?: string): boolean | undefined {
+  return value ? value === 'true' : undefined;
+}
+
+export function isYYYYMMDD(value: string) {
+  return checkDateStringFormat(value);
+}

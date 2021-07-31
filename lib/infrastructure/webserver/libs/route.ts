@@ -18,9 +18,8 @@
  */
 
 import express, {RequestHandler} from 'express';
-import {RequestValidation, validateRequest} from 'zod-express-middleware';
 import {asyncHandler} from './handler';
-import {unstringifier} from './middleware/unstringifier';
+import {RequestValidation, validateRequest} from './middleware/zod';
 
 export function defineRoute<TParams = any, TQuery = any, TBody = any>(
   method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
@@ -30,7 +29,7 @@ export function defineRoute<TParams = any, TQuery = any, TBody = any>(
 ): express.Router {
   const router = express.Router();
 
-  router[method](path, unstringifier(), validateRequest(schema), asyncHandler(handler));
+  router[method](path, validateRequest(schema), asyncHandler(handler));
 
   return router;
 }

@@ -17,14 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {z} from 'zod';
 import {defineSchema} from '../../../libs/schema';
 import {defineRoute} from '../../../libs/route';
 import GetCafeteriaComments from '../../../../../application/cafeteria/GetCafeteriaComments';
+import {stringAsInt} from '../../../utils/zodTypes';
 
 const schema = defineSchema({
   params: {
-    id: z.number().optional(),
+    id: stringAsInt.optional(),
   },
 });
 

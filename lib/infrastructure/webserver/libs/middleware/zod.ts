@@ -1,0 +1,263 @@
+/**
+ * This file is part of INU Cafeteria.
+ *
+ * Copyright (C) 2021 INU Global App Center <potados99@gmail.com>
+ *
+ * INU Cafeteria is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * INU Cafeteria is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/**
+ * MIT License
+ *
+ * Copyright (c) 2021 Casper Schouls
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+import {Request, RequestHandler, Response} from 'express';
+import {ParamsDictionary} from 'express-serve-static-core';
+import {z, ZodEffects, ZodError, ZodSchema, ZodType, ZodTypeDef} from 'zod';
+
+type NonReadOnly<T> = {-readonly [P in keyof T]: NonReadOnly<T[P]>};
+
+export function stripReadOnly<T>(readOnlyItem: T): NonReadOnly<T> {
+  return readOnlyItem as NonReadOnly<T>;
+}
+
+export declare type RequestValidation<TParams, TQuery, TBody> = {
+  params?: ZodSchema<TParams, ZodTypeDef, any>;
+  query?: ZodSchema<TQuery, ZodTypeDef, any>;
+  body?: ZodSchema<TBody, ZodTypeDef, any>;
+};
+export declare type RequestProcessing<TParams, TQuery, TBody> = {
+  params?: ZodEffects<any, TParams>;
+  query?: ZodEffects<any, TQuery>;
+  body?: ZodEffects<any, TBody>;
+};
+
+export declare type TypedRequest<
+  TParams extends ZodType<any, ZodTypeDef, any>,
+  TQuery extends ZodType<any, ZodTypeDef, any>,
+  TBody extends ZodType<any, ZodTypeDef, any>
+> = Request<z.infer<TParams>, any, z.infer<TBody>, z.infer<TQuery>>;
+
+export declare type TypedRequestBody<TBody extends ZodType<any, ZodTypeDef, any>> = Request<
+  ParamsDictionary,
+  any,
+  z.infer<TBody>,
+  any
+>;
+
+export declare type TypedRequestParams<TParams extends ZodType<any, ZodTypeDef, any>> = Request<
+  z.infer<TParams>,
+  any,
+  any,
+  any
+>;
+export declare type TypedRequestQuery<TQuery extends ZodType<any, ZodTypeDef, any>> = Request<
+  ParamsDictionary,
+  any,
+  any,
+  z.infer<TQuery>
+>;
+
+type ErrorListItem = {type: 'Query' | 'Params' | 'Body'; errors: ZodError<any>};
+
+export const sendErrors: (errors: Array<ErrorListItem>, res: Response) => void = (errors, res) => {
+  return res.status(400).send(errors.map((error) => ({type: error.type, errors: error.errors})));
+};
+export const sendError: (error: ErrorListItem, res: Response) => void = (error, res) => {
+  return res.status(400).send({type: error.type, errors: error.errors});
+};
+
+export function processRequestBody<TBody>(
+  effects: ZodSchema<TBody>
+): RequestHandler<ParamsDictionary, any, TBody, any>;
+export function processRequestBody<TBody>(
+  effects: ZodEffects<any, TBody>
+): RequestHandler<ParamsDictionary, any, TBody, any>;
+export function processRequestBody<TBody>(
+  effectsSchema: ZodEffects<any, TBody> | ZodSchema<TBody>
+): RequestHandler<ParamsDictionary, any, TBody, any> {
+  return (req, res, next) => {
+    const parsed = effectsSchema.safeParse(req.body);
+    if (parsed.success) {
+      req.body = parsed.data;
+      return next();
+    } else {
+      return sendErrors([{type: 'Body', errors: parsed.error}], res);
+    }
+  };
+}
+
+export function processRequestParams<TParams>(
+  effects: ZodSchema<TParams>
+): RequestHandler<TParams, any, any, any>;
+export function processRequestParams<TParams>(
+  effects: ZodEffects<any, TParams>
+): RequestHandler<TParams, any, any, any>;
+export function processRequestParams<TParams>(
+  effectsSchema: ZodEffects<any, TParams> | ZodSchema<TParams>
+): RequestHandler<TParams, any, any, any> {
+  return (req, res, next) => {
+    const parsed = effectsSchema.safeParse(req.params);
+    if (parsed.success) {
+      req.params = parsed.data;
+      return next();
+    } else {
+      return sendErrors([{type: 'Params', errors: parsed.error}], res);
+    }
+  };
+}
+
+export function processRequestQuery<TQuery>(
+  effects: ZodSchema<TQuery>
+): RequestHandler<ParamsDictionary, any, any, TQuery>;
+export function processRequestQuery<TQuery>(
+  effects: ZodEffects<any, TQuery>
+): RequestHandler<ParamsDictionary, any, any, TQuery>;
+export function processRequestQuery<TQuery>(
+  effectsSchema: ZodEffects<any, TQuery> | ZodSchema<TQuery>
+): RequestHandler<ParamsDictionary, any, any, TQuery> {
+  return (req, res, next) => {
+    const parsed = effectsSchema.safeParse(req.query);
+    if (parsed.success) {
+      req.query = parsed.data;
+      return next();
+    } else {
+      return sendErrors([{type: 'Query', errors: parsed.error}], res);
+    }
+  };
+}
+
+export function processRequest<TParams = any, TQuery = any, TBody = any>(
+  schemas: RequestProcessing<TParams, TQuery, TBody>
+): RequestHandler<TParams, any, TBody, TQuery>;
+export function processRequest<TParams = any, TQuery = any, TBody = any>(
+  schemas: RequestValidation<TParams, TQuery, TBody>
+): RequestHandler<TParams, any, TBody, TQuery>;
+export function processRequest<TParams = any, TQuery = any, TBody = any>(
+  schemas: RequestValidation<TParams, TQuery, TBody> | RequestProcessing<TParams, TQuery, TBody>
+): RequestHandler<TParams, any, TBody, TQuery> {
+  return (req, res, next) => {
+    const errors: Array<ErrorListItem> = [];
+    if (schemas.params) {
+      const parsed = schemas.params.safeParse(req.params);
+      if (parsed.success) {
+        req.params = parsed.data;
+      } else {
+        errors.push({type: 'Params', errors: parsed.error});
+      }
+    }
+    if (schemas.query) {
+      const parsed = schemas.query.safeParse(req.query);
+      if (parsed.success) {
+        req.query = parsed.data;
+      } else {
+        errors.push({type: 'Query', errors: parsed.error});
+      }
+    }
+    if (schemas.body) {
+      const parsed = schemas.body.safeParse(req.body);
+      if (parsed.success) {
+        req.body = parsed.data;
+      } else {
+        errors.push({type: 'Body', errors: parsed.error});
+      }
+    }
+    if (errors.length > 0) {
+      return sendErrors(errors, res);
+    }
+    return next();
+  };
+}
+
+export const validateRequestBody: <TBody>(
+  zodSchema: ZodSchema<TBody>
+) => RequestHandler<ParamsDictionary, any, TBody, any> = (schema) => (req, res, next) => {
+  const parsed = schema.safeParse(req.body);
+  if (parsed.success) {
+    return next();
+  } else {
+    return sendErrors([{type: 'Body', errors: parsed.error}], res);
+  }
+};
+
+export const validateRequestParams: <TParams>(
+  zodSchema: ZodSchema<TParams>
+) => RequestHandler<TParams, any, any, any> = (schema) => (req, res, next) => {
+  const parsed = schema.safeParse(req.params);
+  if (parsed.success) {
+    return next();
+  } else {
+    return sendErrors([{type: 'Params', errors: parsed.error}], res);
+  }
+};
+
+export const validateRequestQuery: <TQuery>(
+  zodSchema: ZodSchema<TQuery>
+) => RequestHandler<ParamsDictionary, any, any, TQuery> = (schema) => (req, res, next) => {
+  const parsed = schema.safeParse(req.query);
+  if (parsed.success) {
+    return next();
+  } else {
+    return sendErrors([{type: 'Query', errors: parsed.error}], res);
+  }
+};
+
+export const validateRequest: <TParams = any, TQuery = any, TBody = any>(
+  schemas: RequestValidation<TParams, TQuery, TBody>
+) => RequestHandler<TParams, any, TBody, TQuery> =
+  ({params, query, body}) =>
+  (req, res, next) => {
+    const errors: Array<ErrorListItem> = [];
+    if (params) {
+      const parsed = params.safeParse(req.params);
+      if (!parsed.success) {
+        errors.push({type: 'Params', errors: parsed.error});
+      }
+    }
+    if (query) {
+      const parsed = query.safeParse(req.query);
+      if (!parsed.success) {
+        errors.push({type: 'Query', errors: parsed.error});
+      }
+    }
+    if (body) {
+      const parsed = body.safeParse(req.body);
+      if (!parsed.success) {
+        errors.push({type: 'Body', errors: parsed.error});
+      }
+    }
+    if (errors.length > 0) {
+      return sendErrors(errors, res);
+    }
+    return next();
+  };

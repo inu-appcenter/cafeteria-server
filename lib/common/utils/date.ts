@@ -17,8 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+export function checkDateStringFormat(dateString: string) {
+  return /([12]\d{3}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))/.test(dateString);
+}
+
 export function assertDateStringFormat(dateString: string) {
-  if (!/([12]\d{3}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))/.test(dateString)) {
+  if (!checkDateStringFormat(dateString)) {
     throw new Error('날짜 포맷이 올바르지 않습니다. YYYYMMDD만 허용합니다.');
   }
 }

@@ -20,24 +20,20 @@
 import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
-import GetNotices from '../../../../application/notice/GetNotices';
-import {stringAsInt} from '../../utils/zodTypes';
+import VerifyDiscountTransaction from '../../../../application/discount/VerifyDiscountTransaction';
+import {isInt, toInt} from '../../utils/parser';
 
 const schema = defineSchema({
-  params: {
-    id: stringAsInt.optional(),
-  },
   query: {
-    os: z.string().optional(),
-    version: z.string().optional(),
+    barcode: z.string().optional(),
+    cafeteriaId: z.string().refine(isInt).optional(),
   },
 });
 
-export default defineRoute('get', '/notices/:id?', schema, async (req, res) => {
-  const {id} = req.params;
-  const {os, version} = req.query;
+export default defineRoute('get', '/kiosk/discount/request', schema, async (req, res) => {
+  const {barcode, cafeteriaId} = req.query;
 
-  const notices = await GetNotices.run({id, os, version});
+  await VerifyDiscountTransaction.run({barcode, cafeteriaId: toInt(cafeteriaId)});
 
-  return res.json(notices);
+  res.send();
 });

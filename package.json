@@ -54,8 +54,7 @@
     "winston": "^3.3.3",
     "winston-cloudwatch": "^2.5.2",
     "winston-daily-rotate-file": "^4.5.0",
-    "zod": "^3.5.1",
-    "zod-express-middleware": "^1.4.0"
+    "zod": "^3.5.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

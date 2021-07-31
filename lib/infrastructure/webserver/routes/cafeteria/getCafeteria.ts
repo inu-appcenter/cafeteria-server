@@ -20,15 +20,15 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
-import {z} from 'zod';
+import {stringAsBoolean, stringAsInt} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   params: {
-    id: z.number().optional(),
+    id: stringAsInt.optional(),
   },
   query: {
-    withCorners: z.boolean().optional(),
-    withComment: z.boolean().optional(),
+    withCorners: stringAsBoolean.optional(),
+    withComment: stringAsBoolean.optional(),
   },
 });
 

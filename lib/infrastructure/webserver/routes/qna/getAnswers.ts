@@ -21,10 +21,11 @@ import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetAnswers from '../../../../application/qna/GetAnswers';
+import {isBoolean, toBoolean} from '../../utils/parser';
 
 const schema = defineSchema({
   query: {
-    unreadOnly: z.boolean().optional(),
+    unreadOnly: z.string().refine(isBoolean).transform(toBoolean).optional(),
   },
 });
 

@@ -18,6 +18,6 @@
  */
 
 export type HandleDiscountTransactionParams = {
-  barcode: string;
-  cafeteriaId: number;
+  barcode?: string;
+  cafeteriaId?: number;
 };

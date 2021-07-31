@@ -21,19 +21,21 @@ import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetMenus from '../../../../application/menu/GetMenus';
+import {isYYYYMMDD} from '../../utils/parser';
+import {stringAsInt} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   query: {
-    cornerId: z.number().optional(),
-    date: z.number().optional(),
-    dateOffset: z.number().optional(),
+    cornerId: stringAsInt.optional(),
+    date: z.string().refine(isYYYYMMDD).optional(),
+    dateOffset: stringAsInt.optional(),
   },
 });
 
 export default defineRoute('get', '/menus', schema, async (req, res) => {
   const {cornerId, date, dateOffset} = req.query;
 
-  const menus = await GetMenus.run({cornerId, date: date?.toString(), dateOffset});
+  const menus = await GetMenus.run({cornerId, date, dateOffset});
 
   return res.json(menus);
 });

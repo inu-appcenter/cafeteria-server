@@ -18,26 +18,14 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
-import GetNotices from '../../../../application/notice/GetNotices';
-import {stringAsInt} from '../../utils/zodTypes';
+import {isBoolean, isInt, toBoolean, toInt} from './parser';
 
-const schema = defineSchema({
-  params: {
-    id: stringAsInt.optional(),
-  },
-  query: {
-    os: z.string().optional(),
-    version: z.string().optional(),
-  },
-});
+/**
+ * Express는 query와 params를 모두 string으로 줍니다.
+ *
+ * 따라서 만약 숫자로 된 인자를 받고 싶다면 ,
+ * refine()을 통해 숫자 스트링만 걸러낸 뒤에 transform()으로 숫자로 변환해야 합니다.
+ */
 
-export default defineRoute('get', '/notices/:id?', schema, async (req, res) => {
-  const {id} = req.params;
-  const {os, version} = req.query;
-
-  const notices = await GetNotices.run({id, os, version});
-
-  return res.json(notices);
-});
+export const stringAsInt = z.string().refine(isInt).transform(toInt);
+export const stringAsBoolean = z.string().refine(isBoolean).transform(toBoolean);
