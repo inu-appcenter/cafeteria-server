@@ -28,6 +28,7 @@ import {z} from 'zod';
 
 export const stringAsInt = z.string().refine(isInt).transform(toInt);
 export const stringAsBoolean = z.string().refine(isBoolean).transform(toBoolean);
+export const stringInYYYYMMDD = z.string().refine(isYYYYMMDD);
 
 import {isNumeric} from '../../../common/utils/number';
 import {checkDateStringFormat} from '../../../common/utils/date';

@@ -17,15 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetAnswers from '../../../../application/qna/GetAnswers';
-import {isBoolean, toBoolean} from '../../utils/parser';
+import {stringAsBoolean} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   query: {
-    unreadOnly: z.string().refine(isBoolean).transform(toBoolean).optional(),
+    unreadOnly: stringAsBoolean.optional(),
   },
 });
 

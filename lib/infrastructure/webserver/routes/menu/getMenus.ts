@@ -17,17 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetMenus from '../../../../application/menu/GetMenus';
-import {isYYYYMMDD} from '../../utils/parser';
-import {stringAsInt} from '../../utils/zodTypes';
+import {stringAsInt, stringInYYYYMMDD} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   query: {
     cornerId: stringAsInt.optional(),
-    date: z.string().refine(isYYYYMMDD).optional(),
+    date: stringInYYYYMMDD,
     dateOffset: stringAsInt.optional(),
   },
 });
