@@ -17,32 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {CafeteriaComment} from '@inu-cafeteria/backend-core';
-import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/General';
+import {z} from 'zod';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import Ask from '../../../../application/qna/Ask';
 
-export type GetCafeteriaCommentParams = {
-  id?: number;
-};
+const schema = defineSchema({
+  body: {
+    deviceInfo: z.string(),
+    appVersion: z.string(),
+    content: z.string(),
+  },
+});
 
-class GetCafeteriaComment extends UseCase<
-  GetCafeteriaCommentParams,
-  CafeteriaComment | CafeteriaComment[] | undefined
-> {
-  async onExecute({
-    id,
-  }: GetCafeteriaCommentParams): Promise<CafeteriaComment | CafeteriaComment[] | undefined> {
-    if (id) {
-      const found = await CafeteriaComment.findOne(id);
+export default defineRoute('post', '/ask', schema, async (req, res) => {
+  const {userId} = req;
+  const {deviceInfo, appVersion, content} = req.body;
 
-      assert(found, ResourceNotFound());
+  await Ask.run({userId, deviceInfo, appVersion, content});
 
-      return found;
-    } else {
-      return await CafeteriaComment.find();
-    }
-  }
-}
-
-export default new GetCafeteriaComment();
+  return res.send();
+});

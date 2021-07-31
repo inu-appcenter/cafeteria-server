@@ -20,7 +20,7 @@
 import UseCase from '../../common/base/UseCase';
 import {Corner} from '@inu-cafeteria/backend-core';
 import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/Errors';
+import {ResourceNotFound} from '../../common/errors/General';
 
 export type GetCornersParams = {
   id?: number;

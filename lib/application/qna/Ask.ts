@@ -18,32 +18,27 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Cafeteria} from '@inu-cafeteria/backend-core';
-import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/General';
+import {Question} from '@inu-cafeteria/backend-core';
+import {UserIdentifier} from '../user/common/Types';
 
-export type GetCafeteriaParams = {
-  id?: number;
-  withCorners?: boolean;
-};
+export type AskParams = {
+  deviceInfo: string;
+  appVersion: string;
+  content: string;
+} & UserIdentifier;
 
-class GetCafeteria extends UseCase<GetCafeteriaParams, Cafeteria | Cafeteria[] | undefined> {
-  async onExecute({
-    id,
-    withCorners,
-  }: GetCafeteriaParams): Promise<Cafeteria | Cafeteria[] | undefined> {
-    const options = withCorners ? {relations: ['corners']} : {};
+class Ask extends UseCase<AskParams, void> {
+  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
+    const question = Question.create({
+      userId,
+      deviceInfo,
+      appVersion,
+      content,
+      askedAt: new Date(),
+    });
 
-    if (id) {
-      const found = await Cafeteria.findOne(id, options);
-
-      assert(found, ResourceNotFound());
-
-      return found;
-    } else {
-      return await Cafeteria.find(options);
-    }
+    await question.save();
   }
 }
 
-export default new GetCafeteria();
+export default new Ask();

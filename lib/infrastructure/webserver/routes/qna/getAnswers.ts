@@ -17,28 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {Question} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/common/Types';
+import {z} from 'zod';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import GetAnswers from '../../../../application/qna/GetAnswers';
 
-export type MakeInquiryParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
+const schema = defineSchema({
+  query: {
+    unreadOnly: z.boolean().optional(),
+  },
+});
 
-class MakeInquiry extends UseCase<MakeInquiryParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: MakeInquiryParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
+export default defineRoute('get', '/answers', schema, async (req, res) => {
+  const {userId} = req;
+  const {unreadOnly} = req.query;
 
-    await question.save();
-  }
-}
+  const questions = await GetAnswers.run({userId, unreadOnly});
 
-export default new MakeInquiry();
+  return res.json(questions);
+});

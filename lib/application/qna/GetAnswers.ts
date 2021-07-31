@@ -21,9 +21,24 @@ import UseCase from '../../common/base/UseCase';
 import {UserIdentifier} from '../user/common/Types';
 import {Answer} from '@inu-cafeteria/backend-core';
 
-class GetAnswers extends UseCase<UserIdentifier, Answer[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Answer[]> {
-    return await Answer.find({where: {userId}});
+export type GetAnswersParams = UserIdentifier & {
+  unreadOnly?: boolean;
+};
+
+class GetAnswers extends UseCase<GetAnswersParams, Answer[]> {
+  async onExecute({userId, unreadOnly}: GetAnswersParams): Promise<Answer[]> {
+    // find option으로 하는거? 안돼요
+    // https://github.com/typeorm/typeorm/issues/2707
+
+    const query = Answer.createQueryBuilder('answer')
+      .innerJoin('answer.question', 'question')
+      .where('question.userId = :userId', {userId});
+
+    if (unreadOnly) {
+      query.andWhere('answer.read = :read', {read: false});
+    }
+
+    return await query.getMany();
   }
 }
 

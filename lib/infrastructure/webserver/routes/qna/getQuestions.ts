@@ -17,32 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {CafeteriaComment} from '@inu-cafeteria/backend-core';
-import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/General';
+import {z} from 'zod';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import GetQuestions from '../../../../application/qna/GetQuestions';
 
-export type GetCafeteriaCommentParams = {
-  id?: number;
-};
+const schema = defineSchema({
+  query: {
+    withAnswers: z.boolean().optional(),
+  },
+});
 
-class GetCafeteriaComment extends UseCase<
-  GetCafeteriaCommentParams,
-  CafeteriaComment | CafeteriaComment[] | undefined
-> {
-  async onExecute({
-    id,
-  }: GetCafeteriaCommentParams): Promise<CafeteriaComment | CafeteriaComment[] | undefined> {
-    if (id) {
-      const found = await CafeteriaComment.findOne(id);
+export default defineRoute('get', '/questions', schema, async (req, res) => {
+  const {userId} = req;
+  const {withAnswers} = req.query;
 
-      assert(found, ResourceNotFound());
+  const questions = await GetQuestions.run({userId, withAnswers});
 
-      return found;
-    } else {
-      return await CafeteriaComment.find();
-    }
-  }
-}
-
-export default new GetCafeteriaComment();
+  return res.json(questions);
+});

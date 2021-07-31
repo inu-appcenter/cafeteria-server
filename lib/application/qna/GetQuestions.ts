@@ -21,9 +21,15 @@ import UseCase from '../../common/base/UseCase';
 import {UserIdentifier} from '../user/common/Types';
 import {Question} from '@inu-cafeteria/backend-core';
 
-class GetQuestions extends UseCase<UserIdentifier, Question[]> {
-  async onExecute({userId}: UserIdentifier): Promise<Question[]> {
-    return await Question.find({where: {userId}});
+export type GetQuestionsParams = UserIdentifier & {
+  withAnswers?: boolean;
+};
+
+class GetQuestions extends UseCase<GetQuestionsParams, Question[]> {
+  async onExecute({userId, withAnswers}: GetQuestionsParams): Promise<Question[]> {
+    const options = withAnswers ? {relations: ['answer']} : {};
+
+    return await Question.find({where: {userId}, ...options});
   }
 }
 
