@@ -83,7 +83,9 @@ export default class DiscountTransactionValidator {
   }
 
   private async testRequestFormat() {
-    const malformed = !DiscountRulesChecker.requestShouldBeNotMalformed(this.transaction);
+    const goodFormed = await DiscountRulesChecker.requestShouldBeNotMalformed(this.transaction);
+    const malformed = !goodFormed;
+
     if (malformed) {
       throw new RuleViolation({error: RequestMalformed(), failedAt: 0});
     }

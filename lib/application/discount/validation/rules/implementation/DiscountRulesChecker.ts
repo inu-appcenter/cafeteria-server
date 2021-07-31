@@ -23,7 +23,11 @@ import MealTypeValidator from './MealTypeValidator';
 import moment from 'moment';
 
 class DiscountRulesChecker implements DiscountRules {
-  requestShouldBeNotMalformed({studentId, cafeteriaId, mealType}: DiscountTransaction): boolean {
+  async requestShouldBeNotMalformed({
+    studentId,
+    cafeteriaId,
+    mealType,
+  }: DiscountTransaction): Promise<boolean> {
     return !(studentId == null || cafeteriaId == null || mealType == null);
   }
 
