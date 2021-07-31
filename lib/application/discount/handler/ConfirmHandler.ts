@@ -21,6 +21,7 @@ import DiscountTransactionValidator, {
   ValidationResult,
 } from '../validation/DiscountTransactionValidator';
 import DiscountTransactionHandler from './base/DiscountTransactionHandler';
+import logger from '../../../common/logging/logger';
 
 export default class ConfirmHandler extends DiscountTransactionHandler {
   taskType = 'Confirm' as const;
@@ -28,5 +29,17 @@ export default class ConfirmHandler extends DiscountTransactionHandler {
 
   async validate(validator: DiscountTransactionValidator): Promise<ValidationResult> {
     return await validator.validateForConfirm();
+  }
+
+  protected async afterValidationSuccess(): Promise<void> {
+    const {transaction} = this;
+    const {studentId} = transaction;
+
+    /**
+     * 확정된 할인 기록 저장은 여기에서 일어납니다!
+     */
+    await transaction.save();
+
+    logger.info(`${studentId}의 할인 확정이 저장되었습니다.`);
   }
 }
