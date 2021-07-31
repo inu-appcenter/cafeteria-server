@@ -18,7 +18,7 @@
  */
 
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
-import DiscountRulesChecker from './rules/DiscountRulesChecker';
+import DiscountRulesChecker from './rules/implementation/DiscountRulesChecker';
 import config from '../../../../config';
 import RuleViolation from './tests/RuleViolation';
 import TestRunner from './tests/TestRunner';
@@ -33,17 +33,13 @@ import {
   UserNotIdentified,
 } from '../common/Errors';
 
-export type ValidationParams = {
-  transaction: DiscountTransaction;
-};
-
 export type ValidationResult = {
   error: Error | null;
   failedAt: number;
 };
 
 export default class DiscountTransactionValidator {
-  constructor(private readonly params: ValidationParams) {}
+  constructor(protected readonly transaction: DiscountTransaction) {}
 
   async validateForVerify() {
     return await this.validate(async () => {
@@ -87,14 +83,14 @@ export default class DiscountTransactionValidator {
   }
 
   private async testRequestFormat() {
-    const malformed = !DiscountRulesChecker.requestShouldBeNotMalformed(this.params.transaction);
+    const malformed = !DiscountRulesChecker.requestShouldBeNotMalformed(this.transaction);
     if (malformed) {
       throw new RuleViolation({error: RequestMalformed(), failedAt: 0});
     }
   }
 
   private async testBasicRules(excludedRuleIds: number[] = []) {
-    const {transaction} = this.params;
+    const {transaction} = this;
     const {studentId, cafeteriaId, mealType} = transaction;
     const {barcodeLifetimeMinutes, barcodeTagMinimumIntervalSecs} = config.transaction.validation;
 

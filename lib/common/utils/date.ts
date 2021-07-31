@@ -17,29 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import moment from 'moment';
+
 export function checkDateStringFormat(dateString: string) {
-  return /([12]\d{3}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))/.test(dateString);
+  return moment(dateString, 'YYYYMMDD').isValid();
 }
 
 export function assertDateStringFormat(dateString: string) {
   if (!checkDateStringFormat(dateString)) {
     throw new Error('날짜 포맷이 올바르지 않습니다. YYYYMMDD만 허용합니다.');
   }
-}
-
-export function formatDateString(date: Date, dash: boolean = false) {
-  const mm = (date.getMonth() + 1).toString(); // getMonth() 는 0부터 시작
-  const dd = date.getDate().toString();
-
-  return [
-    date.getFullYear(),
-    dash ? '-' : '',
-    mm.length === 2 ? '' : '0',
-    mm,
-    dash ? '-' : '',
-    dd.length === 2 ? '' : '0',
-    dd,
-  ].join('');
 }
 
 /**

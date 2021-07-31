@@ -28,15 +28,22 @@ import {RequestMalformed} from '../common/Errors';
 import assert from 'assert';
 import TimeRangeChecker from './time/TimeRangeChecker';
 
+/**
+ * 요청으로부터 파싱을 거쳐 DiscountTransaction 엔티티를 만들어냅니다!
+ */
 export default class DiscountTransactionParser {
   constructor(private readonly params: HandleDiscountTransactionParams) {}
 
   async parse(): Promise<DiscountTransaction> {
-    return {
+    /**
+     * 여기서 DiscountTransaction 엔티티가 만들어져요!
+     */
+    return DiscountTransaction.create({
       mealType: await this.getCurrentMealTypeForThisCafeteria(),
       studentId: await this.getStudentId(),
       cafeteriaId: await this.getValidatedCafeteriaId(),
-    };
+      timestamp: new Date(),
+    });
   }
 
   /**

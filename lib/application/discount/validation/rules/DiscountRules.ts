@@ -40,10 +40,7 @@ export default interface DiscountRules {
   /**
    * RULE NUMBER 4
    */
-  barcodeShouldBeActive(
-    studentId: string,
-    activeDurationMinute: number /* in minutes */
-  ): Promise<boolean>;
+  barcodeShouldBeActive(studentId: string, activeDurationMinutes: number): Promise<boolean>;
 
   /**
    * RULE NUMBER 5

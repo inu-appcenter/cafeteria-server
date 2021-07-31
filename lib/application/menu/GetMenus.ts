@@ -31,15 +31,16 @@ export type GetMenusParams = {
 
   /**
    * 가져올 식단의 날짜.
+   * YYYYMMDD 형식 스트링입니다.
    * 없으면 오늘로 정해져요.
    */
-  date?: string; // YYYYMMDD
+  date?: string;
 
   /**
    * 위의 date에 추가적으로 날짜를 더하고 뺄 수 있습니다.
    * 예를 들어 '내일' 식단을 가져오고 싶으면, date을 비워놓고 dateOffset=1로 주면 됩니다.
    */
-  dateOffset?: number; // date으로부터 n일 후
+  dateOffset?: number;
 };
 
 class GetMenus extends UseCase<GetMenusParams, Menu[]> {

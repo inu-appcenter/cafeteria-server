@@ -23,6 +23,9 @@ import DiscountTransactionValidator, {
 } from '../../validation/DiscountTransactionValidator';
 import logger from '../../../../common/logging/logger';
 
+/**
+ * DiscountTransaction만 넣어주면 검증과 기록, 성공시에는 트랜잭션 저장까지 합니다.
+ */
 export default abstract class DiscountTransactionHandler {
   constructor(protected readonly transaction: DiscountTransaction) {}
 
@@ -41,8 +44,7 @@ export default abstract class DiscountTransactionHandler {
   async handle(): Promise<void> {
     logger.info(`${this.taskName}을 시작합니다.`);
 
-    const {transaction} = this;
-    const validator = new DiscountTransactionValidator({transaction});
+    const validator = new DiscountTransactionValidator(this.transaction);
 
     await this.beforeValidation();
 
@@ -50,6 +52,7 @@ export default abstract class DiscountTransactionHandler {
 
     if (error == null) {
       await this.onSuccess();
+      await this.afterValidationSuccess();
     } else {
       await this.onFail(failedAt);
 
@@ -75,6 +78,11 @@ export default abstract class DiscountTransactionHandler {
 
     await this.leaveHistory(0, taskType);
   }
+
+  /**
+   * 검증 작업 성공 후에 수행할 작업을 여기에 오버라이드합니다.
+   */
+  protected async afterValidationSuccess(): Promise<void> {}
 
   private async onFail(failedAt: number) {
     const {transaction, taskType, taskName} = this;
