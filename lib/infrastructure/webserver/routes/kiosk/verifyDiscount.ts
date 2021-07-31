@@ -17,25 +17,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isNumeric} from '../../../common/utils/number';
-import {checkDateStringFormat} from '../../../common/utils/date';
+import {z} from 'zod';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import VerifyDiscountTransaction from '../../../../application/discount/VerifyDiscountTransaction';
+import {stringAsInt} from '../../utils/zodTypes';
 
-export function isInt(value: string) {
-  return isNumeric(value);
-}
+const schema = defineSchema({
+  query: {
+    barcode: z.string().optional(),
+    cafeteriaId: stringAsInt.optional(),
+  },
+});
 
-export function toInt(value?: string): number | undefined {
-  return value ? parseInt(value, 10) : undefined;
-}
+export default defineRoute('get', '/kiosk/discount/verify', schema, async (req, res) => {
+  const {barcode, cafeteriaId} = req.query;
 
-export function isBoolean(value: string) {
-  return ['true', 'false'].includes(value);
-}
+  await VerifyDiscountTransaction.run({barcode, cafeteriaId});
 
-export function toBoolean(value?: string): boolean | undefined {
-  return value ? value === 'true' : undefined;
-}
-
-export function isYYYYMMDD(value: string) {
-  return checkDateStringFormat(value);
-}
+  res.send();
+});

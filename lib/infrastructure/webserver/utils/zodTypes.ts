@@ -18,7 +18,6 @@
  */
 
 import {z} from 'zod';
-import {isBoolean, isInt, toBoolean, toInt} from './parser';
 
 /**
  * Express는 query와 params를 모두 string으로 줍니다.
@@ -29,3 +28,26 @@ import {isBoolean, isInt, toBoolean, toInt} from './parser';
 
 export const stringAsInt = z.string().refine(isInt).transform(toInt);
 export const stringAsBoolean = z.string().refine(isBoolean).transform(toBoolean);
+
+import {isNumeric} from '../../../common/utils/number';
+import {checkDateStringFormat} from '../../../common/utils/date';
+
+export function isInt(value: string) {
+  return isNumeric(value);
+}
+
+export function toInt(value?: string): number | undefined {
+  return value ? parseInt(value, 10) : undefined;
+}
+
+export function isBoolean(value: string) {
+  return ['true', 'false'].includes(value);
+}
+
+export function toBoolean(value?: string): boolean | undefined {
+  return value ? value === 'true' : undefined;
+}
+
+export function isYYYYMMDD(value: string) {
+  return checkDateStringFormat(value);
+}
