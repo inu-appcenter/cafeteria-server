@@ -18,12 +18,11 @@
  */
 
 import {CafeteriaValidationParams} from '@inu-cafeteria/backend-core';
-import {allMealTypes} from '@inu-cafeteria/backend-core/src/core/menu/MealType';
-import {MealType} from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 import TimeRangeChecker from '../../../parser/time/TimeRangeChecker';
+import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 
 export type MealTypeValidatorParams = {
-  mealType: MealType;
+  mealType: number;
   discountValidationParams: CafeteriaValidationParams;
 };
 
@@ -44,7 +43,7 @@ export default class MealTypeValidator {
     const {mealType, discountValidationParams} = this.params;
 
     // mealType이 4, 2, 1, 0 중에 하나여야 합니다.
-    if (!allMealTypes.includes(mealType)) {
+    if (!MealType.all.includes(mealType)) {
       return false;
     }
 

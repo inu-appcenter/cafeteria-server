@@ -19,8 +19,8 @@
 
 import MealTimeRange from '@inu-cafeteria/backend-core/dist/src/core/discount/MealTimeRange';
 import moment from 'moment';
-import {MealType} from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 import logger from '../../../../common/logging/logger';
+import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 
 export default class TimeRangeChecker {
   constructor(private readonly timeRanges?: MealTimeRange) {}
