@@ -35,5 +35,5 @@ export default defineRoute('get', '/kiosk/discount/verify', schema, async (req, 
 
   await VerifyDiscountTransaction.run({barcode, cafeteriaId});
 
-  res.send();
+  return res.send();
 });

@@ -41,5 +41,5 @@ export default defineRoute('get', '/kiosk/discount/commit', schema, async (req, 
     await CancelDiscountTransaction.run({barcode, cafeteriaId});
   }
 
-  res.send();
+  return res.send();
 });
