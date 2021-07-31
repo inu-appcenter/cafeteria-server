@@ -19,10 +19,13 @@
 
 import UseCase from '../../common/base/UseCase';
 import ConfirmHandler from './handler/ConfirmHandler';
-import {DiscountTransactionParams} from './common/Types';
+import DiscountTransactionParser from './parser/DiscountTransactionParser';
+import {HandleDiscountTransactionParams} from './common/Types';
 
-class ConfirmDiscountTransaction extends UseCase<DiscountTransactionParams, void> {
-  async onExecute({transaction}: DiscountTransactionParams): Promise<void> {
+class ConfirmDiscountTransaction extends UseCase<HandleDiscountTransactionParams, void> {
+  async onExecute(params: HandleDiscountTransactionParams): Promise<void> {
+    const transaction = await new DiscountTransactionParser(params).parse();
+
     await new ConfirmHandler(transaction).handle();
   }
 }

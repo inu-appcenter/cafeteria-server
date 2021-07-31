@@ -17,7 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type HandleDiscountTransactionParams = {
-  barcode: string;
-  cafeteriaId: number;
-};
+import {z} from 'zod';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import VerifyDiscountTransaction from '../../../../application/discount/VerifyDiscountTransaction';
+
+const schema = defineSchema({
+  query: {},
+});
+
+export default defineRoute('get', '/isBarcode', schema, async (req, res) => {
+  await VerifyDiscountTransaction.run({});
+
+  res.send();
+});

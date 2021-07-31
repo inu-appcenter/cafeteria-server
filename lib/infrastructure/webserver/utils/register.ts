@@ -29,6 +29,10 @@ export async function registerRoutes(app: express.Application, dir: string = '/r
       continue;
     }
 
+    if (!path.endsWith('.ts')) {
+      continue;
+    }
+
     const filePath = dir + '/' + path;
     const stats = fs.lstatSync(filePath);
 
