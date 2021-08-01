@@ -18,7 +18,7 @@
  */
 
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
-import DiscountRulesChecker from './rules/implementation/DiscountRulesChecker';
+import Checker from './rules/implementation/RuleCheckerImpl';
 import config from '../../../../config';
 import RuleViolation from './tests/RuleViolation';
 import TestRunner from './tests/TestRunner';
@@ -83,7 +83,7 @@ export default class DiscountTransactionValidator {
   }
 
   private async testRequestFormat() {
-    const goodFormed = await DiscountRulesChecker.requestShouldBeNotMalformed(this.transaction);
+    const goodFormed = await Checker.requestShouldBeNotMalformed(this.transaction);
     const malformed = !goodFormed;
 
     if (malformed) {
@@ -99,38 +99,33 @@ export default class DiscountTransactionValidator {
     const tests: Test[] = [
       {
         ruleId: 1,
-        validate: () => DiscountRulesChecker.cafeteriaShouldSupportDiscount(cafeteriaId),
+        validate: () => Checker.cafeteriaShouldSupportDiscount(cafeteriaId),
         failure: DiscountNotSupportedHere(),
       },
       {
         ruleId: 2,
-        validate: () => DiscountRulesChecker.requestShouldBeInMealTime(cafeteriaId, mealType),
+        validate: () => Checker.requestShouldBeInMealTime(cafeteriaId, mealType),
         failure: DiscountNotAvailableNow(),
       },
       {
         ruleId: 3,
-        validate: () => DiscountRulesChecker.userShouldExist(studentId),
+        validate: () => Checker.userShouldExist(studentId),
         failure: UserNotIdentified(),
       },
       {
         ruleId: 4,
-        validate: () =>
-          DiscountRulesChecker.barcodeShouldBeActive(studentId, barcodeLifetimeMinutes),
+        validate: () => Checker.barcodeShouldBeActive(studentId, barcodeLifetimeMinutes),
         failure: BarcodeNotActivated(),
       },
       {
         ruleId: 5,
         validate: () =>
-          DiscountRulesChecker.barcodeShouldNotBeUsedRecently(
-            studentId,
-            barcodeTagMinimumIntervalSecs
-          ),
+          Checker.barcodeShouldNotBeUsedRecently(studentId, barcodeTagMinimumIntervalSecs),
         failure: BarcodeUsedRecently(),
       },
       {
         ruleId: 6,
-        validate: () =>
-          DiscountRulesChecker.discountAtThisCafeteriaShouldBeFirstToday(studentId, cafeteriaId),
+        validate: () => Checker.discountAtThisCafeteriaShouldBeFirstToday(studentId, cafeteriaId),
         failure: DiscountAlreadyMadeHereToday(),
       },
     ];

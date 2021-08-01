@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import DiscountRules from '../DiscountRules';
+import RuleChecker from '../RuleChecker';
 import {Cafeteria, DiscountTransaction, User} from '@inu-cafeteria/backend-core';
 import MealTypeValidator from './MealTypeValidator';
 import moment from 'moment';
 
-class DiscountRulesChecker implements DiscountRules {
+class RuleCheckerImpl implements RuleChecker {
   async requestShouldBeNotMalformed({
     studentId,
     cafeteriaId,
@@ -125,4 +125,4 @@ class DiscountRulesChecker implements DiscountRules {
   }
 }
 
-export default new DiscountRulesChecker();
+export default new RuleCheckerImpl();

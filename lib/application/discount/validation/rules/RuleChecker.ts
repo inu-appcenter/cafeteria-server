@@ -19,7 +19,7 @@
 
 import {DiscountTransaction} from '@inu-cafeteria/backend-core';
 
-export default interface DiscountRules {
+export default interface RuleChecker {
   requestShouldBeNotMalformed(transaction: DiscountTransaction): Promise<boolean>;
 
   /**
