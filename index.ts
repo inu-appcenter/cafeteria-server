@@ -25,7 +25,7 @@ import config from './config';
 
 async function start() {
   logger.info('TypeORM과 데이터베이스 연결을 시작합니다.');
-  await startTypeORM(true);
+  await startTypeORM();
 
   logger.info('서버를 시작합니다.');
   await startServer();

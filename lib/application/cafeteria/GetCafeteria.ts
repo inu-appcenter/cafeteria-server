@@ -25,21 +25,14 @@ import {ResourceNotFound} from '../../common/errors/General';
 export type GetCafeteriaParams = {
   id?: number;
   withCorners?: boolean;
-  withComment?: boolean;
 };
 
 class GetCafeteria extends UseCase<GetCafeteriaParams, Cafeteria | Cafeteria[] | undefined> {
   async onExecute({
     id,
     withCorners,
-    withComment,
   }: GetCafeteriaParams): Promise<Cafeteria | Cafeteria[] | undefined> {
-    const relations = [
-      withCorners ? 'corners' : undefined,
-      withComment ? 'comment' : undefined,
-    ].filter((r) => r) as string[];
-
-    const options = {relations};
+    const options = withCorners ? {relations: ['corners']} : {};
 
     if (id) {
       const found = await Cafeteria.findOne(id, options);

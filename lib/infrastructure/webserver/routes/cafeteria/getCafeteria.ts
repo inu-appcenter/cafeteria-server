@@ -28,15 +28,14 @@ const schema = defineSchema({
   },
   query: {
     withCorners: stringAsBoolean.optional(),
-    withComment: stringAsBoolean.optional(),
   },
 });
 
 export default defineRoute('get', '/cafeteria/:id?', schema, async (req, res) => {
   const {id} = req.params;
-  const {withCorners, withComment} = req.query;
+  const {withCorners} = req.query;
 
-  const cafeteria = await GetCafeteria.run({id, withCorners, withComment});
+  const cafeteria = await GetCafeteria.run({id, withCorners});
 
   return res.json(cafeteria);
 });
