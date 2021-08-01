@@ -18,7 +18,7 @@
  */
 
 import logger from '../../../../common/logging/logger';
-import {CafeteriaDiscountRule} from '@inu-cafeteria/backend-core';
+import {DiscountRule} from '@inu-cafeteria/backend-core';
 import RuleViolation from './RuleViolation';
 import {Test, TestContext} from './Test';
 
@@ -37,8 +37,8 @@ export default class TestRunner {
       }
 
       const passed = await test.validate();
-      const canBypass = await CafeteriaDiscountRule.canBypassRule(test.ruleId);
-      const ruleSummary = await CafeteriaDiscountRule.getSummary(test.ruleId);
+      const canBypass = await DiscountRule.canBypassRule(test.ruleId);
+      const ruleSummary = await DiscountRule.getSummary(test.ruleId);
 
       if (passed) {
         logger.info(`${studentId} 통과 ${ruleSummary}`);

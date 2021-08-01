@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DiscountHistory, DiscountTransaction, User} from '@inu-cafeteria/backend-core';
+import {DiscountProcessHistory, DiscountTransaction} from '@inu-cafeteria/backend-core';
 import DiscountTransactionValidator, {
   ValidationResult,
 } from '../../validation/DiscountTransactionValidator';
@@ -98,13 +98,13 @@ export default abstract class DiscountTransactionHandler {
     const {transaction} = this;
     const {studentId, cafeteriaId, mealType} = transaction;
 
-    const history = DiscountHistory.create({
+    const history = DiscountProcessHistory.create({
       type: taskType,
-      user: await User.findOneOrFail({studentId}),
-      cafeteriaId: cafeteriaId,
-      mealType: mealType,
-      failedAt: failedAt,
-      message: message,
+      studentId,
+      cafeteriaId,
+      mealType,
+      failedAt,
+      message,
       timestamp: new Date(),
     });
 
