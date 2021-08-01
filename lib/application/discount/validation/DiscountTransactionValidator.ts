@@ -87,7 +87,7 @@ export default class DiscountTransactionValidator {
     const malformed = !goodFormed;
 
     if (malformed) {
-      throw new RuleViolation({error: RequestMalformed(), failedAt: 0});
+      throw new RuleViolation({error: RequestMalformed(), failedAt: -1});
     }
   }
 
