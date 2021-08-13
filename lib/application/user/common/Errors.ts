@@ -30,3 +30,15 @@ export const InvalidRememberMeToken = Unauthorized.of(
 export const NotLoggedIn = Unauthorized.of('not_logged_in', '로그인해주세요!');
 
 export const InvalidJwt = Unauthorized.of('invalid_jwt', '로그인해주세요!');
+
+export const InvalidPhoneNumber = BadRequest.of(
+  'invalid_phone_number',
+  '잘못된 휴대전화번호 형식입니다!'
+);
+
+export const ForStudentsOnly = BadRequest.of('for_students_only', '재학생만 로그인 가능합니다.');
+
+export const InvalidPasscode = BadRequest.of(
+  'invalid_passcode',
+  '인증번호가 만료되었거나 올바르지 않습니다.'
+);

@@ -17,12 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {LoginParams} from './Login';
-import StudentAccountValidator from '../../external/inu/StudentAccountValidator';
+import {LoginParams} from '../Login';
+import StudentAccountValidator from '../../../external/inu/StudentAccountValidator';
 import {User} from '@inu-cafeteria/backend-core';
-import {compareBcryptHash} from '../../common/utils/bcrypt';
+import {compareBcryptHash} from '../../../common/utils/bcrypt';
 import assert from 'assert';
-import {InvalidRememberMeToken, UserNotExist} from './common/Errors';
+import {ForStudentsOnly, InvalidRememberMeToken, UserNotExist} from '../common/Errors';
+import {MissingRequiredParameters} from '../../../common/errors/General';
 
 export default class LoginPolicyValidator {
   constructor(private readonly params: LoginParams) {}
@@ -30,8 +31,8 @@ export default class LoginPolicyValidator {
   async validate() {
     const {studentId, password, rememberMeToken} = this.params;
 
-    assert(studentId, '학번이 필요합니다!');
-    assert(password || rememberMeToken, '비밀번호 또는 자동로그인 토큰이 필요합니다!');
+    assert(studentId, MissingRequiredParameters());
+    assert(password || rememberMeToken, MissingRequiredParameters());
 
     if (password) {
       await this.validateForPasswordLogin();
@@ -43,11 +44,11 @@ export default class LoginPolicyValidator {
   private async validateForPasswordLogin() {
     const {studentId, password} = this.params;
 
-    assert(password, '비밀번호가 있어야 합니다!');
+    assert(password, MissingRequiredParameters());
 
     const isStudent = await new StudentAccountValidator(studentId, password).isStudent();
 
-    assert(isStudent, '재학생 전용입니다!');
+    assert(isStudent, ForStudentsOnly());
   }
 
   private async validateForRememberedLogin() {

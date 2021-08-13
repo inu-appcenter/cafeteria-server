@@ -17,24 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type UserIdentifier = {
-  userId: number;
-};
-
-export type StudentId = {
-  studentId: string;
-};
-
-export type PhoneNumber = {
-  phoneNumber: string;
-};
-
-export type Session = {
-  jwt: string;
-  rememberMeToken: string;
-  barcode?: string; // 학생 전용
-};
-
-export type SessionTokenContents = {
-  userId: number;
-};
+export function generateRandomDecimal(digits: number) {
+  return Math.floor(Math.random() * (9 * Math.pow(10, digits - 1))) + Math.pow(10, digits - 1);
+}

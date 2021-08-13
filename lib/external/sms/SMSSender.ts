@@ -17,24 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type UserIdentifier = {
-  userId: number;
+export type SMSParams = {
+  recipient: string;
+  body: string;
 };
 
-export type StudentId = {
-  studentId: string;
-};
+export default class SMSSender {
+  constructor(private readonly params: SMSParams) {}
 
-export type PhoneNumber = {
-  phoneNumber: string;
-};
-
-export type Session = {
-  jwt: string;
-  rememberMeToken: string;
-  barcode?: string; // 학생 전용
-};
-
-export type SessionTokenContents = {
-  userId: number;
-};
+  async send() {}
+}

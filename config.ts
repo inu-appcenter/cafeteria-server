@@ -83,6 +83,12 @@ export default {
     fail: 'N',
   },
 
+  guest: {
+    challenge: {
+      expiresIn: 60 * 5, // 초
+    },
+  },
+
   log: {
     ops: {interval: 60 * 60 * 1000} /* 한 시간(밀리초로 나타냄) */,
     filepath: (name: string) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),

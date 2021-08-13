@@ -19,43 +19,39 @@
 
 import {User} from '@inu-cafeteria/backend-core';
 import UseCase from '../../common/base/UseCase';
-import {createJwt} from '../../common/utils/token';
-import {generateUUID} from '../../common/utils/uuid';
-import GenerateBarcode from '../barcode/GenerateBarcode';
-import {applyBcryptHash} from '../../common/utils/bcrypt';
-import LoginPolicyValidator from './validation/LoginPolicyValidator';
 import {Session} from './common/Types';
+import GuestLoginPolicyValidator from './validation/GuestLoginPolicyValidator';
+import {generateUUID} from '../../common/utils/uuid';
+import {applyBcryptHash} from '../../common/utils/bcrypt';
+import {createJwt} from '../../common/utils/token';
 
-export type LoginParams = {
-  studentId: string;
-  password?: string;
+export type GuestLoginParams = {
+  phoneNumber: string;
+  passcode?: string;
   rememberMeToken?: string;
 };
 
-class Login extends UseCase<LoginParams, Session> {
-  async onExecute(params: LoginParams): Promise<Session> {
-    await new LoginPolicyValidator(params).validate();
+class GuestLogin extends UseCase<GuestLoginParams, Session> {
+  async onExecute(params: GuestLoginParams): Promise<Session> {
+    await new GuestLoginPolicyValidator(params).validate();
 
-    return await this.updateUserAndCreateSession(params.studentId);
+    return await this.updateUserAndCreateSession(params.phoneNumber);
   }
 
-  private async updateUserAndCreateSession(studentId: string): Promise<Session> {
-    const user = await User.getOrCreate({studentId});
+  private async updateUserAndCreateSession(phoneNumber: string): Promise<Session> {
+    const user = await User.getOrCreate({phoneNumber});
     const newRememberMeToken = generateUUID();
-    const newBarcode = await GenerateBarcode.run({studentId});
 
     user.rememberMeToken = await applyBcryptHash(newRememberMeToken);
     user.lastLoginAt = new Date();
-    user.barcode = newBarcode;
 
     await user.save();
 
     return {
       jwt: createJwt({userId: user.id}),
       rememberMeToken: newRememberMeToken,
-      barcode: newBarcode,
     };
   }
 }
 
-export default new Login();
+export default new GuestLogin();

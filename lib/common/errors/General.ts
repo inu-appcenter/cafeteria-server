@@ -19,6 +19,7 @@
 
 import NotFound from './http/NotFound';
 import InternalServerError from './http/InternalServerError';
+import BadRequest from './http/BadRequest';
 
 export const ResourceNotFound = NotFound.of(
   'resource_not_found',
@@ -28,4 +29,9 @@ export const ResourceNotFound = NotFound.of(
 export const ThisWillNeverHappen = InternalServerError.of(
   'this_will_never_happen',
   '있을 수 없는 일이 일어났습니다.'
+);
+
+export const MissingRequiredParameters = BadRequest.of(
+  'missing_required_parameters',
+  '필수 파라미터가 누락되었습니다.'
 );
