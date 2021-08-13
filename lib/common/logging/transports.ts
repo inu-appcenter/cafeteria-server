@@ -17,13 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'winston-daily-rotate-file';
+
 import winston from 'winston';
 import config from '../../../config';
 import AWS from 'aws-sdk';
 import WinstonCloudwatch from 'winston-cloudwatch';
 import {getConsoleFormat, getFileFormat} from './formats';
-import _ from 'winston-daily-rotate-file';
-_;
 
 export function getConsoleTransport() {
   return new winston.transports.Console({
@@ -34,19 +34,22 @@ export function getConsoleTransport() {
 export function getFileTransport(prefix: string) {
   return new winston.transports.DailyRotateFile({
     format: getFileFormat(),
-    filename: config.log.filepath(prefix),
+    filename: config.server.logging.filepath(prefix),
     datePattern: 'YYYY-MM-DD',
   });
 }
 
 export function getCloudwatchTransport(prefix: string) {
   AWS.config.update({
-    region: config.aws.region,
-    credentials: new AWS.Credentials(config.aws.accessKeyId, config.aws.secretAccessKey),
+    region: config.external.aws.region,
+    credentials: new AWS.Credentials(
+      config.external.aws.accessKeyId,
+      config.external.aws.secretAccessKey
+    ),
   });
 
   return new WinstonCloudwatch({
-    logGroupName: config.aws.cloudwatch.logGroupName,
+    logGroupName: config.external.aws.cloudwatch.logGroupName,
     logStreamName: prefix,
     messageFormatter: (log) =>
       `[${config.server.instanceName}] ${log.level}: ${log.message.trim()}`,

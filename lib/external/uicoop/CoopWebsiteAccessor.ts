@@ -81,7 +81,7 @@ export default class CoopWebsiteAccessor {
 
     const cookie = imitateCupidCookie(response);
 
-    await this.jar.setCookie(cookie, config.uicoop.domain);
-    await this.axios.post(config.uicoop.verifyUrl);
+    await this.jar.setCookie(cookie, config.external.uicoop.homeUrl);
+    await this.axios.post(config.external.uicoop.verifyUrl);
   }
 }

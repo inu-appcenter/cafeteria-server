@@ -32,7 +32,7 @@ export default class RawMenuTextRetriever {
 
     const rawCombined = this.grepTextBlock(cafeteriaName, cornerName);
 
-    return rawCombined.split(new RegExp(config.menu.parser.menuSplitterRegex));
+    return rawCombined.split(new RegExp(config.application.menu.parser.menuSplitterRegex));
   }
 
   private grepTextBlock(cafeteriaName: string, cornerName: string) {

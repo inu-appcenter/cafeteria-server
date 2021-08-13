@@ -48,7 +48,7 @@ export default class GuestLoginPolicyValidator {
 
     const challenge = await GuestLoginChallenge.findLastOneByPhoneNumberNotOlderThan(
       phoneNumber,
-      config.guest.challenge.expiresIn
+      config.application.guestLogin.challenge.expiresIn
     );
 
     assert(challenge, InvalidPasscode());

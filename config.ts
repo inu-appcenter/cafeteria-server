@@ -93,7 +93,7 @@ export default {
       },
     },
 
-    guest: {
+    guestLogin: {
       challenge: {
         expiresIn: 60 * 5, // 초
       },
@@ -104,6 +104,11 @@ export default {
       parser: {
         menuSplitterRegex: '-{8,}|\n{3,}', // (8개 이상의 -), 또는 (3개 이상의 개행문자).
       },
+    },
+
+    notify: {
+      sender: '카페테리아 <cs-noreply@inu-cafeteria.app>',
+      adminEmail: 'potados99@gmail.com',
     },
   },
 
@@ -122,18 +127,14 @@ export default {
     },
 
     mail: {
-      sender: '카페테리아 <cs-noreply@inu-cafeteria.app>',
       auth: {
         user: getEnv('SMTP_USERNAME'),
         pass: getEnv('SMTP_PASSWORD'),
       },
-
-      addresses: {
-        admin: 'potados99@gmail.com',
-      },
     },
 
     sms: {
+      sender: '01029222661',
       auth: {
         key: getEnv('SMS_API_KEY'),
         secret: getEnv('SMS_API_SECRET'),
@@ -150,13 +151,7 @@ export default {
     uicoop: {
       homeUrl: 'https://www.uicoop.ac.kr',
       verifyUrl: 'https://www.uicoop.ac.kr/___verify',
-      menuParsing: {
-        // 생협 식단 정보 페이지
-        url: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
-        method: 'post',
-        dateArgName: 'sdt',
-        weekArgName: 'jun',
-      },
+      menuParsingUrl: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
     },
   },
 

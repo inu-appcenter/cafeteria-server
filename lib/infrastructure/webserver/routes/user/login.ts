@@ -40,8 +40,10 @@ export default defineRoute('post', '/login', schema, async (req, res) => {
     rememberMeToken,
   });
 
-  return res.cookie(config.jwt.cookieName, result.jwt, config.jwt.cookieOptions).json({
-    barcode: result.barcode,
-    rememberMeToken: result.rememberMeToken,
-  });
+  return res
+    .cookie(config.server.jwt.cookieName, result.jwt, config.server.jwt.cookieOptions)
+    .json({
+      barcode: result.barcode,
+      rememberMeToken: result.rememberMeToken,
+    });
 });

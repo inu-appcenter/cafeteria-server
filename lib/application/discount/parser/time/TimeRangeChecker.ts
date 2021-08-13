@@ -20,7 +20,7 @@
 import moment from 'moment';
 import logger from '../../../../common/logging/logger';
 import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
-import {TimeRangeExpression} from '@inu-cafeteria/backend-core/dist/src/core/discount/CafeteriaValidationParams';
+import {TimeRangeExpression} from '@inu-cafeteria/backend-core';
 
 export default class TimeRangeChecker {
   constructor(

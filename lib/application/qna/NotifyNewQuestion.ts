@@ -31,8 +31,8 @@ export type NotifyNewQuestionParams = {
 class NotifyNewQuestion extends UseCase<NotifyNewQuestionParams, void> {
   async onExecute(params: NotifyNewQuestionParams): Promise<void> {
     const emailParams = {
-      from: config.mail.sender,
-      to: config.mail.addresses.admin,
+      from: config.application.notify.sender,
+      to: config.application.notify.adminEmail,
       title: '새로운 문의가 등록되었습니다.',
       body: this.composeNotificationMailBody(params),
     };

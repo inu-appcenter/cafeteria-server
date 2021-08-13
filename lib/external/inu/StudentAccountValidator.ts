@@ -26,20 +26,20 @@ export default class StudentAccountValidator {
   constructor(private readonly studentId: string, private readonly password: string) {}
 
   async isStudent(): Promise<boolean> {
-    const response = await postUrlencoded(config.login.url, {
+    const response = await postUrlencoded(config.external.inuLogin.url, {
       sno: this.studentId,
       pw: this.encryptPassword(),
     });
 
     assert(
-      response === config.login.success || response === config.login.fail,
-      `원격 로그인 응답은 ${config.login.success} 또는 ${config.login.fail} 중 하나만!`
+      response === config.external.inuLogin.success || response === config.external.inuLogin.fail,
+      `원격 로그인 응답은 ${config.external.inuLogin.success} 또는 ${config.external.inuLogin.fail} 중 하나만!`
     );
 
-    return response === config.login.success;
+    return response === config.external.inuLogin.success;
   }
 
   private encryptPassword() {
-    return encryptForRemoteLogin(this.password, config.login.key);
+    return encryptForRemoteLogin(this.password, config.external.inuLogin.key);
   }
 }

@@ -22,9 +22,12 @@ import config from '../../../config';
 import {SessionTokenContents} from '../../application/user/common/Types';
 
 export function createJwt(payload: SessionTokenContents) {
-  return jwt.sign(payload, config.jwt.key, {algorithm: 'HS256', expiresIn: config.jwt.expiresIn});
+  return jwt.sign(payload, config.server.jwt.key, {
+    algorithm: 'HS256',
+    expiresIn: config.server.jwt.expiresIn,
+  });
 }
 
 export function decodeJwt(token: string): SessionTokenContents {
-  return jwt.verify(token, config.jwt.key) as SessionTokenContents;
+  return jwt.verify(token, config.server.jwt.key) as SessionTokenContents;
 }

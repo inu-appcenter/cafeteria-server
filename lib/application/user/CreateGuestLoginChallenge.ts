@@ -22,6 +22,7 @@ import SMSSender from '../../external/sms/SMSSender';
 import PhoneNumberValidator from './validation/PhoneNumberValidator';
 import {GuestLoginChallenge} from '@inu-cafeteria/backend-core';
 import {generateRandomDecimal} from '../../common/utils/random';
+import config from '../../../config';
 
 export type CreateGuestLoginChallengeParams = {
   phoneNumber: string;
@@ -43,6 +44,7 @@ class CreateGuestLoginChallenge extends UseCase<CreateGuestLoginChallengeParams,
 
   private async sendChallenge({phoneNumber, passcode}: GuestLoginChallenge) {
     await new SMSSender({
+      sender: config.external.sms.sender,
       recipient: phoneNumber,
       body: `[카페테리아] 본인확인 인증번호는 [${passcode}] 입니다.`,
     }).send();

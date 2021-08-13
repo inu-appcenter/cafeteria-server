@@ -94,7 +94,8 @@ export default class DiscountTransactionValidator {
   private async testBasicRules(excludedRuleIds: number[] = []) {
     const {transaction} = this;
     const {studentId, cafeteriaId, mealType} = transaction;
-    const {barcodeLifetimeMinutes, barcodeTagMinimumIntervalSecs} = config.transaction.validation;
+    const {barcodeLifetimeMinutes, barcodeTagMinimumIntervalSecs} =
+      config.application.transaction.validation;
 
     const tests: Test[] = [
       {

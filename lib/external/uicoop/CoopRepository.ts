@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CoopWebsiteAccessor from '../../external/uicoop/CoopWebsiteAccessor';
+import CoopWebsiteAccessor from './CoopWebsiteAccessor';
 import config from '../../../config';
 import logger from '../../common/logging/logger';
 import moment from 'moment';
@@ -45,15 +45,16 @@ class CoopRepository {
     // in contrast to the UICOOP webpage UI.
     // We tell the dateUtil that a week starts from Sunday(by setting dowOffset 0) and it works.
     const weekOffset = this.howManyWeeksToGoUntil(dateString);
-    const body: any = {};
-    body[config.menu.dateArgName] = dateString;
-    body[config.menu.weekArgName] = weekOffset;
+    const body = {
+      sdt: dateString,
+      jun: weekOffset,
+    };
 
     logger.info(`${dateString} 메뉴를 가져옵니다. Week diff는 ${weekOffset}.`);
 
     return await new CoopWebsiteAccessor({
-      url: config.menu.url,
-      method: config.menu.method,
+      url: config.external.uicoop.menuParsingUrl,
+      method: 'post',
       data: body,
     }).visit();
   }

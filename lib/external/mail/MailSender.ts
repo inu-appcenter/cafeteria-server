@@ -35,7 +35,7 @@ export default class MailSender {
 
   private transport = NodeMailer.createTransport({
     service: 'mailgun',
-    auth: config.mail.auth,
+    auth: config.external.mail.auth,
   });
 
   async send(): Promise<void> {

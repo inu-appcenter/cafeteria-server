@@ -22,7 +22,7 @@ import {assertDateStringFormat} from '../../common/utils/date';
 import logger from '../../common/logging/logger';
 import assert from 'assert';
 import config from '../../../config';
-import CoopRepository from './CoopRepository';
+import CoopRepository from '../../external/uicoop/CoopRepository';
 import MenuParser from './parser/MenuParser';
 
 class MenuRepository {
@@ -53,7 +53,7 @@ class MenuRepository {
     const nowMillis = Date.now();
     const elapsedFromLastFetch = nowMillis - this.menuCache.lastUpdatedMillis;
 
-    const cacheIsOld = elapsedFromLastFetch > config.menu.fetchIntervalMillis;
+    const cacheIsOld = elapsedFromLastFetch > config.application.menu.fetchIntervalMillis;
     const dataNotExist = this.menuCache.menus.get(dateString) == null;
 
     if (cacheIsOld || dataNotExist) {
