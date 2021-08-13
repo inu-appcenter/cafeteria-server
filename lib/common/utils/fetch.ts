@@ -33,13 +33,35 @@ export function fetchWithTimeout(
   return Promise.race([fetched, timedOut]);
 }
 
-export async function postUrlencoded(url: RequestInfo, body: Record<string, any> | string) {
+export async function postUrlencoded(
+  url: RequestInfo,
+  body: Record<string, any> | string,
+  headers: Record<string, any> = {}
+) {
   const response = await fetchWithTimeout(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      ...headers,
     },
     body: typeof body === 'string' ? body : new URLSearchParams(body).toString(),
+  });
+
+  return response.text();
+}
+
+export async function postJson(
+  url: RequestInfo,
+  body: Record<string, any>,
+  headers: Record<string, any> = {}
+) {
+  const response = await fetchWithTimeout(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+    body: JSON.stringify(body),
   });
 
   return response.text();

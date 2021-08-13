@@ -17,7 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {postJson} from '../../common/utils/fetch';
+import {generateUUIDHex} from '../../common/utils/uuid';
+import {createHmac} from 'crypto';
+import config from '../../../config';
+
 export type SMSParams = {
+  sender: string;
   recipient: string;
   body: string;
 };
@@ -25,5 +31,39 @@ export type SMSParams = {
 export default class SMSSender {
   constructor(private readonly params: SMSParams) {}
 
-  async send() {}
+  async send(): Promise<boolean> {
+    const {sender, recipient, body} = this.params;
+
+    const payload = {
+      message: {
+        from: sender,
+        to: recipient,
+        text: body,
+      },
+    };
+
+    const headers = this.generateAuthHeader();
+
+    const responseText = await postJson(
+      'https://api.coolsms.co.kr/messages/v4/send',
+      payload,
+      headers
+    );
+
+    return responseText.includes('정상 접수');
+  }
+
+  private generateAuthHeader() {
+    const {key, secret} = config.sms.auth;
+
+    const date = new Date().toISOString();
+    const salt = generateUUIDHex();
+    const data = date + salt;
+
+    const signature = createHmac('sha256', secret).update(data).digest('hex');
+
+    return {
+      Authorization: `HMAC-SHA256 ApiKey=${key}, Date=${date}, salt=${salt}, signature=${signature}`,
+    };
+  }
 }

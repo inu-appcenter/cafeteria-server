@@ -38,6 +38,8 @@ if (isProduction) {
   assert(getEnv('DB_PASSWORD'), 'DB 비밀번호 설정해주세요!');
   assert(getEnv('SMTP_USERNAME'), 'SMTP 사용자 이름 설정해주세요!');
   assert(getEnv('SMTP_PASSWORD'), 'STMP 비밀번호 설정해주세요!');
+  assert(getEnv('SMS_API_KEY'), 'SMS API 키 설정해주세요!');
+  assert(getEnv('SMS_API_SECRET'), 'SMS API 시크릿 설정해주세요!');
 }
 
 export default {
@@ -133,6 +135,13 @@ export default {
 
     addresses: {
       admin: 'potados99@gmail.com',
+    },
+  },
+
+  sms: {
+    auth: {
+      key: getEnv('SMS_API_KEY'),
+      secret: getEnv('SMS_API_SECRET'),
     },
   },
 
