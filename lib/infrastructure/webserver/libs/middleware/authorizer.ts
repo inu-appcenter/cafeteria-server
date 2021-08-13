@@ -34,7 +34,7 @@ export function authorizer({exclude}: AuthorizerConfig): RequestHandler {
       return next();
     }
 
-    const tokenFromCookie = req.cookies[config.auth.cookieName];
+    const tokenFromCookie = req.cookies[config.jwt.cookieName];
     if (tokenFromCookie == null) {
       return next(NotLoggedIn());
     }

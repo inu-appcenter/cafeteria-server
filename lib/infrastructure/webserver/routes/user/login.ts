@@ -40,7 +40,7 @@ export default defineRoute('post', '/login', schema, async (req, res) => {
     rememberMeToken,
   });
 
-  return res.cookie(config.auth.cookieName, result.jwt, config.auth.cookieOptions).json({
+  return res.cookie(config.jwt.cookieName, result.jwt, config.jwt.cookieOptions).json({
     barcode: result.barcode,
     rememberMeToken: result.rememberMeToken,
   });

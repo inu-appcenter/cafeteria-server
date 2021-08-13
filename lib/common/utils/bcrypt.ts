@@ -18,12 +18,11 @@
  */
 
 import bcrypt from 'bcrypt';
-import config from '../../../config';
 
 export async function compareBcryptHash(plain: string, hashed: string) {
   return await bcrypt.compare(plain, hashed);
 }
 
 export async function applyBcryptHash(plain: string) {
-  return await bcrypt.hash(plain, config.hash.saltRounds);
+  return await bcrypt.hash(plain, 9);
 }

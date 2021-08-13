@@ -54,7 +54,7 @@ export default class SMSSender {
   }
 
   private generateAuthHeader() {
-    const {key, secret} = config.sms.auth;
+    const {key, secret} = config.external.sms.auth;
 
     const date = new Date().toISOString();
     const salt = generateUUIDHex();

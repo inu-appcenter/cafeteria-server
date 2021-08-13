@@ -46,109 +46,123 @@ export default {
   isTest,
   isProduction,
 
+  /**
+   * 서버 운영에 필요한 설정입니다.
+   */
   server: {
     host: getArg('host') || '0.0.0.0',
     port: getArg('port') || 9999,
     instanceName: getArg('instance-name') || '?',
-    rootHelloMessage:
-      '안녕하세요 카페테리아 API 서버입니다. 지금 잘 작동하는 것 맞습니다. 혹시 이상 발생하면 010-2922-2661로 연락 주세요!',
-    activeInstanceMessage: `활성 인스턴스: ${getArg('instance-name') || '?'}`,
-  },
 
-  auth: {
-    key: getEnv('JWT_SECRET_KEY', 'whatever haha'),
-    expiresIn: '24h',
-    cookieOptions: {
-      encoding: 'none',
-      secure: false,
-      httpOnly: true,
-      clearInvalid: true,
-      strictHeader: true,
+    healthCheck: {
+      rootHelloMessage:
+        '안녕하세요 카페테리아 API 서버입니다. 지금 잘 작동하는 것 맞습니다. 혹시 이상 발생하면 010-2922-2661로 연락 주세요!',
+      activeInstanceMessage: `활성 인스턴스: ${getArg('instance-name') || '?'}`,
     },
-    cookieName: 'cafeteria-server-session-token',
-  },
 
-  aws: {
-    cloudwatch: {
-      logGroupName: 'cafeteria-server',
+    jwt: {
+      key: getEnv('JWT_SECRET_KEY', 'whatever haha'),
+      expiresIn: '24h',
+      cookieOptions: {
+        encoding: 'none',
+        secure: false,
+        httpOnly: true,
+        clearInvalid: true,
+        strictHeader: true,
+      },
+      cookieName: 'cafeteria-server-session-token',
     },
-    region: 'ap-northeast-2',
-    accessKeyId: getEnv('AWS_ACCESS_KEY_ID', 'an_aws_id'),
-    secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY'),
-  },
 
-  login: {
-    // 재학생 확인용 원격 로그인 서버
-    url: 'http://117.16.191.242:8081/login',
-    key: getEnv('LOGIN_KEY', '앱센터는 모다?'),
-    success: 'Y',
-    fail: 'N',
-  },
-
-  guest: {
-    challenge: {
-      expiresIn: 60 * 5, // 초
+    logging: {
+      filepath: (name: string) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
     },
   },
 
-  log: {
-    ops: {interval: 60 * 60 * 1000} /* 한 시간(밀리초로 나타냄) */,
-    filepath: (name: string) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
-    securedPayloads: ['password', 'token'],
-  },
+  /**
+   * 애플리케이션 비즈니스 로직에 해당하는 설정입니다.
+   */
+  application: {
+    question: {
+      lengthLimit: 500,
+    },
 
-  menu: {
-    // 생협 식단 정보 페이지
-    url: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
-    method: 'post',
-    dateArgName: 'sdt',
-    weekArgName: 'jun',
-    fetchIntervalMillis: 3600000, // 한 시간
-    parser: {
-      menuSplitterRegex: '-{8,}|\n{3,}', // (8개 이상의 -), 또는 (3개 이상의 개행문자).
+    transaction: {
+      validation: {
+        barcodeLifetimeMinutes: 10,
+        barcodeTagMinimumIntervalSecs: 15,
+      },
+    },
+
+    guest: {
+      challenge: {
+        expiresIn: 60 * 5, // 초
+      },
+    },
+
+    menu: {
+      fetchIntervalMillis: 3600000, // 한 시간
+      parser: {
+        menuSplitterRegex: '-{8,}|\n{3,}', // (8개 이상의 -), 또는 (3개 이상의 개행문자).
+      },
     },
   },
 
-  uicoop: {
-    domain: 'https://www.uicoop.ac.kr',
-    verifyUrl: 'https://www.uicoop.ac.kr/___verify',
-  },
+  /**
+   * 외부 인프라에 대한 설정입니다.
+   */
+  external: {
+    aws: {
+      region: 'ap-northeast-2',
+      accessKeyId: getEnv('AWS_ACCESS_KEY_ID', 'an_aws_id'),
+      secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY'),
 
-  hash: {
-    // bcrypt
-    saltRounds: 9,
-  },
+      cloudwatch: {
+        logGroupName: 'cafeteria-server',
+      },
+    },
 
-  transaction: {
-    validation: {
-      barcodeLifetimeMinutes: 10,
-      barcodeTagMinimumIntervalSecs: 15,
+    mail: {
+      sender: '카페테리아 <cs-noreply@inu-cafeteria.app>',
+      auth: {
+        user: getEnv('SMTP_USERNAME'),
+        pass: getEnv('SMTP_PASSWORD'),
+      },
+
+      addresses: {
+        admin: 'potados99@gmail.com',
+      },
+    },
+
+    sms: {
+      auth: {
+        key: getEnv('SMS_API_KEY'),
+        secret: getEnv('SMS_API_SECRET'),
+      },
+    },
+
+    inuLogin: {
+      url: 'http://117.16.191.242:8081/login',
+      key: getEnv('LOGIN_KEY', '앱센터는 모다?'),
+      success: 'Y',
+      fail: 'N',
+    },
+
+    uicoop: {
+      homeUrl: 'https://www.uicoop.ac.kr',
+      verifyUrl: 'https://www.uicoop.ac.kr/___verify',
+      menuParsing: {
+        // 생협 식단 정보 페이지
+        url: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
+        method: 'post',
+        dateArgName: 'sdt',
+        weekArgName: 'jun',
+      },
     },
   },
 
-  mail: {
-    sender: '카페테리아 <cs-noreply@inu-cafeteria.app>',
-    auth: {
-      user: getEnv('SMTP_USERNAME'),
-      pass: getEnv('SMTP_PASSWORD'),
-    },
-
-    addresses: {
-      admin: 'potados99@gmail.com',
-    },
-  },
-
-  sms: {
-    auth: {
-      key: getEnv('SMS_API_KEY'),
-      secret: getEnv('SMS_API_SECRET'),
-    },
-  },
-
-  question: {
-    lengthLimit: 500,
-  },
-
+  /**
+   * 구형 클라이언트에 대한 지원을 위한 설정
+   */
   legacy: {
     isBarcode: {
       cafeCodeToCafeteriaId: {
@@ -162,13 +176,6 @@ export default {
         /* 기존의 cafe code를 cafeteriaId로 변환 */
         1: 1 /* 학생식당 */,
       },
-    },
-  },
-
-  waiting: {
-    orderTTL: {
-      amount: 1,
-      unit: 'hour',
     },
   },
 } as const;
