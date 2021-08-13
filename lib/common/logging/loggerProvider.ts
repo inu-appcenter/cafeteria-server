@@ -34,11 +34,7 @@ export function getLogger(prefix: string) {
     getCloudwatchTransport('combined'),
   ];
 
-  if (config.isProduction) {
-    transports.concat(productionTransports);
-  }
-
-  const logger = createLogger(transports);
+  const logger = createLogger(transports.concat(config.isProduction ? productionTransports : []));
 
   logger.transports.forEach((transport) => {
     transport.silent = config.isTest;

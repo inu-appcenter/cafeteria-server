@@ -32,7 +32,10 @@ export async function registerRoutes(app: express.Application, dir: string = '/r
     const filePath = dir + '/' + path;
     const stats = fs.lstatSync(filePath);
 
-    if (stats.isFile() && path.endsWith('.ts')) {
+    const isFile = stats.isFile();
+    const isSourceFile = path.endsWith('.ts') || path.endsWith('.js');
+
+    if (isFile && isSourceFile) {
       logger.info(`라우터를 등록합니다: ${path}`);
 
       const router = (await import(filePath)).default as express.Router;

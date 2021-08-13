@@ -5,9 +5,12 @@
   "description": "Cafeteria API 서버입니다.",
   "scripts": {
     "dev": "nodemon --exec ts-node index.ts",
-    "start": "node -r esm index.mjs",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "preview": "npm run build && npm start",
     "preversion": "npm run test",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",

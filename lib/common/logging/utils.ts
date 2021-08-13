@@ -57,14 +57,16 @@ export function stringify(object: any) {
 
 export function formatLog(message: any, showCaller = true) {
   const caller = stackTrace.get()[2]; /* to get a real caller */
+  const payload = stringify(message);
 
   if (showCaller) {
-    return `${path.basename(
-      caller.getFileName()
-    )}:${caller.getFunctionName()}:${caller.getLineNumber()}:${caller.getColumnNumber()}: ${stringify(
-      message
-    )}`;
+    const fileName = path.basename(caller.getFileName());
+    const functionName = caller.getFunctionName();
+    const lineNum = caller.getLineNumber();
+    const colNum = caller.getColumnNumber();
+
+    return `${fileName}:${functionName}:${lineNum}:${colNum}: ${payload}`;
   } else {
-    return `${stringify(message)}`;
+    return `${payload}`;
   }
 }
