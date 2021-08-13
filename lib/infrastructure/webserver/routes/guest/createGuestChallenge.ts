@@ -17,25 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import config from '../../../config';
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import {errorHandler} from './libs/middleware/errorHandler';
-import {registerRoutes} from './utils/register';
-import {authorizer} from './libs/middleware/authorizer';
+import {defineSchema} from '../../libs/schema';
+import {defineRoute} from '../../libs/route';
+import {z} from 'zod';
+import CreateGuestLoginChallenge from '../../../../application/user/CreateGuestLoginChallenge';
 
-export default async function startServer() {
-  const app = express();
+const schema = defineSchema({
+  body: {
+    phoneNumber: z.string(),
+  },
+});
 
-  app.use(cookieParser());
-  app.use(authorizer({exclude: ['/', '/login', '/guest/challenge', '/guest/login']}));
+export default defineRoute('post', '/guest/challenge', schema, async (req, res) => {
+  const {phoneNumber} = req.body;
 
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
+  await CreateGuestLoginChallenge.run({phoneNumber});
 
-  await registerRoutes(app, __dirname + '/routes');
-
-  app.use(errorHandler());
-
-  app.listen(config.server.port, config.server.host);
-}
+  res.send();
+});

@@ -72,9 +72,12 @@ export default class DiscountTransactionParser {
   private async getStudentId(): Promise<string> {
     const {barcode} = this.params;
 
+    assert(barcode, RequestMalformed());
+
     const user = await User.findOne({barcode});
 
     assert(user, RequestMalformed());
+    assert(user.isStudent(), RequestMalformed());
     assert(user.studentId, RequestMalformed());
 
     return user.studentId;
