@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {encryptForRemoteLogin} from '../../../../lib/common/utils/encrypt';
+import {encryptForRemoteLogin} from '../../../../../lib/common/utils/encrypt';
 
 describe('재학생 확인할 때에 쓰는 암호화 함수', () => {
   it('프로덕션에서 쓰이는 것의 결과와 같아야 함', async () => {

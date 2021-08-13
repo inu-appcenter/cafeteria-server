@@ -17,32 +17,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import MealTimeRange from '@inu-cafeteria/backend-core/dist/src/core/discount/MealTimeRange';
 import moment from 'moment';
 import logger from '../../../../common/logging/logger';
 import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
+import {TimeRangeExpression} from '@inu-cafeteria/backend-core/dist/src/core/discount/CafeteriaValidationParams';
 
 export default class TimeRangeChecker {
-  constructor(private readonly timeRanges?: MealTimeRange) {}
+  constructor(
+    private readonly breakfast: TimeRangeExpression,
+    private readonly lunch: TimeRangeExpression,
+    private readonly dinner: TimeRangeExpression
+  ) {}
 
-  getCurrentMealType() {
-    const tr = this.timeRanges;
-    if (tr == null) {
-      return MealType.NONE;
-    }
+  getCurrentMealType(now = new Date()) {
+    const {breakfast, lunch, dinner} = this;
 
-    if (this.isTimeInRange(tr.breakfast)) {
+    if (this.isTimeInRange(breakfast, now)) {
       return MealType.BREAKFAST;
-    } else if (this.isTimeInRange(tr.lunch)) {
+    } else if (this.isTimeInRange(lunch, now)) {
       return MealType.LUNCH;
-    } else if (this.isTimeInRange(tr.dinner)) {
+    } else if (this.isTimeInRange(dinner, now)) {
       return MealType.DINNER;
     } else {
       return MealType.NONE;
     }
   }
 
-  private isTimeInRange(timeRangeString: string, now = moment(Date.now())) {
+  private isTimeInRange(timeRangeString: string, now: Date) {
     const timeRangeStringValid = /^[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$/.test(
       timeRangeString
     );
@@ -57,6 +58,6 @@ export default class TimeRangeChecker {
       .split('-')
       .map((timeString) => moment(timeString, 'hh:mm'));
 
-    return now.isBetween(start, end, null, '[)');
+    return moment(now).isBetween(start, end, null, '[)');
   }
 }

@@ -60,7 +60,9 @@ export default class MealTypeValidator {
 
     // 현재 시간으로부터 도출한 mealType이랑
     const currentMealType = new TimeRangeChecker(
-      discountValidationParams.timeRanges
+      discountValidationParams.breakfast,
+      discountValidationParams.lunch,
+      discountValidationParams.dinner
     ).getCurrentMealType();
 
     // 요청에 들어있는 mealType이랑 같아야 함!

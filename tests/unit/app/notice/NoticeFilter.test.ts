@@ -18,7 +18,7 @@
  */
 
 import {Notice} from '@inu-cafeteria/backend-core';
-import NoticeFilter from '../../../lib/application/notice/NoticeFilter';
+import NoticeFilter from '../../../../lib/application/notice/NoticeFilter';
 
 describe('공지 필터하기', () => {
   it('os와 version이 둘 다 맞으면 true', async () => {

@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/inu-appcenter/cafeteria-server#readme",
   "dependencies": {
-    "@inu-cafeteria/backend-core": "^0.1.29",
+    "@inu-cafeteria/backend-core": "^0.1.44",
     "@types/express": "^4.17.13",
     "@types/moment": "^2.13.0",
     "aws-sdk": "^2.818.0",
@@ -81,7 +81,7 @@
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
-    "testRegex": "\\.test\\.ts$",
+    "testRegex": "\\.(test|spec)\\.ts$",
     "globals": {
       "ts-jest": {
         "diagnostics": true

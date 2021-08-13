@@ -27,6 +27,7 @@ import {
 import {RequestMalformed} from '../common/Errors';
 import assert from 'assert';
 import TimeRangeChecker from './time/TimeRangeChecker';
+import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 
 /**
  * 요청으로부터 파싱을 거쳐 DiscountTransaction 엔티티를 만들어냅니다!
@@ -53,9 +54,15 @@ export default class DiscountTransactionParser {
     const {cafeteriaId} = this.params;
 
     const validationParams = await CafeteriaValidationParams.findOne({cafeteriaId});
-    const timeRanges = validationParams?.timeRanges;
+    if (validationParams == null) {
+      return MealType.NONE;
+    }
 
-    return new TimeRangeChecker(timeRanges).getCurrentMealType();
+    return new TimeRangeChecker(
+      validationParams.breakfast,
+      validationParams.lunch,
+      validationParams.dinner
+    ).getCurrentMealType();
   }
 
   /**

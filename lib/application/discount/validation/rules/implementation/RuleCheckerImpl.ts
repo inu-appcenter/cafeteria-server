@@ -116,10 +116,7 @@ class RuleCheckerImpl implements RuleChecker {
     studentId: string,
     cafeteriaId: number
   ): Promise<boolean> {
-    const transactionsToday = await DiscountTransaction.findTransactionsToday(
-      studentId,
-      cafeteriaId
-    );
+    const transactionsToday = await DiscountTransaction.findTransactions(studentId, cafeteriaId);
 
     return transactionsToday.length === 0;
   }
