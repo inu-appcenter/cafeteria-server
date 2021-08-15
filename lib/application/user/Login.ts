@@ -24,7 +24,7 @@ import {generateUUID} from '../../common/utils/uuid';
 import GenerateBarcode from '../barcode/GenerateBarcode';
 import {applyBcryptHash} from '../../common/utils/bcrypt';
 import LoginPolicyValidator from './validation/LoginPolicyValidator';
-import {Session} from './common/Types';
+import {Session} from './common/types';
 
 export type LoginParams = {
   studentId: string;

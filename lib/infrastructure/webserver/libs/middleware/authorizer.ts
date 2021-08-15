@@ -20,7 +20,7 @@
 import express, {RequestHandler} from 'express';
 import {decodeJwt} from '../../../../common/utils/token';
 import config from '../../../../../config';
-import {InvalidJwt, NotLoggedIn} from '../../../../application/user/common/Errors';
+import {InvalidJwt, NotLoggedIn} from '../../../../application/user/common/errors';
 
 export type AuthorizerConfig = {
   exclude?: string[];

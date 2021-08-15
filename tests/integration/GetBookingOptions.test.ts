@@ -17,28 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {Question} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/common/types';
+import GetBookingOptions from '../../lib/application/booking/GetBookingOptions';
+import {startTypeORM} from '@inu-cafeteria/backend-core';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
+beforeAll(async () => {
+  await startTypeORM();
+});
 
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
+describe('예약 옵션 가져오기', () => {
+  it('함 보쟈', async () => {
+    const options = await GetBookingOptions.run({});
 
-    await question.save();
-  }
-}
-
-export default new Ask();
+    console.log(options);
+  });
+});

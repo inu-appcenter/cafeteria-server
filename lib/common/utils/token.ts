@@ -19,7 +19,7 @@
 
 import jwt from 'jsonwebtoken';
 import config from '../../../config';
-import {SessionTokenContents} from '../../application/user/common/Types';
+import {SessionTokenContents} from '../../application/user/common/types';
 
 export function createJwt(payload: SessionTokenContents) {
   return jwt.sign(payload, config.server.jwt.key, {

@@ -17,14 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {HandleDiscountTransactionParams} from '../common/Types';
+import {HandleDiscountTransactionParams} from '../common/types';
 import {
   Cafeteria,
   CafeteriaValidationParams,
   DiscountTransaction,
   User,
 } from '@inu-cafeteria/backend-core';
-import {RequestMalformed} from '../common/Errors';
+import {RequestMalformed} from '../common/errors';
 import assert from 'assert';
 import TimeRangeChecker from './time/TimeRangeChecker';
 import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';

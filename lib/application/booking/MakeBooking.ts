@@ -18,27 +18,30 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Question} from '@inu-cafeteria/backend-core';
+import {Booking} from '@inu-cafeteria/backend-core';
+import {generateUUID} from '../../common/utils/uuid';
 import {UserIdentifier} from '../user/common/types';
+import BookingValidator from './validation/BookingValidator';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
+export type MakeBookingParams = UserIdentifier & {
+  cafeteriaId: number;
+  timeSlot: Date;
+};
 
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
+class MakeBooking extends UseCase<MakeBookingParams, Booking> {
+  async onExecute(params: MakeBookingParams): Promise<Booking> {
+    await new BookingValidator(params).validate();
+
+    const {userId, cafeteriaId, timeSlot} = params;
+
+    return await Booking.create({
+      uuid: generateUUID(),
       userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
-
-    await question.save();
+      cafeteriaId,
+      timeSlot,
+      bookedAt: new Date(),
+    }).save();
   }
 }
 
-export default new Ask();
+export default new MakeBooking();

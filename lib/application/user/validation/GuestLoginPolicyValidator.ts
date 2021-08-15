@@ -23,7 +23,7 @@ import {GuestLoginParams} from '../GuestLogin';
 import {compareBcryptHash} from '../../../common/utils/bcrypt';
 import {GuestLoginChallenge, User} from '@inu-cafeteria/backend-core';
 import {MissingRequiredParameters} from '../../../common/errors/General';
-import {InvalidPasscode, InvalidRememberMeToken, UserNotExist} from '../common/Errors';
+import {InvalidPasscode, InvalidRememberMeToken, UserNotExist} from '../common/errors';
 
 export default class GuestLoginPolicyValidator {
   constructor(private readonly params: GuestLoginParams) {}

@@ -17,28 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {Question} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/common/types';
+import BadRequest from '../../../common/errors/http/BadRequest';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
+export const InvalidTimeSlot = BadRequest.of('invalid_time_slot', '올바르지 않은 예약 시간입니다.');
 
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
+export const InvalidCafeteriaId = BadRequest.of(
+  'invalid_cafeteria_id',
+  '올바르지 않은 식당 식별자입니다.'
+);
 
-    await question.save();
-  }
-}
-
-export default new Ask();
+export const NoBookingParams = BadRequest.of(
+  'no_booking_params',
+  '해당 식당에는 예약 관련 설정이 존재하지 않습니다.'
+);

@@ -19,7 +19,7 @@
 
 import {User} from '@inu-cafeteria/backend-core';
 import UseCase from '../../common/base/UseCase';
-import {Session} from './common/Types';
+import {Session} from './common/types';
 import GuestLoginPolicyValidator from './validation/GuestLoginPolicyValidator';
 import {generateUUID} from '../../common/utils/uuid';
 import {applyBcryptHash} from '../../common/utils/bcrypt';

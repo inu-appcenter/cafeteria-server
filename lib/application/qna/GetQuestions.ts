@@ -18,7 +18,7 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {UserIdentifier} from '../user/common/Types';
+import {UserIdentifier} from '../user/common/types';
 import {Question} from '@inu-cafeteria/backend-core';
 
 export type GetQuestionsParams = UserIdentifier & {

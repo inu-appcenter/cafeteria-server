@@ -31,7 +31,7 @@ import {
   DiscountNotAvailableNow,
   RequestMalformed,
   UserNotIdentified,
-} from '../common/Errors';
+} from '../common/errors';
 
 export type ValidationResult = {
   error: Error | null;

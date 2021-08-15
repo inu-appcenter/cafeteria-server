@@ -20,7 +20,7 @@
 import UseCase from '../../common/base/UseCase';
 import VerifyHandler from './handler/VerifyHandler';
 import DiscountTransactionParser from './parser/DiscountTransactionParser';
-import {HandleDiscountTransactionParams} from './common/Types';
+import {HandleDiscountTransactionParams} from './common/types';
 
 class VerifyDiscountTransaction extends UseCase<HandleDiscountTransactionParams, void> {
   async onExecute(params: HandleDiscountTransactionParams): Promise<void> {

@@ -18,27 +18,16 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Question} from '@inu-cafeteria/backend-core';
+import {Booking} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/common/types';
 
-export type AskParams = {
-  deviceInfo: string;
-  appVersion: string;
-  content: string;
-} & UserIdentifier;
-
-class Ask extends UseCase<AskParams, void> {
-  async onExecute({userId, deviceInfo, appVersion, content}: AskParams): Promise<void> {
-    const question = Question.create({
-      userId,
-      deviceInfo,
-      appVersion,
-      content,
-      askedAt: new Date(),
-    });
-
-    await question.save();
+/**
+ * 사용자의 예약 중에 예약 시간이 아직 안 지났고 & 체크인 안 한 예약을 가져옵니다.
+ */
+class GetBookings extends UseCase<UserIdentifier, Booking[]> {
+  async onExecute({userId}: UserIdentifier): Promise<Booking[]> {
+    return await Booking.findActiveBookings(userId);
   }
 }
 
-export default new Ask();
+export default new GetBookings();

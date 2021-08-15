@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InvalidPhoneNumber} from '../common/Errors';
+import {InvalidPhoneNumber} from '../common/errors';
 
 /**
  * This file is part of INU Cafeteria.
