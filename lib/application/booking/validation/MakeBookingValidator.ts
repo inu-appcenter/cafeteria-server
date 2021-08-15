@@ -23,7 +23,7 @@ import {Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default class BookingValidator {
+export default class MakeBookingValidator {
   constructor(private readonly params: MakeBookingParams) {}
 
   async validate() {

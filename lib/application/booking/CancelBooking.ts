@@ -17,34 +17,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import assert from 'assert';
 import UseCase from '../../common/base/UseCase';
 import {Booking} from '@inu-cafeteria/backend-core';
-import {generateUUID} from '../../common/utils/uuid';
 import {UserIdentifier} from '../user/common/types';
-import MakeBookingValidator from './validation/MakeBookingValidator';
+import {AlreadyCheckedIn, NoBooking} from './common/errors';
 
-export type MakeBookingParams = UserIdentifier & {
-  cafeteriaId: number;
-  timeSlot: Date;
+export type CancelBookingParams = UserIdentifier & {
+  bookingId: number;
 };
 
 /**
- * 예약을 생성합니다.
+ * 예약을 취소합니다.
+ * 이미 체크인한 예약은 취소 못합니다.
  */
-class MakeBooking extends UseCase<MakeBookingParams, Booking> {
-  async onExecute(params: MakeBookingParams): Promise<Booking> {
-    await new MakeBookingValidator(params).validate();
+class CancelBooking extends UseCase<CancelBookingParams, void> {
+  async onExecute({bookingId}: CancelBookingParams): Promise<void> {
+    const booking = await Booking.findOne(bookingId, {relations: ['checkIn']});
 
-    const {userId, cafeteriaId, timeSlot} = params;
+    assert(booking, NoBooking());
+    assert(booking.checkIn == null, AlreadyCheckedIn());
 
-    return await Booking.create({
-      uuid: generateUUID(),
-      userId,
-      cafeteriaId,
-      timeSlot,
-      bookedAt: new Date(),
-    }).save();
+    await booking.remove();
   }
 }
 
-export default new MakeBooking();
+export default new CancelBooking();

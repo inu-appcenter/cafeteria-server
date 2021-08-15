@@ -30,3 +30,10 @@ export const NoBookingParams = BadRequest.of(
   'no_booking_params',
   '해당 식당에는 예약 관련 설정이 존재하지 않습니다.'
 );
+
+export const NoBooking = BadRequest.of('no_booking', '예약이 존재하지 않습니다.');
+
+export const AlreadyCheckedIn = BadRequest.of(
+  'already_checked_in',
+  '이미 체크인한 예약은 취소할 수 없습니다.'
+);
