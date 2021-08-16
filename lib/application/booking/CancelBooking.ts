@@ -32,8 +32,14 @@ export type CancelBookingParams = UserIdentifier & {
  * 이미 체크인한 예약은 취소 못합니다.
  */
 class CancelBooking extends UseCase<CancelBookingParams, void> {
-  async onExecute({bookingId}: CancelBookingParams): Promise<void> {
-    const booking = await Booking.findOne(bookingId, {relations: ['checkIn']});
+  async onExecute({userId, bookingId}: CancelBookingParams): Promise<void> {
+    const booking = await Booking.findOne({
+      where: {
+        userId,
+        bookingId,
+      },
+      relations: ['checkIn'],
+    });
 
     assert(booking, NoBooking());
     assert(booking.checkIn == null, AlreadyCheckedIn());
