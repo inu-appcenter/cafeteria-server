@@ -56,7 +56,7 @@ class GetMenus extends UseCase<GetMenusParams, Menu[]> {
 
   private formatActualDateString(date?: string, dateOffset?: number) {
     const specifiedDate = date ? moment(date, 'YYYYMMDD') : moment();
-    const offsetAdded = specifiedDate.add(dateOffset, 'days');
+    const offsetAdded = specifiedDate.add(dateOffset || 0, 'days');
 
     return offsetAdded.format('YYYYMMDD');
   }
