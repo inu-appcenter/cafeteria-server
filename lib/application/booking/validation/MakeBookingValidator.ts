@@ -36,7 +36,8 @@ export default class MakeBookingValidator {
 
   async validate() {
     await this.cafeteriaShouldExist();
-    await this.bookingParamsShouldExistForTheCafeteria();
+    await this.bookingParamsShouldExistForThatCafeteria();
+
     await this.timeSlotShouldHaveBeenSuggested();
     await this.timeSlotShouldBeAvailable();
   }
@@ -49,7 +50,7 @@ export default class MakeBookingValidator {
     assert(found, InvalidCafeteriaId());
   }
 
-  private async bookingParamsShouldExistForTheCafeteria() {
+  private async bookingParamsShouldExistForThatCafeteria() {
     const {cafeteriaId} = this.params;
 
     const found = await CafeteriaBookingParams.findOne({cafeteriaId});
