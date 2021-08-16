@@ -22,7 +22,7 @@ import config from '../../../../config';
 import {GuestLoginParams} from '../GuestLogin';
 import {compareBcryptHash} from '../../../common/utils/bcrypt';
 import {GuestLoginChallenge, User} from '@inu-cafeteria/backend-core';
-import {MissingRequiredParameters} from '../../../common/errors/General';
+import {MissingRequiredParameters} from '../../../common/errors/general';
 import {InvalidPasscode, InvalidRememberMeToken, UserNotExist} from '../common/errors';
 
 export default class GuestLoginPolicyValidator {

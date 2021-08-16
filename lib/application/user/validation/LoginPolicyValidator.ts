@@ -23,7 +23,7 @@ import {User} from '@inu-cafeteria/backend-core';
 import {compareBcryptHash} from '../../../common/utils/bcrypt';
 import assert from 'assert';
 import {ForStudentsOnly, InvalidRememberMeToken, UserNotExist} from '../common/errors';
-import {MissingRequiredParameters} from '../../../common/errors/General';
+import {MissingRequiredParameters} from '../../../common/errors/general';
 
 export default class LoginPolicyValidator {
   constructor(private readonly params: LoginParams) {}

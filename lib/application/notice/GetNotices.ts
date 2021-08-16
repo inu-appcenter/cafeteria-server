@@ -21,7 +21,7 @@ import UseCase from '../../common/base/UseCase';
 import {Notice} from '@inu-cafeteria/backend-core';
 import NoticeFilter from './NoticeFilter';
 import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/General';
+import {ResourceNotFound} from '../../common/errors/general';
 
 export type GetNoticesParams = {
   id?: number;

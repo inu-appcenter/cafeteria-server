@@ -20,7 +20,7 @@
 import UseCase from '../../common/base/UseCase';
 import {Cafeteria} from '@inu-cafeteria/backend-core';
 import assert from 'assert';
-import {ResourceNotFound} from '../../common/errors/General';
+import {ResourceNotFound} from '../../common/errors/general';
 
 export type GetCafeteriaParams = {
   id?: number;
