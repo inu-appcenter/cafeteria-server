@@ -20,13 +20,21 @@
 import UseCase from '../../common/base/UseCase';
 import {User} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/common/types';
+import assert from 'assert';
+import {ForStudentsOnly} from '../user/common/errors';
 
 class ActivateBarcode extends UseCase<UserIdentifier, void> {
   async onExecute({userId}: UserIdentifier): Promise<void> {
-    /**
-     * 사용자가 없으면 뭐 딱히 업데이트하지 않습니다.
-     */
-    await User.update(userId, {barcodeActivatedAt: new Date()});
+    const user = await User.findOne(userId);
+    if (user == null) {
+      return;
+    }
+
+    assert(user.isStudent(), ForStudentsOnly());
+
+    user.barcodeActivatedAt = new Date();
+
+    await user.save();
   }
 }
 

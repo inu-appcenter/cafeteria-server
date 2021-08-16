@@ -23,7 +23,7 @@ import ActivateBarcode from '../../../../application/discount/ActivateBarcode';
 
 const schema = defineSchema({});
 
-export default defineRoute('post', '/activateBarcode', schema, async (req, res) => {
+export default defineRoute('put', '/activateBarcode', schema, async (req, res) => {
   const {userId} = req;
 
   await ActivateBarcode.run({userId});

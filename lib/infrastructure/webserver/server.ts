@@ -28,7 +28,19 @@ export default async function startServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(authorizer({exclude: ['/', '/login', '/guest/challenge', '/guest/login']}));
+  app.use(
+    authorizer({
+      exclude: [
+        '/',
+        '/login',
+        '/guest/challenge',
+        '/guest/login',
+        '/cafeteria',
+        '/corners',
+        '/menus',
+      ],
+    })
+  );
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
