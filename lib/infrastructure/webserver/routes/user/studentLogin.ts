@@ -20,7 +20,7 @@
 import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
-import Login from '../../../../application/user/Login';
+import StudentLogin from '../../../../application/user/StudentLogin';
 import config from '../../../../../config';
 
 const schema = defineSchema({
@@ -31,10 +31,10 @@ const schema = defineSchema({
   },
 });
 
-export default defineRoute('post', '/login', schema, async (req, res) => {
+export default defineRoute('post', '/student/login', schema, async (req, res) => {
   const {studentId, password, rememberMeToken} = req.body;
 
-  const result = await Login.run({
+  const result = await StudentLogin.run({
     studentId,
     password,
     rememberMeToken,
@@ -43,7 +43,7 @@ export default defineRoute('post', '/login', schema, async (req, res) => {
   return res
     .cookie(config.server.jwt.cookieName, result.jwt, config.server.jwt.cookieOptions)
     .json({
-      barcode: result.barcode,
       rememberMeToken: result.rememberMeToken,
+      barcode: result.barcode,
     });
 });

@@ -32,7 +32,7 @@ export default async function startServer() {
     authorizer({
       exclude: [
         '/',
-        '/login',
+        '/student/login',
         '/guest/challenge',
         '/guest/login',
         '/cafeteria',

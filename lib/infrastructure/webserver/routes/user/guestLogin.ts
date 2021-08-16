@@ -20,7 +20,6 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import {z} from 'zod';
-import Login from '../../../../application/user/Login';
 import config from '../../../../../config';
 import GuestLogin from '../../../../application/user/GuestLogin';
 

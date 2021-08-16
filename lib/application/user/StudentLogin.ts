@@ -19,22 +19,22 @@
 
 import {User} from '@inu-cafeteria/backend-core';
 import UseCase from '../../common/base/UseCase';
+import {Session} from './common/types';
 import {createJwt} from '../../common/utils/token';
 import {generateUUID} from '../../common/utils/uuid';
 import GenerateBarcode from '../barcode/GenerateBarcode';
 import {applyBcryptHash} from '../../common/utils/bcrypt';
-import LoginPolicyValidator from './validation/LoginPolicyValidator';
-import {Session} from './common/types';
+import StudentLoginPolicyValidator from './validation/StudentLoginPolicyValidator';
 
-export type LoginParams = {
+export type StudentLoginParams = {
   studentId: string;
   password?: string;
   rememberMeToken?: string;
 };
 
-class Login extends UseCase<LoginParams, Session> {
-  async onExecute(params: LoginParams): Promise<Session> {
-    await new LoginPolicyValidator(params).validate();
+class StudentLogin extends UseCase<StudentLoginParams, Session> {
+  async onExecute(params: StudentLoginParams): Promise<Session> {
+    await new StudentLoginPolicyValidator(params).validate();
 
     return await this.updateUserAndCreateSession(params.studentId);
   }
@@ -58,4 +58,4 @@ class Login extends UseCase<LoginParams, Session> {
   }
 }
 
-export default new Login();
+export default new StudentLogin();

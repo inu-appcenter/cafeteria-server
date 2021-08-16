@@ -17,16 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {LoginParams} from '../Login';
-import StudentAccountValidator from '../../../external/inu/StudentAccountValidator';
+import assert from 'assert';
 import {User} from '@inu-cafeteria/backend-core';
 import {compareBcryptHash} from '../../../common/utils/bcrypt';
-import assert from 'assert';
-import {ForStudentsOnly, InvalidRememberMeToken, UserNotExist} from '../common/errors';
+import {StudentLoginParams} from '../StudentLogin';
+import StudentAccountValidator from '../../../external/inu/StudentAccountValidator';
 import {MissingRequiredParameters} from '../../../common/errors/general';
+import {ForStudentsOnly, InvalidRememberMeToken, UserNotExist} from '../common/errors';
 
-export default class LoginPolicyValidator {
-  constructor(private readonly params: LoginParams) {}
+export default class StudentLoginPolicyValidator {
+  constructor(private readonly params: StudentLoginParams) {}
 
   async validate() {
     const {studentId, password, rememberMeToken} = this.params;
