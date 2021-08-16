@@ -1,9 +1,3 @@
-import {MakeBookingParams} from '../MakeBooking';
-import GetBookingOptions from '../GetBookingOptions';
-import assert from 'assert';
-import {InvalidCafeteriaId, InvalidTimeSlot, NoBookingParams} from '../common/errors';
-import {Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
-
 /**
  * This file is part of INU Cafeteria.
  *
@@ -23,6 +17,20 @@ import {Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+  InvalidTimeSlot,
+  NoBookingParams,
+  InvalidCafeteriaId,
+  TimeSlotUnavailable,
+} from '../common/errors';
+import assert from 'assert';
+import GetBookingOptions from '../GetBookingOptions';
+import {MakeBookingParams} from '../MakeBooking';
+import {Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
+
+/**
+ * 예약을 진행하기에 앞서 예약이 가능한지 조회합니다.
+ */
 export default class MakeBookingValidator {
   constructor(private readonly params: MakeBookingParams) {}
 
@@ -30,6 +38,7 @@ export default class MakeBookingValidator {
     await this.cafeteriaShouldExist();
     await this.bookingParamsShouldExistForTheCafeteria();
     await this.timeSlotShouldHaveBeenSuggested();
+    await this.timeSlotShouldBeAvailable();
   }
 
   private async cafeteriaShouldExist() {
@@ -59,5 +68,15 @@ export default class MakeBookingValidator {
       .includes(timeSlot.getTime());
 
     assert(timeSlowHasBeenSuggested, InvalidTimeSlot());
+  }
+
+  private async timeSlotShouldBeAvailable() {
+    const {cafeteriaId, timeSlot} = this.params;
+
+    const allOptions = await GetBookingOptions.run({cafeteriaId});
+    const specifiedOption = allOptions.find((o) => o.timeSlot.getTime() === timeSlot.getTime());
+
+    assert(specifiedOption, InvalidTimeSlot());
+    assert(specifiedOption.isAvailable(), TimeSlotUnavailable());
   }
 }

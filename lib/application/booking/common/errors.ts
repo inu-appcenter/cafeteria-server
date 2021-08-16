@@ -37,3 +37,8 @@ export const AlreadyCheckedIn = BadRequest.of(
   'already_checked_in',
   '이미 체크인한 예약은 취소할 수 없습니다.'
 );
+
+export const TimeSlotUnavailable = BadRequest.of(
+  'time_slot_unavailable',
+  '해당 시간대는 예약할 수 없습니다.'
+);
