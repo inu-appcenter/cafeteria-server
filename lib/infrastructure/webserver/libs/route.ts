@@ -17,19 +17,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import express, {RequestHandler} from 'express';
+import rateLimit from 'express-rate-limit';
 import {asyncHandler} from './handler';
+import express, {RequestHandler} from 'express';
 import {RequestValidation, validateRequest} from './middleware/zod';
 
 export function defineRoute<TParams = any, TQuery = any, TBody = any>(
   method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
   path: string,
   schema: RequestValidation<TParams, TQuery, TBody>,
-  handler: RequestHandler<TParams, any, TBody, TQuery>
+  ...handlers: RequestHandler<TParams, any, TBody, TQuery>[]
 ): express.Router {
   const router = express.Router();
 
-  router[method](path, validateRequest(schema), asyncHandler(handler));
+  router[method](path, validateRequest(schema), ...handlers.map((h) => asyncHandler(h)));
 
   return router;
 }
+
+export const apiLimiter = rateLimit({
+  windowMs: 1000 * 60 * 5, // 5분에
+  max: 10, // 10번
+  handler(req, res, next) {
+    res.status(429).json({
+      statusCode: 429,
+      error: 'too_frequent',
+      message: '해당 기능을 너무 빈번하게 사용하고 있습니다. 잠시 처리를 제한합니다.',
+    });
+  },
+});

@@ -18,7 +18,7 @@
  */
 
 import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
+import {apiLimiter, defineRoute} from '../../libs/route';
 import {z} from 'zod';
 import config from '../../../../../config';
 import GuestLogin from '../../../../application/user/GuestLogin';
@@ -31,7 +31,7 @@ const schema = defineSchema({
   },
 });
 
-export default defineRoute('post', '/guest/login', schema, async (req, res) => {
+export default defineRoute('post', '/guest/login', schema, apiLimiter, async (req, res) => {
   const {phoneNumber, passcode, rememberMeToken} = req.body;
 
   const result = await GuestLogin.run({

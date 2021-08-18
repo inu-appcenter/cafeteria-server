@@ -19,7 +19,7 @@
 
 import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
+import {apiLimiter, defineRoute} from '../../libs/route';
 import StudentLogin from '../../../../application/user/StudentLogin';
 import config from '../../../../../config';
 
@@ -31,7 +31,7 @@ const schema = defineSchema({
   },
 });
 
-export default defineRoute('post', '/student/login', schema, async (req, res) => {
+export default defineRoute('post', '/student/login', schema, apiLimiter, async (req, res) => {
   const {studentId, password, rememberMeToken} = req.body;
 
   const result = await StudentLogin.run({

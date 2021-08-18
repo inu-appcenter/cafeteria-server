@@ -18,7 +18,7 @@
  */
 
 import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
+import {apiLimiter, defineRoute} from '../../libs/route';
 import {z} from 'zod';
 import CreateGuestLoginChallenge from '../../../../application/user/CreateGuestLoginChallenge';
 
@@ -28,7 +28,7 @@ const schema = defineSchema({
   },
 });
 
-export default defineRoute('post', '/guest/challenge', schema, async (req, res) => {
+export default defineRoute('post', '/guest/challenge', schema, apiLimiter, async (req, res) => {
   const {phoneNumber} = req.body;
 
   await CreateGuestLoginChallenge.run({phoneNumber});
