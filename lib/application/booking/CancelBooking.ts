@@ -35,8 +35,8 @@ class CancelBooking extends UseCase<CancelBookingParams, void> {
   async onExecute({userId, bookingId}: CancelBookingParams): Promise<void> {
     const booking = await Booking.findOne({
       where: {
+        id: bookingId,
         userId,
-        bookingId,
       },
       relations: ['checkIn'],
     });

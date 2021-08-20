@@ -23,14 +23,14 @@ import {stringAsInt} from '../../utils/zodTypes';
 import CancelBooking from '../../../../application/booking/CancelBooking';
 
 const schema = defineSchema({
-  body: {
+  params: {
     bookingId: stringAsInt,
   },
 });
 
-export default defineRoute('delete', '/booking/bookings', schema, async (req, res) => {
+export default defineRoute('delete', '/booking/bookings/:bookingId', schema, async (req, res) => {
   const {userId} = req;
-  const {bookingId} = req.body;
+  const {bookingId} = req.params;
 
   await CancelBooking.run({userId, bookingId});
 
