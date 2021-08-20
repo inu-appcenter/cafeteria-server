@@ -17,9 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {z} from 'zod';
 import {defineSchema} from '../../libs/schema';
 import {apiLimiter, defineRoute} from '../../libs/route';
-import {z} from 'zod';
 import CreateGuestLoginChallenge from '../../../../application/user/CreateGuestLoginChallenge';
 
 const schema = defineSchema({

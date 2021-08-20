@@ -20,7 +20,7 @@
 import rateLimit from 'express-rate-limit';
 import {asyncHandler} from './handler';
 import express, {RequestHandler} from 'express';
-import {RequestValidation, validateRequest} from './middleware/zod';
+import {processRequest, RequestValidation} from './middleware/zod';
 
 export function defineRoute<TParams = any, TQuery = any, TBody = any>(
   method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head',
@@ -30,7 +30,7 @@ export function defineRoute<TParams = any, TQuery = any, TBody = any>(
 ): express.Router {
   const router = express.Router();
 
-  router[method](path, validateRequest(schema), ...handlers.map((h) => asyncHandler(h)));
+  router[method](path, processRequest(schema), ...handlers.map((h) => asyncHandler(h)));
 
   return router;
 }
