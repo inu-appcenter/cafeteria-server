@@ -36,9 +36,12 @@ export const InvalidPhoneNumber = BadRequest.of(
   '잘못된 휴대전화번호 형식입니다!'
 );
 
-export const ForStudentsOnly = Unauthorized.of('for_students_only', '재학생만 가능합니다.');
+export const ForStudentsOnly = Unauthorized.of(
+  'for_students_only',
+  '학번과 비밀번호를 확인해 주세요 😉'
+);
 
 export const InvalidPasscode = BadRequest.of(
   'invalid_passcode',
-  '인증번호가 만료되었거나 올바르지 않습니다.'
+  '인증번호가 만료되었거나 올바르지 않습니다 😯'
 );

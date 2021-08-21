@@ -42,7 +42,7 @@ export const apiLimiter = rateLimit({
     res.status(429).json({
       statusCode: 429,
       error: 'too_frequent',
-      message: '해당 기능을 너무 빈번하게 사용하고 있습니다. 잠시 처리를 제한합니다.',
+      message: '조금만 천천히 시도해주세요 :)',
     });
   },
 });
