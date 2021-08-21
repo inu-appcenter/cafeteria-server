@@ -50,11 +50,11 @@ describe('공지 필터하기', () => {
   it('os가 맞고 version이 semver 매칭되면 true 1', async () => {
     const notice = new Notice();
     notice.targetOs = 'ios';
-    notice.targetVersion = '1.1.4';
+    notice.targetVersion = '^1.1.0';
 
     const filter = new NoticeFilter({
       os: 'ios',
-      version: '^1.1.0',
+      version: '1.1.4',
     });
 
     expect(filter.filter(notice)).toBe(true);
@@ -63,11 +63,11 @@ describe('공지 필터하기', () => {
   it('os가 맞고 version이 semver 매칭되면 true 2', async () => {
     const notice = new Notice();
     notice.targetOs = 'ios';
-    notice.targetVersion = '1.1.4';
+    notice.targetVersion = '>= 1.0.0 <= 1.2.0';
 
     const filter = new NoticeFilter({
       os: 'ios',
-      version: '>= 1.0.0 <= 1.2.0',
+      version: '1.1.4',
     });
 
     expect(filter.filter(notice)).toBe(true);

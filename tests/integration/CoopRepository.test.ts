@@ -23,6 +23,6 @@ describe('생협 홈페이지에서 식단 가져오기', () => {
   it('회피기동 잘 해야 합니다.', async () => {
     const raw = await CoopRepository.fetchRawMenusPage('20210725');
 
-    console.log(raw);
+    // console.log(raw); // 너무 기니 알아서 보세욧
   });
 });
