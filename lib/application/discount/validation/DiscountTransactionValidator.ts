@@ -94,7 +94,7 @@ export default class DiscountTransactionValidator {
   private async testBasicRules(excludedRuleIds: number[] = []) {
     const {transaction} = this;
     const {studentId, cafeteriaId, mealType} = transaction;
-    const {barcodeLifetimeMinutes, barcodeTagMinimumIntervalSecs} =
+    const {barcodeLifeSpanMinutes, barcodeTagMinimumIntervalSecs} =
       config.application.transaction.validation;
 
     const tests: Test[] = [
@@ -115,7 +115,7 @@ export default class DiscountTransactionValidator {
       },
       {
         ruleId: 4,
-        validate: () => Checker.barcodeShouldBeActive(studentId, barcodeLifetimeMinutes),
+        validate: () => Checker.barcodeShouldBeActive(studentId, barcodeLifeSpanMinutes),
         failure: BarcodeNotActivated(),
       },
       {

@@ -24,23 +24,23 @@ import {errorHandler} from './libs/middleware/errorHandler';
 import {registerRoutes} from './utils/register';
 import {authorizer} from './libs/middleware/authorizer';
 
+const excludeList = [
+  '/',
+  '/student/login',
+  '/guest/challenge',
+  '/guest/login',
+  '/cafeteria',
+  '/corners',
+  '/menus',
+  '/isBarcode',
+  '/paymentSend',
+];
+
 export default async function startServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(
-    authorizer({
-      exclude: [
-        '/',
-        '/student/login',
-        '/guest/challenge',
-        '/guest/login',
-        '/cafeteria',
-        '/corners',
-        '/menus',
-      ],
-    })
-  );
+  app.use(authorizer({exclude: excludeList}));
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));

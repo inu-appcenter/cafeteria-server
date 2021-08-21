@@ -50,11 +50,14 @@ export default abstract class DiscountTransactionHandler {
 
     const {error, failedAt} = await this.validate(validator);
 
+    await this.afterValidation();
+
     if (error == null) {
       await this.onSuccess();
       await this.afterValidationSuccess();
     } else {
       await this.onFail(failedAt);
+      await this.afterValidationFail();
 
       throw error;
     }
@@ -69,6 +72,11 @@ export default abstract class DiscountTransactionHandler {
    * taskType에 따른 적절한 검증을 수행합니다.
    */
   abstract validate(validator: DiscountTransactionValidator): Promise<ValidationResult>;
+
+  /**
+   * 검증 작업이 끝난 후에 수행할 작업을 여기에 오버라이드합니다.
+   */
+  protected async afterValidation(): Promise<void> {}
 
   private async onSuccess() {
     const {transaction, taskType, taskName} = this;
@@ -93,6 +101,11 @@ export default abstract class DiscountTransactionHandler {
 
     await this.leaveHistory(failedAt, taskType, `${taskName} 실패: 규칙 ${failedAt} 검증 실패`);
   }
+
+  /**
+   * 검증 작업 실패 후에 수행할 작업을 여기에 오버라이드합니다.
+   */
+  protected async afterValidationFail(): Promise<void> {}
 
   private async leaveHistory(failedAt: number, taskType: string, message: string = '') {
     const {transaction} = this;

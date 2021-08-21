@@ -88,8 +88,8 @@ export default {
 
     transaction: {
       validation: {
-        barcodeLifetimeMinutes: 10,
-        barcodeTagMinimumIntervalSecs: 15,
+        barcodeLifeSpanMinutes: 10,
+        barcodeTagMinimumIntervalSecs: 5,
       },
     },
 
