@@ -25,8 +25,6 @@
 
 ## 개요
 
-![architecture](/docs/architecture.jpeg)
-
 이 서버는 다음 API를 제공합니다.
 
 ### 클라이언트에게
@@ -57,6 +55,9 @@
 - [설치 및 배포 가이드](https://github.com/inu-appcenter/cafeteria-server-deploy)
 
 ## 업데이트 로그
+
+### 2021.8.21 v2.0.2
+- tsc 의존성 제거.
 
 ### 2021.8.21 v2.0.1
 - 누락된 의존성 tsc 추가.
