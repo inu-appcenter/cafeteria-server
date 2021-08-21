@@ -55,7 +55,7 @@ export default class NoticeFilter {
     const {version} = this.params;
 
     const wildcardPassed = this.isWildcard(notice.targetVersion);
-    const evaluationMatches = !!version && VersionEvaluator.evaluate(notice.targetVersion, version);
+    const evaluationMatches = !!version && VersionEvaluator.evaluate(version, notice.targetVersion);
 
     return wildcardPassed || evaluationMatches;
   }

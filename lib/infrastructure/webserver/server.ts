@@ -26,12 +26,17 @@ import {authorizer} from './libs/middleware/authorizer';
 
 const excludeList = [
   '/',
+
   '/student/login',
   '/guest/challenge',
   '/guest/login',
+
   '/cafeteria',
   '/corners',
   '/menus',
+  '/notices',
+  '/notices/latest',
+
   '/isBarcode',
   '/paymentSend',
 ];
