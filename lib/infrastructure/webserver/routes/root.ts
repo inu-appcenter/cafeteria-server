@@ -19,14 +19,22 @@
 
 import {defineSchema} from '../libs/schema';
 import {defineRoute} from '../libs/route';
-import {stringAsInt} from '../utils/zodTypes';
+import {z} from 'zod';
+import logger from '../../../common/logging/logger';
 
 const schema = defineSchema({
   query: {
-    name: stringAsInt,
+    statusCheck: z.string().optional(),
   },
 });
 
 export default defineRoute('get', '/', schema, async (req, res) => {
-  res.send(`안녕 ${req.query.name}!`);
+  const {statusCheck} = req.query;
+  if (statusCheck) {
+    logger.info(`상태체크(${statusCheck})! 건강합니다!`);
+  }
+
+  res.send(
+    `카페테리아 API 서버입니다. 정상 작동중입니다. 문제 생기면 010-2922-2661로 연락 주세요.`
+  );
 });
