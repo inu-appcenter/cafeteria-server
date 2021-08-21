@@ -31,64 +31,15 @@
 
 ### 클라이언트에게
 
-- 식단 정보 제공
-- 할인 바코드 제공
-- 피드백 수신, 답장과 공지사항 제공
+- 식단 정보
+- 식당 예약 
+- 할인 멤버십
+- 1:1 문의, 공지사항, FAQ 등
 
-### 생협에게
+### 키오스크에게
 
 - 결제시 할인 유효성 검증
 - 결제시 할인 내역 등록
-
-## 상세
-
-이 애플리케이션은 밥아저씨의 "[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)"를 준수합니다. ~~아닐 수도 있음 :D~~
-
-### 디렉토리 구조
-
-~~~
-app
- └ actions                          → 메타 명령어 모음(DB setup 등등)
- └ docs                             → 문서
- └ lib                              → 애플리케이션 소스
-    └ common   	                    → 애플리케이션 전역에서 쓰이는 객체
-       └ di                         → 의존성 주입 클래스 선언과 모듈 정의
-       └ utils                      → 유틸리티
-    └ domain   	                    → 도메인 레이어 (엔터프라이즈 비즈니스 규칙과 애플리케이션 비즈니스 규칙을 통합)
-       └ constants                  → 상수 정의
-       └ entities                   → 도메인 모델 (엔티티)
-       └ repositories               → 데이터에 접근하는 객체의 인터페이스
-       └ security                   → 인증 또는 개인정보과 관련된 객체
-       └ services                   → controller와 repository 사이의 도메인 로직을 처리하는 객체
-       └ usecases                   → 애플리케이션 비즈니스 규칙
-       └ validators                 → 요청의 유효성을 검사하는 객체
-    └ interfaces                    → 인터페이스 어댑터 레이어 (애플리케이션 비즈니스 규칙과 외부 레이어를 연결)
-       └ controllers                → Hapi.js 라우터의 handler
-       └ converter                  → 외부 모델을 도메인 모델로 바꾸어 주는 객체
-       └ legacy                     → 외부 레거시 API 지원을 위한 변환
-       └ security                   → security 구현
-       └ serializers                → 도메인 모델을 외부 응답 모델로 바꾸어 주는 객체
-       └ services                   → services 구현
-       └ storage                    → repository 구현
-       └ validators                 → validators 구현
-    └ infrastructure                → 프레임워크, 드라이버 (DB, 웹서버 등)
-       └ database                   → ORM과 DB 연결 객체
-       └ webserver                  → Hapi.js 웹 서버 구성 (서버, 라우터, 플러그인 등)
-       └ server.mjs                 → Hapi.js 서버 정의
- └ public                           → 웹 서버에 의해 public으로 제공되는 파일들 (res/images 등)
- └ test                             → 테스트 소스
-    └ integration                   → Jest로 작성된 통합 테스트로, 직접 실행함
-    └ manual                        → 순수 자바스크립트로 작성된 통합 테스트로, 직접 실행함
-    └ mocks                         → 테스트용으로 구현한 목(mock) 소스 파일
-    └ requests                      → 서버에 요청을 보내는 curl 스크립트 모음
-    └ unit                          → 유닛 테스트
- └ index.mjs                        → 메인 애플리케이션 진입점
- └ config.mjs                       → 설정 파일
-~~~
-
-## API
-
-- [API 문서 및 테스트](https://api.inu-cafeteria.app/documentation)
 
 ## 비즈니스 룰
 
@@ -100,13 +51,17 @@ app
 - 4: barcodeShouldBeActive
 - 5: discountAtThisCafeteriaShouldBeFirstToday
 - 6: barcodeShouldNotBeUsedRecently
-- 7: tokenShouldBeValid
 
 ## 설치
 
 - [설치 및 배포 가이드](https://github.com/inu-appcenter/cafeteria-server-deploy)
 
 ## 업데이트 로그
+
+### 2021.8.21 v2.0.0
+- Typescript로 다시 작성.
+- Express 사용.
+- 예약 관련 기능 추가
 
 ### 2021.6.6 v1.9.0
 - 보안 취약점 업데이트
