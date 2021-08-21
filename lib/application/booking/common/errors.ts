@@ -18,6 +18,8 @@
  */
 
 import BadRequest from '../../../common/errors/http/BadRequest';
+import Forbidden from '../../../common/errors/http/Forbidden';
+import Conflict from '../../../common/errors/http/Conflict';
 
 export const InvalidTimeSlot = BadRequest.of('invalid_time_slot', '올바르지 않은 예약 시간입니다.');
 
@@ -38,7 +40,12 @@ export const AlreadyCheckedIn = BadRequest.of(
   '이미 체크인한 예약은 취소할 수 없습니다.'
 );
 
-export const TimeSlotUnavailable = BadRequest.of(
+export const TimeSlotUnavailable = Conflict.of(
   'time_slot_unavailable',
   '해당 시간대는 예약할 수 없습니다.'
+);
+
+export const AlreadyBooked = Forbidden.of(
+  'already_booked_with_that_option',
+  '이미 해당 옵션으로 예약한 내역이 존재합니다.'
 );

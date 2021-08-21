@@ -22,12 +22,13 @@ import {
   NoBookingParams,
   InvalidCafeteriaId,
   TimeSlotUnavailable,
+  AlreadyBooked,
 } from '../common/errors';
 import assert from 'assert';
+import {isEqual} from 'date-fns';
 import GetBookingOptions from '../GetBookingOptions';
 import {MakeBookingParams} from '../MakeBooking';
-import {Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
-
+import {Booking, Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
 /**
  * 예약을 진행하기에 앞서 예약이 가능한지 조회합니다.
  */
@@ -40,6 +41,7 @@ export default class MakeBookingValidator {
 
     await this.timeSlotShouldHaveBeenSuggested();
     await this.timeSlotShouldBeAvailable();
+    await this.shouldNotBeDuplicated();
   }
 
   private async cafeteriaShouldExist() {
@@ -79,5 +81,16 @@ export default class MakeBookingValidator {
 
     assert(specifiedOption, InvalidTimeSlot());
     assert(specifiedOption.isAvailable(), TimeSlotUnavailable());
+  }
+
+  private async shouldNotBeDuplicated() {
+    const {userId, cafeteriaId, timeSlot} = this.params;
+    const activeBookingsOfThisUser = await Booking.findActiveBookings(userId);
+
+    const existingOne = activeBookingsOfThisUser.find(
+      (booking) => booking.cafeteriaId === cafeteriaId && isEqual(booking.timeSlot, timeSlot)
+    );
+
+    assert(existingOne == null, AlreadyBooked());
   }
 }
