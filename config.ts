@@ -50,7 +50,7 @@ export default {
    * 서버 운영에 필요한 설정입니다.
    */
   server: {
-    host: getArg('host') || '0.0.0.0',
+    host: '0.0.0.0',
     port: getArg('port') || 9999,
     instanceName: getArg('instance-name') || '?',
 
