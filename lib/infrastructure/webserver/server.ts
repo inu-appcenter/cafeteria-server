@@ -37,6 +37,9 @@ const excludeList = [
   '/notices',
   '/notices/latest',
 
+  '/kiosk/discount/verify',
+  '/kiosk/discount/commit',
+
   '/isBarcode',
   '/paymentSend',
 ];
