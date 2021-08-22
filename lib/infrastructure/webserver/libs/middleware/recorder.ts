@@ -17,16 +17,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from '../logging/logger';
+import logger from '../../../../common/logging/logger';
+import {RequestHandler} from 'express';
 
-export default abstract class UseCase<ParamT = void, ResultT = void> {
-  async run(params: ParamT): Promise<ResultT> {
-    logger.verbose(
-      `UseCase '${this.constructor.name}'를 다음 인자로 실행합니다: ${JSON.stringify(params)}`
-    );
+export default function recorder(): RequestHandler {
+  return async (req, res, next) => {
+    const {path, params, query, body} = req;
 
-    return await this.onExecute(params);
+    const info = {
+      path,
+      params: redacted(params),
+      query: redacted(query),
+      body: redacted(body),
+    };
+
+    logger.info(`요청을 받았습니다: ${JSON.stringify(info)}`);
+
+    next();
+  };
+}
+
+function redacted(data: Record<string, any>): Record<string, any> {
+  const secureFields = ['password'];
+  for (const field of secureFields) {
+    data[field] = '[삭제됨]';
   }
 
-  abstract onExecute(params: ParamT): Promise<ResultT>;
+  return data;
 }

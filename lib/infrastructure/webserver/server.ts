@@ -23,6 +23,7 @@ import cookieParser from 'cookie-parser';
 import {errorHandler} from './libs/middleware/errorHandler';
 import {registerRoutes} from './utils/register';
 import {authorizer} from './libs/middleware/authorizer';
+import recorder from './libs/middleware/recorder';
 
 const excludeList = [
   '/',
@@ -52,6 +53,8 @@ export default async function startServer() {
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
+
+  app.use(recorder());
 
   await registerRoutes(app, __dirname + '/routes');
 
