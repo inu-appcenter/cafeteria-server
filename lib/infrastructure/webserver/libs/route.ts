@@ -37,7 +37,7 @@ export function defineRoute<TParams = any, TQuery = any, TBody = any>(
 
 export const apiLimiter = rateLimit({
   windowMs: 1000 * 60 * 5, // 5분에
-  max: 10, // 10번
+  max: 15, // 15번
   handler(req, res, next) {
     res.status(429).json({
       statusCode: 429,
