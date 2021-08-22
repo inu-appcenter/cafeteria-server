@@ -40,7 +40,9 @@ export default function recorder(): RequestHandler {
 function redacted(data: Record<string, any>): Record<string, any> {
   const secureFields = ['password'];
   for (const field of secureFields) {
-    data[field] = '[삭제됨]';
+    if (data[field]) {
+      data[field] = '[삭제됨]';
+    }
   }
 
   return data;
