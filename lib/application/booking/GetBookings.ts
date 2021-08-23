@@ -26,7 +26,8 @@ import {UserIdentifier} from '../user/common/types';
  */
 class GetBookings extends UseCase<UserIdentifier, Booking[]> {
   async onExecute({userId}: UserIdentifier): Promise<Booking[]> {
-    return await Booking.findActiveBookings(userId);
+    // 30분 정도 지난 예약도 표시는 해줌.
+    return await Booking.findActiveBookings(userId, 30 /*CONSTANT*/, new Date());
   }
 }
 
