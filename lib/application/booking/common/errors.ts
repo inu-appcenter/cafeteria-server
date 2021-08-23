@@ -47,5 +47,5 @@ export const TimeSlotUnavailable = Conflict.of(
 
 export const AlreadyBooked = Forbidden.of(
   'already_booked_with_that_option',
-  '이미 해당 옵션으로 예약한 내역이 존재합니다.'
+  '이미 해당 시간대에 예약한 내역이 존재합니다.'
 );
