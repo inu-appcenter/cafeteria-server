@@ -20,14 +20,19 @@
 import UseCase from '../../common/base/UseCase';
 import {Booking} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/common/types';
+import config from '../../../config';
 
 /**
  * 사용자의 예약 중에 예약 시간이 아직 안 지났고 & 체크인 안 한 예약을 가져옵니다.
  */
 class GetBookings extends UseCase<UserIdentifier, Booking[]> {
   async onExecute({userId}: UserIdentifier): Promise<Booking[]> {
-    // 30분 정도 지난 예약도 표시는 해줌.
-    return await Booking.findActiveBookings(userId, 30 /*CONSTANT*/, new Date());
+    // 어느 정도 지난 예약도 표시는 해줌.
+    return await Booking.findActiveBookings(
+      userId,
+      config.application.booking.pastBookingDisplayToleranceMinutes,
+      new Date()
+    );
   }
 }
 

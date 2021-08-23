@@ -110,6 +110,10 @@ export default {
       sender: '카페테리아 <cs-noreply@inu-cafeteria.app>',
       adminEmail: 'potados99@gmail.com',
     },
+
+    booking: {
+      pastBookingDisplayToleranceMinutes: 30,
+    },
   },
 
   /**
