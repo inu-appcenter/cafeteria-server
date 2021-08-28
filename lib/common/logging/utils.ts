@@ -48,11 +48,10 @@ export function formatLog(message: any, showCaller = true) {
 
   if (showCaller) {
     const fileName = path.basename(caller.getFileName());
-    const functionName = caller.getFunctionName();
     const lineNum = caller.getLineNumber();
     const colNum = caller.getColumnNumber();
 
-    return `${fileName}:${functionName}:${lineNum}:${colNum}: ${payload}`;
+    return `${fileName}:${lineNum}:${colNum}: ${payload}`;
   } else {
     return `${payload}`;
   }
