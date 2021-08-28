@@ -21,6 +21,7 @@ import RuleChecker from '../RuleChecker';
 import {Cafeteria, DiscountTransaction, User} from '@inu-cafeteria/backend-core';
 import MealTypeValidator from './MealTypeValidator';
 import moment from 'moment';
+import logger from '../../../../../common/logging/logger';
 
 class RuleCheckerImpl implements RuleChecker {
   async requestShouldBeNotMalformed({
@@ -37,18 +38,21 @@ class RuleCheckerImpl implements RuleChecker {
     });
 
     if (cafeteria == null) {
+      logger.info(`id가 ${cafeteriaId}인 해당 학식당을 찾을 수 없습니다.`);
       return false;
     }
 
     if (!cafeteria.supportDiscount) {
+      logger.info(`${cafeteria.name}은(는) 할인을 지원하지 않습니다.`);
       return false;
     }
 
     if (cafeteria.discountValidationParams == null) {
+      logger.info(`${cafeteria.name}에 연결된 할인 검증 파라미터가 존재하지 않습니다.`);
       return false;
     }
 
-    return false;
+    return true;
   }
 
   async requestShouldBeInMealTime(cafeteriaId: number, mealType: number): Promise<boolean> {
