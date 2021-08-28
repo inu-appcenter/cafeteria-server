@@ -20,6 +20,7 @@
 import {CafeteriaValidationParams} from '@inu-cafeteria/backend-core';
 import TimeRangeChecker from '../../../parser/time/TimeRangeChecker';
 import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
+import logger from '../../../../../common/logging/logger';
 
 export type MealTypeValidatorParams = {
   mealType: number;
@@ -44,11 +45,19 @@ export default class MealTypeValidator {
 
     // mealType이 4, 2, 1, 0 중에 하나여야 합니다.
     if (!MealType.all.includes(mealType)) {
+      logger.warn(`MealType은 4, 2, 1, 0 중에 하나여야 하지만, ${mealType}이(가) 주어졌습니다.`);
       return false;
     }
 
     // 그리고 식당이 지원하는 mealType 중에 하나여야 합니다.
-    return !!(mealType & discountValidationParams.availableMealTypes);
+    if (!(mealType & discountValidationParams.availableMealTypes)) {
+      logger.warn(
+        `식당이 지원하는 MealType(${discountValidationParams.availableMealTypes}) 중에 주어진 것(${mealType})은 없습니다.`
+      );
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -66,6 +75,13 @@ export default class MealTypeValidator {
     ).getCurrentMealType();
 
     // 요청에 들어있는 mealType이랑 같아야 함!
-    return mealType === currentMealType;
+    if (mealType !== currentMealType) {
+      logger.warn(
+        `현재 시간과 식당 정보에 기반해 도출한 MealType은 ${currentMealType}인데, 요청에 포함된 것은 ${mealType}입니다.`
+      );
+      return false;
+    }
+
+    return true;
   }
 }
