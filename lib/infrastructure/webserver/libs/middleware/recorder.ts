@@ -25,7 +25,9 @@ export default function recorder(): RequestHandler {
     const {path, params, query, body} = req;
 
     const info = {
-      path,
+      remoteAddress: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+      userAgent: req.headers['user-agent'],
+      path: path,
       params: redacted(params),
       query: redacted(query),
       body: redacted(body),
