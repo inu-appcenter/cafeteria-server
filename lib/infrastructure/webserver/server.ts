@@ -25,7 +25,10 @@ import {registerRoutes} from './utils/register';
 import {authorizer} from './libs/middleware/authorizer';
 import recorder from './libs/middleware/recorder';
 
-const excludeList = [
+/**
+ * 인증을 건너뛰는 endpoint 목록입니다.
+ */
+const allowList = [
   '/',
 
   '/student/login',
@@ -49,7 +52,7 @@ export default async function startServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(authorizer({exclude: excludeList}));
+  app.use(authorizer({exclude: allowList}));
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
