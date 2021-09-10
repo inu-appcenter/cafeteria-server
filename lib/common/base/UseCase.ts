@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from '../logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 export default abstract class UseCase<ParamT = void, ResultT = void> {
   async run(params: ParamT): Promise<ResultT> {

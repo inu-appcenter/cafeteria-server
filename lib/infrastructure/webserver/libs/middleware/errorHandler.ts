@@ -20,7 +20,7 @@
 import {ErrorRequestHandler} from 'express';
 import HttpError from '../../../../common/errors/http/base/HttpError';
 import {stringifyError} from '../../../../common/utils/error';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import {AssertionError} from 'assert';
 import CustomError from '../../../../common/errors/custom/base/CustomError';
 

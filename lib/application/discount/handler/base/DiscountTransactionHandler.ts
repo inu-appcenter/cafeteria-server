@@ -23,7 +23,7 @@ import {
   ValidationResult,
 } from '@inu-cafeteria/backend-core';
 import DiscountTransactionValidator from '../../validation/DiscountTransactionValidator';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 /**
  * DiscountTransaction만 넣어주면 검증과 기록, 성공시에는 트랜잭션 저장까지 합니다.

@@ -19,7 +19,7 @@
 
 import * as fs from 'fs';
 import express from 'express';
-import logger from '../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 export async function registerRoutes(app: express.Application, dir: string = '/routes') {
   const files = fs.readdirSync(dir);

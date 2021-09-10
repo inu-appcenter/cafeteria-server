@@ -19,7 +19,7 @@
 
 import CoopWebsiteAccessor from './CoopWebsiteAccessor';
 import config from '../../../config';
-import logger from '../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import moment from 'moment';
 import {getWeeksBetweenDates} from '../../common/utils/date';
 

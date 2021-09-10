@@ -20,7 +20,7 @@
 import {defineSchema} from '../libs/schema';
 import {defineRoute} from '../libs/route';
 import {z} from 'zod';
-import logger from '../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {

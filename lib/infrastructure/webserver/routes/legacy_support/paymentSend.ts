@@ -23,7 +23,7 @@ import {z} from 'zod';
 import {stringAsInt} from '../../utils/zodTypes';
 import ConfirmDiscountTransaction from '../../../../application/discount/ConfirmDiscountTransaction';
 import CancelDiscountTransaction from '../../../../application/discount/CancelDiscountTransaction';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import {stringifyError} from '../../../../common/utils/error';
 
 const schema = defineSchema({

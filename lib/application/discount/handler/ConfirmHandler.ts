@@ -19,7 +19,7 @@
 
 import DiscountTransactionValidator from '../validation/DiscountTransactionValidator';
 import DiscountTransactionHandler from './base/DiscountTransactionHandler';
-import logger from '../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import {ValidationResult} from '@inu-cafeteria/backend-core';
 
 export default class ConfirmHandler extends DiscountTransactionHandler {

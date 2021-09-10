@@ -18,7 +18,7 @@
  */
 
 import {Menu} from '@inu-cafeteria/backend-core';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 type MenuProcessed = {
   foods: string[];

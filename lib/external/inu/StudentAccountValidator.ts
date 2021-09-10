@@ -21,7 +21,7 @@ import assert from 'assert';
 import config from '../../../config';
 import {postUrlencoded} from '../../common/utils/fetch';
 import {encryptForRemoteLogin} from '../../common/utils/encrypt';
-import logger from '../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 export default class StudentAccountValidator {
   constructor(private readonly studentId: string, private readonly password: string) {}

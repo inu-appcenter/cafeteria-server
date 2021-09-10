@@ -18,12 +18,32 @@
  */
 
 import config from './config';
-import logger from './lib/common/logging/logger';
+import {logger, setupLogger} from '@inu-cafeteria/backend-core';
 import startServer from './lib/infrastructure/webserver/server';
 import {printInBox} from './lib/infrastructure/webserver/utils/printer';
 import {startTypeORM} from '@inu-cafeteria/backend-core';
 
 async function start() {
+  console.log('로거를 설정합니다.');
+  await setupLogger({
+    consoleTransportOptions: {
+      prefix: config.server.instanceName,
+    },
+    fileTransportOptions: {
+      prefix: config.server.instanceName,
+      logDirectory: config.server.logging.directory,
+    },
+    cloudwatchTransportOptions: config.isProduction
+      ? {
+          prefix: config.server.instanceName,
+          region: config.external.aws.region,
+          accessKeyId: config.external.aws.accessKeyId,
+          secretAccessKey: config.external.aws.secretAccessKey,
+          logGroupName: config.external.aws.cloudwatch.logGroupName,
+        }
+      : undefined,
+  });
+
   logger.info('TypeORM과 데이터베이스 연결을 시작합니다.');
   await startTypeORM();
 

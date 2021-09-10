@@ -22,7 +22,7 @@ import {defineRoute} from '../../libs/route';
 import {z} from 'zod';
 import {stringAsInt} from '../../utils/zodTypes';
 import VerifyDiscountTransaction from '../../../../application/discount/VerifyDiscountTransaction';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import {stringifyError} from '../../../../common/utils/error';
 
 const schema = defineSchema({

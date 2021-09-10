@@ -19,7 +19,7 @@
 
 import {Cafeteria, Menu} from '@inu-cafeteria/backend-core';
 import {assertDateStringFormat} from '../../common/utils/date';
-import logger from '../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import assert from 'assert';
 import config from '../../../config';
 import CoopRepository from '../../external/uicoop/CoopRepository';

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import logger from '../../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import moment from 'moment';
 import RuleChecker from '../RuleChecker';
 import MealTypeValidator from './MealTypeValidator';

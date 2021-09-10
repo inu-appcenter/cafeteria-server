@@ -18,7 +18,7 @@
  */
 
 import qs from 'qs';
-import logger from '../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import config from '../../../config';
 import {imitateCupidCookie} from './embedded/pageScripts';
 import {appendQueryStringParameters} from '../../common/utils/url';

@@ -18,7 +18,7 @@
  */
 
 import moment from 'moment';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 import {MealType} from '@inu-cafeteria/backend-core';
 import {TimeRangeExpression} from '@inu-cafeteria/backend-core';
 

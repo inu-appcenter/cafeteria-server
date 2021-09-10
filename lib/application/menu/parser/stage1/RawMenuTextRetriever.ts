@@ -20,7 +20,7 @@
 import cheerio from 'cheerio';
 import {compareIgnoringWhiteSpaces} from '../../../../common/utils/string';
 import config from '../../../../../config';
-import logger from '../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 export default class RawMenuTextRetriever {
   constructor(private readonly rawHtml: string) {}

@@ -19,7 +19,6 @@
 
 import getArg from './lib/common/utils/args';
 import getEnv from './lib/common/utils/env';
-import path from 'path';
 import assert from 'assert';
 
 const isTest = getEnv('NODE_ENV') === 'test';
@@ -74,7 +73,7 @@ export default {
     },
 
     logging: {
-      filepath: (name: string) => path.join(getArg('log-dir', 'logs'), name, `${name}-%DATE%.log`),
+      directory: getArg('log-dir', 'logs'),
     },
   },
 

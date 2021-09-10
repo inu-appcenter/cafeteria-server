@@ -19,7 +19,7 @@
 
 import {CafeteriaValidationParams, MealType} from '@inu-cafeteria/backend-core';
 import TimeRangeChecker from '../../../parser/time/TimeRangeChecker';
-import logger from '../../../../../common/logging/logger';
+import {logger} from '@inu-cafeteria/backend-core';
 
 export type MealTypeValidatorParams = {
   mealType: number;
