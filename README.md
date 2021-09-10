@@ -56,6 +56,10 @@
 
 ## 업데이트 로그
 
+### 2021.9.11 v2.0.16
+- 로거와 rule validator 클래스를 backed core의 것으로 대체.
+- 잘못 import된 MealType 수정.
+
 ### 2021.9.5 v2.0.15
 - 누락된 markAnswerRead 추가.
 
