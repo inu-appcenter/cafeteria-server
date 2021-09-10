@@ -22,12 +22,12 @@ import {
   Cafeteria,
   CafeteriaValidationParams,
   DiscountTransaction,
+  MealType,
   User,
 } from '@inu-cafeteria/backend-core';
 import {RequestMalformed} from '../common/errors';
 import assert from 'assert';
 import TimeRangeChecker from './time/TimeRangeChecker';
-import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 
 /**
  * 요청으로부터 파싱을 거쳐 DiscountTransaction 엔티티를 만들어냅니다!

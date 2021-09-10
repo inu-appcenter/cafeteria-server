@@ -17,69 +17,53 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DiscountTransaction} from '@inu-cafeteria/backend-core';
-import Checker from './rules/implementation/RuleCheckerImpl';
 import config from '../../../../config';
-import RuleViolation from './tests/RuleViolation';
-import TestRunner from './tests/TestRunner';
-import {Test} from './tests/Test';
+import Checker from './rules/implementation/RuleCheckerImpl';
+import {
+  DiscountRule,
+  DiscountTransaction,
+  RuleValidator,
+  RuleViolation,
+  Test,
+  TestRunner,
+} from '@inu-cafeteria/backend-core';
 import {
   BarcodeNotActivated,
   BarcodeUsedRecently,
   DiscountAlreadyMadeHereToday,
-  DiscountNotSupportedHere,
   DiscountNotAvailableNow,
+  DiscountNotSupportedHere,
   RequestMalformed,
   UserNotIdentified,
 } from '../common/errors';
 
-export type ValidationResult = {
-  error: Error | null;
-  failedAt: number;
-};
-
-export default class DiscountTransactionValidator {
-  constructor(protected readonly transaction: DiscountTransaction) {}
+export default class DiscountTransactionValidator extends RuleValidator {
+  constructor(protected readonly transaction: DiscountTransaction) {
+    super();
+  }
 
   async validateForVerify() {
-    return await this.validate(async () => {
+    return await this.runValidation(async () => {
       await this.testRequestFormat();
       await this.testBasicRules();
     });
   }
 
   async validateForConfirm() {
-    return await this.validate(async () => {
+    return await this.runValidation(async () => {
       await this.testRequestFormat();
       await this.testBasicRules([5 /** ignore rule 5: barcodeShouldNotBeUsedRecently */]);
     });
   }
 
   async validateForCancel() {
-    return await this.validate(async () => {
+    return await this.runValidation(async () => {
       await this.testRequestFormat();
       await this.testBasicRules([
         5 /** ignore rule 5: barcodeShouldNotBeUsedRecently */,
         6 /** ignore rule 6: discountAtThisCafeteriaShouldBeFirstToday (should rather exist) */,
       ]);
     });
-  }
-
-  private async validate(body: () => Promise<void>): Promise<ValidationResult> {
-    try {
-      await body();
-    } catch (e) {
-      if (e instanceof RuleViolation) {
-        return e.result;
-      } else {
-        throw e;
-      }
-    }
-
-    return {
-      error: null,
-      failedAt: 0,
-    };
   }
 
   private async testRequestFormat() {
@@ -131,6 +115,10 @@ export default class DiscountTransactionValidator {
       },
     ];
 
-    await new TestRunner(tests, {studentId, excludedRuleIds}).runTests();
+    await new TestRunner(tests, {
+      subject: studentId,
+      ruleClass: DiscountRule,
+      excludedRuleIds,
+    }).runTests();
   }
 }

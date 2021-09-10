@@ -58,6 +58,9 @@ export default defineRoute('get', '/paymentSend', schema, async (req, res) => {
     }
   } catch (e) {
     logger.error(`레거시 라우트 paymentSend 에서 생긴 에러: ${stringifyError(e)}`);
+    logger.info(
+      `에러가 생겼지만 레거시 클라이언트는 아직 200 이외의 응답을 잘 모르기 때문에 200을 내려보내줍니다.`
+    );
 
     return res.json({
       message: 'ERROR',

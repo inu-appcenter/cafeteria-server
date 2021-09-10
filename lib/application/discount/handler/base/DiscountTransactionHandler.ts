@@ -17,10 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DiscountProcessHistory, DiscountTransaction} from '@inu-cafeteria/backend-core';
-import DiscountTransactionValidator, {
+import {
+  DiscountProcessHistory,
+  DiscountTransaction,
   ValidationResult,
-} from '../../validation/DiscountTransactionValidator';
+} from '@inu-cafeteria/backend-core';
+import DiscountTransactionValidator from '../../validation/DiscountTransactionValidator';
 import logger from '../../../../common/logging/logger';
 
 /**

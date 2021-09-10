@@ -33,4 +33,7 @@ async function start() {
 
 start()
   .then(() => printInBox('SERVER STARTED', `Listening on ${config.server.port}`, '#'))
-  .catch((e) => console.log(e));
+  .catch((e) => {
+    console.error(e);
+    console.log('서버 시작에 실패했습니다!');
+  });

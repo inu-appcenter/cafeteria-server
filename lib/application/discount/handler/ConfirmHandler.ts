@@ -17,11 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import DiscountTransactionValidator, {
-  ValidationResult,
-} from '../validation/DiscountTransactionValidator';
+import DiscountTransactionValidator from '../validation/DiscountTransactionValidator';
 import DiscountTransactionHandler from './base/DiscountTransactionHandler';
 import logger from '../../../common/logging/logger';
+import {ValidationResult} from '@inu-cafeteria/backend-core';
 
 export default class ConfirmHandler extends DiscountTransactionHandler {
   taskType = 'Confirm' as const;

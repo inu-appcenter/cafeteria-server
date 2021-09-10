@@ -18,7 +18,7 @@
  */
 
 import TimeRangeChecker from './TimeRangeChecker';
-import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
+import {MealType} from '@inu-cafeteria/backend-core';
 
 describe('시간대 체크', () => {
   it('만약 지금이 오후 6시이고, 검증 파라미터의 저녁 시간대에 6시가 포함된다면 저녁인 것 ', async () => {

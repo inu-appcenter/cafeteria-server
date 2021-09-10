@@ -17,9 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CafeteriaValidationParams} from '@inu-cafeteria/backend-core';
+import {CafeteriaValidationParams, MealType} from '@inu-cafeteria/backend-core';
 import TimeRangeChecker from '../../../parser/time/TimeRangeChecker';
-import MealType from '@inu-cafeteria/backend-core/dist/src/core/menu/MealType';
 import logger from '../../../../../common/logging/logger';
 
 export type MealTypeValidatorParams = {
