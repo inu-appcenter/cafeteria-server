@@ -69,7 +69,7 @@ class NotifyNewQuestion extends UseCase<NotifyNewQuestionParams, void> {
         <div style="margin: 3px;">
            <p><span style="color: #808080;">문의 내용</span></p>
            <pre>${params.content}</pre>
-           <h3><strong><a style="color: #ff6600;" href="https://console.inu-cafeteria.app/#/Questions">답변하기</a></strong></h3>
+           <h3><strong><a style="color: #ff6600;" href="https://console.inu-cafeteria.app/#/user/questions">답변하기</a></strong></h3>
         </div>
     `;
   }
