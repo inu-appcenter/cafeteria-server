@@ -40,7 +40,12 @@ export default class MailSender {
 
   async send(): Promise<void> {
     try {
-      const result = await this.transport.sendMail(this.params);
+      const result = await this.transport.sendMail({
+        from: this.params.from,
+        to: this.params.to,
+        subject: this.params.title,
+        html: this.params.body,
+      });
 
       logger.info(`${this.params.to}에게 메일 전송 완료: ${result.response}`);
     } catch (e) {

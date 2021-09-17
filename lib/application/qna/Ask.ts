@@ -20,6 +20,8 @@
 import UseCase from '../../common/base/UseCase';
 import {Question} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/common/types';
+import MailSender from '../../external/mail/MailSender';
+import NotifyNewQuestion from './NotifyNewQuestion';
 
 export type AskParams = {
   deviceInfo: string;
@@ -38,6 +40,13 @@ class Ask extends UseCase<AskParams, void> {
     });
 
     await question.save();
+
+    await NotifyNewQuestion.run({
+      userId,
+      deviceInfo,
+      appVersion,
+      content,
+    });
   }
 }
 

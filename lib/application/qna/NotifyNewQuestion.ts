@@ -20,9 +20,10 @@
 import UseCase from '../../common/base/UseCase';
 import config from '../../../config';
 import MailSender from '../../external/mail/MailSender';
+import {User} from '@inu-cafeteria/backend-core';
 
 export type NotifyNewQuestionParams = {
-  studentId: string;
+  userId: number;
   deviceInfo: string;
   appVersion: string;
   content: string;
@@ -34,13 +35,15 @@ class NotifyNewQuestion extends UseCase<NotifyNewQuestionParams, void> {
       from: config.application.notify.sender,
       to: config.application.notify.adminEmail,
       title: '새로운 문의가 등록되었습니다.',
-      body: this.composeNotificationMailBody(params),
+      body: await this.composeNotificationMailBody(params),
     };
 
     await new MailSender(emailParams).send();
   }
 
-  private composeNotificationMailBody(params: NotifyNewQuestionParams) {
+  private async composeNotificationMailBody(params: NotifyNewQuestionParams) {
+    const user = await User.findOne(params.userId);
+
     // https://html5-editor.net
     return `
         <!-- #######  THIS IS A COMMENT - Visible only in the source editor #########-->
@@ -50,7 +53,9 @@ class NotifyNewQuestion extends UseCase<NotifyNewQuestionParams, void> {
            <tbody>
               <tr style="height: 23px;">
                  <td style="width: 133.203125px; height: 23px; border: 0px;"><span style="color: #808080;">작성자</span></td>
-                 <td style="width: 212.8125px; height: 23px; border: 0px;">${params.studentId}</td>
+                 <td style="width: 212.8125px; height: 23px; border: 0px;">${
+                   user?.identifier() ?? `userId: ${params.userId}`
+                 }</td>
               </tr>
               <tr style="height: 23px;">
                  <td style="width: 133.203125px; height: 23px; border: 0px;"><span style="color: #808080;">문의 시각</span></td>
