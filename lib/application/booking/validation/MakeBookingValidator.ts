@@ -85,15 +85,18 @@ export default class MakeBookingValidator {
   }
 
   private async shouldNotBeDuplicated() {
-    const {userId, cafeteriaId, timeSlot} = this.params;
+    const {userId, cafeteriaId} = this.params;
     const activeBookingsOfThisUser = await Booking.findActiveBookings(
       userId,
       config.application.booking.pastBookingDisplayToleranceMinutes,
       new Date()
     );
 
+    /**
+     * 같은 식당에 또 예약 불가!
+     */
     const existingOne = activeBookingsOfThisUser.find(
-      (booking) => booking.cafeteriaId === cafeteriaId && isEqual(booking.timeSlot, timeSlot)
+      (booking) => booking.cafeteriaId === cafeteriaId
     );
 
     assert(existingOne == null, AlreadyBooked());
