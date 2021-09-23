@@ -42,8 +42,8 @@ class GuestLogin extends UseCase<GuestLoginParams, Session> {
     const user = await User.getOrCreate({phoneNumber});
     const newRememberMeToken = generateUUID();
 
-    user.rememberMeToken = await applyBcryptHash(newRememberMeToken);
-    user.lastLoginAt = new Date();
+    user.updateLoginStatus(await applyBcryptHash(newRememberMeToken));
+    user.agreePrivacyPolicy();
 
     await user.save();
 
