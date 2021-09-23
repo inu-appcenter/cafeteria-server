@@ -45,7 +45,6 @@ class StudentLogin extends UseCase<StudentLoginParams, Session> {
     const newBarcode = await GenerateBarcode.run({studentId});
 
     user.updateLoginStatus(await applyBcryptHash(newRememberMeToken), newBarcode);
-    user.agreePrivacyPolicy();
 
     await user.save();
 

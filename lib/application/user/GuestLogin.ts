@@ -43,7 +43,6 @@ class GuestLogin extends UseCase<GuestLoginParams, Session> {
     const newRememberMeToken = generateUUID();
 
     user.updateLoginStatus(await applyBcryptHash(newRememberMeToken));
-    user.agreePrivacyPolicy();
 
     await user.save();
 
