@@ -113,6 +113,10 @@ export default {
     booking: {
       historyInHours: 72,
     },
+
+    privacy: {
+      agreementValidForDays: 28,
+    },
   },
 
   /**
