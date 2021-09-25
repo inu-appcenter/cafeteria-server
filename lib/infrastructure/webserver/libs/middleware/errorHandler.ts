@@ -44,6 +44,14 @@ export function errorHandler(): ErrorRequestHandler {
         error: 'assertion_failed',
         message,
       });
+    } else if (isErrorWithStatusCode(err)) {
+      logger.error(`상태 코드와 함께 에러가 발생했습니다: ${stringifyError(err)}`);
+
+      return res.status(500).json({
+        statusCode: err.statusCode,
+        error: err.name,
+        message: err.message,
+      });
     } else {
       logger.error(`처리되지 않은 에러가 발생했습니다: ${stringifyError(err)}`);
 
@@ -66,4 +74,9 @@ function isCustomError(error: Error): error is CustomError<any> {
 
 function isAssertionError(error: Error): error is AssertionError {
   return error instanceof AssertionError;
+}
+
+function isErrorWithStatusCode(error: Error): error is Error & {statusCode: number} {
+  // @ts-ignore
+  return error['statusCode'] != null;
 }
