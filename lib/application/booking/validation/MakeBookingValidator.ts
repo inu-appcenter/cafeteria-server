@@ -18,18 +18,23 @@
  */
 
 import {
+  AlreadyBooked,
   InvalidTimeSlot,
   NoBookingParams,
   InvalidCafeteriaId,
   TimeSlotUnavailable,
-  AlreadyBooked,
 } from '../common/errors';
 import assert from 'assert';
-import {isEqual} from 'date-fns';
 import GetBookingOptions from '../GetBookingOptions';
 import {MakeBookingParams} from '../MakeBooking';
-import {Booking, Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
+import {
+  Booking,
+  Cafeteria,
+  BookingStatus,
+  CafeteriaBookingParams,
+} from '@inu-cafeteria/backend-core';
 import config from '../../../../config';
+
 /**
  * 예약을 진행하기에 앞서 예약이 가능한지 조회합니다.
  */
@@ -86,10 +91,12 @@ export default class MakeBookingValidator {
 
   private async shouldNotBeDuplicated() {
     const {userId, cafeteriaId} = this.params;
-    const activeBookingsOfThisUser = await Booking.findActiveBookings(
+    const recentBookingsOfThisUser = await Booking.findRecentBookings(
       userId,
-      config.application.booking.pastBookingDisplayToleranceMinutes,
-      new Date()
+      config.application.booking.historyInHours
+    );
+    const activeBookingsOfThisUser = recentBookingsOfThisUser.filter(
+      (booking) => booking.status === BookingStatus.UNUSED_AVAILABLE
     );
 
     /**
