@@ -111,7 +111,7 @@ export default {
     },
 
     booking: {
-      pastBookingDisplayToleranceMinutes: 30,
+      historyInHours: 72,
     },
   },
 
