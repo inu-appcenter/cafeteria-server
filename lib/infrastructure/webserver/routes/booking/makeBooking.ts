@@ -24,7 +24,7 @@ import MakeBooking from '../../../../application/booking/MakeBooking';
 
 const schema = defineSchema({
   body: {
-    cafeteriaId: stringAsInt,
+    cafeteriaId: stringAsInt, // TODO 숫자 그대로 받자
     timeSlot: stringAsDate,
   },
 });
@@ -33,7 +33,7 @@ export default defineRoute('post', '/booking/bookings', schema, async (req, res)
   const {userId} = req;
   const {cafeteriaId, timeSlot} = req.body;
 
-  const booking = await MakeBooking.run({userId, cafeteriaId, timeSlot});
+  await MakeBooking.run({userId, cafeteriaId, timeSlot});
 
-  res.json(booking);
+  res.sendStatus(201);
 });

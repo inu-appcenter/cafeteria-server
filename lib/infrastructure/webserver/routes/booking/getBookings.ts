@@ -28,5 +28,15 @@ export default defineRoute('get', '/booking/bookings', schema, async (req, res) 
 
   const allBookings = await GetBookings.run({userId});
 
-  res.json(allBookings);
+  res.json(
+    allBookings.map((booking) => ({
+      id: booking.id,
+      uuid: booking.uuid,
+      cafeteriaId: booking.cafeteriaId,
+      timeSlot: booking.timeSlot,
+      nextTimeSlot: booking.nextTimeSlot,
+      bookedAt: booking.bookedAt,
+      status: booking.status,
+    }))
+  );
 });
