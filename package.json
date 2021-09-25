@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/inu-appcenter/cafeteria-server#readme",
   "dependencies": {
-    "@inu-cafeteria/backend-core": "^0.6.10",
+    "@inu-cafeteria/backend-core": "^0.6.11",
     "@types/express": "^4.17.13",
     "@types/moment": "^2.13.0",
     "axios": "^0.21.2",
