@@ -21,6 +21,7 @@ import {postJson} from '../../common/utils/fetch';
 import {generateUUIDHex} from '../../common/utils/uuid';
 import {createHmac} from 'crypto';
 import config from '../../../config';
+import {logger} from '@inu-cafeteria/backend-core';
 
 export type SMSParams = {
   sender: string;
@@ -42,6 +43,8 @@ export default class SMSSender {
       },
     };
 
+    logger.info(`SMS를 보냅니다. 요청 페이로드는 ${JSON.stringify(payload)}`);
+
     const headers = this.generateAuthHeader();
 
     const responseText = await postJson(
@@ -49,6 +52,8 @@ export default class SMSSender {
       payload,
       headers
     );
+
+    logger.info(`응답이 왔습니다: ${responseText}`);
 
     return responseText.includes('정상 접수');
   }

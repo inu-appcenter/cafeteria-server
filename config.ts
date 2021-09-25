@@ -141,7 +141,7 @@ export default {
     },
 
     sms: {
-      sender: '01029222661',
+      sender: '0328359798',
       auth: {
         key: getEnv('SMS_API_KEY'),
         secret: getEnv('SMS_API_SECRET'),
