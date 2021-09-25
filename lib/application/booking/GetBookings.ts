@@ -28,11 +28,7 @@ import config from '../../../config';
 class GetBookings extends UseCase<UserIdentifier, Booking[]> {
   async onExecute({userId}: UserIdentifier): Promise<Booking[]> {
     // 어느 정도 지난 예약도 표시는 해줌.
-    return await Booking.findActiveBookings(
-      userId,
-      config.application.booking.pastBookingDisplayToleranceMinutes,
-      new Date()
-    );
+    return await Booking.findRecentBookings(userId, config.application.booking.historyInHours);
   }
 }
 
