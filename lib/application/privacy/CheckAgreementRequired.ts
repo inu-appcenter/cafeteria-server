@@ -20,7 +20,6 @@
 import {User} from '@inu-cafeteria/backend-core';
 import UseCase from '../../common/base/UseCase';
 import {UserIdentifier} from '../user/common/types';
-import config from '../../../config';
 
 /**
  * 개인정보처리방침 동의가 필요한지 확인합니다.
@@ -29,7 +28,7 @@ class CheckAgreementRequired extends UseCase<UserIdentifier, boolean> {
   async onExecute({userId}: UserIdentifier): Promise<boolean> {
     const user = await User.findOneOrFail(userId);
 
-    return !user.hasAgreedPrivacyPolicy(config.application.privacy.agreementValidForDays);
+    return !user.hasAgreedPrivacyPolicy();
   }
 }
 
