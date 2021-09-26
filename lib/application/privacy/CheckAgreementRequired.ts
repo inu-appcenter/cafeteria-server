@@ -29,9 +29,7 @@ class CheckAgreementRequired extends UseCase<UserIdentifier, boolean> {
   async onExecute({userId}: UserIdentifier): Promise<boolean> {
     const user = await User.findOneOrFail(userId);
 
-    return !user.hasAgreedPrivacyPolicy(
-      config.application.privacy.agreementValidForDays * 1000 * 60 * 60 * 24
-    );
+    return !user.hasAgreedPrivacyPolicy(config.application.privacy.agreementValidForDays);
   }
 }
 
