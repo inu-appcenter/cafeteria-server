@@ -32,10 +32,16 @@ export default class StudentAccountValidator {
       return true;
     }
 
-    const response = await postUrlencoded(config.external.inuLogin.url, {
-      sno: this.studentId,
-      pw: this.encryptPassword(),
-    });
+    let response;
+    try {
+      response = await postUrlencoded(config.external.inuLogin.url, {
+        sno: this.studentId,
+        pw: this.encryptPassword(),
+      });
+    } catch (e) {
+      logger.error(e);
+      return false;
+    }
 
     assert(
       response === config.external.inuLogin.success || response === config.external.inuLogin.fail,
