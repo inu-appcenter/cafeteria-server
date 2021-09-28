@@ -18,28 +18,22 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
+import {stringAsInt} from '../../utils/zodTypes';
 import {defineRoute} from '../../libs/route';
-import ConfirmDiscountTransaction from '../../../../application/discount/ConfirmDiscountTransaction';
+import {defineSchema} from '../../libs/schema';
 import CancelDiscountTransaction from '../../../../application/discount/CancelDiscountTransaction';
-import {stringAsBoolean, stringAsInt} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   query: {
     barcode: z.string().optional(),
     cafeteriaId: stringAsInt.optional(),
-    confirm: stringAsBoolean.optional().default('true'),
   },
 });
 
-export default defineRoute('get', '/kiosk/discount/commit', schema, async (req, res) => {
-  const {barcode, cafeteriaId, confirm} = req.query;
+export default defineRoute('get', '/kiosk/discount/cancel', schema, async (req, res) => {
+  const {barcode, cafeteriaId} = req.query;
 
-  if (confirm) {
-    await ConfirmDiscountTransaction.run({barcode, cafeteriaId});
-  } else {
-    await CancelDiscountTransaction.run({barcode, cafeteriaId});
-  }
+  await CancelDiscountTransaction.run({barcode, cafeteriaId});
 
   return res.send();
 });

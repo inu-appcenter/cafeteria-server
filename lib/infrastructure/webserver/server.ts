@@ -42,7 +42,8 @@ const allowList = [
   '/notices/latest',
 
   '/kiosk/discount/verify',
-  '/kiosk/discount/commit',
+  '/kiosk/discount/confirm',
+  '/kiosk/discount/cancel',
 
   '/isBarcode',
   '/paymentSend',
