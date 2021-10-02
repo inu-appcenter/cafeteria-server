@@ -18,7 +18,7 @@
  */
 
 import assert from 'assert';
-import {getEnv, getSecret} from '@inu-cafeteria/backend-core/dist/src/core/utils';
+import {getEnv, getSecret} from '@inu-cafeteria/backend-core';
 
 const isTest = getEnv('NODE_ENV') === 'test';
 const isProduction = getEnv('NODE_ENV') === 'production';
