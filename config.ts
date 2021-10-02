@@ -17,28 +17,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import getArg from './lib/common/utils/args';
-import getEnv from './lib/common/utils/env';
 import assert from 'assert';
+import {getEnv, getSecret} from '@inu-cafeteria/backend-core/dist/src/core/utils';
 
 const isTest = getEnv('NODE_ENV') === 'test';
 const isProduction = getEnv('NODE_ENV') === 'production';
 
 if (isProduction) {
-  assert(getArg('host'), '호스트(host) 설정해주세요!');
-  assert(getArg('port'), '포트(port) 설정해주세요!');
-  assert(getArg('log-dir'), '로그 경로(log-dir) 설정해주세요!');
+  assert(getEnv('PORT'), '포트 설정해주세요!');
+  assert(getEnv('LOG_DIR'), '로그 경로 설정해주세요!');
+  assert(getEnv('INSTANCE_NAME'), '인스턴스 이름을 설정해주세요!');
 
-  assert(getEnv('JWT_SECRET_KEY'), 'JWT 비밀 key 설정해주세요!');
-  assert(getEnv('LOGIN_KEY'), '로그인 key 설정해주세요!');
-  assert(getEnv('AWS_ACCESS_KEY_ID'), 'AWS access id 설정해주세요!');
-  assert(getEnv('AWS_SECRET_ACCESS_KEY'), 'AWS secret access key 설정해주세요!');
-  assert(getEnv('DB_USERNAME'), 'DB 사용자 이름 설정해주세요!');
-  assert(getEnv('DB_PASSWORD'), 'DB 비밀번호 설정해주세요!');
-  assert(getEnv('SMTP_USERNAME'), 'SMTP 사용자 이름 설정해주세요!');
-  assert(getEnv('SMTP_PASSWORD'), 'STMP 비밀번호 설정해주세요!');
-  assert(getEnv('SMS_API_KEY'), 'SMS API 키 설정해주세요!');
-  assert(getEnv('SMS_API_SECRET'), 'SMS API 시크릿 설정해주세요!');
+  assert(getSecret('JWT_SECRET_KEY'), 'JWT 비밀 key 설정해주세요!');
+  assert(getSecret('LOGIN_KEY'), '로그인 key 설정해주세요!');
+  assert(getSecret('AWS_ACCESS_KEY_ID'), 'AWS access id 설정해주세요!');
+  assert(getSecret('AWS_SECRET_ACCESS_KEY'), 'AWS secret access key 설정해주세요!');
+  assert(getSecret('DB_USERNAME'), 'DB 사용자 이름 설정해주세요!');
+  assert(getSecret('DB_PASSWORD'), 'DB 비밀번호 설정해주세요!');
+  assert(getSecret('SMTP_USERNAME'), 'SMTP 사용자 이름 설정해주세요!');
+  assert(getSecret('SMTP_PASSWORD'), 'STMP 비밀번호 설정해주세요!');
+  assert(getSecret('SMS_API_KEY'), 'SMS API 키 설정해주세요!');
+  assert(getSecret('SMS_API_SECRET'), 'SMS API 시크릿 설정해주세요!');
 }
 
 export default {
@@ -49,18 +48,17 @@ export default {
    * 서버 운영에 필요한 설정입니다.
    */
   server: {
-    host: '0.0.0.0',
-    port: getArg('port') || 9999,
-    instanceName: getArg('instance-name') || '?',
+    port: getEnv('PORT') || 9999,
+    instanceName: getEnv('INSTANCE_NAME') || '?',
 
     healthCheck: {
       rootHelloMessage:
         '안녕하세요 카페테리아 API 서버입니다. 지금 잘 작동하는 것 맞습니다. 혹시 이상 발생하면 010-2922-2661로 연락 주세요!',
-      activeInstanceMessage: `활성 인스턴스: ${getArg('instance-name') || '?'}`,
+      activeInstanceMessage: `활성 인스턴스: ${getEnv('INSTANCE_NAME') || '?'}`,
     },
 
     jwt: {
-      key: getEnv('JWT_SECRET_KEY', 'whatever haha'),
+      key: getSecret('JWT_SECRET_KEY', 'whatever haha'),
       expiresIn: '24h',
       cookieOptions: {
         encoding: 'none',
@@ -73,7 +71,7 @@ export default {
     },
 
     logging: {
-      directory: getArg('log-dir', 'logs'),
+      directory: getEnv('LOG_DIR', 'logs'),
     },
   },
 
@@ -121,8 +119,8 @@ export default {
   external: {
     aws: {
       region: 'ap-northeast-2',
-      accessKeyId: getEnv('AWS_ACCESS_KEY_ID', 'an_aws_id'),
-      secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY'),
+      accessKeyId: getSecret('AWS_ACCESS_KEY_ID', 'an_aws_id'),
+      secretAccessKey: getSecret('AWS_SECRET_ACCESS_KEY'),
 
       cloudwatch: {
         logGroupName: 'cafeteria-server',
@@ -131,22 +129,22 @@ export default {
 
     mail: {
       auth: {
-        user: getEnv('SMTP_USERNAME'),
-        pass: getEnv('SMTP_PASSWORD'),
+        user: getSecret('SMTP_USERNAME'),
+        pass: getSecret('SMTP_PASSWORD'),
       },
     },
 
     sms: {
       sender: '0328359798',
       auth: {
-        key: getEnv('SMS_API_KEY'),
-        secret: getEnv('SMS_API_SECRET'),
+        key: getSecret('SMS_API_KEY'),
+        secret: getSecret('SMS_API_SECRET'),
       },
     },
 
     inuLogin: {
       url: 'http://117.16.191.242:8081/login',
-      key: getEnv('LOGIN_KEY', '앱센터는 모다?'),
+      key: getSecret('LOGIN_KEY', '앱센터는 모다?'),
       success: 'Y',
       fail: 'N',
     },

@@ -64,5 +64,5 @@ export default async function startServer() {
 
   app.use(errorHandler());
 
-  app.listen(config.server.port, config.server.host);
+  app.listen(config.server.port);
 }
