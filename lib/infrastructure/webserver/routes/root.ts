@@ -17,10 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../libs/schema';
-import {defineRoute} from '../libs/route';
 import {z} from 'zod';
 import {logger} from '@inu-cafeteria/backend-core';
+import packageInfo from '../../../../package.json';
+import {defineRoute} from '../libs/route';
+import {defineSchema} from '../libs/schema';
 
 const schema = defineSchema({
   query: {
@@ -35,6 +36,9 @@ export default defineRoute('get', '/', schema, async (req, res) => {
   }
 
   res.send(
-    `카페테리아 API 서버입니다. ${new Date().toLocaleString()} 현재 정상 작동중입니다. 문제 생기면 010-2922-2661(앱센터 송병준) 연락 주세요.`
+    `카페테리아 API 서버 v${packageInfo.version} 
+    / 서버시각 ${new Date().toLocaleString()} 
+    / 비상연락 010-2922-2661(앱센터 송병준) 
+    / 서버 정상 작동중입니다. 문제 생기면 연락 주세요 :)`
   );
 });
