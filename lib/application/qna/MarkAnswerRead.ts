@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import UseCase from '../../common/base/UseCase';
 import {Answer} from '@inu-cafeteria/backend-core';
 
@@ -25,7 +26,10 @@ export type MarkAnswerReadParams = {
 
 class MarkAnswerRead extends UseCase<MarkAnswerReadParams, void> {
   async onExecute({answerId}: MarkAnswerReadParams): Promise<void> {
-    await Answer.update(answerId, {read: true});
+    await Answer.update(answerId, {
+      read: true,
+      readAt: new Date(),
+    });
   }
 }
 
