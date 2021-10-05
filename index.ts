@@ -18,10 +18,10 @@
  */
 
 import config from './config';
-import {logger, setupLogger} from '@inu-cafeteria/backend-core';
 import startServer from './lib/infrastructure/webserver/server';
 import {printInBox} from './lib/infrastructure/webserver/utils/printer';
 import {startTypeORM} from '@inu-cafeteria/backend-core';
+import {logger, setupLogger} from '@inu-cafeteria/backend-core';
 
 async function start() {
   console.log('로거를 설정합니다.');
