@@ -25,6 +25,7 @@ import {logger, setupLogger} from '@inu-cafeteria/backend-core';
 
 async function start() {
   console.log('로거를 설정합니다.');
+
   await setupLogger({
     consoleTransportOptions: {
       prefix: config.server.instanceName,

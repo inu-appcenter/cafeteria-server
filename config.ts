@@ -35,7 +35,7 @@ if (isProduction) {
   assert(getSecret('DB_USERNAME'), 'DB 사용자 이름 설정해주세요!');
   assert(getSecret('DB_PASSWORD'), 'DB 비밀번호 설정해주세요!');
   assert(getSecret('SMTP_USERNAME'), 'SMTP 사용자 이름 설정해주세요!');
-  assert(getSecret('SMTP_PASSWORD'), 'STMP 비밀번호 설정해주세요!');
+  assert(getSecret('SMTP_PASSWORD'), 'SMTP 비밀번호 설정해주세요!');
   assert(getSecret('SMS_API_KEY'), 'SMS API 키 설정해주세요!');
   assert(getSecret('SMS_API_SECRET'), 'SMS API 시크릿 설정해주세요!');
 }
