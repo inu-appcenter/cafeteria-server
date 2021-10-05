@@ -27,9 +27,9 @@ import {stringifyError} from '../../../../common/utils/error';
 
 const schema = defineSchema({
   query: {
-    barcode: z.string(),
-    code: stringAsInt,
-    menu: z.string(),
+    barcode: z.string().optional(),
+    code: stringAsInt.optional(),
+    menu: z.string().optional(),
   },
 });
 
@@ -46,7 +46,7 @@ const cafeCodeToCafeteriaId: Record<number, number> = {
 export default defineRoute('get', '/isBarcode', schema, async (req, res) => {
   const {barcode, code} = req.query;
 
-  const cafeteriaId = cafeCodeToCafeteriaId[code];
+  const cafeteriaId = cafeCodeToCafeteriaId[code ?? 1];
 
   try {
     await VerifyDiscountTransaction.run({barcode, cafeteriaId});
@@ -61,6 +61,8 @@ export default defineRoute('get', '/isBarcode', schema, async (req, res) => {
       activated: 0,
     });
   }
+
+  logger.info('/isBarcode 성공 응답을 보냅니다.');
 
   return res.json({
     message: 'SUCCESS',

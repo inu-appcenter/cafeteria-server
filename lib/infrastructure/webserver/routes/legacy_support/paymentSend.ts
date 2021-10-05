@@ -28,10 +28,10 @@ import {stringifyError} from '../../../../common/utils/error';
 
 const schema = defineSchema({
   query: {
-    barcode: z.string(),
-    code: stringAsInt,
-    menu: z.string(),
-    payment: z.string(),
+    barcode: z.string().optional(),
+    code: stringAsInt.optional(),
+    menu: z.string().optional(),
+    payment: z.string().optional(),
   },
 });
 
@@ -47,7 +47,7 @@ const cafeCodeToCafeteriaId: Record<number, number> = {
 export default defineRoute('get', '/paymentSend', schema, async (req, res) => {
   const {barcode, code, payment} = req.query;
 
-  const cafeteriaId = cafeCodeToCafeteriaId[code];
+  const cafeteriaId = cafeCodeToCafeteriaId[code ?? 1];
   const confirm = payment === 'Y';
 
   try {
@@ -66,6 +66,8 @@ export default defineRoute('get', '/paymentSend', schema, async (req, res) => {
       message: 'ERROR',
     });
   }
+
+  logger.info('/paymentSend 성공 응답을 보냅니다.');
 
   return res.json({
     message: 'SUCCESS',
