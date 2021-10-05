@@ -17,19 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {logger} from '@inu-cafeteria/backend-core';
-import redacted from '../utils/redacted';
-
-export default abstract class UseCase<ParamT = void, ResultT = void> {
-  async run(params: ParamT): Promise<ResultT> {
-    logger.verbose(
-      `UseCase '${this.constructor.name}'를 다음 인자로 실행합니다: ${JSON.stringify(
-        redacted(params)
-      )}`
-    );
-
-    return await this.onExecute(params);
+export default function redacted(data: Record<string, any>): Record<string, any> {
+  if (typeof data !== 'object') {
+    return data;
   }
 
-  abstract onExecute(params: ParamT): Promise<ResultT>;
+  const copied = Object.assign({}, data);
+
+  const secureFields = ['password'];
+  for (const field of secureFields) {
+    if (copied[field]) {
+      copied[field] = '[삭제됨]';
+    }
+  }
+
+  return copied;
 }

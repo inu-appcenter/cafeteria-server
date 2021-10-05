@@ -18,6 +18,7 @@
  */
 
 import {logger} from '@inu-cafeteria/backend-core';
+import redacted from '../../../../common/utils/redacted';
 import {RequestHandler} from 'express';
 
 export default function recorder(): RequestHandler {
@@ -37,17 +38,4 @@ export default function recorder(): RequestHandler {
 
     next();
   };
-}
-
-function redacted(data: Record<string, any>): Record<string, any> {
-  const copied = Object.assign({}, data);
-
-  const secureFields = ['password'];
-  for (const field of secureFields) {
-    if (copied[field]) {
-      copied[field] = '[삭제됨]';
-    }
-  }
-
-  return copied;
 }
