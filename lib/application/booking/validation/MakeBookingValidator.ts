@@ -25,12 +25,12 @@ import {
   TimeSlotUnavailable,
 } from '../common/errors';
 import assert from 'assert';
-import GetBookingOptions from '../GetBookingOptions';
 import {MakeBookingParams} from '../MakeBooking';
 import {
   Booking,
   Cafeteria,
   BookingStatus,
+  BookingOption,
   CafeteriaBookingParams,
 } from '@inu-cafeteria/backend-core';
 import config from '../../../../config';
@@ -69,24 +69,18 @@ export default class MakeBookingValidator {
   private async timeSlotShouldHaveBeenSuggested() {
     const {cafeteriaId, timeSlot} = this.params;
 
-    const allOptions = await GetBookingOptions.run({cafeteriaId});
-    const allTimeSlots = allOptions.map((o) => o.timeSlot);
+    const option = await BookingOption.findByCafeteriaAndTimeSlot(cafeteriaId, timeSlot);
 
-    const timeSlowHasBeenSuggested = allTimeSlots
-      .map((ts) => ts.getTime())
-      .includes(timeSlot.getTime());
-
-    assert(timeSlowHasBeenSuggested, InvalidTimeSlot());
+    assert(option, InvalidTimeSlot());
   }
 
   private async timeSlotShouldBeAvailable() {
     const {cafeteriaId, timeSlot} = this.params;
 
-    const allOptions = await GetBookingOptions.run({cafeteriaId});
-    const specifiedOption = allOptions.find((o) => o.timeSlot.getTime() === timeSlot.getTime());
+    const option = await BookingOption.findByCafeteriaAndTimeSlot(cafeteriaId, timeSlot);
 
-    assert(specifiedOption, InvalidTimeSlot());
-    assert(specifiedOption.isAvailable(), TimeSlotUnavailable());
+    assert(option, InvalidTimeSlot());
+    assert(option.isAvailable(), TimeSlotUnavailable());
   }
 
   private async shouldNotBeDuplicated() {
