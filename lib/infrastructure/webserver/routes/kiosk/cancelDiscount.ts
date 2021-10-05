@@ -35,5 +35,9 @@ export default defineRoute('get', '/kiosk/discount/cancel', schema, async (req, 
 
   await CancelDiscountTransaction.run({barcode, cafeteriaId});
 
-  return res.send();
+  return res.json({
+    statusCode: 200,
+    error: '',
+    message: '성공',
+  });
 });
