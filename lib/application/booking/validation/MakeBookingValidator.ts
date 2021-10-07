@@ -67,20 +67,26 @@ export default class MakeBookingValidator {
   }
 
   private async timeSlotShouldHaveBeenSuggested() {
-    const {cafeteriaId, timeSlot} = this.params;
+    const {cafeteriaId, timeSlotStart} = this.params;
 
-    const option = await BookingOption.findByCafeteriaAndTimeSlot(cafeteriaId, timeSlot);
+    const option = await BookingOption.findByCafeteriaIdAndTimeSlotStart(
+      cafeteriaId,
+      timeSlotStart
+    );
 
     assert(option, InvalidTimeSlot());
   }
 
   private async timeSlotShouldBeAvailable() {
-    const {cafeteriaId, timeSlot} = this.params;
+    const {cafeteriaId, timeSlotStart} = this.params;
 
-    const option = await BookingOption.findByCafeteriaAndTimeSlot(cafeteriaId, timeSlot);
+    const option = await BookingOption.findByCafeteriaIdAndTimeSlotStart(
+      cafeteriaId,
+      timeSlotStart
+    );
 
     assert(option, InvalidTimeSlot());
-    assert(option.isAvailable(), TimeSlotUnavailable());
+    assert(option.isAvailableForBooking(), TimeSlotUnavailable());
   }
 
   private async shouldNotBeDuplicated() {
