@@ -18,15 +18,14 @@
  */
 
 import UseCase from '../../common/base/UseCase';
-import {Booking, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
 import {generateUUID} from '../../common/utils/uuid';
 import {UserIdentifier} from '../user/common/types';
 import MakeBookingValidator from './validation/MakeBookingValidator';
-import {addMinutes} from 'date-fns';
+import {Booking, BookingOption} from '@inu-cafeteria/backend-core';
 
 export type MakeBookingParams = UserIdentifier & {
   cafeteriaId: number;
-  timeSlot: Date;
+  timeSlotStart: Date;
 };
 
 /**
@@ -36,17 +35,19 @@ class MakeBooking extends UseCase<MakeBookingParams, Booking> {
   async onExecute(params: MakeBookingParams): Promise<Booking> {
     await new MakeBookingValidator(params).validate();
 
-    const {userId, cafeteriaId, timeSlot} = params;
+    const {userId, cafeteriaId, timeSlotStart} = params;
 
-    const bookingParams = await CafeteriaBookingParams.findOneOrFail({where: {cafeteriaId}});
-    const nextTimeSlot = addMinutes(timeSlot, bookingParams.intervalMinutes);
+    const bookingOption = (await BookingOption.findByCafeteriaIdAndTimeSlotStart(
+      cafeteriaId,
+      timeSlotStart
+    ))!!;
 
     return await Booking.create({
       uuid: generateUUID(),
       userId,
       cafeteriaId,
-      timeSlot,
-      nextTimeSlot, // 체크인 가능 시간을 판단하기 위해 받습니다.
+      timeSlotStart: bookingOption.timeSlotStart,
+      timeSlotEnd: bookingOption.timeSlotEnd,
       bookedAt: new Date(),
     }).save();
   }

@@ -17,23 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
-import {stringAsDate, stringAsInt} from '../../utils/zodTypes';
+import {z} from 'zod';
 import MakeBooking from '../../../../application/booking/MakeBooking';
+import {defineRoute} from '../../libs/route';
+import {defineSchema} from '../../libs/schema';
+import {stringAsDate} from '../../utils/zodTypes';
 
 const schema = defineSchema({
   body: {
-    cafeteriaId: stringAsInt, // TODO 숫자 그대로 받자
-    timeSlot: stringAsDate,
+    cafeteriaId: z.number(),
+    timeSlotStart: stringAsDate,
   },
 });
 
 export default defineRoute('post', '/booking/bookings', schema, async (req, res) => {
   const {userId} = req;
-  const {cafeteriaId, timeSlot} = req.body;
+  const {cafeteriaId, timeSlotStart} = req.body;
 
-  await MakeBooking.run({userId, cafeteriaId, timeSlot});
+  await MakeBooking.run({userId, cafeteriaId, timeSlotStart});
 
   res.sendStatus(201);
 });
