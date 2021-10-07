@@ -33,8 +33,8 @@ export default defineRoute('get', '/booking/bookings', schema, async (req, res) 
       id: booking.id,
       uuid: booking.uuid,
       cafeteriaId: booking.cafeteriaId,
-      timeSlot: booking.timeSlot,
-      nextTimeSlot: booking.nextTimeSlot,
+      timeSlotStart: booking.timeSlotStart,
+      timeSlotEnd: booking.timeSlotEnd,
       bookedAt: booking.bookedAt,
       status: booking.status,
     }))
