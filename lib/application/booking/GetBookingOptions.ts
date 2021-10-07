@@ -35,7 +35,11 @@ export type GetBookingOptionsParams = {
  */
 class GetBookingOptions extends UseCase<GetBookingOptionsParams, BookingOption[]> {
   async onExecute({cafeteriaId}: GetBookingOptionsParams): Promise<BookingOption[]> {
-    return await BookingOption.findForCafeteria(cafeteriaId);
+    if (cafeteriaId == null) {
+      return await BookingOption.findAll();
+    } else {
+      return await BookingOption.findByCafeteriaId(cafeteriaId);
+    }
   }
 }
 
