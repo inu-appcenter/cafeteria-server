@@ -34,10 +34,7 @@ export type CancelBookingParams = UserIdentifier & {
 class CancelBooking extends UseCase<CancelBookingParams, void> {
   async onExecute({userId, bookingId}: CancelBookingParams): Promise<void> {
     const booking = await Booking.findOne({
-      where: {
-        id: bookingId,
-        userId,
-      },
+      where: {id: bookingId, userId},
       relations: ['checkIn'],
     });
 
