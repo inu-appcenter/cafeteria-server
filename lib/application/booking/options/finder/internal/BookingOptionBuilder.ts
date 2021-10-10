@@ -28,14 +28,13 @@ export default class BookingOptionBuilder {
   constructor(private readonly bookingParams: CafeteriaBookingParams) {}
 
   private bookingFinder = new BookingFinder();
+  private timeSlotGenerator = new NextTimeSlotGenerator(this.bookingParams);
 
   /**
    * 예약 파라미터로부터 예약 옵션을 모두 만들어 냅니다.
    */
   async buildAll(): Promise<BookingOption[]> {
-    const timeSlots = await new NextTimeSlotGenerator(
-      this.bookingParams
-    ).getTimeSlotsInBusinessHour();
+    const timeSlots = await this.timeSlotGenerator.getTimeSlotsInBusinessHour();
 
     return await Promise.all(timeSlots.map((slot) => this.buildOne(slot)));
   }
