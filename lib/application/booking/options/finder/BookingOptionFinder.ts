@@ -22,19 +22,38 @@ import {BookingOption, CafeteriaBookingParams} from '@inu-cafeteria/backend-core
 
 /**
  * 예약 옵션을 찾아와 주는 친구입니다.
+ *
+ * 캐싱을 지원합니다!!
+ * 같은 인스턴스에서는 두 번 이상 계산하지 않습니다.
  */
 export default class BookingOptionFinder {
+  private allBookingParams?: CafeteriaBookingParams[] = undefined;
+  private bookingOptions = new Map<CafeteriaBookingParams, BookingOption[]>();
+
   /**
    * 모든 식당에 대해 사용자에게 보여 줄 예약 옵션을 가져옵니다.
    */
   async findAll(): Promise<BookingOption[]> {
-    const allBookingParams = await CafeteriaBookingParams.findAll();
+    const allBookingParams = await this.getAllBookingParams();
 
     const allOptions = await Promise.all(
-      allBookingParams.map((params) => new BookingOptionBuilder(params).buildAll())
+      allBookingParams.map((params) => this.findByBookingParams(params))
     );
 
     return allOptions.flat();
+  }
+
+  private async getAllBookingParams(): Promise<CafeteriaBookingParams[]> {
+    const fromCache = this.allBookingParams;
+
+    if (fromCache == null) {
+      const result = await CafeteriaBookingParams.findAll();
+      this.allBookingParams = result;
+
+      return result;
+    } else {
+      return fromCache;
+    }
   }
 
   /**
@@ -43,13 +62,36 @@ export default class BookingOptionFinder {
    * @param cafeteriaId 식당 식별자.
    */
   async findByCafeteriaId(cafeteriaId: number): Promise<BookingOption[]> {
-    const params = await CafeteriaBookingParams.findByCafeteriaId(cafeteriaId);
-
+    const params = await this.getBookingParams(cafeteriaId);
     if (params == null) {
       return [];
     }
 
-    return await new BookingOptionBuilder(params).buildAll();
+    return await this.findByBookingParams(params);
+  }
+
+  private async getBookingParams(cafeteriaId: number): Promise<CafeteriaBookingParams | undefined> {
+    const all = await this.getAllBookingParams();
+
+    return all.find((params) => params.cafeteriaId === cafeteriaId);
+  }
+
+  /**
+   * 예약 옵션을 가져오는 메소드는 결국 여기로 모입니다.
+   *
+   * @param params 예약 파라미터.
+   */
+  async findByBookingParams(params: CafeteriaBookingParams): Promise<BookingOption[]> {
+    const fromCache = this.bookingOptions.get(params);
+
+    if (fromCache == null) {
+      const result = await new BookingOptionBuilder(params).buildAll();
+      this.bookingOptions.set(params, result);
+
+      return result;
+    } else {
+      return fromCache;
+    }
   }
 
   /**
