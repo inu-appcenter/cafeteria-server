@@ -81,4 +81,12 @@ describe('예약 옵션 가져오기', () => {
     expect(timeSlots[0].capacity).toBe(55);
     expect(timeSlots[timeSlots.length - 1].capacity).toBe(35);
   });
+
+  it('휴일에는 아무것도 안 가져옴.', async () => {
+    MockDate.set('2021-08-16 4:26:30'); // 광복절 대체휴일.
+
+    const timeSlots = await generate();
+
+    expect(timeSlots.length).toBe(0); // 휴일이라 없음.
+  });
 });

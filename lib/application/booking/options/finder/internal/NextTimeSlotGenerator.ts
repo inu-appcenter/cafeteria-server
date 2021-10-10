@@ -23,6 +23,7 @@ import {
   CafeteriaBookingParams,
 } from '@inu-cafeteria/backend-core';
 import {getNextDay} from '../../../../../common/utils/date';
+import holidayChecker from './HolidayChecker';
 import {areIntervalsOverlapping, isFuture, isWeekend} from 'date-fns';
 
 /**
@@ -35,10 +36,13 @@ export default class NextTimeSlotGenerator {
   ) {}
 
   /**
-   * 예약 가능한 미래의 타임슬롯을 모두 가져옵니다.
+   * 예약 가능한, 사용자에게 표시할 타임슬롯을 모두 가져옵니다.
    *
-   * 예약이 가능하다 함은, 주말이 아니며 휴업 시간이 아님을 뜻합니다.
-   * 미래라 함은, 해당 예약 시간이 아직 지나지 않았음을 뜻합니다.
+   * 예약이 가능하다 함은 다음을 만족하는 것입니다:
+   *  - 미래임
+   *  - 주말이 아님
+   *  - 공휴일이 아님
+   *  - 휴업 시간이 아님
    *
    * 오늘 모든 예약 운영이 종료되었으면 다음 날의 타임 슬롯을 가져옵니다.
    * 설령 다음 날이 휴일이거나 하루 종일 휴업이더라도 해당 날짜를 기준으로 빈 배열만 가져옵니다.
@@ -51,7 +55,11 @@ export default class NextTimeSlotGenerator {
       this.dayOffs ??
       (await CafeteriaDayOff.findByCafeteriaIdAtSameDay(this.bookingParams.cafeteriaId, baseDate));
 
+    await holidayChecker.fetchIfNeeded();
+
+    const isNotOver = (slot: BookingTimeSlot) => isFuture(slot.end);
     const isNotWeekend = (slot: BookingTimeSlot) => !isWeekend(slot.start);
+    const isNotHoliday = (slot: BookingTimeSlot) => !holidayChecker.isHoliday(slot.start);
     const isNotOffTime = (slot: BookingTimeSlot) =>
       offs.find((off) =>
         areIntervalsOverlapping(
@@ -59,12 +67,12 @@ export default class NextTimeSlotGenerator {
           {start: off.startsAt, end: off.endsAt}
         )
       ) == null;
-    const isNotOver = (slot: BookingTimeSlot) => isFuture(slot.end);
 
     return this.bookingParams
       .getAllTimeSlots(baseDate)
+      .filter(isNotOver)
       .filter(isNotWeekend)
-      .filter(isNotOffTime)
-      .filter(isNotOver);
+      .filter(isNotHoliday)
+      .filter(isNotOffTime);
   }
 }
