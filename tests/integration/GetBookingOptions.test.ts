@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GetBookingOptions from '../../lib/application/booking/GetBookingOptions';
+import GetBookingOptions from '../../lib/application/booking/options/GetBookingOptions';
 import {startTypeORM} from '@inu-cafeteria/backend-core';
 
 beforeAll(async () => {

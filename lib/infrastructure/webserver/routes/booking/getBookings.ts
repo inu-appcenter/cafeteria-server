@@ -19,7 +19,7 @@
 
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
-import GetBookings from '../../../../application/booking/GetBookings';
+import GetBookings from '../../../../application/booking/booking/GetBookings';
 
 const schema = defineSchema({});
 

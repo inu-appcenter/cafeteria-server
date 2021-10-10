@@ -17,16 +17,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import assert from 'assert';
 import moment from 'moment';
+import {addDays} from 'date-fns';
 
+/**
+ * 날짜 스트링이 YYYYMMDD 포맷으로 이루어져 있는지 여부를 가져옵니다.
+ *
+ * @param dateString 검증 대상 날짜 스트링.
+ */
 export function checkDateStringFormat(dateString: string) {
   return moment(dateString, 'YYYYMMDD').isValid();
 }
 
+/**
+ * 날짜 스트링이 YYYYMMDD 포맷으로 이루어져 있지 않으면 뻗습니다.
+ *
+ * @param dateString 검증 대상 날짜 스트링.
+ */
 export function assertDateStringFormat(dateString: string) {
-  if (!checkDateStringFormat(dateString)) {
-    throw new Error('날짜 포맷이 올바르지 않습니다. YYYYMMDD만 허용합니다.');
-  }
+  assert(
+    checkDateStringFormat(dateString),
+    '날짜 포맷이 올바르지 않습니다. YYYYMMDD만 허용합니다.'
+  );
 }
 
 /**
@@ -53,4 +66,12 @@ export function getWeeksBetweenDates(d0: Date, d1: Date, startDay: number = 1) {
   [d0, d1].forEach(setDateToStartOfThatWeek);
 
   return Math.round((d1.getTime() - d0.getTime()) / 6.048e8 /*7 days in millis*/);
+}
+
+/**
+ * 다음(내일) 날짜를 가져옵니다.
+ * @param date
+ */
+export function getNextDay(date: Date) {
+  return addDays(date, 1);
 }

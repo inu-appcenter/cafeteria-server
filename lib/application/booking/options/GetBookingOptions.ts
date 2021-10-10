@@ -17,8 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
+import UseCase from '../../../common/base/UseCase';
 import {BookingOption} from '@inu-cafeteria/backend-core';
+import BookingOptionFinder from './finder/BookingOptionFinder';
 
 export type GetBookingOptionsParams = {
   /**
@@ -35,10 +36,12 @@ export type GetBookingOptionsParams = {
  */
 class GetBookingOptions extends UseCase<GetBookingOptionsParams, BookingOption[]> {
   async onExecute({cafeteriaId}: GetBookingOptionsParams): Promise<BookingOption[]> {
+    const finder = new BookingOptionFinder();
+
     if (cafeteriaId == null) {
-      return await BookingOption.findAll();
+      return await finder.findAll();
     } else {
-      return await BookingOption.findByCafeteriaId(cafeteriaId);
+      return await finder.findByCafeteriaId(cafeteriaId);
     }
   }
 }

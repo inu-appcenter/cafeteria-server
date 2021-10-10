@@ -17,9 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import BadRequest from '../../../common/errors/http/BadRequest';
-import Forbidden from '../../../common/errors/http/Forbidden';
-import Conflict from '../../../common/errors/http/Conflict';
+import BadRequest from '../../../../common/errors/http/BadRequest';
+import Forbidden from '../../../../common/errors/http/Forbidden';
+import Conflict from '../../../../common/errors/http/Conflict';
 
 export const InvalidTimeSlot = BadRequest.of('invalid_time_slot', '올바르지 않은 예약 시간입니다.');
 

@@ -18,7 +18,7 @@
  */
 
 import {z} from 'zod';
-import MakeBooking from '../../../../application/booking/MakeBooking';
+import MakeBooking from '../../../../application/booking/booking/MakeBooking';
 import {defineRoute} from '../../libs/route';
 import {defineSchema} from '../../libs/schema';
 import {stringAsDate} from '../../utils/zodTypes';

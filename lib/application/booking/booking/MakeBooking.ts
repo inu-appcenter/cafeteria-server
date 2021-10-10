@@ -17,11 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UseCase from '../../common/base/UseCase';
-import {generateUUID} from '../../common/utils/uuid';
-import {UserIdentifier} from '../user/common/types';
+import assert from 'assert';
+import UseCase from '../../../common/base/UseCase';
+import {Booking} from '@inu-cafeteria/backend-core';
+import BookingCreator from './creator/BookingCreator';
+import {UserIdentifier} from '../../user/common/types';
+import BookingOptionFinder from '../options/finder/BookingOptionFinder';
 import MakeBookingValidator from './validation/MakeBookingValidator';
-import {Booking, BookingOption} from '@inu-cafeteria/backend-core';
 
 export type MakeBookingParams = UserIdentifier & {
   cafeteriaId: number;
@@ -37,19 +39,19 @@ class MakeBooking extends UseCase<MakeBookingParams, Booking> {
 
     const {userId, cafeteriaId, timeSlotStart} = params;
 
-    const bookingOption = (await BookingOption.findByCafeteriaIdAndTimeSlotStart(
+    const bookingOption = await new BookingOptionFinder().findByCafeteriaIdAndTimeSlotStart(
       cafeteriaId,
       timeSlotStart
-    ))!!;
+    );
 
-    return await Booking.create({
-      uuid: generateUUID(),
+    assert(bookingOption, '검증 이후에 예약 옵션이 없을 수 없습니다.');
+
+    return await new BookingCreator({
       userId,
       cafeteriaId,
       timeSlotStart: bookingOption.timeSlotStart,
       timeSlotEnd: bookingOption.timeSlotEnd,
-      bookedAt: new Date(),
-    }).save();
+    }).create();
   }
 }
 

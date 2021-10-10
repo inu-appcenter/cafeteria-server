@@ -17,32 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import assert from 'assert';
-import UseCase from '../../common/base/UseCase';
+import config from '../../../../config';
+import UseCase from '../../../common/base/UseCase';
 import {Booking} from '@inu-cafeteria/backend-core';
-import {UserIdentifier} from '../user/common/types';
-import {AlreadyCheckedIn, NoBooking} from './common/errors';
-
-export type CancelBookingParams = UserIdentifier & {
-  bookingId: number;
-};
+import BookingFinder from './finder/BookingFinder';
+import {UserIdentifier} from '../../user/common/types';
 
 /**
- * 예약을 취소합니다.
- * 이미 체크인한 예약은 취소 못합니다.
+ * 사용자의 예약 내역을 가져옵니다.
  */
-class CancelBooking extends UseCase<CancelBookingParams, void> {
-  async onExecute({userId, bookingId}: CancelBookingParams): Promise<void> {
-    const booking = await Booking.findOne({
-      where: {id: bookingId, userId},
-      relations: ['checkIn'],
-    });
-
-    assert(booking, NoBooking());
-    assert(booking.checkIn == null, AlreadyCheckedIn());
-
-    await booking.remove();
+class GetBookings extends UseCase<UserIdentifier, Booking[]> {
+  async onExecute({userId}: UserIdentifier): Promise<Booking[]> {
+    return await new BookingFinder().findRecentBookings(
+      userId,
+      config.application.booking.historyInHours
+    );
   }
 }
 
-export default new CancelBooking();
+export default new GetBookings();

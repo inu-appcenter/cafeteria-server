@@ -20,7 +20,7 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import {stringAsInt} from '../../utils/zodTypes';
-import CancelBooking from '../../../../application/booking/CancelBooking';
+import CancelBooking from '../../../../application/booking/booking/CancelBooking';
 
 const schema = defineSchema({
   params: {

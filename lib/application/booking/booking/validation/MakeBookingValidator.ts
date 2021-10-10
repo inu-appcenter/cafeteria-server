@@ -19,27 +19,26 @@
 
 import {
   AlreadyBooked,
+  InvalidCafeteriaId,
   InvalidTimeSlot,
   NoBookingParams,
-  InvalidCafeteriaId,
   TimeSlotUnavailable,
 } from '../common/errors';
 import assert from 'assert';
+import config from '../../../../../config';
+import BookingFinder from '../finder/BookingFinder';
 import {MakeBookingParams} from '../MakeBooking';
-import {
-  Booking,
-  Cafeteria,
-  BookingStatus,
-  BookingOption,
-  CafeteriaBookingParams,
-} from '@inu-cafeteria/backend-core';
-import config from '../../../../config';
+import BookingOptionFinder from '../../options/finder/BookingOptionFinder';
+import {BookingStatus, Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/backend-core';
 
 /**
  * 예약을 진행하기에 앞서 예약이 가능한지 조회합니다.
  */
 export default class MakeBookingValidator {
   constructor(private readonly params: MakeBookingParams) {}
+
+  private optionsFinder = new BookingOptionFinder();
+  private bookingFinder = new BookingFinder();
 
   async validate() {
     await this.cafeteriaShouldExist();
@@ -69,7 +68,7 @@ export default class MakeBookingValidator {
   private async timeSlotShouldHaveBeenSuggested() {
     const {cafeteriaId, timeSlotStart} = this.params;
 
-    const option = await BookingOption.findByCafeteriaIdAndTimeSlotStart(
+    const option = await this.optionsFinder.findByCafeteriaIdAndTimeSlotStart(
       cafeteriaId,
       timeSlotStart
     );
@@ -80,7 +79,7 @@ export default class MakeBookingValidator {
   private async timeSlotShouldBeAvailable() {
     const {cafeteriaId, timeSlotStart} = this.params;
 
-    const option = await BookingOption.findByCafeteriaIdAndTimeSlotStart(
+    const option = await this.optionsFinder.findByCafeteriaIdAndTimeSlotStart(
       cafeteriaId,
       timeSlotStart
     );
@@ -91,7 +90,7 @@ export default class MakeBookingValidator {
 
   private async shouldNotBeDuplicated() {
     const {userId, cafeteriaId} = this.params;
-    const recentBookingsOfThisUser = await Booking.findRecentBookings(
+    const recentBookingsOfThisUser = await this.bookingFinder.findRecentBookings(
       userId,
       config.application.booking.historyInHours
     );

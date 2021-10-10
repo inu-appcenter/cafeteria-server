@@ -20,7 +20,7 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import {stringAsInt} from '../../utils/zodTypes';
-import GetBookingOptions from '../../../../application/booking/GetBookingOptions';
+import GetBookingOptions from '../../../../application/booking/options/GetBookingOptions';
 
 const schema = defineSchema({
   query: {
