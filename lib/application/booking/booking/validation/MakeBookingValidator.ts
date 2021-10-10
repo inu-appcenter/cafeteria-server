@@ -35,10 +35,11 @@ import {BookingStatus, Cafeteria, CafeteriaBookingParams} from '@inu-cafeteria/b
  * 예약을 진행하기에 앞서 예약이 가능한지 조회합니다.
  */
 export default class MakeBookingValidator {
-  constructor(private readonly params: MakeBookingParams) {}
-
-  private optionsFinder = new BookingOptionFinder();
-  private bookingFinder = new BookingFinder();
+  constructor(
+    private readonly params: MakeBookingParams,
+    private readonly optionsFinder = new BookingOptionFinder(),
+    private readonly bookingFinder = new BookingFinder()
+  ) {}
 
   async validate() {
     await this.cafeteriaShouldExist();

@@ -24,6 +24,7 @@ import BookingCreator from './creator/BookingCreator';
 import {UserIdentifier} from '../../user/common/types';
 import BookingOptionFinder from '../options/finder/BookingOptionFinder';
 import MakeBookingValidator from './validation/MakeBookingValidator';
+import BookingFinder from './finder/BookingFinder';
 
 export type MakeBookingParams = UserIdentifier & {
   cafeteriaId: number;
@@ -35,11 +36,16 @@ export type MakeBookingParams = UserIdentifier & {
  */
 class MakeBooking extends UseCase<MakeBookingParams, Booking> {
   async onExecute(params: MakeBookingParams): Promise<Booking> {
-    await new MakeBookingValidator(params).validate();
+    // 얘네 둘은 validator 부터 아래 예약 생성까지 여러 번 쓰일 것이기 때문에
+    // 하나의 인스턴스로 주욱 갑니다.
+    const optionsFinder = new BookingOptionFinder();
+    const bookingFinder = new BookingFinder();
+
+    await new MakeBookingValidator(params, optionsFinder, bookingFinder).validate();
 
     const {userId, cafeteriaId, timeSlotStart} = params;
 
-    const bookingOption = await new BookingOptionFinder().findByCafeteriaIdAndTimeSlotStart(
+    const bookingOption = await optionsFinder.findByCafeteriaIdAndTimeSlotStart(
       cafeteriaId,
       timeSlotStart
     );
