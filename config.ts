@@ -152,6 +152,12 @@ export default {
       verifyUrl: 'https://www.uicoop.ac.kr/___verify',
       menuParsingUrl: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
     },
+
+    calender: {
+      holidays: {
+        url: 'https://calendar.google.com/calendar/ical/ko.south_korea.official%23holiday%40group.v.calendar.google.com/public/basic.ics',
+      },
+    },
   },
 
   /**
