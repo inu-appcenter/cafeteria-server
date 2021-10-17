@@ -18,9 +18,8 @@
  */
 
 import cheerio from 'cheerio';
-import {compareIgnoringWhiteSpaces} from '../../../../common/utils/string';
-import config from '../../../../../config';
 import {logger} from '@inu-cafeteria/backend-core';
+import {compareIgnoringWhiteSpaces} from '../../../../common/utils/string';
 
 export default class RawMenuTextRetriever {
   constructor(private readonly rawHtml: string) {}
@@ -30,9 +29,11 @@ export default class RawMenuTextRetriever {
       `<메뉴 파싱 stage 1> ${cornerName}(${cornerName})의 메뉴 정보 스트링을 모두 가져옵니다.`
     );
 
+    // 한 블록에 여러 개의 메뉴가 '==='로 이어져 들어 있습니다.
     const rawCombined = this.grepTextBlock(cafeteriaName, cornerName);
 
-    return rawCombined.split(new RegExp(config.application.menu.parser.menuSplitterRegex));
+    // 3개 이상의 '='를 기준으로 나눕니다.
+    return rawCombined.split(/={3,}/);
   }
 
   private grepTextBlock(cafeteriaName: string, cornerName: string) {

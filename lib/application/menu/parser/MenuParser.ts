@@ -17,10 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Cafeteria, Corner, Menu, MenuParseRegex} from '@inu-cafeteria/backend-core';
-import RawMenuTextRetriever from './stage1/RawMenuTextRetriever';
-import MenuTokenizer from './stage2/MenuTokenizer';
 import Entitizer from './stage3/Entitizer';
+import MenuTokenizer from './stage2/MenuTokenizer';
+import RawMenuTextRetriever from './stage1/RawMenuTextRetriever';
+import {Cafeteria, Corner, Menu} from '@inu-cafeteria/backend-core';
 
 export type MenuParserParams = {
   rawHtml: string;
@@ -40,16 +40,10 @@ export default class MenuParser {
 
   async parse(): Promise<Menu[]> {
     const menus: Menu[] = [];
-    const menuParseRegexes = await MenuParseRegex.find();
-    const metadataExpressions = menuParseRegexes.map((r) => r.regex);
 
     for (const cafeteria of this.params.cafeteriaWithCorners) {
       for (const corner of cafeteria.corners) {
-        const parsed = await this.parsePerCafeteriaAndCorner(
-          cafeteria,
-          corner,
-          metadataExpressions
-        );
+        const parsed = await this.parsePerCafeteriaAndCorner(cafeteria, corner);
 
         menus.push(...parsed);
       }
@@ -58,16 +52,10 @@ export default class MenuParser {
     return menus;
   }
 
-  private async parsePerCafeteriaAndCorner(
-    cafeteria: Cafeteria,
-    corner: Corner,
-    metadataExpressions: string[]
-  ) {
+  private async parsePerCafeteriaAndCorner(cafeteria: Cafeteria, corner: Corner): Promise<Menu[]> {
     const rawMenuTexts = this.rawMenuTextRetriever.retrieve(cafeteria.name, corner.name);
 
-    const processed = rawMenuTexts.map((t) =>
-      this.menuTokenizer.splitFoodsAndMetadata(t, metadataExpressions)
-    );
+    const processed = rawMenuTexts.map((t) => this.menuTokenizer.tokenize(t));
 
     return this.entitizer.toEntity(processed, corner.id);
   }

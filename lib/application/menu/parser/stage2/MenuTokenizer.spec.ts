@@ -17,22 +17,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {logger} from '@inu-cafeteria/backend-core';
-import Extractor from './helper/Extractor';
+import MenuTokenizer from './MenuTokenizer';
 
-export default class MenuTokenizer {
-  tokenize(rawMenuText: string) {
-    logger.verbose(
-      `<메뉴 파싱 stage 2> 가져온 메뉴 스트링을 분석하여 식단과 가격, 열량, 추가 정보를 분리합니다.`
-    );
+describe('새로 바뀐 메뉴 파싱', () => {
+  const parse = (raw: string) => new MenuTokenizer().tokenize(raw);
 
-    const extractor = new Extractor(rawMenuText);
+  it('2021-10-18 학생식당 조식의 일부', async () => {
+    const raw =
+      '현미시리얼\n' +
+      '셀프토스트\n' +
+      '흰우유\n' +
+      '딸기잼\n' +
+      '샐러드\n' +
+      '황도\n' +
+      '\n' +
+      '4,000원\n' +
+      '665kcal\n' +
+      '\n' +
+      '*8:30~10:30';
 
-    return {
-      foods: extractor.extractFoods(),
-      price: extractor.extractPrice(),
-      calorie: extractor.extractCalorie(),
-      extras: extractor.extractExtras(),
-    };
-  }
-}
+    const result = parse(raw);
+
+    console.log(result);
+  });
+});

@@ -22,8 +22,9 @@ import {logger} from '@inu-cafeteria/backend-core';
 
 type MenuProcessed = {
   foods: string[];
-  price: number | null;
-  calorie: number | null;
+  price?: number;
+  calorie?: number;
+  extras: string[];
 };
 
 export default class Entitizer {
@@ -35,8 +36,10 @@ export default class Entitizer {
       .map((m) =>
         Menu.create({
           foods: m.foods,
-          price: m.price || undefined,
-          calorie: m.calorie || undefined,
+          price: m.price,
+          calorie: m.calorie,
+          extras: m.extras,
+
           cornerId: cornerId,
         })
       );
