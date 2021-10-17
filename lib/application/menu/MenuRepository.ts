@@ -41,6 +41,13 @@ class MenuRepository {
     return all.filter((m) => m.cornerId === cornerId);
   }
 
+  clearCache() {
+    logger.info('메뉴 캐시를 초기화합니다.');
+
+    this.menuCache.menus.clear();
+    this.menuCache.lastUpdatedMillis = 0;
+  }
+
   private async getLatestMenus(dateString: string) {
     assertDateStringFormat(dateString);
 
