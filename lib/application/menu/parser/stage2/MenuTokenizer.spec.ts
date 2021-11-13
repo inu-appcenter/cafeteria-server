@@ -40,4 +40,38 @@ describe('새로 바뀐 메뉴 파싱', () => {
 
     console.log(result);
   });
+
+  it('2021-11-15 학생식당 중식(일품)의 일부', async () => {
+    const raw =
+      '양파크리미돈까스\n' +
+      '시찌미주먹밥\n' +
+      '모닝빵*딸기잼\n' +
+      '오이피클\n' +
+      '우동국물\n' +
+      '\n' +
+      '4,000원670kcal\n' +
+      '\n' +
+      '*11:30~소진시';
+
+    const result = parse(raw);
+
+    console.log(result);
+  });
+
+  it('엑스트라에 별 여러개와 공백 여러개', async () => {
+    const raw =
+      '양파크리미돈까스\n' +
+      '시찌미주먹밥\n' +
+      '모닝빵*딸기잼\n' +
+      '오이피클\n' +
+      '우동국물\n' +
+      '\n' +
+      '4,000원670kcal\n' +
+      '\n' +
+      '****      11:30~소진시';
+
+    const result = parse(raw);
+
+    console.log(result);
+  });
 });

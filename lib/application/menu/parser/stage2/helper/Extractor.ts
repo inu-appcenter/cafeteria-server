@@ -26,10 +26,10 @@ import LineClassifier, {RegexResult} from './LineClassifier';
  */
 export default class Extractor {
   private classifiers = {
-    extras: new LineClassifier(/\*(?<EXTRA>.+)/),
-    foods: new LineClassifier(/(?<FOOD>.+)/),
-    prices: new LineClassifier(/(?<PRICE>[0-9,]+)원/),
-    calories: new LineClassifier(/(?<CALORIE>[0-9,]+)[Kk]cal/),
+    extras: new LineClassifier(/^\*+\s*(?<EXTRA>.+)$/),
+    foods: new LineClassifier(/^(?<FOOD>.+)$/),
+    prices: new LineClassifier(/^(?<PRICE>[0-9,]+)원$/),
+    calories: new LineClassifier(/^(?<CALORIE>[0-9,]+)[Kk]cal$/),
   };
 
   constructor(private readonly text: string) {
