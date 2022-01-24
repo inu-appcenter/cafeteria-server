@@ -28,8 +28,6 @@
   "homepage": "https://github.com/inu-appcenter/cafeteria-server#readme",
   "dependencies": {
     "@inu-cafeteria/backend-core": "^0.9.4",
-    "@types/express": "^4.17.13",
-    "@types/moment": "^2.13.0",
     "axios": "^0.21.2",
     "axios-cookiejar-support": "^1.0.1",
     "bcrypt": "^5.0.1",
@@ -53,6 +51,8 @@
     "zod": "^3.7.3"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/moment": "^2.13.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express-rate-limit": "^5.1.3",
