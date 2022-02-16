@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import fetch, {RequestInfo, RequestInit} from 'node-fetch';
+import fetch from 'isomorphic-fetch';
 
 export function fetchWithTimeout(
   url: RequestInfo,
