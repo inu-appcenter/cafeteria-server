@@ -20,23 +20,36 @@
 import {defineSchema} from '../../libs/schema';
 import {defineRoute} from '../../libs/route';
 import GetBookings from '../../../../application/booking/booking/GetBookings';
+import {stringAsBoolean} from '../../utils/zodTypes';
+import RealTimeBookingService from '../../../../application/booking/booking/RealTimeBookingService';
 
-const schema = defineSchema({});
+const schema = defineSchema({
+  query: {
+    sse: stringAsBoolean.optional(),
+  },
+});
 
 export default defineRoute('get', '/booking/bookings', schema, async (req, res) => {
   const {userId} = req;
+  const {sse} = req.query;
 
-  const allBookings = await GetBookings.run({userId});
+  if (sse === true) {
+    RealTimeBookingService.addBookingsListener(userId, res);
 
-  res.json(
-    allBookings.map((booking) => ({
-      id: booking.id,
-      uuid: booking.uuid,
-      cafeteriaId: booking.cafeteriaId,
-      timeSlotStart: booking.timeSlotStart,
-      timeSlotEnd: booking.timeSlotEnd,
-      bookedAt: booking.bookedAt,
-      status: booking.status,
-    }))
-  );
+    return await RealTimeBookingService.emitBookings(userId);
+  } else {
+    const allBookings = await GetBookings.run({userId});
+
+    return res.json(
+      allBookings.map((booking) => ({
+        id: booking.id,
+        uuid: booking.uuid,
+        cafeteriaId: booking.cafeteriaId,
+        timeSlotStart: booking.timeSlotStart,
+        timeSlotEnd: booking.timeSlotEnd,
+        bookedAt: booking.bookedAt,
+        status: booking.status,
+      }))
+    );
+  }
 });
