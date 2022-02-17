@@ -41,11 +41,13 @@ class RealTimeBookingService {
    */
   async emitBookings(userId: number) {
     try {
+      logger.info(`사용자 ${userId}의 예약 내역을 방출합니다.`);
+
       const bookings = await GetBookings.run({userId});
 
       await this.pool.broadcast(`user_${userId}`, 'bookings', bookings);
     } catch (e) {
-      logger.error(`예약 내역 emit 실패: ${e}`);
+      logger.error(`사용자 ${userId}의 예약 내역 방출 실패: ${e}`);
     }
   }
 }

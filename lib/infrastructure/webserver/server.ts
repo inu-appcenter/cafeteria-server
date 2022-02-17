@@ -45,6 +45,8 @@ const allowList = [
   '/kiosk/discount/confirm',
   '/kiosk/discount/cancel',
 
+  '/internal/updates/bookings',
+
   '/isBarcode',
   '/paymentSend',
 ];
