@@ -20,6 +20,7 @@
 import express from 'express';
 import {logger} from '@inu-cafeteria/backend-core';
 import GetBookings from './GetBookings';
+import BookingMapper from './mapper/BookingMapper';
 import ConnectionPool from '../../../infrastructure/webserver/libs/ConnectionPool';
 
 class RealTimeBookingService {
@@ -37,15 +38,17 @@ class RealTimeBookingService {
 
   /**
    * 어느 사용자에게 예약 내역을 방출합니다.
+   *
    * @param userId 사용자 식별자.
    */
   async emitBookings(userId: number) {
     try {
       logger.info(`사용자 ${userId}의 예약 내역을 방출합니다.`);
 
-      const bookings = await GetBookings.run({userId});
+      const allBookings = await GetBookings.run({userId});
+      const bookingResponses = BookingMapper.toBookingResponse(allBookings);
 
-      await this.pool.broadcast(`user_${userId}`, 'bookings', bookings);
+      await this.pool.broadcast(`user_${userId}`, 'bookings', bookingResponses);
     } catch (e) {
       logger.error(`사용자 ${userId}의 예약 내역 방출 실패: ${e}`);
     }

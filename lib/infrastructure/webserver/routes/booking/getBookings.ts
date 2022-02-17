@@ -17,9 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import GetBookings from '../../../../application/booking/booking/GetBookings';
+import {defineRoute} from '../../libs/route';
+import BookingMapper from '../../../../application/booking/booking/mapper/BookingMapper';
+import {defineSchema} from '../../libs/schema';
 import {stringAsBoolean} from '../../utils/zodTypes';
 import RealTimeBookingService from '../../../../application/booking/booking/RealTimeBookingService';
 
@@ -40,16 +41,6 @@ export default defineRoute('get', '/booking/bookings', schema, async (req, res) 
   } else {
     const allBookings = await GetBookings.run({userId});
 
-    return res.json(
-      allBookings.map((booking) => ({
-        id: booking.id,
-        uuid: booking.uuid,
-        cafeteriaId: booking.cafeteriaId,
-        timeSlotStart: booking.timeSlotStart,
-        timeSlotEnd: booking.timeSlotEnd,
-        bookedAt: booking.bookedAt,
-        status: booking.status,
-      }))
-    );
+    return res.json(BookingMapper.toBookingResponse(allBookings));
   }
 });

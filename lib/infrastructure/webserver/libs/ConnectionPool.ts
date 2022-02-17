@@ -58,9 +58,13 @@ export default class ConnectionPool {
       logger.info(`${subject} 풀에서 클라이언트와의 SSE 연결 종료 ㅠㅡㅠ`);
 
       this.removeFromPool(subjectPool, res);
+
+      logger.info(`Active subject가 ${this.getActiveSubjects().length}개!`);
     });
 
     subjectPool.push(res);
+
+    logger.info(`Active subject가 ${this.getActiveSubjects().length}개!`);
   }
 
   /**
