@@ -18,9 +18,9 @@
  */
 
 import config from '../../../config';
+import {logger} from '@inu-cafeteria/backend-core';
 import {postUrlencoded} from '../../common/utils/fetch';
 import {encryptForRemoteLogin} from '../../common/utils/encrypt';
-import {logger} from '@inu-cafeteria/backend-core';
 import {ForUndergraduatesOnly, InvalidCredentials} from '../../application/user/common/errors';
 
 export default class StudentAccountValidator {
