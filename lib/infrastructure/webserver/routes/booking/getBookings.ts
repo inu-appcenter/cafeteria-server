@@ -18,11 +18,10 @@
  */
 
 import GetBookings from '../../../../application/booking/booking/GetBookings';
-import {defineRoute} from '../../libs/route';
 import BookingMapper from '../../../../application/booking/booking/mapper/BookingMapper';
-import {defineSchema} from '../../libs/schema';
-import {stringAsBoolean} from '../../utils/zodTypes';
+import {stringAsBoolean} from '@inu-cafeteria/backend-core';
 import RealTimeBookingService from '../../../../application/booking/booking/RealTimeBookingService';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {
@@ -31,7 +30,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('get', '/booking/bookings', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {sse} = req.query;
 
   if (sse === true) {

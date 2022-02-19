@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {User} from '@inu-cafeteria/backend-core';
+import config from '../../../config';
 import UseCase from '../../common/base/UseCase';
 import {Session} from './common/types';
-import {createJwt} from '../../common/utils/token';
 import {generateUUID} from '../../common/utils/uuid';
 import GenerateBarcode from '../barcode/GenerateBarcode';
+import {User, createJwt} from '@inu-cafeteria/backend-core';
 import {applyBcryptHash} from '../../common/utils/bcrypt';
 import StudentLoginPolicyValidator from './validation/StudentLoginPolicyValidator';
 
@@ -48,8 +48,12 @@ class StudentLogin extends UseCase<StudentLoginParams, Session> {
 
     await user.save();
 
+    const newJwt = createJwt({userId: user.id}, config.server.jwt.key, {
+      expiresIn: config.server.jwt.expiresIn,
+    });
+
     return {
-      jwt: createJwt({userId: user.id}),
+      jwt: newJwt,
       rememberMeToken: newRememberMeToken,
       barcode: newBarcode,
     };

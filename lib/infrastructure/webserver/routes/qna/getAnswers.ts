@@ -17,10 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import GetAnswers from '../../../../application/qna/GetAnswers';
-import {stringAsBoolean} from '../../utils/zodTypes';
+import {stringAsBoolean} from '@inu-cafeteria/backend-core';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {
@@ -29,7 +28,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('get', '/answers', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {unreadOnly} = req.query;
 
   const questions = await GetAnswers.run({userId, unreadOnly});

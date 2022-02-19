@@ -18,9 +18,8 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import Ask from '../../../../application/qna/Ask';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   body: {
@@ -31,7 +30,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('post', '/ask', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {deviceInfo, appVersion, content} = req.body;
 
   await Ask.run({userId, deviceInfo, appVersion, content});

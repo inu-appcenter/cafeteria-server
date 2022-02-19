@@ -17,8 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import BadRequest from '../../../common/errors/http/BadRequest';
-import Unauthorized from '../../../common/errors/http/Unauthorized';
+import {BadRequest, Unauthorized} from '@inu-cafeteria/backend-core';
 
 export const UserNotExist = BadRequest.of('user_not_exist', '사용자가 존재하지 않습니다.');
 

@@ -18,10 +18,8 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import GetNotices from '../../../../application/notice/GetNotices';
-import {stringAsInt} from '../../utils/zodTypes';
+import {defineRoute, defineSchema, stringAsInt} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   params: {

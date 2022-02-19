@@ -19,9 +19,8 @@
 
 import {z} from 'zod';
 import MakeBooking from '../../../../application/booking/booking/MakeBooking';
-import {defineRoute} from '../../libs/route';
-import {defineSchema} from '../../libs/schema';
-import {stringAsDate} from '../../utils/zodTypes';
+import {stringAsDate} from '@inu-cafeteria/backend-core';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   body: {
@@ -31,7 +30,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('post', '/booking/bookings', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {cafeteriaId, timeSlotStart} = req.body;
 
   await MakeBooking.run({userId, cafeteriaId, timeSlotStart});

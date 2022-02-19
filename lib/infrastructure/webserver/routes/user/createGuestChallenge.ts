@@ -18,9 +18,8 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {apiLimiter, defineRoute} from '../../libs/route';
 import CreateGuestLoginChallenge from '../../../../application/user/CreateGuestLoginChallenge';
+import {apiLimiter, defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   body: {
@@ -28,7 +27,7 @@ const schema = defineSchema({
   },
 });
 
-export default defineRoute('post', '/guest/challenge', schema, apiLimiter, async (req, res) => {
+export default defineRoute('post', '/guest/challenge', schema, apiLimiter(), async (req, res) => {
   const {phoneNumber} = req.body;
 
   await CreateGuestLoginChallenge.run({phoneNumber});

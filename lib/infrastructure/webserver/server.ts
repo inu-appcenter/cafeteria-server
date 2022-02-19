@@ -20,10 +20,13 @@
 import config from '../../../config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import {errorHandler} from './libs/middleware/errorHandler';
-import {registerRoutes} from './utils/register';
-import {authorizer} from './libs/middleware/authorizer';
-import recorder from './libs/middleware/recorder';
+import {
+  recorder,
+  authorizer,
+  errorHandler,
+  registerRoutes,
+  userIdGetterAssigner,
+} from '@inu-cafeteria/backend-core';
 
 /**
  * 인증을 건너뛰는 endpoint 목록입니다.
@@ -35,27 +38,35 @@ const allowList = [
   '/guest/challenge',
   '/guest/login',
 
-  '/cafeteria',
-  '/corners',
-  '/menus',
-  '/notices',
-  '/notices/latest',
+  '/cafeteria/**',
+  '/corners/**',
+  '/menus/**',
+  '/notices/**',
 
-  '/kiosk/discount/verify',
-  '/kiosk/discount/confirm',
-  '/kiosk/discount/cancel',
+  '/kiosk/discount/**',
 
-  '/internal/updates/bookings',
+  '/internal/**',
 
   '/isBarcode',
   '/paymentSend',
 ];
 
+const myAuthorizer = authorizer({
+  jwtKey: config.server.jwt.key,
+  jwtFieldName: config.server.jwt.cookieName,
+  allowList,
+});
+
+const myUserIdGetterAssigner = userIdGetterAssigner({
+  jwtFieldName: config.server.jwt.cookieName,
+});
+
 export default async function startServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(authorizer({exclude: allowList}));
+  app.use(myAuthorizer);
+  app.use(myUserIdGetterAssigner);
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));

@@ -18,10 +18,9 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
+import {stringAsInt} from '@inu-cafeteria/backend-core';
 import VerifyDiscountTransaction from '../../../../application/discount/VerifyDiscountTransaction';
-import {stringAsInt} from '../../utils/zodTypes';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {
