@@ -21,7 +21,7 @@ import UseCase from '../../common/base/UseCase';
 import {User} from '@inu-cafeteria/backend-core';
 import {UserIdentifier} from '../user/common/types';
 import assert from 'assert';
-import {ForStudentsOnly} from '../user/common/errors';
+import {InvalidCredentials} from '../user/common/errors';
 
 class ActivateBarcode extends UseCase<UserIdentifier, void> {
   async onExecute({userId}: UserIdentifier): Promise<void> {
@@ -30,7 +30,7 @@ class ActivateBarcode extends UseCase<UserIdentifier, void> {
       return;
     }
 
-    assert(user.isStudent(), ForStudentsOnly());
+    assert(user.isStudent(), InvalidCredentials());
 
     user.barcodeActivatedAt = new Date();
 

@@ -38,7 +38,7 @@ export async function postUrlencoded(
   body: Record<string, any> | string,
   headers: Record<string, any> = {}
 ) {
-  const response = await fetchWithTimeout(url, {
+  return await fetchWithTimeout(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -46,8 +46,6 @@ export async function postUrlencoded(
     },
     body: typeof body === 'string' ? body : new URLSearchParams(body).toString(),
   });
-
-  return response.text();
 }
 
 export async function postJson(

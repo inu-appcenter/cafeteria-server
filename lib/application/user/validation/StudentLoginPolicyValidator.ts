@@ -23,7 +23,7 @@ import {compareBcryptHash} from '../../../common/utils/bcrypt';
 import {StudentLoginParams} from '../StudentLogin';
 import StudentAccountValidator from '../../../external/inu/StudentAccountValidator';
 import {MissingRequiredParameters} from '../../../common/errors/general';
-import {ForStudentsOnly, InvalidRememberMeToken, UserNotExist} from '../common/errors';
+import {InvalidCredentials, InvalidRememberMeToken, UserNotExist} from '../common/errors';
 
 export default class StudentLoginPolicyValidator {
   constructor(private readonly params: StudentLoginParams) {}
@@ -46,9 +46,10 @@ export default class StudentLoginPolicyValidator {
 
     assert(password, MissingRequiredParameters());
 
-    const isStudent = await new StudentAccountValidator(studentId, password).isStudent();
-
-    assert(isStudent, ForStudentsOnly());
+    await new StudentAccountValidator(
+      studentId,
+      password
+    ).shouldBeUndergraduateWithCorrectCredentials();
   }
 
   private async validateForRememberedLogin() {

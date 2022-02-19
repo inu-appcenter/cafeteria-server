@@ -17,19 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import assert from 'assert';
 import config from '../../../config';
 import {postUrlencoded} from '../../common/utils/fetch';
 import {encryptForRemoteLogin} from '../../common/utils/encrypt';
 import {logger} from '@inu-cafeteria/backend-core';
+import {ForUndergraduatesOnly, InvalidCredentials} from '../../application/user/common/errors';
 
 export default class StudentAccountValidator {
   constructor(private readonly studentId: string, private readonly password: string) {}
 
-  async isStudent(): Promise<boolean> {
+  async shouldBeUndergraduateWithCorrectCredentials(): Promise<void> {
     if (this.studentId === '202099999' && this.password === 'xptmxmzzzz') {
       logger.info('테스트 계정입니다!');
-      return true;
+      return;
     }
 
     let response;
@@ -40,15 +40,17 @@ export default class StudentAccountValidator {
       });
     } catch (e) {
       logger.error(e);
-      return false;
+      return;
     }
 
-    assert(
-      response === config.external.inuLogin.success || response === config.external.inuLogin.fail,
-      `원격 로그인 응답은 ${config.external.inuLogin.success} 또는 ${config.external.inuLogin.fail} 중 하나만!`
-    );
-
-    return response === config.external.inuLogin.success;
+    switch (response.status) {
+      case 200:
+        break;
+      case 401:
+        throw InvalidCredentials();
+      case 403:
+        throw ForUndergraduatesOnly();
+    }
   }
 
   private encryptPassword() {

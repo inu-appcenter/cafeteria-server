@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BadRequest, Unauthorized} from '@inu-cafeteria/backend-core';
+import {BadRequest, Forbidden, Unauthorized} from '@inu-cafeteria/backend-core';
 
 export const UserNotExist = BadRequest.of('user_not_exist', '사용자가 존재하지 않습니다.');
 
@@ -35,9 +35,14 @@ export const InvalidPhoneNumber = BadRequest.of(
   '잘못된 휴대전화번호 형식입니다!'
 );
 
-export const ForStudentsOnly = Unauthorized.of(
-  'for_students_only',
+export const InvalidCredentials = Unauthorized.of(
+  'invalid_credentials',
   '학번과 비밀번호를 확인해 주세요 😉'
+);
+
+export const ForUndergraduatesOnly = Forbidden.of(
+  'for_undergraduates_only',
+  '수료 또는 졸업하신 경우 서비스 이용이 어렵습니다 😢'
 );
 
 export const InvalidPasscode = BadRequest.of(
