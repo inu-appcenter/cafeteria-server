@@ -44,7 +44,8 @@
     "semver": "^7.3.5",
     "tough-cookie": "^4.0.0",
     "uuid-with-v6": "^1.1.2",
-    "zod": "^3.7.3"
+    "zod": "^3.7.3",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -66,7 +67,6 @@
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
-    "source-map-support": "^0.5.19",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
