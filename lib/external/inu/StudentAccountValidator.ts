@@ -21,7 +21,12 @@ import config from '../../../config';
 import {logger} from '@inu-cafeteria/backend-core';
 import {postUrlencoded} from '../../common/utils/fetch';
 import {encryptForRemoteLogin} from '../../common/utils/encrypt';
-import {ForUndergraduatesOnly, InvalidCredentials} from '../../application/user/common/errors';
+import {
+  BadFormedCredentials,
+  ForUndergraduatesOnly,
+  InvalidCredentials,
+  StudentLoginUnavailable,
+} from '../../application/user/common/errors';
 
 export default class StudentAccountValidator {
   constructor(private readonly studentId: string, private readonly password: string) {}
@@ -46,10 +51,14 @@ export default class StudentAccountValidator {
     switch (response.status) {
       case 200:
         break;
+      case 400:
+        throw BadFormedCredentials();
       case 401:
         throw InvalidCredentials();
       case 403:
         throw ForUndergraduatesOnly();
+      default:
+        throw StudentLoginUnavailable();
     }
   }
 

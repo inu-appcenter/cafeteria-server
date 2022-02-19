@@ -17,7 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BadRequest, Forbidden, Unauthorized} from '@inu-cafeteria/backend-core';
+import {
+  BadRequest,
+  Forbidden,
+  InternalServerError,
+  Unauthorized,
+} from '@inu-cafeteria/backend-core';
 
 export const UserNotExist = BadRequest.of('user_not_exist', '사용자가 존재하지 않습니다.');
 
@@ -35,6 +40,16 @@ export const InvalidPhoneNumber = BadRequest.of(
   '잘못된 휴대전화번호 형식입니다!'
 );
 
+export const InvalidPasscode = BadRequest.of(
+  'invalid_passcode',
+  '인증번호가 만료되었거나 올바르지 않습니다 😯'
+);
+
+export const BadFormedCredentials = BadRequest.of(
+  'bad_formed_credentials',
+  '올바른 학번과 비밀번호를 입력해주세요 😉'
+);
+
 export const InvalidCredentials = Unauthorized.of(
   'invalid_credentials',
   '학번과 비밀번호를 확인해 주세요 😉'
@@ -45,7 +60,7 @@ export const ForUndergraduatesOnly = Forbidden.of(
   '수료 또는 졸업하신 경우 서비스 이용이 어렵습니다 😢'
 );
 
-export const InvalidPasscode = BadRequest.of(
-  'invalid_passcode',
-  '인증번호가 만료되었거나 올바르지 않습니다 😯'
+export const StudentLoginUnavailable = InternalServerError.of(
+  'student_login_unavailable',
+  '로그인 서버에 문제가 생겼습니다 🤯'
 );
