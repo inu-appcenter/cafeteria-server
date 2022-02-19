@@ -18,10 +18,9 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {apiLimiter, defineRoute} from '../../libs/route';
-import StudentLogin from '../../../../application/user/StudentLogin';
 import config from '../../../../../config';
+import StudentLogin from '../../../../application/user/StudentLogin';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   body: {

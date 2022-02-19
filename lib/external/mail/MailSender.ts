@@ -19,8 +19,7 @@
 
 import NodeMailer from 'nodemailer';
 import config from '../../../config';
-import {logger} from '@inu-cafeteria/backend-core';
-import {stringifyError} from '../../common/utils/error';
+import {logger, stringifyError} from '@inu-cafeteria/backend-core';
 
 export type SendMailParams = {
   from: string;

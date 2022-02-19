@@ -18,10 +18,9 @@
  */
 
 import express from 'express';
-import {logger} from '@inu-cafeteria/backend-core';
 import GetBookings from './GetBookings';
 import BookingMapper from './mapper/BookingMapper';
-import ConnectionPool from '../../../infrastructure/webserver/libs/ConnectionPool';
+import {logger, ConnectionPool} from '@inu-cafeteria/backend-core';
 
 class RealTimeBookingService {
   private pool = new ConnectionPool();

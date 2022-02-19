@@ -17,10 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import GetCafeteria from '../../../../application/cafeteria/GetCafeteria';
-import {stringAsBoolean, stringAsInt} from '../../utils/zodTypes';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
+import {stringAsBoolean, stringAsInt} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   params: {

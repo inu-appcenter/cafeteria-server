@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import BadRequest from '../../../common/errors/http/BadRequest';
+import {BadRequest} from '@inu-cafeteria/backend-core';
 
 export const RequestMalformed = BadRequest.of(
   'request_malformed',

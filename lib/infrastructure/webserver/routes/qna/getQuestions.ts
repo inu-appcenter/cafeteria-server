@@ -17,10 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import GetQuestions from '../../../../application/qna/GetQuestions';
-import {stringAsBoolean} from '../../utils/zodTypes';
+import {stringAsBoolean} from '@inu-cafeteria/backend-core';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {

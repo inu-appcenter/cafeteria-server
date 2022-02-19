@@ -19,11 +19,9 @@
 
 import config from '../../../config';
 import express from 'express';
+import recorder from '@inu-cafeteria/backend-core/dist/src/core/server/middleware/recorder';
 import cookieParser from 'cookie-parser';
-import {errorHandler} from './libs/middleware/errorHandler';
-import {registerRoutes} from './utils/register';
-import {authorizer} from './libs/middleware/authorizer';
-import recorder from './libs/middleware/recorder';
+import {authorizer, errorHandler, registerRoutes} from '@inu-cafeteria/backend-core';
 
 /**
  * 인증을 건너뛰는 endpoint 목록입니다.
@@ -55,7 +53,13 @@ export default async function startServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(authorizer({exclude: allowList}));
+  app.use(
+    authorizer({
+      jwtKey: config.server.jwt.key,
+      jwtFieldName: config.server.jwt.cookieName,
+      allowList,
+    })
+  );
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));

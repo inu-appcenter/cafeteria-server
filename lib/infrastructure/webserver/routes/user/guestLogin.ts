@@ -17,11 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineSchema} from '../../libs/schema';
-import {apiLimiter, defineRoute} from '../../libs/route';
 import {z} from 'zod';
 import config from '../../../../../config';
 import GuestLogin from '../../../../application/user/GuestLogin';
+import {apiLimiter, defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   body: {
@@ -31,7 +30,7 @@ const schema = defineSchema({
   },
 });
 
-export default defineRoute('post', '/guest/login', schema, apiLimiter, async (req, res) => {
+export default defineRoute('post', '/guest/login', schema, apiLimiter(), async (req, res) => {
   const {phoneNumber, passcode, rememberMeToken} = req.body;
 
   const result = await GuestLogin.run({

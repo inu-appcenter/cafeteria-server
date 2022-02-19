@@ -17,9 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import NotFound from './http/NotFound';
-import InternalServerError from './http/InternalServerError';
-import BadRequest from './http/BadRequest';
+import {BadRequest, InternalServerError, NotFound} from '@inu-cafeteria/backend-core';
 
 export const ResourceNotFound = NotFound.of(
   'resource_not_found',

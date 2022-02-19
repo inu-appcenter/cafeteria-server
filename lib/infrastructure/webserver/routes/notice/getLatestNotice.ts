@@ -18,9 +18,8 @@
  */
 
 import {z} from 'zod';
-import {defineSchema} from '../../libs/schema';
-import {defineRoute} from '../../libs/route';
 import GetLatestNotice from '../../../../application/notice/GetLatestNotice';
+import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {

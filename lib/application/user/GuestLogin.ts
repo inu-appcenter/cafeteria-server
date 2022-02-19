@@ -17,13 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {User} from '@inu-cafeteria/backend-core';
 import UseCase from '../../common/base/UseCase';
 import {Session} from './common/types';
-import GuestLoginPolicyValidator from './validation/GuestLoginPolicyValidator';
 import {generateUUID} from '../../common/utils/uuid';
+import {User, createJwt} from '@inu-cafeteria/backend-core';
 import {applyBcryptHash} from '../../common/utils/bcrypt';
-import {createJwt} from '../../common/utils/token';
+import GuestLoginPolicyValidator from './validation/GuestLoginPolicyValidator';
+import config from '../../../config';
 
 export type GuestLoginParams = {
   phoneNumber: string;
@@ -46,8 +46,12 @@ class GuestLogin extends UseCase<GuestLoginParams, Session> {
 
     await user.save();
 
+    const newJwt = createJwt({userId: user.id}, config.server.jwt.key, {
+      expiresIn: config.server.jwt.expiresIn,
+    });
+
     return {
-      jwt: createJwt({userId: user.id}),
+      jwt: newJwt,
       rememberMeToken: newRememberMeToken,
     };
   }
