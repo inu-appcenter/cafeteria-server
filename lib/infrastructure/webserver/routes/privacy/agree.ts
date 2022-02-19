@@ -23,7 +23,8 @@ import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 const schema = defineSchema({});
 
 export default defineRoute('post', '/agreement', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
+
   await AgreePrivacyPolicy.run({userId});
 
   res.send();

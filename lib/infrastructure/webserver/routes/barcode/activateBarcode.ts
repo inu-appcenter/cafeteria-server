@@ -23,7 +23,7 @@ import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 const schema = defineSchema({});
 
 export default defineRoute('put', '/activateBarcode', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
 
   await ActivateBarcode.run({userId});
 

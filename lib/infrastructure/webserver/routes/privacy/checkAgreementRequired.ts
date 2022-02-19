@@ -23,7 +23,7 @@ import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 const schema = defineSchema({});
 
 export default defineRoute('get', '/agreement/required', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const required = await CheckAgreementRequired.run({userId});
 
   res.send({required});

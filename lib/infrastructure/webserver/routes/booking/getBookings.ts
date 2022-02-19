@@ -30,7 +30,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('get', '/booking/bookings', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {sse} = req.query;
 
   if (sse === true) {

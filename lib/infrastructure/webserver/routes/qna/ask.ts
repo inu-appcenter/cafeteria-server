@@ -30,7 +30,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('post', '/ask', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {deviceInfo, appVersion, content} = req.body;
 
   await Ask.run({userId, deviceInfo, appVersion, content});

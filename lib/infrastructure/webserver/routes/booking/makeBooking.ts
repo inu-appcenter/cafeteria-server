@@ -30,7 +30,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('post', '/booking/bookings', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {cafeteriaId, timeSlotStart} = req.body;
 
   await MakeBooking.run({userId, cafeteriaId, timeSlotStart});

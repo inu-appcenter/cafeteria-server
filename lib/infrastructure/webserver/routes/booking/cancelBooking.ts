@@ -28,7 +28,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('delete', '/booking/bookings/:bookingId', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {bookingId} = req.params;
 
   await CancelBooking.run({userId, bookingId});

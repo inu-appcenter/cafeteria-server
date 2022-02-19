@@ -21,7 +21,12 @@ import config from '../../../config';
 import express from 'express';
 import recorder from '@inu-cafeteria/backend-core/dist/src/core/server/middleware/recorder';
 import cookieParser from 'cookie-parser';
-import {authorizer, errorHandler, registerRoutes} from '@inu-cafeteria/backend-core';
+import {
+  authorizer,
+  errorHandler,
+  registerRoutes,
+  userIdGetterAssigner,
+} from '@inu-cafeteria/backend-core';
 
 /**
  * 인증을 건너뛰는 endpoint 목록입니다.
@@ -58,6 +63,11 @@ export default async function startServer() {
       jwtKey: config.server.jwt.key,
       jwtFieldName: config.server.jwt.cookieName,
       allowList,
+    })
+  );
+  app.use(
+    userIdGetterAssigner({
+      jwtFieldName: config.server.jwt.cookieName,
     })
   );
 

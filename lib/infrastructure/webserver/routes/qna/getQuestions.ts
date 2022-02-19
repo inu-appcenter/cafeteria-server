@@ -28,7 +28,7 @@ const schema = defineSchema({
 });
 
 export default defineRoute('get', '/questions', schema, async (req, res) => {
-  const {userId} = req;
+  const userId = req.requireUserId();
   const {withAnswers} = req.query;
 
   const questions = await GetQuestions.run({userId, withAnswers});
