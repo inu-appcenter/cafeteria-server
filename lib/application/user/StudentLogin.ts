@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import config from '../../../config';
 import UseCase from '../../common/base/UseCase';
 import {Session} from './common/types';
 import {generateUUID} from '../../common/utils/uuid';
@@ -24,7 +25,6 @@ import GenerateBarcode from '../barcode/GenerateBarcode';
 import {User, createJwt} from '@inu-cafeteria/backend-core';
 import {applyBcryptHash} from '../../common/utils/bcrypt';
 import StudentLoginPolicyValidator from './validation/StudentLoginPolicyValidator';
-import config from '../../../config';
 
 export type StudentLoginParams = {
   studentId: string;

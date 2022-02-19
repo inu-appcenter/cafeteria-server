@@ -19,9 +19,9 @@
 
 import config from '../../../config';
 import express from 'express';
-import recorder from '@inu-cafeteria/backend-core/dist/src/core/server/middleware/recorder';
 import cookieParser from 'cookie-parser';
 import {
+  recorder,
   authorizer,
   errorHandler,
   registerRoutes,
