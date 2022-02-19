@@ -38,38 +38,35 @@ const allowList = [
   '/guest/challenge',
   '/guest/login',
 
-  '/cafeteria',
-  '/corners',
-  '/menus',
-  '/notices',
-  '/notices/latest',
+  '/cafeteria/**',
+  '/corners/**',
+  '/menus/**',
+  '/notices/**',
 
-  '/kiosk/discount/verify',
-  '/kiosk/discount/confirm',
-  '/kiosk/discount/cancel',
+  '/kiosk/discount/**',
 
-  '/internal/updates/bookings',
+  '/internal/**',
 
   '/isBarcode',
   '/paymentSend',
 ];
 
+const myAuthorizer = authorizer({
+  jwtKey: config.server.jwt.key,
+  jwtFieldName: config.server.jwt.cookieName,
+  allowList,
+});
+
+const myUserIdGetterAssigner = userIdGetterAssigner({
+  jwtFieldName: config.server.jwt.cookieName,
+});
+
 export default async function startServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(
-    authorizer({
-      jwtKey: config.server.jwt.key,
-      jwtFieldName: config.server.jwt.cookieName,
-      allowList,
-    })
-  );
-  app.use(
-    userIdGetterAssigner({
-      jwtFieldName: config.server.jwt.cookieName,
-    })
-  );
+  app.use(myAuthorizer);
+  app.use(myUserIdGetterAssigner);
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
