@@ -58,6 +58,7 @@ const myAuthorizer = authorizer({
 });
 
 const myUserIdGetterAssigner = userIdGetterAssigner({
+  jwtKey: config.server.jwt.key,
   jwtFieldName: config.server.jwt.cookieName,
 });
 
