@@ -17,9 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function withTimeout<T>(run: () => T, within: number, or: () => Error): Promise<T> {
+export async function withTimeout<T>(run: () => T, within: number, or: () => Error): Promise<T> {
+  const task = run();
   const timedOut = new Promise((_, reject) => setTimeout(() => reject(or()), within));
 
-  // @ts-ignore
-  return Promise.race([run, timedOut]);
+  return (await Promise.race([task, timedOut])) as T;
 }
