@@ -1,7 +1,7 @@
 /**
  * This file is part of INU Cafeteria.
  *
- * Copyright 2021 INU Global App Center <potados99@gmail.com>
+ * Copyright 2022 INU Global App Center <potados99@gmail.com>
  *
  * INU Cafeteria is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import crypto from 'crypto';
+import {encrypt, decrypt} from '../../../lib/common/utils/cipher';
 
-export function encryptForRemoteLogin(plain: string, key: string) {
-  const cipher = crypto.createCipheriv('aes-256-cbc', key, null);
-  cipher.update(plain, 'utf-8', 'base64');
+describe('Crypto 양방향!', () => {
+  it('될까?', async () => {
+    const plain = 'hello';
+    const secret = '앱센터 짱짱';
 
-  return cipher.final('base64');
-}
+    const encrypted = encrypt(plain, secret);
+    console.log(encrypted);
+
+    const decrypted = decrypt(encrypted, secret);
+    console.log(decrypted);
+
+    expect(decrypted).toBe(plain);
+  });
+});

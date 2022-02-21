@@ -17,13 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {encryptForRemoteLogin} from '../../../../../lib/common/utils/encrypt';
+import crypto from 'crypto';
 
-describe('재학생 확인할 때에 쓰는 암호화 함수', () => {
-  it('프로덕션에서 쓰이는 것의 결과와 같아야 함', async () => {
-    const actual = encryptForRemoteLogin('abcd', 'key');
-    const expected = 'DXX1d6XeJ38fYaqz3TFfrA==';
+export function encrypt(plain: string, secret: string) {
+  const key = crypto.scryptSync(secret, 'yeah', 32);
+  const iv = Buffer.alloc(16);
 
-    expect(actual).toBe(expected);
-  });
-});
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  cipher.update(plain, 'utf-8', 'hex');
+
+  return cipher.final('hex');
+}
+
+export function decrypt(encrypted: string, secret: string) {
+  const key = crypto.scryptSync(secret, 'yeah', 32);
+  const iv = Buffer.alloc(16);
+
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+  decipher.update(encrypted, 'hex', 'utf-8');
+
+  return decipher.final('utf-8');
+}
