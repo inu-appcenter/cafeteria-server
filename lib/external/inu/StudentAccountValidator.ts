@@ -17,14 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import fetch from 'isomorphic-fetch';
 import config from '../../../config';
+import assert from 'assert';
 import {logger} from '@inu-cafeteria/backend-core';
-import {postUrlencoded} from '../../common/utils/fetch';
-import {encryptForRemoteLogin} from '../../common/utils/encrypt';
+import {encrypt} from '../../common/utils/cipher';
+import {withTimeout} from '../../common/utils/timeout';
 import {
+  InvalidCredentials,
   BadFormedCredentials,
   ForUndergraduatesOnly,
-  InvalidCredentials,
   StudentLoginUnavailable,
 } from '../../application/user/common/errors';
 
@@ -37,32 +39,27 @@ export default class StudentAccountValidator {
       return;
     }
 
-    let response;
-    try {
-      response = await postUrlencoded(config.external.inuLogin.url, {
-        sno: this.studentId,
-        pw: this.encryptPassword(),
-      });
-    } catch (e) {
-      logger.error(e);
-      return;
-    }
+    const studentId = this.studentId;
+    const password = this.encryptPassword();
+    const url = config.external.inuApi.accountStatusUrl(studentId, password);
+
+    const response = await withTimeout(() => fetch(url), 3000, StudentLoginUnavailable);
 
     switch (response.status) {
       case 200:
+        const {undergraduate} = await response.json();
+        assert(undergraduate, ForUndergraduatesOnly());
         break;
       case 400:
         throw BadFormedCredentials();
       case 401:
         throw InvalidCredentials();
-      case 403:
-        throw ForUndergraduatesOnly();
       default:
         throw StudentLoginUnavailable();
     }
   }
 
   private encryptPassword() {
-    return encryptForRemoteLogin(this.password, config.external.inuLogin.key);
+    return encrypt(this.password, config.external.inuApi.key);
   }
 }
