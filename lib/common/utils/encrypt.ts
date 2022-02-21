@@ -20,19 +20,7 @@
 import crypto from 'crypto';
 
 export function encryptForRemoteLogin(plain: string, key: string) {
-  // *WARNING*
-  // createCipher() is deprecated.
-  // It creates a cipher without initial vector.
-  // It is potentially danger to use only (key) for encryption,
-  // We are recommended to use createCipher() so we use (key, iv) pair
-  // as an encryption key.
-  //
-  // Sadly the login server requires a password encrypted with
-  // only a single key.
-  // We need a secure communication between the login server and this one.
-  // In current configuration, once the key is leaked,
-  // every private information will be visible, crystal-clearly.
-  const cipher = crypto.createCipher('aes-256-cbc', key);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, null);
   cipher.update(plain, 'utf-8', 'base64');
 
   return cipher.final('base64');
