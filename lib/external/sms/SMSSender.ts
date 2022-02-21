@@ -17,11 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {postJson} from '../../common/utils/fetch';
-import {generateUUIDHex} from '../../common/utils/uuid';
-import {createHmac} from 'crypto';
+import fetch from 'isomorphic-fetch';
 import config from '../../../config';
 import {logger} from '@inu-cafeteria/backend-core';
+import {createHmac} from 'crypto';
+import {generateUUIDHex} from '../../common/utils/uuid';
 
 export type SMSParams = {
   sender: string;
@@ -45,20 +45,20 @@ export default class SMSSender {
 
     logger.info(`SMS를 보냅니다. 요청 페이로드는 ${JSON.stringify(payload)}`);
 
-    const headers = this.generateAuthHeader();
+    const response = await fetch(config.external.sms.sendUrl, {
+      method: 'POST',
+      headers: this.generateHeaders(),
+      body: JSON.stringify(body),
+    });
 
-    const responseText = await postJson(
-      'https://api.coolsms.co.kr/messages/v4/send',
-      payload,
-      headers
-    );
+    const responseText = await response.text();
 
     logger.info(`응답이 왔습니다: ${responseText}`);
 
     return responseText.includes('정상 접수');
   }
 
-  private generateAuthHeader() {
+  private generateHeaders() {
     const {key, secret} = config.external.sms.auth;
 
     const date = new Date().toISOString();
@@ -68,6 +68,7 @@ export default class SMSSender {
     const signature = createHmac('sha256', secret).update(data).digest('hex');
 
     return {
+      'Content-Type': 'application/json',
       Authorization: `HMAC-SHA256 ApiKey=${key}, Date=${date}, salt=${salt}, signature=${signature}`,
     };
   }
