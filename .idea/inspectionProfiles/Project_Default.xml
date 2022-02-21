@@ -35,6 +35,7 @@
           <option value="http://primefaces.org/ui" />
           <option value="http://tiles.apache.org/" />
           <option value="http://117.16.191.242" />
+          <option value="http://api.inuappcenter.kr" />
         </list>
       </option>
     </inspection_tool>

@@ -143,7 +143,7 @@ export default {
 
     inuApi: {
       accountStatusUrl: (studentId: string, password: string) =>
-        `http://117.16.191.242:5630/account/status?studentId=${studentId}&password=${password}`,
+        `http://api.inuappcenter.kr:8080/account/status?studentId=${studentId}&password=${password}`,
       key: getSecret('LOGIN_KEY', '앱센터는 모다?'),
     },
 
