@@ -133,6 +133,7 @@ export default {
     },
 
     sms: {
+      sendUrl: 'https://api.coolsms.co.kr/messages/v4/send',
       sender: '0328359798',
       auth: {
         key: getSecret('SMS_API_KEY'),
@@ -140,11 +141,10 @@ export default {
       },
     },
 
-    inuLogin: {
-      url: 'http://117.16.191.242:8081/login',
+    inuApi: {
+      accountStatusUrl: (studentId: string, password: string) =>
+        `http://117.16.191.242:5630/account/status?studentId=${studentId}&password=${password}`,
       key: getSecret('LOGIN_KEY', '앱센터는 모다?'),
-      success: 'Y',
-      fail: 'N',
     },
 
     uicoop: {
@@ -155,7 +155,8 @@ export default {
 
     calender: {
       holidays: {
-        url: 'https://calendar.google.com/calendar/ical/ko.south_korea.official%23holiday%40group.v.calendar.google.com/public/basic.ics',
+        accountStatusUrl:
+          'https://calendar.google.com/calendar/ical/ko.south_korea.official%23holiday%40group.v.calendar.google.com/public/basic.ics',
       },
     },
   },
