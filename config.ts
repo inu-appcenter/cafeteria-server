@@ -148,9 +148,9 @@ export default {
     },
 
     uicoop: {
-      homeUrl: 'https://www.uicoop.ac.kr',
-      verifyUrl: 'https://www.uicoop.ac.kr/___verify',
-      menuParsingUrl: 'https://www.uicoop.ac.kr/main.php?mkey=2&w=4',
+      homeUrl: 'https://inucoop.com',
+      verifyUrl: 'https://inucoop.com/___verify',
+      menuParsingUrl: 'https://inucoop.com/main.php?mkey=2&w=4',
     },
 
     calender: {
