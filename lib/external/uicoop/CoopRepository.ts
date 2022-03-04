@@ -51,8 +51,6 @@ class CoopRepository {
       jun: weekOffset,
     };
 
-    console.log(qs.stringify(body));
-
     logger.info(`${dateString} 메뉴를 가져옵니다. Week diff는 ${weekOffset}.`);
 
     return await new CoopWebsiteAccessor({
