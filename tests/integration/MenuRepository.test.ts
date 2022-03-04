@@ -21,12 +21,12 @@ import MenuRepository from '../../lib/application/menu/MenuRepository';
 import {startTypeORM} from '@inu-cafeteria/backend-core';
 
 beforeAll(async () => {
-  await startTypeORM(true);
+  await startTypeORM(false);
 });
 
 describe('메뉴 가져오기', () => {
   it('처음부터 끝까지!', async () => {
-    const menus = await MenuRepository.getAllMenus('20210726');
+    const menus = await MenuRepository.getAllMenus('20220303');
 
     console.log(menus);
   });
