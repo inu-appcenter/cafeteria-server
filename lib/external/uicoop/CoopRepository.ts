@@ -17,10 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CoopWebsiteAccessor from './CoopWebsiteAccessor';
+import qs from 'qs';
 import config from '../../../config';
-import {logger} from '@inu-cafeteria/backend-core';
 import moment from 'moment';
+import {logger} from '@inu-cafeteria/backend-core';
+import CoopWebsiteAccessor from './CoopWebsiteAccessor';
 import {getWeeksBetweenDates} from '../../common/utils/date';
 
 class CoopRepository {
@@ -50,12 +51,15 @@ class CoopRepository {
       jun: weekOffset,
     };
 
+    console.log(qs.stringify(body));
+
     logger.info(`${dateString} 메뉴를 가져옵니다. Week diff는 ${weekOffset}.`);
 
     return await new CoopWebsiteAccessor({
       url: config.external.uicoop.menuParsingUrl,
       method: 'post',
-      data: body,
+      headers: {'content-type': 'application/x-www-form-urlencoded'},
+      data: qs.stringify(body),
     }).visit();
   }
 

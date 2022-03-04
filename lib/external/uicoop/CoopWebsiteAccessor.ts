@@ -17,18 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import qs from 'qs';
-import {logger} from '@inu-cafeteria/backend-core';
 import config from '../../../config';
+import {logger} from '@inu-cafeteria/backend-core';
 import {imitateCupidCookie} from './embedded/pageScripts';
 import {appendQueryStringParameters} from '../../common/utils/url';
 import {newAxiosInstance, newCookieJar} from '../../common/utils/axios';
+import {AxiosRequestConfig} from 'axios';
 
 export type CoopRequestParams = {
   url: string;
   method: 'get' | 'post';
+  headers?: Record<string, any>;
   searchParams?: Record<string, any>;
-  data?: Record<string, any>;
+  data?: any;
 };
 
 /**
@@ -57,14 +58,13 @@ export default class CoopWebsiteAccessor {
   }
 
   private async request(): Promise<string> {
-    const {url, method, searchParams, data} = this.params;
+    const {url, method, headers, searchParams, data} = this.params;
 
-    const urlToRequest = appendQueryStringParameters(url, searchParams || {});
-
-    const requestConfig = {
-      url: urlToRequest,
+    const requestConfig: AxiosRequestConfig = {
+      url: appendQueryStringParameters(url, searchParams || {}),
       method: method,
-      data: qs.stringify(data),
+      headers: headers,
+      data: data,
     };
 
     logger.verbose(
