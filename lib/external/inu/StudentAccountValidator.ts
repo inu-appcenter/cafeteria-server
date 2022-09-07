@@ -39,6 +39,10 @@ export default class StudentAccountValidator {
       return;
     }
 
+    // TODO 9월 7일 아-주 급하게 잠시 모두 통과 처리하기로!
+    logger.warn(`${this.studentId}씨는 지금 로그인 서버가 죽었기 때문에 일단 학생인걸로 합니다!`);
+    return;
+
     const studentId = this.studentId;
     const password = this.encryptPassword();
     const url = config.external.inuApi.accountStatusUrl(studentId, password);
