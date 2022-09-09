@@ -6,6 +6,4 @@ COPY . .
 
 RUN npm ci
 
-EXPOSE 20201-20202
-
 CMD ["npm", "start"]
