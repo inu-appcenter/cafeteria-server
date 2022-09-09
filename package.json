@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/inu-appcenter/cafeteria-server#readme",
   "dependencies": {
-    "@inu-cafeteria/backend-core": "^0.10.16",
+    "@inu-cafeteria/backend-core": "^0.10.17",
     "axios": "^0.21.2",
     "axios-cookiejar-support": "^1.0.1",
     "bcrypt": "^5.0.1",
