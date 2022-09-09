@@ -24,9 +24,9 @@ import {logger} from '@inu-cafeteria/backend-core';
 import {encrypt} from '../../common/utils/cipher';
 import {withTimeout} from '../../common/utils/timeout';
 import {
-  InvalidCredentials,
   BadFormedCredentials,
   ForUndergraduatesOnly,
+  InvalidCredentials,
   StudentLoginUnavailable,
 } from '../../application/user/common/errors';
 
@@ -39,15 +39,11 @@ export default class StudentAccountValidator {
       return;
     }
 
-    // TODO 9월 7일 아-주 급하게 잠시 모두 통과 처리하기로!
-    logger.warn(`${this.studentId}씨는 지금 로그인 서버가 죽었기 때문에 일단 학생인걸로 합니다!`);
-    return;
-
     const studentId = this.studentId;
     const password = this.encryptPassword();
     const url = config.external.inuApi.accountStatusUrl(studentId, password);
 
-    const response = await withTimeout(() => fetch(url), 3000, StudentLoginUnavailable);
+    const response = await this.getResponse(url);
 
     switch (response.status) {
       case 200:
@@ -60,6 +56,20 @@ export default class StudentAccountValidator {
         throw InvalidCredentials();
       default:
         throw StudentLoginUnavailable();
+    }
+  }
+
+  private async getResponse(url: string) {
+    try {
+      return await withTimeout(() => fetch(url), 3000, StudentLoginUnavailable);
+    } catch (e) {
+      // 응답조차 받지 못하고 예외가 발생한다? 뭔가 잘못된 일이 생긴 것이니,
+      // 적절한 예외(StudentLoginUnavailable)로 치환하여 줍니다.
+      logger.error(
+        `맙소사, 재학생 여부를 확인하려는데 교내 API 서버와의 통신에 문제가 생겼습니다:`,
+        e
+      );
+      throw StudentLoginUnavailable();
     }
   }
 
