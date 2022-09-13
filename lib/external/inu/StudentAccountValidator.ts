@@ -41,9 +41,13 @@ export default class StudentAccountValidator {
 
     const studentId = this.studentId;
     const password = this.encryptPassword();
-    const url = config.external.inuApi.accountStatusUrl(studentId, password);
 
-    const response = await this.getResponse(url);
+    const url = config.external.inuApi.accountStatusUrl;
+    const headers = {
+      authorization: `Basic ${Buffer.from(`${studentId}:${password}`).toString('base64')}`,
+    };
+
+    const response = await this.getResponse(url, headers);
 
     switch (response.status) {
       case 200:
@@ -59,9 +63,9 @@ export default class StudentAccountValidator {
     }
   }
 
-  private async getResponse(url: string) {
+  private async getResponse(url: string, headers: Record<string, any>) {
     try {
-      return await withTimeout(() => fetch(url), 3000, StudentLoginUnavailable);
+      return await withTimeout(() => fetch(url, {headers}), 3000, StudentLoginUnavailable);
     } catch (e) {
       // 응답조차 받지 못하고 예외가 발생한다? 뭔가 잘못된 일이 생긴 것이니,
       // 적절한 예외(StudentLoginUnavailable)로 치환하여 줍니다.
