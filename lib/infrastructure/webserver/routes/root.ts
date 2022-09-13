@@ -18,9 +18,8 @@
  */
 
 import {z} from 'zod';
-import {logger} from '@inu-cafeteria/backend-core';
+import {defineRoute, defineSchema, logger} from '@inu-cafeteria/backend-core';
 import packageInfo from '../../../../package.json';
-import {defineRoute, defineSchema} from '@inu-cafeteria/backend-core';
 
 const schema = defineSchema({
   query: {
@@ -35,9 +34,9 @@ export default defineRoute('get', '/', schema, async (req, res) => {
   }
 
   res.send(
-    `카페테리아 API 서버 v${packageInfo.version} 
+    `<iframe src='https://contacts.inuappcenter.kr?service=cafeteria' style='border: none;'></iframe><br><br>
+    카페테리아 API 서버 v${packageInfo.version} 
     / 서버시각 ${new Date().toLocaleString()} 
-    / 비상연락 010-2922-2661(앱센터 송병준) 
     / 서버 정상 작동중입니다. 문제 생기면 연락 주세요 :)`
   );
 });
