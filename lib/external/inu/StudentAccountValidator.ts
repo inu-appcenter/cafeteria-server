@@ -21,7 +21,6 @@ import fetch from 'isomorphic-fetch';
 import config from '../../../config';
 import assert from 'assert';
 import {logger} from '@inu-cafeteria/backend-core';
-import {encrypt} from '../../common/utils/cipher';
 import {withTimeout} from '../../common/utils/timeout';
 import {
   BadFormedCredentials,
@@ -34,17 +33,16 @@ export default class StudentAccountValidator {
   constructor(private readonly studentId: string, private readonly password: string) {}
 
   async shouldBeUndergraduateWithCorrectCredentials(): Promise<void> {
-    if (this.studentId === '202099999' && this.password === 'xptmxmzzzz') {
+    if (this.studentId === '202099999' && this.password === 'xptmxmzzzz' /*테스틐ㅋㅋㅋ*/) {
       logger.info('테스트 계정입니다!');
       return;
     }
 
-    const studentId = this.studentId;
-    const password = this.encryptPassword();
-
     const url = config.external.inuApi.accountStatusUrl;
     const headers = {
-      authorization: `Basic ${Buffer.from(`${studentId}:${password}`).toString('base64')}`,
+      authorization: `Basic ${Buffer.from(`${this.studentId}:${this.password}`).toString(
+        'base64'
+      )}`,
     };
 
     const response = await this.getResponse(url, headers);
@@ -75,9 +73,5 @@ export default class StudentAccountValidator {
       );
       throw StudentLoginUnavailable();
     }
-  }
-
-  private encryptPassword() {
-    return encrypt(this.password, config.external.inuApi.key);
   }
 }
