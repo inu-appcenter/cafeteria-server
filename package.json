@@ -65,7 +65,7 @@
     "@types/uuid-with-v6": "^1.1.0",
     "jest": "^27.0.5",
     "mockdate": "^3.0.5",
-    "nodemon": "^2.0.12",
+    "nodemon": "^2.0.20",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
